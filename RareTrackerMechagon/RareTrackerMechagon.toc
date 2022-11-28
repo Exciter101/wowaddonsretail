@@ -1,0 +1,21 @@
+## Interface: 100002
+## Title: RareTrackerMechagon
+## Notes: Track and coordinate rare spawn timers in Mechagon.
+## Author: Melroy
+## Version: 7.1.14
+## SavedVariables: RareTrackerMechagonDB
+## Dependencies: RareTrackerCore
+
+Locales\enUS.lua
+Locales\deDE.lua
+Locales\esES.lua
+Locales\esMX.lua
+Locales\frFR.lua
+Locales\itIT.lua
+Locales\koKR.lua
+Locales\ptBR.lua
+Locales\ptPT.lua
+Locales\ruRU.lua
+Locales\zhCN.lua
+
+RareTrackerMechagon.lua

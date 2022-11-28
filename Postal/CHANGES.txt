@@ -1,0 +1,10 @@
+------------------------------------------------------------------------
+r557 | Zimzarina | 2022-11-21 08:36:04 +0000 (Mon, 21 Nov 2022) | 1 line
+Changed paths:
+   M /trunk/Modules/Express.lua
+   M /trunk/Modules/QuickAttach.lua
+   M /trunk/Postal.lua
+
+Added support for reagent bag in 10.0.2 release to Express.lua and QuickAttach.lua.
+------------------------------------------------------------------------
+
