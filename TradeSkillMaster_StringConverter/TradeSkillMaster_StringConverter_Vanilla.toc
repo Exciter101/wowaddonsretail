@@ -1,0 +1,25 @@
+## Interface: 11403
+## Title: |cff00fe00TradeSkillMaster Import String Converter|r
+## Notes: Fixes invalid TSM import itemID group strings
+## Notes-ruRU: Исправляет неправильный импорт строк групп ID предметов 
+## Notes-frFR: Corrige les chaînes de caractères incorrectes IDobjet pour importation dans TSM
+## Version: 2.1.09
+## Author: Myrroddin/Sygon
+## X-Revision: 43
+## X-Copyright: Copyright (c) 2022 Paul Vandersypen. All Rights Reserved
+## X-Date: 2022-11-15T22:15:54Z
+## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3
+## X-Category: Auction & Economy
+
+## X-Curse-Project-ID: 311361
+## X-WoWI-ID: 24876
+## X-Waago-ID: RBKpxXKE
+
+## SavedVariables: TSMSC_DB
+
+LibStub\LibStub.lua
+CallbackHandler-1.0\CallbackHandler-1.0.xml
+AceGUI-3.0\AceGUI-3.0.xml
+
+Localization.lua
+Main.lua
