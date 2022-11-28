@@ -1,0 +1,27 @@
+## Interface: 100002
+## Author: Eltreum
+## Version: 3.6.1
+## Title: |cff1784d1ElvUI|r Eltruism
+## Notes: Eltruism is an ElvUI plugin with profiles and other features not available in ElvUI
+## Notes-deDE: Eltruism ist ein ElvUI Plugin mit Profilen und anderen Funktionen, die in ElvUI nicht verfügbar sind
+## Dependencies: ElvUI, AddOnSkins
+## RequiredDeps: Blizzard_CombatText
+## OptionalDeps: NameplateSCT, Immersion, DynamicCam, GladiusEx, ElvUI_SLE, ElvUI_WindTools, ProjectAzilroka
+## DefaultState: enabled
+## X-Interface: 100000
+## X-Curse-Project-ID: 459494
+## X-Wago-ID: vEGPqEN1
+## X-Tukui-ProjectID: 209
+## X-Tukui-ProjectFolders: ElvUI_EltreumUI
+
+Init.lua
+Settings\load_settings.xml
+Localization\Load_localization.xml
+Core\load_core.xml
+Libs\Load_Libs.xml
+Media\load_media.xml
+Modules\load_modules.xml
+Profiles\load_profiles.xml
+Layouts\load_layouts.xml
+Options\Options.lua
+
