@@ -1,0 +1,20 @@
+﻿$Id: Revision.txt 8 2022-11-20 07:29:37Z arithmandar $
+Revision History:
+=================
+
+* v1.03 (Nov. 20, 2022)
+==========================
+- Re-organize folder structure
+- Added faction items (mostly done by serious2)
+
+* v1.02 (Nov. 20, 2022)
+==========================
+- ToC update to support WoW 10.0.2
+
+* v1.01 (Nov. 13, 2022)
+==========================
+- Localization key update
+
+* v1.00 (Nov. 13, 2022)
+==========================
+- Initial version to support WoW 10.0.0 / AtlasLoot_Enhanced v8.13.02
