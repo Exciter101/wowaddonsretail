@@ -1,0 +1,15 @@
+﻿$Id: Revision.txt 6 2022-11-20 04:12:27Z arithmandar $
+Revision History:
+=================
+
+* v1.02 (Nov. 20, 2022)
+==========================
+- ToC update to support WoW 10.0.2
+
+* v1.01 (Nov. 13, 2022)
+==========================
+- Added full classes full slots' item drops
+
+* v1.00 (Nov. 13, 2022)
+==========================
+- Initial version to support WoW 10.0.0 / AtlasLoot_Enhanced v8.13.02

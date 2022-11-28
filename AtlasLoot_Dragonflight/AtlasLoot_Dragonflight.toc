@@ -1,0 +1,24 @@
+## Interface: 100002
+## Author: Arith	
+## Version: v1.02
+## Dependencies: AtlasLoot
+## LoadOnDemand: 1
+
+#@non-debug@
+## Title: AtlasLoot |cFF0099FF[Dragonflight]|r
+## Title-zhTW: AtlasLoot |cFF0099FF[巨龍崛起]|r
+## Notes: AtlasLoot loot tables from Dragonflight
+## Notes-zhTW: AtlasLoot 巨龍崛起的物品掉落資料庫
+#@end-non-debug@
+#@debug@
+# ## Title: AtlasLoot |cFF0099FF[Dragonflight]|r
+# ## Notes: AtlasLoot loot tables from Dragonflight
+#@end-debug@
+
+## X-Category: Map
+## X-License: GPL v2
+
+## X-AtlasLoot-LootModule: 1
+## X-AtlasLoot-ModuleName: Dragonflight
+
+data.lua
