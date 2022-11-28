@@ -1,0 +1,9 @@
+## Last updated 2022-10-26T14:35:15Z
+## Interface: 100000
+## Version: 1.7
+## Title: Auto Equipment Compare
+## Notes: Shows compare on hover, super minimal addon.
+## Author: Tsaavik (Gnoballs @Greymane)
+## DefaultState: enabled
+
+consolecommand.lua

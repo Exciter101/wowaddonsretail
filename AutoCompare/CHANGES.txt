@@ -1,0 +1,12 @@
+tag 163d3b8a5eced164860855cfdc5aba8c788d72b8 v1.7
+Author:	David Mcanulty <github@hellspark.com>
+Date:	Wed Oct 26 14:35:37 2022 +0000
+
+Release 1.7
+
+commit 2ec756045a422da281dafac7acd23050af316d44
+Author: David Mcanulty <github@hellspark.com>
+Date:   Wed Oct 26 14:35:15 2022 +0000
+
+    Bumped toc for 10.0
+
