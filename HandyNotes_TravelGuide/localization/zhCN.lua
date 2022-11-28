@@ -5,6 +5,10 @@ if not L then return end
 --  zhCN client: (NGA-男爵凯恩)
 --  Last update: 2022/11/11
 if L then
+----------------------------------------------------------------------------------------------------
+-----------------------------------------------CONFIG-----------------------------------------------
+----------------------------------------------------------------------------------------------------
+
 L["config_plugin_name"] = "旅行指南"
 L["config_plugin_desc"] = "在世界地图和小地图上显示传送门、飞艇、港口图标。"
 
@@ -158,7 +162,7 @@ L["Submarine to Mechagon"] = "前往麦卡贡的潜艇"
 L["Portal to Silithus"] = "通往希利苏斯"
 L["Boat to Echo Isles"] = "通往回声群岛的船"
 
-L["Portal to Boralus"] = "伯拉勒斯"
+L["Portal to Boralus"] = "通往伯拉勒斯"
 L["Boat to Boralus"] = "前往伯拉勒斯的船"
 L["Return to Boralus"] = "返回伯拉勒斯"
 L["Boat to Drustvar"] = "前往德鲁斯瓦的船"
