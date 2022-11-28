@@ -1,0 +1,21 @@
+Altoholic LDB::Changelog
+
+r4 | 28-11-2008 | Slashee the Cow
+Changed the way the feed loads so as to avoid many possible problems and use less memory (not that the latter was a problem, but always nice).
+In case you're just joining us, there was an r3 but it bombed severly and is now considered th be heresy.
+
+r2.1.1 | 14-11-2008 | Slashee the Cow
+Changed name of LDB feed so it will show up separately to Altoholic's built in feed.
+
+r2.1 | 12-11-2008 | Slashee the Cow
+Still didn't have files in correct order. D'oh!
+Addon name changed in TOC (will no longer show up with underscores in addon list).
+
+r2 | 12-11-2008 | Slashee the Cow
+Right click on button now opens Altoholic options (updated tooltip to reflect this).
+Removed "LDB" from the end of the feed name (some people might be using labels).
+Files now loaded in correct order (my bad, sorry).
+Mod is now loaded by using an invisible frame (simpler and should cause less problems).
+
+r1 | 11-11-2008 | Slashee the Cow
+This is the first release (not that I see a long series of updates in this mod's future).
