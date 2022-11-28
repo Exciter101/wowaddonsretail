@@ -268,6 +268,10 @@ function ElvUI_EltreumUI:SkinQuests()
 								block.currentLine.Text:SetWordWrap(true)
 							end
 						end
+						if block.itemButton and E.db.ElvUI_EltreumUI.skins.shadow.enable then
+							block.itemButton:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+							if EnhancedShadows then EnhancedShadows:RegisterShadow(block.itemButton.shadow) end
+						end
 						local line = DEFAULT_OBJECTIVE_TRACKER_MODULE:GetLine(block, objectiveKey, lineType)
 						if ( line.Dash ) then
 							if E.db.ElvUI_EltreumUI.skins.questsettings.customcolor then
@@ -334,6 +338,16 @@ function ElvUI_EltreumUI:SkinQuests()
 									if EnhancedShadows then EnhancedShadows:RegisterShadow(module.Header.EltruismStatusLine.shadow) end
 								end
 							end
+						end
+					end
+
+					--add quest count
+					if _G.ObjectiveTrackerBlocksFrame and _G.ObjectiveTrackerBlocksFrame.QuestHeader and _G.ObjectiveTrackerBlocksFrame.QuestHeader.Text then
+						local NumQuests = select(2, C_QuestLog.GetNumQuestLogEntries())
+						if (NumQuests >= (MAX_QUESTS - 5)) then
+							_G.ObjectiveTrackerBlocksFrame.QuestHeader.Text:SetText(format("|CFFFF0000%d/%d|r - %s", NumQuests, MAX_QUESTS, QUESTS_LABEL))
+						--else
+						--	_G.ObjectiveTrackerBlocksFrame.QuestHeader.Text:SetText(QUESTS_LABEL)
 						end
 					end
 				end)
@@ -417,6 +431,8 @@ function ElvUI_EltreumUI:SkinQuests()
 						ScenarioObjectiveBlockBackground:SetPoint("CENTER", _G.EltruismDungeonLine, "CENTER", -3, -47)
 					elseif _G.EltruismScenarioLine then
 						ScenarioObjectiveBlockBackground:SetPoint("CENTER", _G.EltruismScenarioLine, "CENTER", -3, -47)
+					elseif _G.ObjectiveTrackerBlocksFrame and _G.ObjectiveTrackerBlocksFrame.ScenarioHeader and _G.ObjectiveTrackerBlocksFrame.ScenarioHeader.EltruismStatusLine then
+						ScenarioObjectiveBlockBackground:SetPoint("CENTER", _G.ObjectiveTrackerBlocksFrame.ScenarioHeader.EltruismStatusLine, "CENTER", -3, -47)
 					end
 					ScenarioObjectiveBlockBackground:SetSize(243, 80)
 					ScenarioObjectiveBlockBackground:SetFrameLevel(3)
@@ -604,6 +620,53 @@ function ElvUI_EltreumUI:SkinQuests()
 						end
 					end
 				end)
+
+				hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
+					if block.currentLine then --this is the text
+						for objectiveKey, line in pairs(block.lines) do --Blizzard_ObjectiveTracker.lua#L458
+							if objectiveKey == 0 then --its the title
+								if E.db.ElvUI_EltreumUI.skins.questsettings.customcolor then
+									line.Text:SetTextColor(E.db.ElvUI_EltreumUI.skins.questsettings.customr, E.db.ElvUI_EltreumUI.skins.questsettings.customg, E.db.ElvUI_EltreumUI.skins.questsettings.customb)
+								else
+									line.Text:SetTextColor(classcolor.r, classcolor.g, classcolor.b)
+								end
+							else -- its the subtext
+								line.Text:SetTextColor(1, 1, 1)
+							end
+							if ( line.Dash ) then
+								if E.db.ElvUI_EltreumUI.skins.questsettings.customcolor then
+									line.Dash:SetTextColor(E.db.ElvUI_EltreumUI.skins.questsettings.customr, E.db.ElvUI_EltreumUI.skins.questsettings.customg, E.db.ElvUI_EltreumUI.skins.questsettings.customb)
+								else
+									line.Dash:SetTextColor(classcolor.r, classcolor.g, classcolor.b)
+								end
+							end
+						end
+					end
+				end)
+
+				hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
+					if block.currentLine then
+						for objectiveKey, line in pairs(block.lines) do --Blizzard_ObjectiveTracker.lua#L458
+							if objectiveKey == 0 then --its the title
+								if E.db.ElvUI_EltreumUI.skins.questsettings.customcolor then
+									line.Text:SetTextColor(mult * E.db.ElvUI_EltreumUI.skins.questsettings.customr, mult * E.db.ElvUI_EltreumUI.skins.questsettings.customg, mult * E.db.ElvUI_EltreumUI.skins.questsettings.customb)
+								else
+									line.Text:SetTextColor(mult * classcolor.r, mult * classcolor.g, mult * classcolor.b)
+								end
+							else -- its the subtext
+								line.Text:SetTextColor(mult, mult, mult)
+							end
+							if ( line.Dash ) then
+								if E.db.ElvUI_EltreumUI.skins.questsettings.customcolor then
+									line.Dash:SetTextColor(E.db.ElvUI_EltreumUI.skins.questsettings.customr, E.db.ElvUI_EltreumUI.skins.questsettings.customg, E.db.ElvUI_EltreumUI.skins.questsettings.customb)
+								else
+									line.Dash:SetTextColor(classcolor.r, classcolor.g, classcolor.b)
+								end
+							end
+						end
+					end
+				end)
+
 			end
 		elseif E.Classic then
 			if IsAddOnLoaded('!KalielsTracker') or IsAddOnLoaded('SorhaQuestLog') or IsAddOnLoaded('ClassicQuestLog') or IsAddOnLoaded('Who Framed Watcher Wabbit?') then
@@ -694,9 +757,9 @@ function ElvUI_EltreumUI:SkinQuests()
 
 				local NumQuests = select(2, GetNumQuestLogEntries())
 				if (NumQuests >= (MAX_QUESTS - 5)) then
-					QuestWatchFrameTitle:SetText(format("|CFFFF0000%d/%d|r - %s", NumQuests, MAX_QUESTS, "Quests"))
+					QuestWatchFrameTitle:SetText(format("|CFFFF0000%d/%d|r - %s", NumQuests, MAX_QUESTS, QUESTS_LABEL))
 				else
-					QuestWatchFrameTitle:SetText(format("%d/%d - %s", NumQuests, MAX_QUESTS, "Quests"))
+					QuestWatchFrameTitle:SetText(QUESTS_LABEL)
 				end
 				if (GetNumQuestWatches() == 0) then
 					_G.QuestWatchFrame.HeaderBar:SetAlpha(0)
@@ -903,9 +966,9 @@ function ElvUI_EltreumUI:SkinQuests()
 				local NumQuests = select(2, GetNumQuestLogEntries())
 
 				if (NumQuests >= (MAX_QUESTS - 5)) then
-					WatchFrameTitle:SetText(format("|CFFFF0000%d/%d|r - %s", NumQuests, MAX_QUESTS, "Quests"))
+					WatchFrameTitle:SetText(format("|CFFFF0000%d/%d|r - %s", NumQuests, MAX_QUESTS, QUESTS_LABEL))
 				else
-					WatchFrameTitle:SetText(format("%d/%d - %s", NumQuests, MAX_QUESTS, "Quests"))
+					WatchFrameTitle:SetText(QUESTS_LABEL)
 				end
 
 				if (GetNumQuestWatches() == 0) then

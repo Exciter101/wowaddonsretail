@@ -186,6 +186,7 @@ function ElvUI_EltreumUI:AutoAcceptQuests()
 				end
 				return
 			else
+				if E.Retail and C_Map.GetBestMapForUnit('player') == 762 then return end
 				if E.db.ElvUI_EltreumUI.dev then
 					ElvUI_EltreumUI:Print("started quest automation")
 				end
@@ -450,6 +451,13 @@ function ElvUI_EltreumUI:AutoAcceptQuests()
 										return
 									else
 										C_GossipInfo.SelectOption(gossipInfoTable[1].gossipOptionID)
+									end
+								else
+									for i = 1, #gossipInfoTable do
+										local text = gossipInfoTable[i].name
+										if text and text:match("|cFF0000FF") then --quests are marked with a blue (Quests) text too
+											C_GossipInfo.SelectOption(gossipInfoTable[i].gossipOptionID)
+										end
 									end
 								end
 								--[[for i = 1, #gossipInfoTable do
