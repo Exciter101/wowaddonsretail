@@ -782,7 +782,18 @@ spec:RegisterStateExpr( "fury_spent", function ()
 end )
 
 
+local sigil_types = { "chains", "flame", "misery", "silence" }
+
 spec:RegisterHook( "reset_precast", function ()
+    last_metamorphosis = nil
+    last_infernal_strike = nil
+
+    for i, sigil in ipairs( sigil_types ) do
+        local activation = ( action[ "sigil_of_" .. sigil ].lastCast or 0 ) + ( talent.quickened_sigils.enabled and 2 or 1 )
+        if activation > now then sigils[ sigil ] = activation
+        else sigils[ sigil ] = 0 end
+    end
+
     last_darkness = 0
     last_metamorphosis = 0
     last_eye_beam = 0
@@ -812,11 +823,13 @@ spec:RegisterHook( "reset_precast", function ()
 end )
 
 
-spec:RegisterCycle( function ()
-    if active_enemies == 1 then return end
-
-    -- For Nemesis, we want to cast it on the lowest health enemy.
-    if this_action == "nemesis" and Hekili:GetNumTTDsWithin( target.time_to_die ) > 1 then return "cycle" end
+spec:RegisterHook( "advance_end", function( time )
+    if query_time - time < sigils.flame and query_time >= sigils.flame then
+        -- SoF should've applied.
+        applyDebuff( "target", "sigil_of_flame", debuff.sigil_of_flame.duration - ( query_time - sigils.flame ) )
+        active_dot.sigil_of_flame = active_enemies
+        sigils.flame = 0
+    end
 end )
 
 
@@ -1461,10 +1474,6 @@ spec:RegisterAbilities( {
 
         talent = "sigil_of_flame",
         startsCombat = false,
-
-        readyTime = function ()
-            return sigils.flame - query_time
-        end,
 
         sigil_placed = function() return sigil_placed end,
 

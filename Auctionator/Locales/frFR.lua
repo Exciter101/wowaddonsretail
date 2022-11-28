@@ -316,6 +316,8 @@ L["PROSPECT_TOOLTIP_TOOLTIP_TEXT"] = "Afficher la valeur estimée de la prospect
 L["PURCHASED_X_XX"] = "Acheté %s x%s"
 L["QUANTITY"] = "Quantité"
 L["REAGENT_SEARCH"] = "Composants"
+--[[Translation missing --]]
+L["REAGENTS_VALUE_COLON"] = "Reagents Value:"
 L["REALM_HISTORY"] = "Historique du royaume"
 L["RECENT_SEARCHES"] = "Recherches récentes"
 L["REFRESH"] = "Actualiser"
@@ -356,6 +358,46 @@ L["SHOPPING_TAB"] = "Achat"
 L["SHOPPING_TAB_HEADER_2"] = "Auctionator - Achats"
 L["SKIP"] = "Passer"
 L["SORT"] = "Trier"
+--[[Translation missing --]]
+L["SPLASH_100015_ALL_VERSIONS_1"] = "Autocomplete search terms when searching in the Shopping tab."
+--[[Translation missing --]]
+L["SPLASH_100015_ALL_VERSIONS_2"] = "Quick search terms are immediately editable in the Shopping tab after a search."
+--[[Translation missing --]]
+L["SPLASH_100015_ALL_VERSIONS_3"] = "Option to preserve last selected duration in the Selling tab."
+--[[Translation missing --]]
+L["SPLASH_100015_ALL_VERSIONS_4"] = "Both crafting cost and profit can be displayed simultaneously in the crafting views."
+--[[Translation missing --]]
+L["SPLASH_100015_ALL_VERSIONS_5"] = "Scroll areas have been reworked to be smoother."
+--[[Translation missing --]]
+L["SPLASH_100015_ALL_VERSIONS_6"] = "General bugfixes and compatibility changes for WoW."
+--[[Translation missing --]]
+L["SPLASH_100015_ALL_VERSIONS_HEADER"] = "Recent features for all versions"
+--[[Translation missing --]]
+L["SPLASH_100015_CLASSIC_1"] = "Warning when posting with a massive undercut (50% or more) to reduce mistakes."
+--[[Translation missing --]]
+L["SPLASH_100015_CLASSIC_2"] = "New optional \"Top?\" column in the Shopping tab to see if your auction is top for an item."
+--[[Translation missing --]]
+L["SPLASH_100015_CLASSIC_3"] = "Prospecting ore estimated values as an optional tooltip."
+--[[Translation missing --]]
+L["SPLASH_100015_CLASSIC_4"] = "Milling herb estimated values as an optional tooltip."
+--[[Translation missing --]]
+L["SPLASH_100015_CLASSIC_5"] = "Shows posting history as an extra option in an item's price history view."
+--[[Translation missing --]]
+L["SPLASH_100015_CLASSIC_6"] = "In the Selling tab removed extra scan after posting an item."
+--[[Translation missing --]]
+L["SPLASH_100015_CLASSIC_7"] = "Option to prevent the post button going grey/disabled and to allow attempts to post immediately, with no-cost retries on failure."
+--[[Translation missing --]]
+L["SPLASH_100015_CLASSIC_HEADER"] = "Recent features for Classic"
+--[[Translation missing --]]
+L["SPLASH_100015_DESCRIPTION"] = "Lots of improvements, including compatibility with Dragonflight"
+--[[Translation missing --]]
+L["SPLASH_100015_RETAIL_1"] = "Crafting cost and profit updates based on the reagents and quality selected."
+--[[Translation missing --]]
+L["SPLASH_100015_RETAIL_2"] = "Selling tab has an expanded prices view with historical prices available in a separate tab. Reverting to the split screen view is available as an option."
+--[[Translation missing --]]
+L["SPLASH_100015_RETAIL_3"] = "Reagents value on the auction house is shown when listing a crafting order."
+--[[Translation missing --]]
+L["SPLASH_100015_RETAIL_HEADER"] = "Recent features for Retail"
 L["SPLASH_830_BUGS_1"] = "Veuillez nous rejoindre sur le serveur Discord d'Auctionator %s"
 L["SPLASH_830_BUGS_2"] = "Veuillez signaler les bugs sur Github %s"
 L["SPLASH_830_BUGS_3"] = "Nous sommes surtout actifs sur Discord, et ne prenons pas les rapports de bugs sur les forums de Curseforge ou Auctionator"

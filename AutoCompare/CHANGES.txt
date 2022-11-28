@@ -1,12 +1,12 @@
-tag 163d3b8a5eced164860855cfdc5aba8c788d72b8 v1.7
+tag 1169567346330bf084798d443e532627fd5e0ba0 v1.8
 Author:	David Mcanulty <github@hellspark.com>
-Date:	Wed Oct 26 14:35:37 2022 +0000
+Date:	Sun Nov 27 19:45:46 2022 +0000
 
-Release 1.7
+Release 1.8
 
-commit 2ec756045a422da281dafac7acd23050af316d44
+commit b936feb02eb2c382d789b60708d8a049354fa219
 Author: David Mcanulty <github@hellspark.com>
-Date:   Wed Oct 26 14:35:15 2022 +0000
+Date:   Sun Nov 27 19:45:29 2022 +0000
 
-    Bumped toc for 10.0
+    Bumped toc to 100002
 
