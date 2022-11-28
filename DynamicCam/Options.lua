@@ -22,7 +22,9 @@ end
 
 local Options = DynamicCam.Options
 local _
-local S, SID
+
+-- To store the currently selected situation and situation ID.
+local S, SID, lastSelectedSID
 local copiedSituationID
 local exportName, exportAuthor
 
@@ -129,6 +131,42 @@ end
 
 
 
+-- A function to get all views used by all situations.
+local function GetUsedViews()
+    local usedViews = {}
+    local usedDefaultViews = {}
+    -- Go through all situations.
+    for id, situation in pairs(DynamicCam.db.profile.situations) do
+
+        if situation.enabled and not situation.errorEncountered then
+
+            -- Shortcut variable.
+            local sc = situation.viewZoom
+
+            if sc.enabled and sc.viewZoomType == "view" then
+
+                if not usedViews[sc.viewNumber] then
+                    usedViews[sc.viewNumber] = {}
+                end
+                -- Store the id of the situation using this view.
+                usedViews[sc.viewNumber][id] = true
+
+                if not usedDefaultViews[sc.def] then
+                    usedDefaultViews[sc.restoreDefaultViewNumber] = {}
+                end
+                -- Store the id of the situation using this view.
+                usedDefaultViews[sc.restoreDefaultViewNumber][id] = true
+
+            end
+        end
+    end
+
+    return usedViews, usedDefaultViews
+end
+
+
+
+
 -- We want to use the same CreateSettingsTab() function for the
 -- standard settings and situation settings. Hence we need this function
 -- to return the appropriate table.
@@ -208,9 +246,9 @@ end
 
 
 
-function DynamicCam:InterfaceOptionsFrameSetIgnoreParentAlpha(ignoreParentAlpha)
+function DynamicCam:SettingsPanelSetIgnoreParentAlpha(ignoreParentAlpha)
     GameMenuFrame:SetIgnoreParentAlpha(ignoreParentAlpha)
-    InterfaceOptionsFrame:SetIgnoreParentAlpha(ignoreParentAlpha)
+    SettingsPanel:SetIgnoreParentAlpha(ignoreParentAlpha)
     for i = 1, LibStub("AceGUI-3.0"):GetNextWidgetNum("Dropdown-Pullout") do
       if _G["AceGUI30Pullout" .. i] then _G["AceGUI30Pullout" .. i]:SetIgnoreParentAlpha(ignoreParentAlpha) end
     end
@@ -256,7 +294,7 @@ local function CreateSliderResetButton(order, forSituations, index1, index2, too
         imageCoords = {0.533203125, 0.58203125, 0.248046875, 0.294921875},
         imageWidth = 25/1.5,
         imageHeight = 24/1.5,
-        desc = "Reset to default: " .. tooltipDefaultValue .."\nThis is just the global default! Choosing settings of other profiles or presets is not possible here. You can only copy a whole profile or preset into the current profile (see \"Profiles\" tab).",
+        desc = "Reset to global default: " .. tooltipDefaultValue .."\n(To restore the settings of a specific profile, restore the profile in the \"Profiles\" tab.)",
         order = order,
         width = 0.25,
         func =
@@ -374,6 +412,13 @@ local function SetGroupVars(groupVarsTable, override)
     Options:SendMessage("DC_BASE_CAMERA_UPDATED")
 end
 
+
+local function GreyWhenInactive(name, enabled)
+  if not enabled then
+    return "|cff909090"..name.."|r"
+  end
+  return name
+end 
 
 local function ColoredNames(name, groupVarsTable, forSituations)
     if not forSituations then
@@ -929,7 +974,7 @@ local function CreateSettingsTab(tabOrder, forSituations)
                                         imageCoords = {0.533203125, 0.58203125, 0.248046875, 0.294921875},
                                         imageWidth = 25/1.5,
                                         imageHeight = 24/1.5,
-                                        desc = "Reset to defaults: " .. DynamicCam:GetSettingsDefault("shoulderOffsetZoomLowerBound") .." and " .. DynamicCam:GetSettingsDefault("shoulderOffsetZoomUpperBound") .. "\nThis is just the global default! Choosing settings of other profiles or presets is not possible here. You can only copy a whole profile or preset into the current profile in the Profiles/Presets section.",
+                                        desc = "Reset to global defaults: " .. DynamicCam:GetSettingsDefault("shoulderOffsetZoomLowerBound") .." and " .. DynamicCam:GetSettingsDefault("shoulderOffsetZoomUpperBound") .. "\n(To restore the settings of a specific profile, restore the profile in the \"Profiles\" tab.)",
                                         order = 1.2,
                                         width = 0.25,
                                         func =
@@ -1003,7 +1048,7 @@ local function CreateSettingsTab(tabOrder, forSituations)
 
                                     shoulderOffsetZoomDescription = {
                                         type = "description",
-                                        name = "Make the shoulder offset gradually transition to zero while zooming in. The two sliders define between what zoom levels this transition takes place.",
+                                        name = "Make the shoulder offset gradually transition to zero while zooming in. The two sliders define between what zoom levels this transition takes place. This setting is global and not situation-specific.",
                                         order = 4,
                                     },
 
@@ -1677,15 +1722,17 @@ local function CreateSituationSettingsTab(tabOrder)
             selectedSituation = {
                 type = "select",
                 name = "Select a situation to setup",
-                desc = "\n|cffffcc00Colour codes:|r\n|cFF808A87- Disabled situation.|r\n- Enabled situation.\n|cFF00FF00- Enabled and currently active situation.|r\n|cFF63B8FF- Enabled situation with fulfilled condition but lower priority than the currently active situation.|r\n|cFFFF6600- Modified stock \"Situation Controls\".|r\n|cFFEE0000- Erroneous \"Situation Controls\".|r",
+                desc = "\n|cffffcc00Colour codes:|r\n|cFF808A87- Disabled situation.|r\n- Enabled situation.\n|cFF00FF00- Enabled and currently active situation.|r\n|cFF63B8FF- Enabled situation with fulfilled condition but lower priority than the currently active situation.|r\n|cFFFF6600- Modified stock \"Situation Controls\" (reset recommended).|r\n|cFFEE0000- Erroneous \"Situation Controls\" (changes required).|r",
                 get =
                     function()
+                        lastSelectedSID = SID
                         return SID
                     end,
                 set =
                     function(_, newValue)
                         S = DynamicCam.db.profile.situations[newValue]
                         SID = newValue
+                        lastSelectedSID = newValue
                     end,
                 values =
                     function()
@@ -1784,7 +1831,10 @@ local function CreateSituationSettingsTab(tabOrder)
 
                     viewZoomSettings = {
                         type = "group",
-                        name = "Zoom/View",
+                        name =
+                            function()
+                                return GreyWhenInactive("Zoom/View", S.viewZoom.enabled)
+                            end,
                         order = 1,
                         args = {
 
@@ -1811,7 +1861,7 @@ local function CreateSituationSettingsTab(tabOrder)
                                 imageCoords = {0.533203125, 0.58203125, 0.248046875, 0.294921875},
                                 imageWidth = 25/1.5,
                                 imageHeight = 24/1.5,
-                                desc = "Reset to default: This will reset to the global default! If you want to reset to the settings of a preset or a different profile, do it there.",
+                                desc = "Reset to global defaults!\n(To restore the settings of a specific profile, restore the profile in the \"Profiles\" tab.)",
                                 order = 1.5,
                                 width = 0.25,
                                 func =
@@ -1873,6 +1923,7 @@ local function CreateSituationSettingsTab(tabOrder)
                                     },
                                     blank2 = {type = "description", name = " ", order = 2.1, },
 
+
                                     viewBox = {
 
                                         type = "group",
@@ -1886,7 +1937,7 @@ local function CreateSituationSettingsTab(tabOrder)
 
                                             view = {
                                                 type = "select",
-                                                name = "...to saved view:",
+                                                name = "Set view to saved view:",
                                                 desc = "Select the saved view to switch to when entering this situation.",
                                                 get =
                                                     function()
@@ -1903,13 +1954,13 @@ local function CreateSituationSettingsTab(tabOrder)
                                                     [5] = "View 5"
                                                 },
                                                 order = 1,
-                                                width = 0.6,
+                                                width = 0.8,
                                             },
                                             blank1 = {type = "description", name = " ", order = 1.1, width = 0.1, },
                                             instant = {
                                                 type = "toggle",
                                                 name = "Instant",
-                                                desc = "Make the transition to this view instant.",
+                                                desc = "Make view transitions instant.",
                                                 get =
                                                     function()
                                                         return S.viewZoom.viewInstant
@@ -1921,10 +1972,15 @@ local function CreateSituationSettingsTab(tabOrder)
                                                 order = 2,
                                                 width = "half",
                                             },
+
                                             viewRestore = {
                                                 type = "toggle",
-                                                name = "Restore View",
+                                                name = "Restore",
                                                 desc = "When exiting the situation restore the camera position to what it was before entering.",
+                                                hidden =
+                                                    function()
+                                                        return GetCVar("cameraSmoothStyle") ~= "0"
+                                                    end,
                                                 get =
                                                     function()
                                                         return S.viewZoom.viewRestore
@@ -1934,10 +1990,105 @@ local function CreateSituationSettingsTab(tabOrder)
                                                         S.viewZoom.viewRestore = newValue
                                                     end,
                                                 order = 3,
-                                                width = 0.6,
+                                                width = "full",
+                                            },
+
+                                            cameraSmoothNote = {
+                                                type = "description",
+                                                hidden =
+                                                    function()
+                                                        return GetCVar("cameraSmoothStyle") == "0"
+                                                    end,
+                                                order = 4,
+                                                name =
+[[|cFFEE0000Attention:|r You are using WoW's "Camera Following Styles" that automatically put the camera behind the player. This does not work while you are in a customized saved view. It is possible to use customized saved views for situations in which camera following is not needed (e.g. NPC interaction). But after exiting the situation you have to return to a non-customized default view in order to make the camera following work again.]],
+                                            },
+
+                                            viewRestoreToDefault = {
+                                                type = "select",
+                                                name = "Restore to default view:",
+                                                desc =
+[[Select the default view to return to when exiting this situation.
+
+View 1:   Zoom 0, Pitch 0
+View 2:   Zoom 5.5, Pitch 10
+View 3:   Zoom 5.5, Pitch 20
+View 4:   Zoom 13.8, Pitch 30
+View 5:   Zoom 13.8, Pitch 10]],
+                                                hidden =
+                                                    function()
+                                                        return GetCVar("cameraSmoothStyle") == "0"
+                                                    end,
+                                                get =
+                                                    function()
+                                                        return S.viewZoom.restoreDefaultViewNumber
+                                                    end,
+                                                set =
+                                                    function(_, newValue)
+                                                        S.viewZoom.restoreDefaultViewNumber = newValue
+                                                    end,
+                                                values = {
+                                                    [1] = "View 1",
+                                                    [2] = "View 2",
+                                                    [3] = "View 3",
+                                                    [4] = "View 4",
+                                                    [5] = "View 5"
+                                                },
+                                                order = 5,
+                                                width = "full",
+                                            },
+
+                                            cameraSmoothWarning = {
+                                                type = "description",
+                                                hidden =
+                                                    function ()
+                                                        if GetCVar("cameraSmoothStyle") == "0" then return true end
+
+                                                        local usedViews, usedDefaultViews = GetUsedViews()
+
+                                                        for usedView in pairs(usedViews) do
+                                                                -- We know that at least one other situation used this view.
+                                                                if usedDefaultViews[usedView] then
+                                                                    -- print("View", usedView, "used as saved and default view.")
+                                                                    return false
+                                                                end
+                                                            end
+                                                        return true
+                                                    end,
+
+                                                order = 6,
+                                                name =
+                                                    function()
+                                                        if GetCVar("cameraSmoothStyle") == "0" then return "" end
+
+                                                        local usedViews, usedDefaultViews = GetUsedViews()
+
+                                                        local returnString = "|cFFEE0000WARNING:|r You are using the same view as saved view and as restore-to-default view. Using a view as restore-to-default view will reset it. Only do this if you really want to use it as a non-customized saved view.\n"
+
+                                                        for usedView, usedViewSituationList in pairs(usedViews) do
+
+                                                                -- We know that at least one other situation used this view.
+                                                                if usedDefaultViews[usedView] then
+
+                                                                    returnString = returnString .. "\n\n- View " .. usedView .. " is used as saved view in the situations:\n"
+
+                                                                    for usedViewSituationId in pairs(usedViewSituationList) do
+                                                                        returnString = returnString .. "    - " .. DynamicCam.db.profile.situations[usedViewSituationId].name .. "\n"
+                                                                    end
+                                                                    returnString = returnString .. "   and as restore-to-default view in the situations:\n"
+
+                                                                    for usedDefaultViewSituationId in pairs(usedDefaultViews[usedView]) do
+                                                                        returnString = returnString .. "    - " ..  DynamicCam.db.profile.situations[usedDefaultViewSituationId].name .. "\n"
+                                                                    end
+
+                                                                end
+                                                            end
+
+                                                        return returnString
+
+                                                    end,
                                             },
                                         },
-
                                     },
                                     viewBlank3 = {type = "description", name = " ", order = 3.1, },
 
@@ -1953,9 +2104,9 @@ local function CreateSituationSettingsTab(tabOrder)
                                             zoomDescription = {
                                                 type = "description",
                                                 name =
-[[WoW allows us to save up to 5 custom camera views. View 1 is used by DynamicCam to save the camera position when entering a situation, such that it can be restored upon exiting the situation again, if you check the "Restore" box above. This is particularly nice for short situations like NPC interaction, allowing us to switch to one view while talking to the NPC and afterwards back to what the camera was before. This is why you cannot select View 1 in the above drop down menu of saved views.
+[[WoW allows to save up to 5 custom camera views. View 1 is used by DynamicCam to save the camera position when entering a situation, such that it can be restored upon exiting the situation again, if you check the "Restore" box above. This is particularly nice for short situations like NPC interaction, allowing to switch to one view while talking to the NPC and afterwards back to what the camera was before. This is why View 1 cannot be selected in the above drop down menu of saved views.
 
-Views 2, 3, 4 and 5, however, can be used to save your custom camera positions. To save a view, simply bring the camera into the desired zoom and angle. Then type the following command into the console (with # being the view number 2, 3, 4 or 5):
+Views 2, 3, 4 and 5 can be used to save a custom camera positions. To save a view, simply bring the camera into the desired zoom and angle. Then type the following command into the console (with # being the view number 2, 3, 4 or 5):
 
     /saveView #
 
@@ -1963,7 +2114,7 @@ Or for short:
 
     /sv #
 
-Notice that the saved views are stored by WoW. DynamicCam only stores which view numbers to use. Thus, when you import a DynamicCam situation profile using views, you may have to set up and save the appropriate views manually.
+Notice that the saved views are stored by WoW. DynamicCam only stores which view numbers to use. Thus, when you import a new DynamicCam situation profile with views, you probably have to set and save the appropriate views afterwards.
 
 
 DynamicCam also provides a console command to switch to a view irrespective of entering or exiting situations:
@@ -2252,7 +2403,10 @@ Or for short:
 
                     rotationSettings = {
                         type = "group",
-                        name = "Rotation",
+                        name =
+                            function()
+                                return GreyWhenInactive("Rotation", S.rotation.enabled)
+                            end,
                         order = 2,
                         args = {
 
@@ -2280,7 +2434,7 @@ Or for short:
                                 imageCoords = {0.533203125, 0.58203125, 0.248046875, 0.294921875},
                                 imageWidth = 25/1.5,
                                 imageHeight = 24/1.5,
-                                desc = "Reset to default: This will reset to the global default! If you want to reset to the settings of a preset or a different profile, do it there.",
+                                desc = "Reset to global defaults!\n(To restore the settings of a specific profile, restore the profile in the \"Profiles\" tab.)",
                                 order = 1.5,
                                 width = 0.25,
                                 func =
@@ -2502,7 +2656,10 @@ Or for short:
 
                     hideUISettings = {
                         type = "group",
-                        name = "Fade Out UI",
+                        name =
+                            function()
+                                return GreyWhenInactive("Fade Out UI", S.hideUI.enabled)
+                            end,
                         order = 3,
                         args = {
                             hideUIToggle = {
@@ -2529,7 +2686,7 @@ Or for short:
                                 imageCoords = {0.533203125, 0.58203125, 0.248046875, 0.294921875},
                                 imageWidth = 25/1.5,
                                 imageHeight = 24/1.5,
-                                desc = "Reset to default: This will reset to the global default! If you want to reset to the settings of a preset or a different profile, do it there.",
+                                desc = "Reset to global defaults!\n(To restore the settings of a specific profile, restore the profile in the \"Profiles\" tab.)",
                                 order = 1.5,
                                 width = 0.25,
                                 func =
@@ -2777,7 +2934,7 @@ Or for short:
                                                 order = 5,
                                                 width = 0.9,
                                             },
-                                            
+
                                             keepPartyRaidFrame = {
                                                 type = "toggle",
                                                 name = "Keep Party/Raid",
@@ -2795,9 +2952,9 @@ Or for short:
                                                 order = 5,
                                                 width = 0.9,
                                             },
-                                            
+
                                             n6 = {order = 6, type = "description", name = " ",},
-                                            
+
                                             keepCustomFrames = {
                                                 type = 'toggle',
                                                 name = "Keep additional frames",
@@ -2846,8 +3003,8 @@ Or for short:
                                                 order = 8,
                                                 width = "double",
                                             },
-                                            
-                                            
+
+
                                         },
                                     },
                                     blank6 = {type = "description", name = " ", order = 6.2, },
@@ -2915,17 +3072,17 @@ to show the UI without any delay.]],
                                         name = "While setting up your desired UI fade effects, it can be annoying when this \"Interface\" settings frame fades out as well. If this box is checked, it will not be faded out.\n\nThis setting is global for all situations.",
                                         order = 1,
                                     },
-                                    interfaceOptionsFrameIgnoreParentAlpha = {
+                                    settingsPanelIgnoreParentAlpha = {
                                         type = "toggle",
                                         name = "Do not fade out this \"Interface\" settings frame.",
                                         get =
                                             function()
-                                                return InterfaceOptionsFrame:IsIgnoringParentAlpha()
+                                                return SettingsPanel:IsIgnoringParentAlpha()
                                             end,
                                         set =
                                             function(_, newValue)
-                                                DynamicCam.db.profile.interfaceOptionsFrameIgnoreParentAlpha = newValue
-                                                DynamicCam:InterfaceOptionsFrameSetIgnoreParentAlpha(newValue)
+                                                DynamicCam.db.profile.settingsPanelIgnoreParentAlpha = newValue
+                                                DynamicCam:SettingsPanelSetIgnoreParentAlpha(newValue)
                                             end,
                                         width = "full",
                                         order = 2,
@@ -3484,11 +3641,18 @@ The delay determines how many seconds to wait before exiting the situation. So f
 
                 args = {
 
-                    exportFrame = {
-                        type = "input",
-                        name = "Situation Export",
-                        dialogControl = "aceInvader",
+                    description = {
+                        type = "description",
+                        name = "Coming soon(TM).",
+                        order = 1,
                     },
+
+                    -- TODO
+                    -- exportFrame = {
+                        -- type = "input",
+                        -- name = "Situation Export",
+                        -- dialogControl = "aceInvader",
+                    -- },
                 },
             },
 
@@ -3500,55 +3664,63 @@ The delay determines how many seconds to wait before exiting the situation. So f
 
                 args = {
 
-                    copy = {
-                        type = "execute",
-                        name = "Copy",
-                        desc = "Copy this situations settings so that you can paste it into another situation.\n\nDoesn't copy the condition or the advanced mode Lua scripts.",
-                        hidden = function() return not S end,
-                        func = function() copiedSituationID = SID end,
-                        order = 5,
-                        width = "half",
-                    },
-
-                    paste = {
-                        type = "execute",
-                        name = "Paste",
-                        desc = "Paste the settings from that last copied situation.",
-                        hidden = function() return not S end,
-                        disabled = function() return not copiedSituationID end,
-                        func = function()
-                                DynamicCam:CopySituationInto(copiedSituationID, SID)
-                                copiedSituationID = nil
-                            end,
-                        order = 6,
-                        width = "half",
-                    },
-
-                    export = {
-                        type = "execute",
-                        name = "Export",
-                        desc = "If you want to share the settings of this situation with others you can export it into a text string. Use the \"Import\" section of the DynamicCam settings to import strings you have received from others.",
-                        hidden = function() return not S end,
-                        func = function() DynamicCam:PopupExport(DynamicCam:ExportSituation(SID)) end,
-                        order = 7,
-                        width = "half",
-                    },
-
-                    helpText = {
+                    description = {
                         type = "description",
-                        name = "If you have the DynamicCam import string for a profile or situation, paste it in the text box below to import it. You can generate such import strings yourself using the export functions in the \"Profiles\" or \"Situations\" sections of the DynamicCam settings.\n\n|cFFFF4040YOUR CURRENT PROFILE WILL BE OVERRIDDEN WITHOUT WARNING, SO MAKE A COPY IF YOU WANT TO KEEP IT!|r\n",
-                        order = 8,
+                        name = "Coming soon(TM).",
+                        order = 1,
                     },
-                    import = {
-                        type = "input",
-                        name = "Paste and hit Accept to import!",
-                        desc = "Paste the DynamicCam import string of a profile or a situation.",
-                        get = function() return "" end,
-                        set = function(_, newValue) DynamicCam:Import(newValue) end,
-                        multiline = 10,
-                        width = "full",
-                        order = 9,
-                    },
+
+
+                    -- TODO
+                    -- copy = {
+                        -- type = "execute",
+                        -- name = "Copy",
+                        -- desc = "Copy this situations settings so that you can paste it into another situation.\n\nDoesn't copy the condition or the advanced mode Lua scripts.",
+                        -- hidden = function() return not S end,
+                        -- func = function() copiedSituationID = SID end,
+                        -- order = 5,
+                        -- width = "half",
+                    -- },
+
+                    -- paste = {
+                        -- type = "execute",
+                        -- name = "Paste",
+                        -- desc = "Paste the settings from that last copied situation.",
+                        -- hidden = function() return not S end,
+                        -- disabled = function() return not copiedSituationID end,
+                        -- func = function()
+                                -- DynamicCam:CopySituationInto(copiedSituationID, SID)
+                                -- copiedSituationID = nil
+                            -- end,
+                        -- order = 6,
+                        -- width = "half",
+                    -- },
+
+                    -- export = {
+                        -- type = "execute",
+                        -- name = "Export",
+                        -- desc = "If you want to share the settings of this situation with others you can export it into a text string. Use the \"Import\" section of the DynamicCam settings to import strings you have received from others.",
+                        -- hidden = function() return not S end,
+                        -- func = function() DynamicCam:PopupExport(DynamicCam:ExportSituation(SID)) end,
+                        -- order = 7,
+                        -- width = "half",
+                    -- },
+
+                    -- helpText = {
+                        -- type = "description",
+                        -- name = "If you have the DynamicCam import string for a profile or situation, paste it in the text box below to import it. You can generate such import strings yourself using the export functions in the \"Profiles\" or \"Situations\" sections of the DynamicCam settings.\n\n|cFFFF4040YOUR CURRENT PROFILE WILL BE OVERRIDDEN WITHOUT WARNING, SO MAKE A COPY IF YOU WANT TO KEEP IT!|r\n",
+                        -- order = 8,
+                    -- },
+                    -- import = {
+                        -- type = "input",
+                        -- name = "Paste and hit Accept to import!",
+                        -- desc = "Paste the DynamicCam import string of a profile or a situation.",
+                        -- get = function() return "" end,
+                        -- set = function(_, newValue) DynamicCam:Import(newValue) end,
+                        -- multiline = 10,
+                        -- width = "full",
+                        -- order = 9,
+                    -- },
 
                 },
 
@@ -3563,9 +3735,9 @@ end
 
 local welcomeMessage = [[We're glad that you're here and we hope that you have fun with the addon.
 
-DynamicCam (DC) was started in May 2016 by mpstark when the WoW devs at Blizzard introduced the experimental ActionCam features to the game. The main purpose of DC has been to provide a user interface for the ActionCam settings. ActionCam is still marked as experimental while there has been no sign from Blizzard to develop it further. But instead of complaining about possible shortcomings, we should be thankful that it was left in the game for enthusiast like us to use. :-) DC does not just allow to change the ActionCam settings but to have different settings for different game situations. Not related to ActionCam, DC also provides features regarding camera zoom and UI fade-out.
+DynamicCam (DC) was started in May 2016 by mpstark when the WoW devs at Blizzard introduced the experimental ActionCam features into the game. The main purpose of DC has been to provide a user interface for the ActionCam settings. Within the game, the ActionCam is still designated as "experimental" and there has been no sign from Blizzard to develop it further. There are some shortcomings, but we should be thankful that ActionCam was left in the game for enthusiast like us to use. :-) DC does not just allow you to change the ActionCam settings but to have different settings for different game situations. Not related to ActionCam, DC also provides features regarding camera zoom and UI fade-out.
 
-The work of mpstark on DC continued until August 2018. While most features worked well for a substantial user base, mpstark had always considered DC to be in beta state and due to his waning investment in WoW he ended up not resuming his work. At that time, Ludius had already begun making adjustments to DC for himself, which was noticed by Weston (aka dernPerkins) who in early 2020 managed to get in touch with mpstark leading to Ludius taking over the development. The first non-beta version 1.0 was released in May 2020 including Ludius's adjustments up to that point. Afterwards, Ludius began to work on an overhaul of DC resulting in version 2.0 being released in Summer 2021.
+The work of mpstark on DC continued until August 2018. While most features worked well for a substantial user base, mpstark had always considered DC to be in beta state and due to his waning investment in WoW he ended up not resuming his work. At that time, Ludius had already begun making adjustments to DC for himself, which was noticed by Weston (aka dernPerkins) who in early 2020 managed to get in touch with mpstark leading to Ludius taking over the development. The first non-beta version 1.0 was released in May 2020 including Ludius's adjustments up to that point. Afterwards, Ludius began to work on an overhaul of DC resulting in version 2.0 being released in Autum 2022.
 
 When mpstark started DC, his focus was on making most customisations in-game instead of having to change the source code. This made it easier to experiment particularly with the different game situations. From version 2.0 on, these advanced settings have been moved to a special section called "Situation Controls". Most users will probably never need it, but for "power users" it is still available. A hazard of making changes there is that saved user settings always override DC's stock settings, even if new versions of DC bring updated stock settings. Hence, a warning is displayed at the top of this page whenever you have stock situations with modified "Situation Controls".
 
@@ -3589,7 +3761,7 @@ Here are some handy slash commands:
 local about = {
     type = "group",
     name = "About",
-    order = 1,
+    order = 10,
     args = {
         situationControlsWarning = {
             type = "group",
@@ -3715,33 +3887,40 @@ local profileSettings = {
             args = {
                 description = {
                     type = "description",
-                    name = "Here are some preset profiles created by other DynamicCam users. Do you have a profile that's unlike any of these? Please export it and post it together with a name and description on the DynamicCam user forum! We will then consider putting it into the next release.",
+                    name = "Coming soon(TM).",
                     order = 1,
                 },
-                loadPreset = {
-                    type = "select",
-                    name = "Load Preset",
-                    desc = "Select a preset profile to load it.\n|cFFFF4040YOUR CURRENT PROFILE WILL BE OVERRIDDEN WITHOUT WARNING, SO MAKE A COPY IF YOU WANT TO KEEP IT!|r",
-                    get = function() return "" end,
-                    set = function(_, newValue) DynamicCam:LoadPreset(newValue) end,
-                    values = function() return DynamicCam:GetPresets() end,
-                    sorting = function() return DynamicCam:GetPresetsSorting() end,
-                    width = "full",
-                    order = 2,
-                },
-                presetDescriptions = {
-                    type = "group",
-                    name = "Descriptions",
-                    order = 3,
-                    inline = true,
-                    args = {
-                        description = {
-                            type = "description",
-                            name = function() return DynamicCam:GetPresetDescriptions() end,
-                            order = 1,
-                        },
-                    },
-                },
+
+                -- TODO
+                -- description = {
+                    -- type = "description",
+                    -- name = "Here are some preset profiles created by other DynamicCam users. Do you have a profile that's unlike any of these? Please export it and post it together with a name and description on the DynamicCam user forum! We will then consider putting it into the next release.",
+                    -- order = 1,
+                -- },
+                -- loadPreset = {
+                    -- type = "select",
+                    -- name = "Load Preset",
+                    -- desc = "Select a preset profile to load it.\n|cFFFF4040YOUR CURRENT PROFILE WILL BE OVERRIDDEN WITHOUT WARNING, SO MAKE A COPY IF YOU WANT TO KEEP IT!|r",
+                    -- get = function() return "" end,
+                    -- set = function(_, newValue) DynamicCam:LoadPreset(newValue) end,
+                    -- values = function() return DynamicCam:GetPresets() end,
+                    -- sorting = function() return DynamicCam:GetPresetsSorting() end,
+                    -- width = "full",
+                    -- order = 2,
+                -- },
+                -- presetDescriptions = {
+                    -- type = "group",
+                    -- name = "Descriptions",
+                    -- order = 3,
+                    -- inline = true,
+                    -- args = {
+                        -- description = {
+                            -- type = "description",
+                            -- name = function() return DynamicCam:GetPresetDescriptions() end,
+                            -- order = 1,
+                        -- },
+                    -- },
+                -- },
             },
         },
 
@@ -3750,51 +3929,58 @@ local profileSettings = {
             name = "Import / Export",
             order = 3,
             args = {
-                helpText = {
+                description = {
                     type = "description",
-                    name = "If you want to share your profile with others you can export it into a text string. Use \"Import\" to import strings you have received from others.",
-                    order = 0,
-                },
-                name = {
-                    type = "input",
-                    name = "Profile Name (Required!)",
-                    desc = "The name that other people will see when importing this profile.",
-                    get = function() return exportName end,
-                    set = function(_, newValue) exportName = newValue end,
-                    --width = "double",
+                    name = "Coming soon(TM).",
                     order = 1,
                 },
-                author = {
-                    type = "input",
-                    name = "Author (Optional)",
-                    desc = "A name that will be attached to the export so that other people know whom it's from.",
-                    get = function() return exportAuthor end,
-                    set = function(_, newValue) exportAuthor = newValue end,
-                    order = 2,
-                },
-                export = {
-                    type = "execute",
-                    name = "Generate export string",
-                    disabled = function() return not (exportName and exportName ~= "") end,
-                    func = function() DynamicCam:PopupExport(DynamicCam:ExportProfile(exportName, exportAuthor)) end,
-                    order = 3,
-                },
 
-                helpText = {
-                    type = "description",
-                    name = "If you have the DynamicCam import string for a profile or situation, paste it in the text box below to import it. You can generate such import strings yourself using the export functions in the \"Profiles\" or \"Situations\" sections of the DynamicCam settings.\n\n|cFFFF4040YOUR CURRENT PROFILE WILL BE OVERRIDDEN WITHOUT WARNING, SO MAKE A COPY IF YOU WANT TO KEEP IT!|r\n",
-                    order = 4,
-                },
-                import = {
-                    type = "input",
-                    name = "Paste and hit Accept to import!",
-                    desc = "Paste the DynamicCam import string of a profile or a situation.",
-                    get = function() return "" end,
-                    set = function(_, newValue) DynamicCam:Import(newValue) end,
-                    multiline = 10,
-                    width = "full",
-                    order = 5,
-                },
+                -- TODO
+                -- helpText = {
+                    -- type = "description",
+                    -- name = "If you want to share your profile with others you can export it into a text string. Use \"Import\" to import strings you have received from others.",
+                    -- order = 0,
+                -- },
+                -- name = {
+                    -- type = "input",
+                    -- name = "Profile Name (Required!)",
+                    -- desc = "The name that other people will see when importing this profile.",
+                    -- get = function() return exportName end,
+                    -- set = function(_, newValue) exportName = newValue end,
+                    -- --width = "double",
+                    -- order = 1,
+                -- },
+                -- author = {
+                    -- type = "input",
+                    -- name = "Author (Optional)",
+                    -- desc = "A name that will be attached to the export so that other people know whom it's from.",
+                    -- get = function() return exportAuthor end,
+                    -- set = function(_, newValue) exportAuthor = newValue end,
+                    -- order = 2,
+                -- },
+                -- export = {
+                    -- type = "execute",
+                    -- name = "Generate export string",
+                    -- disabled = function() return not (exportName and exportName ~= "") end,
+                    -- func = function() DynamicCam:PopupExport(DynamicCam:ExportProfile(exportName, exportAuthor)) end,
+                    -- order = 3,
+                -- },
+
+                -- helpText = {
+                    -- type = "description",
+                    -- name = "If you have the DynamicCam import string for a profile or situation, paste it in the text box below to import it. You can generate such import strings yourself using the export functions in the \"Profiles\" or \"Situations\" sections of the DynamicCam settings.\n\n|cFFFF4040YOUR CURRENT PROFILE WILL BE OVERRIDDEN WITHOUT WARNING, SO MAKE A COPY IF YOU WANT TO KEEP IT!|r\n",
+                    -- order = 4,
+                -- },
+                -- import = {
+                    -- type = "input",
+                    -- name = "Paste and hit Accept to import!",
+                    -- desc = "Paste the DynamicCam import string of a profile or a situation.",
+                    -- get = function() return "" end,
+                    -- set = function(_, newValue) DynamicCam:Import(newValue) end,
+                    -- multiline = 10,
+                    -- width = "full",
+                    -- order = 5,
+                -- },
 
             },
         },
@@ -3846,21 +4032,20 @@ function Options:ReselectSituation()
     self:SelectSituation()
 end
 
+
+-- If there has been user interaction with situation settings before (lastSelectedSID ~= nil),
+-- do not change the currently selected situation.
 function Options:SelectSituation(selectMe)
     if selectMe and DynamicCam.db.profile.situations[selectMe] then
         S = DynamicCam.db.profile.situations[selectMe]
         SID = selectMe
-    else
-        if DynamicCam.currentSituationID then
-            S = DynamicCam.db.profile.situations[DynamicCam.currentSituationID]
-            SID = DynamicCam.currentSituationID
-        else
-            if not SID or not S then
-                SID, S = next(DynamicCam.db.profile.situations)
-            end
-        end
+    elseif not lastSelectedSID and DynamicCam.currentSituationID then
+        S = DynamicCam.db.profile.situations[DynamicCam.currentSituationID]
+        SID = DynamicCam.currentSituationID
+    elseif not SID or not S then
+        SID, S = next(DynamicCam.db.profile.situations)
     end
-
+    
     LibStub("AceConfigRegistry-3.0"):NotifyChange("DynamicCam")
 end
 
@@ -3928,49 +4113,112 @@ end
 -- Create stuff, but all width dependent things have to be (re-)done in the OnWidthSet function.
 local function BuildSituationExportFrame(widget)
 
-  f = widget.frame
+  local f = widget.frame
 
-  f:SetHeight(300)
-  SetFrameBorder(f, 2, 1, 0, 0, 0.5)
-
+  -- Description text on top of the page. Using the same font as AceConfig description text.
   if not f.help then
 
-    -- print("Building")
-
-
-    -- #### Description text on top of the page.
-    f.help = f:CreateFontString(nil, "HIGH")
-    -- Using the same font as AceConfig description text.
+    f.help = f:CreateFontString(nil, "OVERLAY")
     f.help:SetFontObject("GameFontHighlightSmall")
     f.help:SetJustifyH("LEFT")
-    -- f.help:SetJustifyV("TOP")
     f.help:SetPoint("TOPLEFT", f, "TOPLEFT")
-    -- This does not help! The FontString dimensions get out of hand anyway
-    -- unless I am enforcing them in the OnWidthSet function.
-    -- f.help:SetPoint("TOPRIGHT", f, "TOPRIGHT")
-    f.help:SetText("Here you control when a situation is active. Knowledge of the WoW UI API may be required. If you are happy with the stock situations of DynamicCam, just ignore this section. But if you want to create custom situations, you can check the stock situations here. You can also modify them, but beware: your changed settings will persist even if future versions of DynamicCam introduce important updates.")
-    -- Register for resizing in OnWidthSet.
-    tinsert(widget.fontStrings, {f.help, f})
+    f.help:SetPoint("TOPRIGHT", f, "TOPRIGHT")
+
+    f.help:SetText("TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO")
+  end
 
 
-
-
+  if not f.contentFrame then
     f.contentFrame = CreateFrame("Frame", nil, f)
-    f.contentFrame:SetPoint("TOPLEFT", f.help, "BOTTOMLEFT", 0, -10)
-    f.contentFrame:SetPoint("TOPRIGHT", f.help, "BOTTOMRIGHT", 0, -10)
+    local cf = f.contentFrame
 
-    f.contentFrame:SetHeight(70)
+    local yOffset = -10
+    cf:SetPoint("TOPLEFT", f.help, "BOTTOMLEFT", 0, yOffset)
+    cf:SetPoint("TOPRIGHT", f.help, "TOPRIGHT", 0, yOffset)
 
-    -- TODO: Continue here
-    SetFrameBorder(f.contentFrame, 2, 1, 1, 1)
+
+    cf.situationSettingsFrame = CreateFrame("Frame", nil, cf)
+    local ssf = cf.situationSettingsFrame
+    ssf:SetPoint("TOPLEFT", cf, "TOPLEFT")
+    ssf:SetPoint("TOPRIGHT", cf, "TOPRIGHT")
+
+    ssf:SetHeight(30)
+
+
+    cf.situationActionsFrame = CreateFrame("Frame", nil, cf)
+    local saf = cf.situationActionsFrame
+    saf:SetPoint("TOPLEFT", ssf, "BOTTOMLEFT")
+    saf:SetPoint("TOPRIGHT", ssf, "BOTTOMRIGHT")
+
+    saf:SetHeight(30)
+
+
+    cf.situationControlsFrame = CreateFrame("Frame", nil, cf)
+    local scf = cf.situationControlsFrame
+    scf:SetPoint("TOPLEFT", saf, "BOTTOMLEFT")
+    scf:SetPoint("TOPRIGHT", saf, "BOTTOMRIGHT")
+
+    -- If this is too small, the text of the label gets cut off...
+    scf:SetHeight(30)
+
 
   end
+
+
+
+
+
+
+
+
+  -- TODO: For testing.
+  -- SetFrameBorder(f, 2, 1, 0, 0, 0.5)
+  -- SetFrameBorder(f.contentFrame, 2, 1, 1, 1)
+
+  -- testFrame = f.contentFrame.situationControlsFrame
+  -- if not testFrame.myLabel then
+    -- testFrame.myLabel = testFrame:CreateFontString(nil, "OVERLAY")
+    -- testFrame.myLabel:SetFont("Fonts\\FRIZQT__.TTF", 12)
+    -- testFrame.myLabel:SetTextColor(0.8, 0.8, 0.8)
+    -- testFrame.myLabel:SetJustifyH("LEFT")
+    -- testFrame.myLabel:SetPoint("TOPLEFT", testFrame, "TOPLEFT")
+    -- testFrame.myLabel:SetPoint("TOPRIGHT", testFrame, "TOPRIGHT")
+    -- testFrame.myLabel:SetText("TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST")
+  -- end
+
+
+
+
+  -- Whenever OnWidthSet() is called, we set the height of frames to the height of their children frames.
+  widget.AdjustHeightFunction = widget.AdjustHeightFunction or function(self)
+
+    -- -- For multi-line text labels with automatic line breaks you may have to
+    -- -- reset the label height back to the string height here. Because for some reason
+    -- -- the label may get reduced to one line (problby because the width is temporarily
+    -- -- undefined) in the process of switching GUI tabs.
+    -- -- This is also the place where have to set the height of frames, whose height should
+    -- -- depend on a text's height.
+    -- local newHeight = testFrame.myLabel:GetStringHeight()
+    -- testFrame.myLabel:SetHeight(newHeight)
+    -- testFrame:SetHeight(newHeight)
+
+    local f = self.frame
+    local cf = f.contentFrame
+
+    -- Set the contentFrame to the height of all its children.
+    cf:SetHeight(cf.situationSettingsFrame:GetHeight() + cf.situationActionsFrame:GetHeight() + cf.situationControlsFrame:GetHeight())
+
+    -- Set the widget frame to the height of all its children (frame.help and frame.contentFrame).
+    -- Get the offset between frame.help and frame.contentFrame.
+    local point, _, _, _, yOffset = cf:GetPoint()
+    assert(point == "TOPLEFT" or point == "TOPRIGHT")
+    f:SetHeight(f.help:GetStringHeight() - yOffset + cf:GetHeight())
+  end
+
 
 end
 
 
--- So we only call OnWidthSet when necessary.
-local lastWidth = nil
 
 -- My aceInvader.
 -- Inspired by https://github.com/SFX-WoW/AceGUI-3.0_SFX-Widgets/.
@@ -3995,9 +4243,6 @@ do
     -- Reccommended place to store ephemeral widget information.
     Widget.userdata = {}
 
-    -- FontStrings we need to resize in OnWidthSet().
-    Widget.fontStrings = {}
-
     -- OnAcquire, SetLabel, SetText, SetDisabled(nil)
     -- all get called when showing the widget.
     -- It does not really matter which of these functions you use to do your stuff.
@@ -4011,6 +4256,7 @@ do
       self.resizing = nil
     end
 
+
     -- Could be used to read the "name" attribute,
     -- if you want to use the same aceInvader for different purposes.
 		Widget.SetLabel = function(self, name)
@@ -4020,34 +4266,21 @@ do
         BuildSituationExportFrame(self)
       end
 
-      -- print(self.frame:GetWidth())
-      -- print(self.frame.help:GetWidth())
-      -- print(self.frame.help:GetHeight())
-
-      -- For testing.
-      -- self:SetHeight(800)
-      -- or
-      -- self.frame:SetHeight(800)
     end
 
     -- Not useful to us, but Ace3 needs to call it.
 		Widget.SetText = function(self)
-        -- print("SetText")
+      -- print("----------- SetText")
     end
 
 
 
     Widget.OnWidthSet = function(self)
-      if self.resizing or (self.frame:GetWidth() == lastWidth) then return end
-      -- print("----------- OnWidthSet")
+      if self.resizing then return end
+      -- print("----------- OnWidthSet", self.frame:GetWidth(), self.frame.contentFrame:GetWidth())
 
-      -- We need to manually set the FontString width after the frame width has changed.
-      for _, v in pairs(self.fontStrings) do
-        local label, frame = unpack(v)
-        label:SetWidth(frame:GetWidth())
-      end
-
-      lastWidth = self.frame:GetWidth()
+      -- Whenever OnWidthSet() is called, adjust the height of the frames to contain all child frames.
+      if self.AdjustHeightFunction then self:AdjustHeightFunction() end
     end
 
 
@@ -4384,134 +4617,224 @@ end
 
 
 
+
+
+
+local mouseLookSpeedSlider = nil
+local MouseLookSpeedSliderOrignialTooltipEnter = nil
+local MouseLookSpeedSliderOrignialTooltipLeave = nil
+
+
+-- Partially disable motion sickness options and leave a tooltip note in the default UI settings.
+local motionSicknessDropDown = nil
+local indexCentered = nil
+local indexReduced = nil
+local indexBoth = nil
+local indexNone = nil
+local MotionSicknessDropDownOriginalTooltipEnter = nil
+local MotionSicknessDropDownOriginalTooltipLeave = nil
+
+hooksecurefunc(SettingsPanel.Container.SettingsList.ScrollBox, "Update", function(self)
+
+  local foundMouseMotionSicknessDropDown = false
+  local children = { SettingsPanel.Container.SettingsList.ScrollBox.ScrollTarget:GetChildren() }
+  for i, child in ipairs(children) do
+    if child.Text then
+      if child.Text:GetText() == MOTION_SICKNESS_DROPDOWN  then
+        -- print("Found", child.Text:GetText(), MOTION_SICKNESS_DROPDOWN)
+        foundMouseMotionSicknessDropDown = true
+
+        if not motionSicknessDropDown then
+          -- print("Disabling drop down")
+          motionSicknessDropDown = child.DropDown.Button
+
+          if not MotionSicknessDropDownOriginalTooltipEnter then
+            MotionSicknessDropDownOriginalTooltipEnter = motionSicknessDropDown:GetScript("OnEnter")
+            MotionSicknessDropDownOriginalTooltipLeave = motionSicknessDropDown:GetScript("OnLeave")
+          end
+
+          -- Change tooltip.
+          motionSicknessDropDown:SetScript("OnEnter", function(self)
+              GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 0)
+              GameTooltip:AddLine("|cFFFF0000Partially disabled!|r", _, _, _, true)
+              GameTooltip:AddLine("\"" .. MOTION_SICKNESS_CHARACTER_CENTERED .. "\" prevents many features of the\naddon DynamicCam and is therefore disabled.\n\nFurthermore, since WoW 10.0 not using the \"" ..MOTION_SICKNESS_REDUCE_CAMERA_MOTION .. "\" setting heavily disrupts the zoom-in of DynamicCam's Reactive Zoom and view changes, which is why this setting is enforced.", _, _, _, true)
+              GameTooltip:Show()
+          end)
+          motionSicknessDropDown:SetScript("OnLeave", function(self)
+              GameTooltip:Hide()
+          end)
+
+
+          -- Prevent unallowed selections.
+          local function UndoSelections(self, value)
+            -- print("UndoSelections")
+
+            -- Only do this while the drop down is modified.
+            if not motionSicknessDropDown then return end
+
+            -- There is only one allowed selection!
+            self:SetSelectedIndex(indexReduced)
+
+            -- Before 10.0.0, CameraReduceUnexpectedMovement was not messing with the zoom in and could be allowed.
+            -- if value == indexBoth then
+              -- self:SetSelectedIndex(indexReduced)
+            -- elseif value == indexCentered then
+              -- self:SetSelectedIndex(indexNone)
+            -- end
+          end
+
+          hooksecurefunc(motionSicknessDropDown, "OnEntryClicked", UndoSelections)
+          hooksecurefunc(motionSicknessDropDown, "Increment", UndoSelections)
+          hooksecurefunc(motionSicknessDropDown, "Decrement", UndoSelections)
+
+        end
+
+        -- Got to make sure the labels stay modified.
+        for i, k in pairs(motionSicknessDropDown.selections) do
+          -- print(i, k)
+
+          if k.label == MOTION_SICKNESS_CHARACTER_CENTERED then
+            k.label = "|cFFFF0000" .. MOTION_SICKNESS_CHARACTER_CENTERED .. " (disabled)|r"
+            indexCentered = k.value
+          elseif k.label == MOTION_SICKNESS_BOTH then
+            k.label = "|cFFFF0000" .. MOTION_SICKNESS_BOTH .. " (disabled)|r"
+            indexBoth = k.value
+          elseif k.label == MOTION_SICKNESS_NONE then
+            k.label = "|cFFFF0000" .. MOTION_SICKNESS_NONE .. " (disabled)|r"
+            indexNone = k.value
+          elseif k.label == MOTION_SICKNESS_REDUCE_CAMERA_MOTION then
+            -- k.label = MOTION_SICKNESS_REDUCE_CAMERA_MOTION
+            indexReduced = k.value
+          end
+
+          -- for i2, k2 in pairs(k) do
+            -- print("    ", i2, k2)
+          -- end
+        end
+
+        break
+      end
+    end
+  end
+
+  -- If the drop down is used for something else and we have changed it before, undo the change.
+  if motionSicknessDropDown and not foundMouseMotionSicknessDropDown then
+    -- print("Re-enabling drop down")
+    motionSicknessDropDown:SetScript("OnEnter", MotionSicknessDropDownOriginalTooltipEnter)
+    motionSicknessDropDown:SetScript("OnLeave", MotionSicknessDropDownOriginalTooltipLeave)
+
+    motionSicknessDropDown = nil
+  end
+
+
+
+
+
+  local foundMouseLookSpeedSlider = false
+  local children = { SettingsPanel.Container.SettingsList.ScrollBox.ScrollTarget:GetChildren() }
+  for i, child in ipairs(children) do
+    if child.Text then
+      if child.Text:GetText() == MOUSE_LOOK_SPEED then
+        -- print("Found", child.Text:GetText(), MOUSE_LOOK_SPEED)
+        foundMouseLookSpeedSlider = true
+
+        if not mouseLookSpeedSlider then
+          -- print("Disabling slider")
+          mouseLookSpeedSlider = child.SliderWithSteppers
+
+          if not MouseLookSpeedSliderOrignialTooltipEnter then
+            MouseLookSpeedSliderOrignialTooltipEnter = mouseLookSpeedSlider.Slider:GetScript("OnEnter")
+            MouseLookSpeedSliderOrignialTooltipLeave = mouseLookSpeedSlider.Slider:GetScript("OnLeave")
+          end
+
+          -- Change tooltip.
+          mouseLookSpeedSlider.Slider:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 0, 0)
+            GameTooltip:AddLine("|cFFFF0000Disabled!|r", _, _, _, true)
+            GameTooltip:AddLine("Your Addon DynamicCam lets you adjust horizontal and vertical mouse look speed individually! Just go to the \"Mouse Look\" settings of DynamicCam to make the adjustments there.", _, _, _, true)
+            GameTooltip:Show()
+          end)
+          mouseLookSpeedSlider.Slider:SetScript("OnLeave", function(self)
+            GameTooltip:Hide()
+          end)
+        end
+
+        -- Got to make sure, the slider stays disabled.
+        if mouseLookSpeedSlider.Slider:IsEnabled() then
+          mouseLookSpeedSlider:SetEnabled_(false)
+        end
+
+        break
+      end
+    end
+  end
+
+  -- If the slider is used for something else and we have changed it before, undo the change.
+  if mouseLookSpeedSlider and not foundMouseLookSpeedSlider then
+    -- print("Re-enabling slider")
+    mouseLookSpeedSlider.Slider:SetScript("OnEnter", MouseLookSpeedSliderOrignialTooltipEnter)
+    mouseLookSpeedSlider.Slider:SetScript("OnLeave", MouseLookSpeedSliderOrignialTooltipLeave)
+    if not mouseLookSpeedSlider.Slider:IsEnabled() then
+      mouseLookSpeedSlider:SetEnabled_(true)
+    end
+    mouseLookSpeedSlider = nil
+  end
+
+end)
+
+
+
+
+
+-- Remember which view is active and which as been reset,
+-- so when the user activates cameraSmoothStyle, we only reset to view 1 once.
+local viewIsActive = {[1] = nil, [2] = nil, [3] = nil, [4] = nil, [5] = nil,}
+local viewIsReset = {[1] = nil, [2] = nil, [3] = nil, [4] = nil, [5] = nil,}
+hooksecurefunc("SetView", function(view)
+    for i = 1, 5 do
+        if i == tonumber(view) then
+            viewIsActive[i] = true
+        else
+            viewIsActive[i] = false
+        end
+    end
+end)
+hooksecurefunc("SaveView", function(view) viewIsReset[tonumber(view)] = false end)
+hooksecurefunc("ResetView", function(view) viewIsReset[tonumber(view)] = true end)
+
+
+
 local validValuesCameraView = {[1] = true, [2] = true, [3] = true, [4] = true, [5] = true,}
 
--- Automatically undo forbidden cvar changes.
 hooksecurefunc("SetCVar", function(cvar, value)
-    if cvar == "CameraKeepCharacterCentered" and value == "1" then
+    -- print(cvar, value)
+
+    -- Automatically undo forbidden motion sickness setting.
+    if cvar == "CameraKeepCharacterCentered" and (value == "1" or value == 1) then
         print("|cFFFF0000CameraKeepCharacterCentered = 1 prevented by DynamicCam!|r")
         SetCVar("CameraKeepCharacterCentered", 0)
+
+    elseif cvar == "CameraReduceUnexpectedMovement" and (value == "0" or value == 0) then
+        print("|cFFFF0000CameraReduceUnexpectedMovement = 0 prevented by DynamicCam!|r")
+        SetCVar("CameraReduceUnexpectedMovement", 1)
 
     -- https://github.com/Mpstark/DynamicCam/issues/40
     elseif cvar == "cameraView" and not validValuesCameraView[tonumber(value)] then
         print("|cFFFF0000cameraView =", value, "prevented by DynamicCam!|r")
         SetCVar("cameraView", GetCVarDefault("cameraView"))
-    end
-end)
-
--- Wait some time to be on the safe side...
-C_Timer.After(1, function()
-
-    -- Disable the standard UI's mouse look slider.
-    InterfaceOptionsMousePanelMouseLookSpeedSlider:Disable()
-    InterfaceOptionsMousePanelMouseLookSpeedSlider:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -10)
-        GameTooltip:SetText("Overridden by \"Mouse Look\" settings\nof the addon DynamicCam!")
-    end)
-    InterfaceOptionsMousePanelMouseLookSpeedSlider:SetScript("OnLeave", function(self)
-        GameTooltip:Hide()
-    end)
 
 
-
-    -- Prevent the user from activating MOTION_SICKNESS_CHARACTER_CENTERED.
-
-    -- Hide the original motion sickness drop down.
-    InterfaceOptionsAccessibilityPanelMotionSicknessDropdown:Hide()
-
-    -- Replace it with my own copy, such that there will be no taint.
-    local cameraKeepCharacterCentered = "CameraKeepCharacterCentered";
-    local cameraReduceUnexpectedMovement = "CameraReduceUnexpectedMovement";
-    local motionSicknessOptions = {
-        {
-            text = MOTION_SICKNESS_NONE,
-            [cameraKeepCharacterCentered] = "0",
-            [cameraReduceUnexpectedMovement] = "0"
-        },
-        {
-            text = MOTION_SICKNESS_REDUCE_CAMERA_MOTION,
-            [cameraKeepCharacterCentered] = "0",
-            [cameraReduceUnexpectedMovement] = "1"
-        },
-        {
-            text = "|cFFFF0000" .. MOTION_SICKNESS_CHARACTER_CENTERED .. " (disabled)|r",
-            [cameraKeepCharacterCentered] = "1",
-            [cameraReduceUnexpectedMovement] = "0"
-        },
-        {
-            text = "|cFFFF0000" .. MOTION_SICKNESS_BOTH .. " (disabled)|r",
-            [cameraKeepCharacterCentered] = "1",
-            [cameraReduceUnexpectedMovement] = "1"
-        },
-    }
-    local function GetMotionSicknessSelected()
-        local SelectedcameraKeepCharacterCentered = GetCVar(cameraKeepCharacterCentered)
-        local SelectedcameraReduceUnexpectedMovement = GetCVar(cameraReduceUnexpectedMovement)
-
-        for option, cvars in pairs(motionSicknessOptions) do
-            if ( cvars[cameraKeepCharacterCentered] == SelectedcameraKeepCharacterCentered and cvars[cameraReduceUnexpectedMovement] == SelectedcameraReduceUnexpectedMovement ) then
-                return option;
-            end
-        end
+    -- Switch to a default view, if user switches to cameraSmoothStyle.
+    elseif cvar == "cameraSmoothStyle" and value ~= "0" then
+        -- The order (first reset then set) is important, because if you are already
+        -- in view 1 and do a reset, it also sets the view. If this is followed by
+        -- another setView, you get an undesired instant view switch.
+        if not viewIsReset[1] then ResetView(1) end
+        if not viewIsActive[1] then SetView(1) end
     end
 
-
-    local DynamicCamMotionSicknessDropdown = CreateFrame("Frame", "DynamicCamMotionSicknessDropdown", InterfaceOptionsAccessibilityPanel, "UIDropDownMenuTemplate")
-    DynamicCamMotionSicknessDropdown:SetPoint("TOPLEFT", InterfaceOptionsAccessibilityPanelMotionSicknessDropdown, "TOPLEFT", 0, 0)
-    -- Use in place of dropDown:SetWidth.
-    -- (Could not find where the original takes its width from, but 130 seems to be it.)
-    UIDropDownMenu_SetWidth(DynamicCamMotionSicknessDropdown, 130)
-    DynamicCamMotionSicknessDropdown.label = DynamicCamMotionSicknessDropdown:CreateFontString("DynamicCamMotionSicknessDropdownLabel", "BACKGROUND", "OptionsFontSmall")
-    DynamicCamMotionSicknessDropdown.label:SetPoint("BOTTOMLEFT", DynamicCamMotionSicknessDropdown, "TOPLEFT", 17, 3)
-    DynamicCamMotionSicknessDropdown.label:SetText(MOTION_SICKNESS_DROPDOWN)
-
-    local function DynamicCamMotionSicknessDropdown_Initialize()
-
-      local selectedValue = UIDropDownMenu_GetSelectedValue(DynamicCamMotionSicknessDropdown)
-
-      local info = UIDropDownMenu_CreateInfo()
-
-      -- Called when this option is selected.
-      info.func = function(self)
-          -- Try to set the cvars. They will be rectified by the cvar hook above.
-          BlizzardOptionsPanel_SetCVarSafe(cameraKeepCharacterCentered, motionSicknessOptions[self.value][cameraKeepCharacterCentered])
-          BlizzardOptionsPanel_SetCVarSafe(cameraReduceUnexpectedMovement, motionSicknessOptions[self.value][cameraReduceUnexpectedMovement])
-          -- Then set the selected item accordingly.
-          DynamicCamMotionSicknessDropdown.value = GetMotionSicknessSelected()
-          UIDropDownMenu_SetSelectedValue(DynamicCamMotionSicknessDropdown, DynamicCamMotionSicknessDropdown.value)
-        end
-
-      for k, v in ipairs(motionSicknessOptions) do
-          info.text = v.text
-          info.value = k
-          info.checked = k == selectedValue
-          -- UIDropDownMenu_AddButton(info)
-
-          MyUIDropDownMenu_AddButton(info)
-      end
-
-    end
-
-
-    UIDropDownMenu_Initialize(DynamicCamMotionSicknessDropdown, DynamicCamMotionSicknessDropdown_Initialize)
-
-    DynamicCamMotionSicknessDropdown.value = GetMotionSicknessSelected()
-    UIDropDownMenu_SetSelectedValue(DynamicCamMotionSicknessDropdown, DynamicCamMotionSicknessDropdown.value)
-
-
-    -- Place a tooltip warning.
-    DynamicCamMotionSicknessDropdown:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_TOP", 0, 10)
-        GameTooltip:SetText("\"" .. MOTION_SICKNESS_CHARACTER_CENTERED .. "\" would disable many features of the\naddon DynamicCam and is therefore disabled.")
-    end)
-    DynamicCamMotionSicknessDropdown:SetScript("OnLeave", function(self)
-        GameTooltip:Hide()
-    end)
 
 end)
-
-
-
 
 
 

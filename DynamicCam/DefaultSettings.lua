@@ -37,6 +37,7 @@ DynamicCam.situationDefaults = {
         viewNumber = 2,
         viewRestore = true,
         viewInstant = false,
+        restoreDefaultViewNumber = 1,
     },
 
     rotation = {
@@ -98,7 +99,7 @@ DynamicCam.defaults = {
         firstRun = true,
 
         zoomRestoreSetting = "adaptive",
-        interfaceOptionsFrameIgnoreParentAlpha = true,
+        settingsPanelIgnoreParentAlpha = true,
 
         -- Standard settings (for when no situation is overriding them).
         standardSettings = {
@@ -276,7 +277,7 @@ return isInstance and instanceType == "pvp" and UnitAffectingCombat("player")]],
 
             ["100"] = {
                 name = "Mounted",
-                events = {"SPELL_UPDATE_USABLE", "UNIT_AURA"},
+                events = {"PLAYER_MOUNT_DISPLAY_CHANGED"},
                 priority = 100,
                 condition = "return IsMounted() and not UnitOnTaxi(\"player\")",
             },
@@ -395,6 +396,10 @@ end]],
   346170,  -- Attendant's Pocket Portal: Ardenweald
   346171,  -- Attendant's Pocket Portal: Maldraxxus
   346173,  -- Attendant's Pocket Portal: Revendreth
+  363799,  -- Dominated Hearthstone
+  367013,  -- Broker Translocation Matrix
+  368788,  -- Hearth to Brill
+  375357,  -- Timewalker's Hearthstone
 
 }]],
                 events = {"UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_SUCCEEDED", "UNIT_SPELLCAST_CHANNEL_START", "UNIT_SPELLCAST_CHANNEL_STOP", "UNIT_SPELLCAST_CHANNEL_UPDATE", "UNIT_SPELLCAST_INTERRUPTED"},
@@ -451,7 +456,7 @@ function this:GetCurrentMount()
   end
   return nil
 end]],
-                events = {"AUCTION_HOUSE_CLOSED", "AUCTION_HOUSE_SHOW", "BANKFRAME_CLOSED", "BANKFRAME_OPENED", "GOSSIP_CLOSED", "GOSSIP_SHOW", "GUILD_REGISTRAR_CLOSED", "GUILD_REGISTRAR_SHOW", "MERCHANT_CLOSED", "MERCHANT_SHOW", "PET_STABLE_CLOSED", "PET_STABLE_SHOW", "PLAYER_TARGET_CHANGED", "QUEST_COMPLETE", "QUEST_DETAIL", "QUEST_FINISHED", "QUEST_GREETING", "QUEST_PROGRESS", "CLOSE_TABARD_FRAME", "OPEN_TABARD_FRAME", "TRAINER_CLOSED", "TRAINER_SHOW", "SHIPMENT_CRAFTER_CLOSED", "SHIPMENT_CRAFTER_OPENED", "TRANSMOGRIFY_CLOSE", "TRANSMOGRIFY_OPEN"},
+                events = {"AUCTION_HOUSE_CLOSED", "AUCTION_HOUSE_SHOW", "BANKFRAME_CLOSED", "BANKFRAME_OPENED", "GOSSIP_CLOSED", "GOSSIP_SHOW", "GUILD_REGISTRAR_CLOSED", "GUILD_REGISTRAR_SHOW", "MERCHANT_CLOSED", "MERCHANT_SHOW", "PET_STABLE_CLOSED", "PET_STABLE_SHOW", "PLAYER_TARGET_CHANGED", "QUEST_COMPLETE", "QUEST_DETAIL", "QUEST_FINISHED", "QUEST_GREETING", "QUEST_PROGRESS", "CLOSE_TABARD_FRAME", "OPEN_TABARD_FRAME", "TRAINER_CLOSED", "TRAINER_SHOW", "SHIPMENT_CRAFTER_CLOSED", "SHIPMENT_CRAFTER_OPENED", "TRANSMOGRIFY_CLOSE", "TRANSMOGRIFY_OPEN", "PLAYER_INTERACTION_MANAGER_FRAME_SHOW", "PLAYER_INTERACTION_MANAGER_FRAME_HIDE"},
                 priority = 110,
                 condition = [[-- Don't want to apply this to my own mount vendors while mounted.
 if IsMounted() then
@@ -477,7 +482,7 @@ return shown and UnitExists("npc") and UnitIsUnit("npc", "target")]],
 
             ["301"] = {
                 name = "Mailbox",
-                events = {"MAIL_CLOSED", "MAIL_SHOW", "GOSSIP_CLOSED"},
+                events = {"MAIL_SHOW", "PLAYER_INTERACTION_MANAGER_FRAME_SHOW", "PLAYER_INTERACTION_MANAGER_FRAME_HIDE", "MAIL_CLOSED", "GOSSIP_CLOSED"},
                 priority = 110,
                 condition = "return MailFrame and MailFrame:IsShown()",
             },
