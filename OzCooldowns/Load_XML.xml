@@ -1,0 +1,6 @@
+<Ui>
+	<Include file='Libs\Load_Libs.xml'/>
+	<Include file='Locale\load_locales.xml'/>
+	<Include file='Core\Load_Core.xml'/>
+	<Include file='Class\Load_Classes.xml'/>
+</Ui>

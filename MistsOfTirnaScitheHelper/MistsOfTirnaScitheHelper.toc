@@ -1,0 +1,11 @@
+## Interface: 100000
+## Title: Mists of Tirna Scithe Helper
+## Notes: Helps to solve the guessing game in Mists of Tirna Scithe
+## Author: scorkum
+## Version: 10.0.0.0
+## DefaultState: Enabled
+## SavedVariables: MoTSHdata
+## SavedVariablesPerCharacter: isAnnounce, isPreview, pickerScale, pickerTransparency, previewScale, previewTransparency, UICoords, isShowOnBoss, isSync, isShowOrder, ChoiceColourTable, AnswerColourTable
+
+Locales.lua
+Core.lua

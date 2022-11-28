@@ -1,0 +1,10 @@
+## Interface: 90207
+## Title: One Click Enchant
+## Notes: Create enchantment scrolls with just one single click.
+## Author: Tarley on Twisting Nether-EU <H3adcracker#21987>
+
+## Version: 9.2.7-release(r2)
+## LoadOnDemand: 1
+## LoadWith: Blizzard_TradeSkillUI
+
+OneClickEnchant.lua

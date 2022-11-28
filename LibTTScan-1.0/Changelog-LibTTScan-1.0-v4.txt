@@ -1,0 +1,8 @@
+2016-11-02  rowaasr13  <rowaasr13>
+
+[8ffcad0beb96] [v4]
+* LibTTScan-1.0.lua, LibTTScan-1.0.toc:
+
+v4 toc + MINOR
+
+
