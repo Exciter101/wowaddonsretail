@@ -1,6 +1,0 @@
-## Interface: 30300
-## Title: TIA:|cffffffff No Error Spam
-## Author: Tia Lynn
-## Notes: Prevents Error Messages from Repeating More than 1 per 8 Seconds (Default Time for Message to Fade Away)
-
-Tia_NoErrorSpam.lua

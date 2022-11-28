@@ -1,9 +1,0 @@
-## Interface: 80100
-## DefaultState: Enabled
-## Title: |cFF00FFFFOz|r|cFFFFFFFFCooldowns|r
-## Author: Azilroka, ChaoticVoid, Nimaear
-## Version: 3.42
-## OptionalDeps: Tukui, ElvUI, DSM, AddOnSkins
-## SavedVariables: OzCooldownsDB
-
-Load_XML.xml
