@@ -151,7 +151,8 @@ function private.ErrorHandler(msg, thread)
 	end)
 
 	-- build stack trace with locals and get addon name
-	local stackInfo = private.GetStackInfo(msg, thread)
+	local stackInfo, newMsg = private.GetStackInfo(msg, thread)
+	msg = newMsg
 	local addonName = isSilent and "TradeSkillMaster" or nil
 	for _, info in ipairs(stackInfo) do
 		if not addonName then
@@ -256,7 +257,7 @@ function private.ErrorHandler(msg, thread)
 	-- show this error
 	local stackInfoLines = {}
 	for _, info in ipairs(errorInfo.stackInfo) do
-		local localsStr = info.locals ~= "" and ("\n  |cffaaaaaa"..gsub(info.locals, "\n", "\n  ").."|r") or ""
+		local localsStr = info.localsStr ~= "" and ("\n  |cffaaaaaa"..gsub(info.localsStr, "\n", "\n  ").."|r") or ""
 		local locationStr = info.line ~= 0 and strjoin(":", info.file, info.line) or info.file
 		tinsert(stackInfoLines, locationStr.." <"..info.func..">"..localsStr)
 	end
@@ -296,46 +297,79 @@ end
 
 function private.GetStackInfo(msg, thread)
 	local errLocation = strmatch(msg, "[A-Za-z]+%.lua:[0-9]+")
-	local stackInfo = {}
-	local stackStarted = false
-	local consecutiveIgnored = 0
-	for i = 0, math.huge do
-		local prevStackFunc = #stackInfo > 0 and stackInfo[#stackInfo].func or nil
-		local file, line, func, localsStr, newPrevStackFunc, appendPrevLocals = private.GetStackLevelInfo(i, thread, prevStackFunc)
-		if newPrevStackFunc then
-			stackInfo[#stackInfo].func = newPrevStackFunc
-			if appendPrevLocals then
-				stackInfo[#stackInfo].locals = stackInfo[#stackInfo].locals.."\n"..appendPrevLocals
-			end
-		end
-		if file then
-			if not stackStarted then
-				if errLocation then
-					stackStarted = strmatch(file..":"..line, "[A-Za-z]+%.lua:[0-9]+") == errLocation
+	local stackFrames = private.GetStackFrames(thread)
+	local startIndex = nil
+	for i, frame in ipairs(stackFrames) do
+		local prevFrame = stackFrames[i-1]
+		if prevFrame and strfind(frame.file, "LibTSMClass%.lua") then
+			-- TODO: Ignore stack frames from the class code's wrapper function
+			if frame.func ~= "?" and prevFrame.func and not strmatch(frame.func, "^.+:[0-9]+$") and strmatch(prevFrame.func, "^.+:[0-9]+$") then
+				-- This stack frame includes the class method we were accessing in the previous one, so go back and fix it up
+				if frame.rawLocals then
+					local className, objKey = strmatch(frame.rawLocals, "\n +str = \"([A-Za-z_0-9]+):([0-9A-F]+)\"\n")
+					if className then
+						if TSM.IsDevVersion() then
+							prevFrame.localsStr = prevFrame.localsStr.."\n"..LibTSMClass.GetDebugInfo(className..":"..objKey, 5, private.LocalTableLookupFunc)
+						end
+						prevFrame.func = className.."."..frame.func
+					else
+						prevFrame.func = "?."..frame.func
+					end
 				else
-					stackStarted = i > (thread and 1 or 4) and file ~= "[C]"
+					prevFrame.func = "?."..frame.func
 				end
 			end
-			if stackStarted then
-				tinsert(stackInfo, {
-					file = file,
-					line = line,
-					func = func,
-					locals = localsStr,
-				})
+		end
+		if not startIndex then
+			if errLocation and strmatch(frame.file..":"..frame.line, "[A-Za-z]+%.lua:[0-9]+") == errLocation then
+				startIndex = strfind(frame.file, "LibTSMClass%.lua") and (i - 1) or i
+			elseif not errLocation and i > (thread and 1 or 4) and frame.file ~= "[C]" then
+				startIndex = i
 			end
+		end
+	end
+	if not startIndex then
+		return {}
+	end
+
+	-- Remove the extra frames from the top
+	for _ = 1, startIndex - 1 do
+		tremove(stackFrames, 1)
+	end
+
+	-- Fix up the error message
+	if errLocation and strfind(errLocation, "LibTSMClass%.lua:%d+") and stackFrames[1] and not strfind(stackFrames[1].file, "LibTSMClass%.lua") then
+		msg = gsub(msg, ".+LibTSMClass%.lua:[0-9]+", stackFrames[1].file..":"..stackFrames[1].line)
+	end
+
+	return stackFrames, msg
+end
+
+function private.GetStackFrames(thread)
+	local stackFrames = {}
+	local consecutiveIgnored = nil
+	for i = 0, math.huge do
+		local file, line, func, locals = private.GetStackFrame(i, thread)
+		if file then
+			tinsert(stackFrames, {
+				file = file,
+				line = line,
+				func = func,
+				rawLocals = locals,
+				localsStr = locals and private.ParseLocals(locals, file) or "",
+			})
 			consecutiveIgnored = 0
 		else
 			consecutiveIgnored = consecutiveIgnored + 1
-			if consecutiveIgnored >= 20 or #stackInfo >= MAX_STACK_DEPTH then
+			if consecutiveIgnored >= 20 or #stackFrames >= MAX_STACK_DEPTH then
 				break
 			end
 		end
 	end
-	return stackInfo
+	return stackFrames
 end
 
-function private.GetStackLevelInfo(level, thread, prevStackFunc)
+function private.GetStackFrame(level, thread)
 	local stackLine = nil
 	if thread then
 		stackLine = debugstack(thread, level, 1, 0)
@@ -371,32 +405,7 @@ function private.GetStackLevelInfo(level, thread, prevStackFunc)
 
 	local func = strsub(functionStr, strfind(functionStr, "`") and 2 or 1, -1) or "?"
 	func = func ~= "" and func or "?"
-
-	if strfind(locationStr, "LibTSMClass%.lua:") then
-		local appendPrevLocals = nil
-		-- ignore stack frames from the class code's wrapper function
-		if func ~= "?" and prevStackFunc and not strmatch(func, "^.+:[0-9]+$") and strmatch(prevStackFunc, "^.+:[0-9]+$") then
-			-- this stack frame includes the class method we were accessing in the previous one, so go back and fix it up
-			if locals then
-				local className, objKey = strmatch(locals, "\n +str = \"([A-Za-z_0-9]+):([0-9A-F]+)\"\n")
-				if className then
-					if TSM.IsDevVersion() then
-						appendPrevLocals = LibTSMClass.GetDebugInfo(className..":"..objKey, 5, private.LocalTableLookupFunc)
-					end
-					prevStackFunc = className.."."..func
-				else
-					prevStackFunc = "?."..func
-				end
-			else
-				prevStackFunc = "?."..func
-			end
-		end
-		return nil, nil, nil, nil, prevStackFunc, appendPrevLocals
-	end
-
-	-- add locals for addon functions (debuglocals() doesn't always work - or ever for threads)
-	local localsStr = locals and private.ParseLocals(locals, file) or ""
-	return file, line, func, localsStr, nil
+	return file, line, func, locals
 end
 
 function private.ParseLocals(locals, file)

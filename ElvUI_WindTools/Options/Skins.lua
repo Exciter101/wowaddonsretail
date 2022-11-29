@@ -543,20 +543,30 @@ options.blizzard = {
             type = "toggle",
             name = L["Event Trace"]
         },
-        friends = {
+        expansionLandingPage = {
             order = 10,
             type = "toggle",
-            name = L["Friend List"]
+            name = L["Expansion Landing Page"]
         },
         flightMap = {
             order = 10,
             type = "toggle",
             name = L["Flight Map"]
         },
+        friends = {
+            order = 10,
+            type = "toggle",
+            name = L["Friend List"]
+        },
         garrison = {
             order = 10,
             type = "toggle",
             name = L["Garrison"]
+        },
+        genericTrait = {
+            order = 10,
+            type = "toggle",
+            name = L["Generic Trait"]
         },
         gossip = {
             order = 10,
@@ -622,6 +632,11 @@ options.blizzard = {
             order = 10,
             type = "toggle",
             name = L["Mail Frame"]
+        },
+        majorFactions = {
+            order = 10,
+            type = "toggle",
+            name = L["Major Factions"]
         },
         merchant = {
             order = 10,
