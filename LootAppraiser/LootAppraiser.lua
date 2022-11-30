@@ -342,8 +342,8 @@ function private.sellGrayItems()
 	
 	for bag = 0, NUM_BAG_SLOTS do
 		--get details about each item in slot
-		for slot = 1, GetContainerNumSlots(bag) do
-			local itemLink = GetContainerItemLink(bag, slot)
+		for slot = 1, C_Container.GetContainerNumSlots(bag) do
+			local itemLink = C_Container.GetContainerItemLink(bag, slot)
 			--if an itemLink is available
 		
 			if itemLink ~= nil then
@@ -372,7 +372,7 @@ function private.sellGrayItems()
 					end
 					
 					
-					UseContainerItem(bag, slot)		--perform selling of item
+					C_Container.UseContainerItem(bag, slot)		--perform selling of item
 				else
 					--nothing
 				end
