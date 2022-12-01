@@ -423,6 +423,7 @@ V.skins = {
         petBattle = true,
         playerChoice = true,
         professions = true,
+        professionsCustomerOrders = true,
         quest = true,
         raidInfo = true,
         scenario = true,
@@ -466,7 +467,7 @@ V.skins = {
         raidUtility = true,
         staticPopup = true,
         statusReport = true,
-        totemBar = true,
+        totemTracker = true,
         unitFrames = true
     }
 }

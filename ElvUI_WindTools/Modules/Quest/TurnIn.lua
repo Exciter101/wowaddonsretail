@@ -6,9 +6,11 @@ local format = format
 local ipairs = ipairs
 local next = next
 local select = select
+local strfind = strfind
 local strlen = strlen
 local strmatch = strmatch
 local strupper = strupper
+local tinsert = tinsert
 local tonumber = tonumber
 
 local AcceptQuest = AcceptQuest
@@ -289,7 +291,9 @@ function TI:QUEST_GREETING()
             local _, isComplete = GetActiveTitle(index)
             local questID = GetActiveQuestID(index)
             if isComplete and not C_QuestLog_IsWorldQuest(questID) then
-                SelectActiveQuest(index)
+                if not self:IsPaused("COMPLETE") then
+                    SelectActiveQuest(index)
+                end
             end
         end
     end
@@ -299,7 +303,9 @@ function TI:QUEST_GREETING()
         for index = 1, available do
             local isTrivial = GetAvailableQuestInfo(index)
             if not isTrivial or IsTrackingHidden() then
-                SelectAvailableQuest(index)
+                if not self:IsPaused("ACCEPT") then
+                    SelectAvailableQuest(index)
+                end
             end
         end
     end
@@ -366,6 +372,20 @@ function TI:GOSSIP_SHOW()
             end
         elseif self.db and self.db.followerAssignees and followerAssignees[npcID] and numGossipOptions > 1 then
             return C_GossipInfo_SelectOption(firstGossipOptionID)
+        elseif numGossipOptions > 1 then
+            local maybeQuestIndexes = {}
+            for index, gossipOption in ipairs(gossipOptions) do
+                if gossipOption.name and strfind(gossipOption.name, "^|cFF0000FF[^|]*" .. _G.QUESTS_LABEL .. "[^|]*|r") then
+                    tinsert(maybeQuestIndexes, index)
+                end
+            end
+            if #maybeQuestIndexes == 1 then
+                local index = maybeQuestIndexes[1]
+                local status = gossipOptions[index] and gossipOptions[index].status
+                if status and status == 0 then
+                    return C_GossipInfo_SelectOption(gossipOptions[index].gossipOptionID)
+                end
+            end
         end
     end
 end
