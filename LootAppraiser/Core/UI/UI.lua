@@ -1003,21 +1003,21 @@ function private.OnBtnSellTrashClick()
 
     local itemsSold = 0
     for bag=0,4 do
-        for slot=1, GetContainerNumSlots(bag) do
+        for slot=1, C_Container.GetContainerNumSlots(bag) do
             -- first: we sell all grays
-            local link = GetContainerItemLink(bag, slot)
+            local link = C_Container.GetContainerItemLink(bag, slot)
             if link and link:find("ff9d9d9d") then			--Poor = ff9d9d9d
-                UseContainerItem(bag, slot)
+                C_Container.UseContainerItem(bag, slot)
                 itemsSold = itemsSold + 1
             end
 
             --second: sell items in TSM group
             if LA.GetFromDb("sellTrash", "tsmGroupEnabled", "TSM_REQUIRED") then
-                local id = GetContainerItemID(bag, slot)
+                local id = C_Container.GetContainerItemID(bag, slot)
                 --if id and LA:isItemInList(id, trashItems) then
                 if id and LA.TSM.IsItemInGroup(id, LA.GetFromDb("sellTrash", "tsmGroup")) then
                     --LA.Debug.Log("  id=" .. id .. ", found=" .. tostring(trashItems["i:" .. id]) .. ", link=" .. link)
-                    UseContainerItem(bag, slot)
+                    C_Container.UseContainerItem(bag, slot)
                     itemsSold = itemsSold + 1
                 end
             end
@@ -1036,8 +1036,8 @@ function private.OnBtnDestroyTrashClick()
     local destroyCounter = 0
 
     for bag = 0, 4 do
-        for slot = 1, GetContainerNumSlots(bag) do
-            local link = GetContainerItemLink(bag, slot)
+        for slot = 1, C_Container.GetContainerNumSlots(bag) do
+            local link = C_Container.GetContainerItemLink(bag, slot)
 
             -- grey items
             if link and link:find("ff9d9d9d") then -- Poor = ff9d9d9d
@@ -1051,7 +1051,7 @@ function private.OnBtnDestroyTrashClick()
             if link and private.IsDestroyBlacklistedItems() then
                 local itemID = LA.Util.ToItemID(link)
                 if LA.IsItemBlacklisted(itemID) then
-                    PickupContainerItem(bag, slot)
+                    C_Container.PickupContainerItem(bag, slot)
                     DeleteCursorItem()
 
                     destroyCounter = destroyCounter + 1

@@ -294,14 +294,87 @@ function ElvUI_EltreumUI:Anchors()
 		for i = #registered, 1, -1 do
 			local name = registered[i]:GetName()
 			if name == "ObjectiveTrackerFrame" and E.db.ElvUI_EltreumUI.quests.anchor then
-				tremove(editMode.registeredSystemFrames, i)
+				if (not IsAddOnLoaded('!KalielsTracker')) and (not IsAddOnLoaded('SorhaQuestLog')) and (not IsAddOnLoaded('ClassicQuestLog')) and (not IsAddOnLoaded('Who Framed Watcher Wabbit?')) then
+					tremove(editMode.registeredSystemFrames, i)
+				end
 			end
 			if E.private.actionbar.enable then
 				if name == "MainMenuBar" then
 					tremove(editMode.registeredSystemFrames, i)
 					_G.MainMenuBar.ApplySystemAnchor = nil
 				end
+				if name == "MultiBarBottomLeft" then
+					tremove(editMode.registeredSystemFrames, i)
+					--_G.MultiBarBottomLeft.SetPointBase = nil
+				end
+				if name == "MultiBarLeft" then
+					tremove(editMode.registeredSystemFrames, i)
+					--_G.MultiBarLeft.SetPointBase = nil
+				end
+				if name == "MultiBarBottomRight" then
+					tremove(editMode.registeredSystemFrames, i)
+					--_G.MultiBarBottomRight.SetPointBase = nil
+				end
+				if name == "MultiBarRight" then
+					tremove(editMode.registeredSystemFrames, i)
+					--_G.MultiBarRight.SetPointBase = nil
+				end
 				if name == "ExtraAbilityContainer" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "EncounterBar" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "StanceBar" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "PetActionBar" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "PossessActionBar" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "MainMenuBarVehicleLeaveButton" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "MultiBar5" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "MultiBar6" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "MultiBar7" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+			end
+			if E.private.skins.blizzard.enable and E.private.skins.blizzard.loot then
+				if name == "LootFrame" then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+			end
+			if E.private.unitframe.enable then
+				if name == "CompactRaidFrameContainer" and E.private.unitframe.disabledBlizzardFrames.raid then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "ArenaEnemyFramesContainer" and E.private.unitframe.disabledBlizzardFrames.arena then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "BossTargetFrameContainer" and E.private.unitframe.disabledBlizzardFrames.boss then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "PlayerFrame" and E.private.unitframe.disabledBlizzardFrames.player then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "TargetFrame" and E.private.unitframe.disabledBlizzardFrames.target then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "FocusFrame" and E.private.unitframe.disabledBlizzardFrames.focus then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "PartyFrame" and E.private.unitframe.disabledBlizzardFrames.party then
+					tremove(editMode.registeredSystemFrames, i)
+				end
+				if name == "PlayerCastingBarFrame" and E.private.unitframe.disabledBlizzardFrames.castbar then
 					tremove(editMode.registeredSystemFrames, i)
 				end
 			end
@@ -324,6 +397,8 @@ function ElvUI_EltreumUI:Anchors()
 						_G.ObjectiveTrackerFrame.ApplySystemAnchor = nil
 						_G.ObjectiveTrackerFrame.AnchorSelectionFrame = nil
 						_G.ObjectiveTrackerFrame.SetPointOverride = nil
+						_G.ObjectiveTrackerFrame.isRightManagedFrame = false
+						_G.ObjectiveTrackerFrame.breakSnappedFramesOnSave = false
 						--[[_G.ObjectiveTrackerFrame.SnapToFrame = nil
 						_G.ObjectiveTrackerFrame.ClearAllPointsOverride = nil
 						--_G.ObjectiveTrackerFrame.SetPointBase = E.noop --causes issues for some people for some reason
@@ -344,6 +419,8 @@ function ElvUI_EltreumUI:Anchors()
 						local function SetObjectivePoint()
 							E:Delay(0, function()
 								if not InCombatLockdown() then
+									_G.ObjectiveTrackerFrame.isRightManagedFrame = false
+									_G.ObjectiveTrackerFrame.breakSnappedFramesOnSave = false
 									_G.ObjectiveTrackerFrame:ClearAllPoints()
 									_G.ObjectiveTrackerFrame:Point("TOP", holder, "TOP")
 								end
@@ -593,12 +670,14 @@ EltruismGameMenu:SetScript("OnEvent", function()
 	if _G.GameMenuButtonEditMode and E.db.ElvUI_EltreumUI.otherstuff.gamemenu then
 		_G.GameMenuButtonEditMode:RegisterForClicks("AnyUp")
 		_G.GameMenuButtonEditMode:SetScript("OnClick", function(self, button)
-			if button == "LeftButton" then
-				E:ToggleMoveMode()
-				HideUIPanel(_G["GameMenuFrame"])
-			else
-				PlaySound(SOUNDKIT.IG_MAINMENU_OPTION);
-				ShowUIPanel(EditModeManagerFrame);
+			if not InCombatLockdown() then
+				if button == "LeftButton" then
+					E:ToggleMoveMode()
+					HideUIPanel(_G["GameMenuFrame"])
+				else
+					PlaySound(SOUNDKIT.IG_MAINMENU_OPTION);
+					ShowUIPanel(EditModeManagerFrame);
+				end
 			end
 		end)
 	end
