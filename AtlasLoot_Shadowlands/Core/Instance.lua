@@ -1,4 +1,4 @@
--- $Id: Instance.lua 8 2022-11-20 07:29:37Z arithmandar $
+-- $Id: Instance.lua 10 2022-12-03 08:38:11Z arithmandar $
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
@@ -120,7 +120,7 @@ data["De Other Side"] = {
 	items = 
 	{
 		{ -- Hakkar the Soulflayer
-			EncounterJournalID = 2030,
+			EncounterJournalID = 2408,
 			[NORMAL_DUNGEON_DIFF] = {
 				{ 1, 183504 }, -- Well-Placed Steel
 				{ 2, 182621 }, -- One With the Beast
@@ -304,7 +304,7 @@ data["Halls of Atonement"] = {
 			},
 		},
 		{ -- Lord Chamberlain
-			EncounterJournalID = 2102,
+			EncounterJournalID = 2413,
 			[NORMAL_DUNGEON_DIFF] = {
 				{ 1, 182685 }, -- Increased Scrutiny
 				{ 2, 183495 }, -- Lashing Scars
@@ -984,7 +984,7 @@ data["The Necrotic Wake"] = {
 	items = 
 	{
 		{ -- Blightbone
-			EncounterJournalID = 2419,
+			EncounterJournalID = 2395,
 			[NORMAL_DUNGEON_DIFF] = {
 				{ 1, 178732 }, -- Abominable Visage
 				{ 2, 178734 }, -- Fused Bone Greatbelt
@@ -1233,160 +1233,66 @@ data["Shadowlands"] = {
 	TableType = RAID_ITTYPE,
 	items = 
 	{
-		{ -- Oranomonos the Everbranching
-			EncounterJournalID = 2432,
-			[NORMAL_RAID_DIFF] = {
-				{ 1 , 183472 }, -- Evolved Swarm
-				{ 2 , 182346 }, -- Tumbling Waves
-				{ 3 , 184126 }, -- Ironroot Bindings
-				{ 4 , 182685 }, -- Increased Scrutiny
-				{ 5 , 184142 }, -- Twisted Witherroot Band
-				{ 6 , 182646 }, -- Repeat Decree
-				{ 7 , 182339 }, -- Necrotic Barrage
-				{ 8 , 182347 }, -- Essential Extraction
-				{ 9 , 182292 }, -- Brutal Grasp
-				{ 10, 184127 }, -- Slippers of the Leafy Undergrowth
-				{ 11, 183261 }, -- Memory of Surging Shots
-				{ 12, 182962 }, -- Catastrophic Origin
-				{ 13, 183474 }, -- Endless Thirst
-				{ 14, 182348 }, -- Lavish Harvest
-				{ 15, 183238 }, -- Memory of the Verdant Infusion
-				{ 16, 181553 }, -- Gift of the Lich
-				{ 17, 183199 }, -- Withering Ground
-				{ 18, 181774 }, -- Imbued Reflections
-				{ 19, 182331 }, -- Empowered Release
-				{ 20, 182442 }, -- Veteran's Repute
-				{ 21, 184129 }, -- Oranomonos's Diaphanous Leggings
-				{ 22, 182767 }, -- The Long Summer
-				{ 23, 182129 }, -- Fae Fermata
-				{ 24, 181759 }, -- Strike with Clarity
-				{ 25, 182964 }, -- Soul Eater
-				{ 26, 181775 }, -- Way of the Fae
-				{ 27, 181639 }, -- Siphoned Malice
-				{ 28, 181539 }, -- Discipline of the Grove
-				{ 29, 181981 }, -- Festering Transfusion
-				{ 30, 184138 }, -- Stonebark Girdle
-				{ 101, 182130 }, -- Shattered Perceptions
-				{ 102, 181770 }, -- Bone Marrow Hops
-				{ 103, 182335 }, -- Spirit Attunement
-				{ 104, 183463 }, -- Unnatural Malice
-				{ 105, 182288 }, -- Impenetrable Gloom
-				{ 106, 183493 }, -- Sudden Fractures
-				{ 107, 184172 }, -- Seed-Tender's Handwraps
-				{ 108, 182778 }, -- Ringing Clarity
-				{ 109, 182770 }, -- Righteous Might
-				{ 110, 182706 }, -- Brooding Pool
-				{ 111, 182777 }, -- Hallowed Discernment
-				{ 112, 183492 }, -- Reverberation
-				{ 113, 181974 }, -- Courageous Ascension
-				{ 114, 183494 }, -- Septic Shock
-				{ 115, 182295 }, -- Proliferation
-				{ 116, 182651 }, -- Destructive Reverberations
-				{ 117, 182321 }, -- Enfeebled Mark
-				{ 118, 183274 }, -- Memory of a Fevered Incantation
-				{ 119, 182463 }, -- Harrowing Punishment
-				{ 120, 182345 }, -- Elysian Dirge
-				{ 121, 183471 }, -- Deep Allegiance
-				{ 122, 183495 }, -- Lashing Scars
-				{ 123, 181600 }, -- Ire of the Ascended
-				{ 124, 182440 }, -- Piercing Verdict
-				{ 125, 182961 }, -- Fatal Decimation
-				{ 126, 182960 }, -- Soul Tithe
-				{ 127, 183473 }, -- Conflux of Elements
-			},
-		},
-		{ -- Mor'geth, Tormentor of the Damned
-			EncounterJournalID = 2456,
-			[NORMAL_RAID_DIFF] = {
-				{ 1, 187507 }, -- Adaptive Armor Fragment
-				{ 2, 187061 }, -- Shard of Rev
-				{ 3, 186360 }, -- Tormented Soul Harness
-				{ 4, 187506 }, -- Condensed Anima Sphere
-				{ 5, 186368 }, -- Mor'geth's Gauntlets of Damnation
-				{ 6, 186355 }, -- Wristwraps of Anguish
-				{ 7, 186372 }, -- Tormentor's Greatbelt
-				{ 8, 187447 }, -- Soul Cage Fragment
-				{ 9, 186361 }, -- Grips of Unleashed Suffering
-				{ 10, 186366 }, -- Stygian Chain Greaves
-				{ 11, 186357 }, -- Sorrowful Trousers
-				{ 12, 186370 }, -- Caged Legplates
-			},
-		},
-		{ -- Antros
-			EncounterJournalID = 2468,
-			[NORMAL_RAID_DIFF] = {
-				{ 1, 187507 }, -- Adaptive Armor Fragment
-				{ 2, 190614 }, -- Antros' Entrusted Bascinet
-				{ 3, 190616 }, -- Controlled Sequence Clasp
-				{ 4, 190618 }, -- Lattice of the Distant Keeper
-				{ 5, 190620 }, -- Sav'thul's Calamitous Tantour
-				{ 6, 187506 }, -- Condensed Anima Sphere
-				{ 7, 190615 }, -- Cosmic Guardian's Casing
-				{ 8, 190617 }, -- Destruction-Core Handlers
-				{ 9, 190619 }, -- Antecedent's Aliform Joggers
-				{ 10, 190621 }, -- Dealic Deterrent Stockings
-			},
-		},
-		{ -- Nurgash Muckformed
-			EncounterJournalID = 2433,
+		{ -- Valinor, the Light of Eons
+			EncounterJournalID = 2430,
 			[NORMAL_RAID_DIFF] = {
 				{ 1 , 183472 }, -- Evolved Swarm
 				{ 2 , 182346 }, -- Tumbling Waves
 				{ 3 , 182685 }, -- Increased Scrutiny
-				{ 4 , 182638 }, -- Memory of a Frenzied Monstrosity
-				{ 5 , 182331 }, -- Empowered Release
-				{ 6 , 182339 }, -- Necrotic Barrage
-				{ 7 , 182347 }, -- Essential Extraction
-				{ 8 , 182292 }, -- Brutal Grasp
-				{ 9 , 182442 }, -- Veteran's Repute
-				{ 10, 182962 }, -- Catastrophic Origin
-				{ 11, 183474 }, -- Endless Thirst
-				{ 12, 182348 }, -- Lavish Harvest
-				{ 13, 181600 }, -- Ire of the Ascended
+				{ 4 , 182646 }, -- Repeat Decree
+				{ 5 , 182339 }, -- Necrotic Barrage
+				{ 6 , 182347 }, -- Essential Extraction
+				{ 7 , 182292 }, -- Brutal Grasp
+				{ 8 , 182442 }, -- Veteran's Repute
+				{ 9 , 182962 }, -- Catastrophic Origin
+				{ 10, 183474 }, -- Endless Thirst
+				{ 11, 182348 }, -- Lavish Harvest
+				{ 12, 181600 }, -- Ire of the Ascended
+				{ 13, 184136 }, -- Anima-Charged Wristbanding
 				{ 14, 181553 }, -- Gift of the Lich
 				{ 15, 183199 }, -- Withering Ground
-				{ 16, 184134 }, -- Jingling Stone Stompers
-				{ 17, 183215 }, -- Memory of an Erratic Fel Core
+				{ 16, 183473 }, -- Conflux of Elements
+				{ 17, 182961 }, -- Fatal Decimation
 				{ 18, 181774 }, -- Imbued Reflections
-				{ 19, 183473 }, -- Conflux of Elements
-				{ 20, 181539 }, -- Discipline of the Grove
-				{ 21, 182767 }, -- The Long Summer
-				{ 22, 184137 }, -- Sinstone Shoulderpadding
+				{ 19, 184141 }, -- Shroud of the Penitent
+				{ 20, 181759 }, -- Strike with Clarity
+				{ 21, 184125 }, -- Servo-Chain Waistguard
+				{ 22, 183325 }, -- Memory of Archbishop Benedictus
 				{ 23, 182129 }, -- Fae Fermata
-				{ 24, 181759 }, -- Strike with Clarity
+				{ 24, 182767 }, -- The Long Summer
 				{ 25, 182964 }, -- Soul Eater
 				{ 26, 181775 }, -- Way of the Fae
-				{ 27, 181639 }, -- Siphoned Malice
+				{ 27, 182345 }, -- Elysian Dirge
 				{ 28, 183492 }, -- Reverberation
-				{ 29, 184130 }, -- Nurgash's Belt of Many Sinstones
-				{ 30, 181770 }, -- Bone Marrow Hops
+				{ 29, 183311 }, -- Memory of the Final Verdict
+				{ 30, 182463 }, -- Harrowing Punishment
 				{ 101, 182130 }, -- Shattered Perceptions
-				{ 102, 181981 }, -- Festering Transfusion
+				{ 102, 183463 }, -- Unnatural Malice
 				{ 103, 182335 }, -- Spirit Attunement
-				{ 104, 182777 }, -- Hallowed Discernment
+				{ 104, 184170 }, -- Doubtweaver's Handwraps
 				{ 105, 182288 }, -- Impenetrable Gloom
 				{ 106, 183493 }, -- Sudden Fractures
-				{ 107, 184131 }, -- Comfortable Slumberwraps
-				{ 108, 182463 }, -- Harrowing Punishment
-				{ 109, 183463 }, -- Unnatural Malice
+				{ 107, 182295 }, -- Proliferation
+				{ 108, 184139 }, -- Valinor's Ground Pounders
+				{ 109, 182778 }, -- Ringing Clarity
 				{ 110, 182706 }, -- Brooding Pool
-				{ 111, 182651 }, -- Destructive Reverberations
-				{ 112, 184171 }, -- Hardened Castle Crushers
+				{ 111, 182777 }, -- Hallowed Discernment
+				{ 112, 181981 }, -- Festering Transfusion
 				{ 113, 181974 }, -- Courageous Ascension
 				{ 114, 183494 }, -- Septic Shock
-				{ 115, 183376 }, -- Memory of Azj'Aqir's Madness
-				{ 116, 182646 }, -- Repeat Decree
+				{ 115, 184132 }, -- Oversized Centurion Helm
+				{ 116, 182651 }, -- Destructive Reverberations
 				{ 117, 182321 }, -- Enfeebled Mark
 				{ 118, 182770 }, -- Righteous Might
-				{ 119, 182778 }, -- Ringing Clarity
-				{ 120, 182345 }, -- Elysian Dirge
-				{ 121, 183471 }, -- Deep Allegiance
+				{ 119, 183471 }, -- Deep Allegiance
+				{ 120, 183353 }, -- Memory of the Windspeaker's Lava Resurgence
+				{ 121, 181639 }, -- Siphoned Malice
 				{ 122, 183495 }, -- Lashing Scars
-				{ 123, 182295 }, -- Proliferation
+				{ 123, 182331 }, -- Empowered Release
 				{ 124, 182440 }, -- Piercing Verdict
-				{ 125, 182961 }, -- Fatal Decimation
+				{ 125, 181539 }, -- Discipline of the Grove
 				{ 126, 182960 }, -- Soul Tithe
-				{ 127, 184144 }, -- Muckformed Chain Choker
+				{ 127, 181770 }, -- Bone Marrow Hops
 			},
 		},
 		{ -- Mortanis
@@ -1451,503 +1357,160 @@ data["Shadowlands"] = {
 				{ 127, 182346 }, -- Tumbling Waves
 			},
 		},
-		{ -- Valinor, the Light of Eons
-			EncounterJournalID = 2430,
+		{ -- Oranomonos the Everbranching
+			EncounterJournalID = 2432,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 183472 }, -- Evolved Swarm
+				{ 2 , 182346 }, -- Tumbling Waves
+				{ 3 , 184126 }, -- Ironroot Bindings
+				{ 4 , 182685 }, -- Increased Scrutiny
+				{ 5 , 184142 }, -- Twisted Witherroot Band
+				{ 6 , 182646 }, -- Repeat Decree
+				{ 7 , 182339 }, -- Necrotic Barrage
+				{ 8 , 182347 }, -- Essential Extraction
+				{ 9 , 182292 }, -- Brutal Grasp
+				{ 10, 184127 }, -- Slippers of the Leafy Undergrowth
+				{ 11, 183261 }, -- Memory of Surging Shots
+				{ 12, 182962 }, -- Catastrophic Origin
+				{ 13, 183474 }, -- Endless Thirst
+				{ 14, 182348 }, -- Lavish Harvest
+				{ 15, 183238 }, -- Memory of the Verdant Infusion
+				{ 16, 181553 }, -- Gift of the Lich
+				{ 17, 183199 }, -- Withering Ground
+				{ 18, 181774 }, -- Imbued Reflections
+				{ 19, 182331 }, -- Empowered Release
+				{ 20, 182442 }, -- Veteran's Repute
+				{ 21, 184129 }, -- Oranomonos's Diaphanous Leggings
+				{ 22, 182767 }, -- The Long Summer
+				{ 23, 182129 }, -- Fae Fermata
+				{ 24, 181759 }, -- Strike with Clarity
+				{ 25, 182964 }, -- Soul Eater
+				{ 26, 181775 }, -- Way of the Fae
+				{ 27, 181639 }, -- Siphoned Malice
+				{ 28, 181539 }, -- Discipline of the Grove
+				{ 29, 181981 }, -- Festering Transfusion
+				{ 30, 184138 }, -- Stonebark Girdle
+				{ 101, 182130 }, -- Shattered Perceptions
+				{ 102, 181770 }, -- Bone Marrow Hops
+				{ 103, 182335 }, -- Spirit Attunement
+				{ 104, 183463 }, -- Unnatural Malice
+				{ 105, 182288 }, -- Impenetrable Gloom
+				{ 106, 183493 }, -- Sudden Fractures
+				{ 107, 184172 }, -- Seed-Tender's Handwraps
+				{ 108, 182778 }, -- Ringing Clarity
+				{ 109, 182770 }, -- Righteous Might
+				{ 110, 182706 }, -- Brooding Pool
+				{ 111, 182777 }, -- Hallowed Discernment
+				{ 112, 183492 }, -- Reverberation
+				{ 113, 181974 }, -- Courageous Ascension
+				{ 114, 183494 }, -- Septic Shock
+				{ 115, 182295 }, -- Proliferation
+				{ 116, 182651 }, -- Destructive Reverberations
+				{ 117, 182321 }, -- Enfeebled Mark
+				{ 118, 183274 }, -- Memory of a Fevered Incantation
+				{ 119, 182463 }, -- Harrowing Punishment
+				{ 120, 182345 }, -- Elysian Dirge
+				{ 121, 183471 }, -- Deep Allegiance
+				{ 122, 183495 }, -- Lashing Scars
+				{ 123, 181600 }, -- Ire of the Ascended
+				{ 124, 182440 }, -- Piercing Verdict
+				{ 125, 182961 }, -- Fatal Decimation
+				{ 126, 182960 }, -- Soul Tithe
+				{ 127, 183473 }, -- Conflux of Elements
+			},
+		},
+		{ -- Nurgash Muckformed
+			EncounterJournalID = 2433,
 			[NORMAL_RAID_DIFF] = {
 				{ 1 , 183472 }, -- Evolved Swarm
 				{ 2 , 182346 }, -- Tumbling Waves
 				{ 3 , 182685 }, -- Increased Scrutiny
-				{ 4 , 182646 }, -- Repeat Decree
-				{ 5 , 182339 }, -- Necrotic Barrage
-				{ 6 , 182347 }, -- Essential Extraction
-				{ 7 , 182292 }, -- Brutal Grasp
-				{ 8 , 182442 }, -- Veteran's Repute
-				{ 9 , 182962 }, -- Catastrophic Origin
-				{ 10, 183474 }, -- Endless Thirst
-				{ 11, 182348 }, -- Lavish Harvest
-				{ 12, 181600 }, -- Ire of the Ascended
-				{ 13, 184136 }, -- Anima-Charged Wristbanding
-				{ 14, 181553 }, -- Gift of the Lich
-				{ 15, 183199 }, -- Withering Ground
-				{ 16, 183473 }, -- Conflux of Elements
-				{ 17, 182961 }, -- Fatal Decimation
-				{ 18, 181774 }, -- Imbued Reflections
-				{ 19, 184141 }, -- Shroud of the Penitent
-				{ 20, 181759 }, -- Strike with Clarity
-				{ 21, 184125 }, -- Servo-Chain Waistguard
-				{ 22, 183325 }, -- Memory of Archbishop Benedictus
-				{ 23, 182129 }, -- Fae Fermata
-				{ 24, 182767 }, -- The Long Summer
-				{ 25, 182964 }, -- Soul Eater
-				{ 26, 181775 }, -- Way of the Fae
-				{ 27, 182345 }, -- Elysian Dirge
-				{ 28, 183492 }, -- Reverberation
-				{ 29, 183311 }, -- Memory of the Final Verdict
-				{ 30, 182463 }, -- Harrowing Punishment
-				{ 101, 182130 }, -- Shattered Perceptions
-				{ 102, 183463 }, -- Unnatural Malice
-				{ 103, 182335 }, -- Spirit Attunement
-				{ 104, 184170 }, -- Doubtweaver's Handwraps
-				{ 105, 182288 }, -- Impenetrable Gloom
-				{ 106, 183493 }, -- Sudden Fractures
-				{ 107, 182295 }, -- Proliferation
-				{ 108, 184139 }, -- Valinor's Ground Pounders
-				{ 109, 182778 }, -- Ringing Clarity
-				{ 110, 182706 }, -- Brooding Pool
-				{ 111, 182777 }, -- Hallowed Discernment
-				{ 112, 181981 }, -- Festering Transfusion
-				{ 113, 181974 }, -- Courageous Ascension
-				{ 114, 183494 }, -- Septic Shock
-				{ 115, 184132 }, -- Oversized Centurion Helm
-				{ 116, 182651 }, -- Destructive Reverberations
-				{ 117, 182321 }, -- Enfeebled Mark
-				{ 118, 182770 }, -- Righteous Might
-				{ 119, 183471 }, -- Deep Allegiance
-				{ 120, 183353 }, -- Memory of the Windspeaker's Lava Resurgence
-				{ 121, 181639 }, -- Siphoned Malice
-				{ 122, 183495 }, -- Lashing Scars
-				{ 123, 182331 }, -- Empowered Release
-				{ 124, 182440 }, -- Piercing Verdict
-				{ 125, 181539 }, -- Discipline of the Grove
-				{ 126, 182960 }, -- Soul Tithe
-				{ 127, 181770 }, -- Bone Marrow Hops
-			},
-		},
-	}
-}
-
-data["Sepulcher of the First Ones"] = {
-	EncounterJournalID = 1195,
-	MapID = 2047,
-	ContentType = RAID_CONTENT,
-	TableType = RAID_ITTYPE,
-	items = 
-	{
-		{ -- Vigilant Guardian
-			EncounterJournalID = 2458,
-			[NORMAL_RAID_DIFF] = {
-				{ 1, 183402 }, -- Bloodletting
-				{ 2, 188273 }, -- Auxiliary Attendant Chime
-				{ 3, 182736 }, -- Rolling Agony
-				{ 4, 189777 }, -- Unstable Giant's Cuffs
-				{ 5, 189770 }, -- Pre-Fabricated Footpads
-				{ 6, 189774 }, -- Fractured Colossus Core
-				{ 7, 189778 }, -- Legplates of the Slumbering Sentinel
-				{ 8, 189584 }, -- Sepulcher's Savior
-				{ 9, 181734 }, -- Magi's Brand
-				{ 10, 183505 }, -- Maim, Mangle
-				{ 11, 181742 }, -- Walk with the Ox
-				{ 12, 189775 }, -- Helm of Solemn Vigil
-				{ 13, 189779 }, -- Key to the Immortal Hearth
-				{ 14, 182622 }, -- Resplendent Light
-				{ 15, 189771 }, -- Ancient Materium Tassets
-				{ 16, 189772 }, -- Modified Defense Grid
-				{ 17, 181843 }, -- Shining Radiance
-				{ 18, 182126 }, -- High Voltage
-				{ 19, 183479 }, -- Umbral Intensity
-				{ 20, 189776 }, -- Girdle of the First Gate
-				{ 21, 180944 }, -- Merciless Bonegrinder
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-		},
-		{ -- Skolex, the Insatiable Ravener
-			EncounterJournalID = 2465,
-			[NORMAL_RAID_DIFF] = {
-				{ 1 , 189811 }, -- Infinitely Collapsing Coil
-				{ 2 , 189815 }, -- Lurking Predator's Camouflage
-				{ 3 , 189819 }, -- Assimilated Safeguard
-				{ 4 , 181980 }, -- Embrace Death
-				{ 5 , 181469 }, -- Indelible Victory
-				{ 6 , 189812 }, -- Devourer's Sandblown Hidebinders
-				{ 7 , 181508 }, -- Fortifying Ingredients
-				{ 8 , 183167 }, -- Strength of the Pack
-				{ 9 , 181838 }, -- Charitable Soul
-				{ 10, 189809 }, -- Skolex's Ravenous Skinguards
-				{ 11, 182466 }, -- Shade of Terror
-				{ 12, 188267 }, -- Bells of the Endless Feast
-				{ 13, 182110 }, -- Crippling Hex
-				{ 14, 189810 }, -- Ephemera-Softened Exoskeleton
-				{ 15, 189814 }, -- Gluttonous Gardbrace
-				{ 16, 189817 }, -- Rift-Scarred Solcrusher
-				{ 17, 189813 }, -- Mantle of the Broken Beast
-				{ 18, 183502 }, -- Prepared for All
-				{ 19, 183484 }, -- Unchecked Aggression
-				{ 20, 182383 }, -- Dancing with Fate
-				{ 21, 182336 }, -- Golden Path
-				{ 22, 189816 }, -- Crystallized Viscera Spike
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-		},
-		{ -- Artificer Xy'mox
-			EncounterJournalID = 2470,
-			[NORMAL_RAID_DIFF] = {
-				{ 1 , 181844 }, -- Pain Transformation
-				{ 2 , 188265 }, -- Cache of Acquired Treasures
-				{ 3 , 189823 }, -- Stolen Nathrian Slippers
-				{ 4 , 189827 }, -- Cartel Xy's Proof of Initiation
-				{ 5 , 183488 }, -- Unstoppable Growth
-				{ 6 , 181756 }, -- Incantation of Swiftness
-				{ 7 , 189824 }, -- Unlicensed Hyperlight Handlers
-				{ 8 , 189828 }, -- Xy Captain's Crossbow
-				{ 9 , 180935 }, -- Crash the Ramparts
-				{ 10, 189821 }, -- Illicit Artifact Holster
-				{ 11, 189825 }, -- Veiled Auctioneer's Vambraces
-				{ 12, 189829 }, -- Forerunner's Relic Blade
-				{ 13, 188266 }, -- Pulsating Riftshard
-				{ 14, 182128 }, -- Call of Flame
-				{ 15, 182469 }, -- Rejuvenating Wind
-				{ 16, 183506 }, -- Lethal Poisons
-				{ 17, 189822 }, -- Imported Illidari Spaulders
-				{ 18, 189826 }, -- Enforcer's Containment Cinch
-				{ 19, 189830 }, -- Replicated Relic Blade
-				{ 20, 181836 }, -- Spirit Drain
-				{ 21, 182743 }, -- Focused Malignancy
-				{ 22, 182667 }, -- Focused Light
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-		},
-		{ -- Dausegne, the Fallen Oracle
-			EncounterJournalID = 2459,
-			[NORMAL_RAID_DIFF] = {
-				{ 1 , 189784 }, -- Epaulets of the Ailing Aria
-				{ 2 , 189788 }, -- Maestro's Malice
-				{ 3 , 189773 }, -- Clasp of Crooked Crescendos
-				{ 4 , 181504 }, -- Infernal Cascade
-				{ 5 , 189785 }, -- Oracle's Chromatic Cuirass
-				{ 6 , 189793 }, -- Sash of the Silent Sonata
-				{ 7 , 181776 }, -- Vicious Contempt
-				{ 8 , 182648 }, -- Sharpshooter's Focus
-				{ 9 , 189782 }, -- Haunting Hymnal Robes
-				{ 10, 189786 }, -- Song-Mad Sabatons
-				{ 11, 189790 }, -- Final Forte
-				{ 12, 182134 }, -- Unruly Winds
-				{ 13, 181866 }, -- Withering Plague
-				{ 14, 182677 }, -- Punish the Guilty
-				{ 15, 183510 }, -- Count the Odds
-				{ 16, 188272 }, -- Resonant Reservoir
-				{ 17, 182471 }, -- Soul Furnace
-				{ 18, 189791 }, -- Drape of Mournful Melodies
-				{ 19, 189787 }, -- Dausegne's Dissonant Halo
-				{ 20, 181942 }, -- Focused Mending
-				{ 21, 181495 }, -- Jade Bond
-				{ 22, 189807 }, -- Discordant Deathblade
-				{ 23, 182751 }, -- Tyrant's Soul
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-		},
-		{ -- Prototype Pantheon
-			EncounterJournalID = 2460,
-			[NORMAL_RAID_DIFF] = {
-				{ 1 , 183472 }, -- Evolved Swarm
-				{ 2 , 182346 }, -- Tumbling Waves
-				{ 3 , 189796 }, -- Duty's Ascendant Breastplate
-				{ 4 , 182685 }, -- Increased Scrutiny
-				{ 5 , 182646 }, -- Repeat Decree
+				{ 4 , 182638 }, -- Memory of a Frenzied Monstrosity
+				{ 5 , 182331 }, -- Empowered Release
 				{ 6 , 182339 }, -- Necrotic Barrage
 				{ 7 , 182347 }, -- Essential Extraction
 				{ 8 , 182292 }, -- Brutal Grasp
-				{ 9 , 189797 }, -- Wristwraps of Night's Renewal
-				{ 10, 182442 }, -- Veteran's Repute
-				{ 11, 182962 }, -- Catastrophic Origin
-				{ 12, 183474 }, -- Endless Thirst
-				{ 13, 182348 }, -- Lavish Harvest
-				{ 14, 181600 }, -- Ire of the Ascended
-				{ 15, 189798 }, -- Moccasins of Dreadful Absolution
-				{ 16, 181553 }, -- Gift of the Lich
-				{ 17, 183199 }, -- Withering Ground
-				{ 18, 188271 }, -- The First Sigil
-				{ 19, 189789 }, -- Pursuit of Victory
-				{ 20, 181774 }, -- Imbued Reflections
-				{ 21, 189783 }, -- Sin-Steeped Coronet
-				{ 22, 182961 }, -- Fatal Decimation
-				{ 23, 189799 }, -- Elysia's Promise
-				{ 24, 182331 }, -- Empowered Release
-				{ 25, 182129 }, -- Fae Fermata
-				{ 26, 182767 }, -- The Long Summer
-				{ 27, 182964 }, -- Soul Eater
-				{ 28, 181775 }, -- Way of the Fae
-				{ 29, 181639 }, -- Siphoned Malice
-				{ 30, 181539 }, -- Discipline of the Grove
-				{ 101, 189800 }, -- Prelude to Pride
-				{ 102, 189795 }, -- Winter's Stampeding Striders
-				{ 103, 182130 }, -- Shattered Perceptions
-				{ 104, 183493 }, -- Sudden Fractures
-				{ 105, 182335 }, -- Spirit Attunement
-				{ 106, 183471 }, -- Deep Allegiance
-				{ 107, 182288 }, -- Impenetrable Gloom
-				{ 108, 181981 }, -- Festering Transfusion
-				{ 109, 181770 }, -- Bone Marrow Hops
-				{ 110, 183463 }, -- Unnatural Malice
-				{ 111, 182778 }, -- Ringing Clarity
-				{ 112, 182706 }, -- Brooding Pool
-				{ 113, 182777 }, -- Hallowed Discernment
-				{ 114, 189794 }, -- Boots of Ceaseless Conflict
-				{ 115, 181974 }, -- Courageous Ascension
-				{ 116, 183494 }, -- Septic Shock
-				{ 117, 183492 }, -- Reverberation
-				{ 118, 182651 }, -- Destructive Reverberations
-				{ 119, 182321 }, -- Enfeebled Mark
-				{ 120, 182770 }, -- Righteous Might
-				{ 121, 182463 }, -- Harrowing Punishment
-				{ 122, 182345 }, -- Elysian Dirge
+				{ 9 , 182442 }, -- Veteran's Repute
+				{ 10, 182962 }, -- Catastrophic Origin
+				{ 11, 183474 }, -- Endless Thirst
+				{ 12, 182348 }, -- Lavish Harvest
+				{ 13, 181600 }, -- Ire of the Ascended
+				{ 14, 181553 }, -- Gift of the Lich
+				{ 15, 183199 }, -- Withering Ground
+				{ 16, 184134 }, -- Jingling Stone Stompers
+				{ 17, 183215 }, -- Memory of an Erratic Fel Core
+				{ 18, 181774 }, -- Imbued Reflections
+				{ 19, 183473 }, -- Conflux of Elements
+				{ 20, 181539 }, -- Discipline of the Grove
+				{ 21, 182767 }, -- The Long Summer
+				{ 22, 184137 }, -- Sinstone Shoulderpadding
+				{ 23, 182129 }, -- Fae Fermata
+				{ 24, 181759 }, -- Strike with Clarity
+				{ 25, 182964 }, -- Soul Eater
+				{ 26, 181775 }, -- Way of the Fae
+				{ 27, 181639 }, -- Siphoned Malice
+				{ 28, 183492 }, -- Reverberation
+				{ 29, 184130 }, -- Nurgash's Belt of Many Sinstones
+				{ 30, 181770 }, -- Bone Marrow Hops
+				{ 101, 182130 }, -- Shattered Perceptions
+				{ 102, 181981 }, -- Festering Transfusion
+				{ 103, 182335 }, -- Spirit Attunement
+				{ 104, 182777 }, -- Hallowed Discernment
+				{ 105, 182288 }, -- Impenetrable Gloom
+				{ 106, 183493 }, -- Sudden Fractures
+				{ 107, 184131 }, -- Comfortable Slumberwraps
+				{ 108, 182463 }, -- Harrowing Punishment
+				{ 109, 183463 }, -- Unnatural Malice
+				{ 110, 182706 }, -- Brooding Pool
+				{ 111, 182651 }, -- Destructive Reverberations
+				{ 112, 184171 }, -- Hardened Castle Crushers
+				{ 113, 181974 }, -- Courageous Ascension
+				{ 114, 183494 }, -- Septic Shock
+				{ 115, 183376 }, -- Memory of Azj'Aqir's Madness
+				{ 116, 182646 }, -- Repeat Decree
+				{ 117, 182321 }, -- Enfeebled Mark
+				{ 118, 182770 }, -- Righteous Might
+				{ 119, 182778 }, -- Ringing Clarity
+				{ 120, 182345 }, -- Elysian Dirge
+				{ 121, 183471 }, -- Deep Allegiance
+				{ 122, 183495 }, -- Lashing Scars
 				{ 123, 182295 }, -- Proliferation
-				{ 124, 183495 }, -- Lashing Scars
-				{ 125, 181759 }, -- Strike with Clarity
-				{ 126, 182440 }, -- Piercing Verdict
-				{ 127, 188270 }, -- Elegy of the Eternals
-				{ 128, 182960 }, -- Soul Tithe
-				{ 129, 183473 }, -- Conflux of Elements
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
+				{ 124, 182440 }, -- Piercing Verdict
+				{ 125, 182961 }, -- Fatal Decimation
+				{ 126, 182960 }, -- Soul Tithe
+				{ 127, 184144 }, -- Muckformed Chain Choker
 			},
 		},
-		{ -- Lihuvim, Principal Architect
-			EncounterJournalID = 2461,
+		{ -- Mor'geth, Tormentor of the Damned
+			EncounterJournalID = 2456,
 			[NORMAL_RAID_DIFF] = {
-				{ 1 , 188269 }, -- Pocket Protoforge
-				{ 2 , 182755 }, -- Ashen Remains
-				{ 3 , 182608 }, -- Virtuous Command
-				{ 4 , 189804 }, -- Combustible Collaboration Girdle
-				{ 5 , 189808 }, -- Lihuvim's Severing Scalpel
-				{ 6 , 182624 }, -- Show of Force
-				{ 7 , 182140 }, -- Dissonant Echoes
-				{ 8 , 189801 }, -- Ephemera-Charged Thinking Cap
-				{ 9 , 181435 }, -- Calculated Strikes
-				{ 10, 183482 }, -- Sudden Ambush
-				{ 11, 181982 }, -- Everfrost
-				{ 12, 189754 }, -- Genesis Lathe
-				{ 13, 189802 }, -- Loquacious Keeper's Peridot
-				{ 14, 191015 }, -- Mystic Hand Module
-				{ 15, 189805 }, -- Bracers of the Inscrutable Inventor
-				{ 16, 191017 }, -- Zenith Hand Module
-				{ 17, 188268 }, -- Architect's Ingenuity Core
-				{ 18, 182143 }, -- Swirling Currents
-				{ 19, 181455 }, -- Icy Propulsion
-				{ 20, 183512 }, -- Planned Execution
-				{ 21, 189803 }, -- Automa-Tender's Tights
-				{ 22, 191016 }, -- Venerated Hand Module
-				{ 23, 191014 }, -- Dreadful Hand Module
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
+				{ 1, 187507 }, -- Adaptive Armor Fragment
+				{ 2, 187061 }, -- Shard of Rev
+				{ 3, 186360 }, -- Tormented Soul Harness
+				{ 4, 187506 }, -- Condensed Anima Sphere
+				{ 5, 186368 }, -- Mor'geth's Gauntlets of Damnation
+				{ 6, 186355 }, -- Wristwraps of Anguish
+				{ 7, 186372 }, -- Tormentor's Greatbelt
+				{ 8, 187447 }, -- Soul Cage Fragment
+				{ 9, 186361 }, -- Grips of Unleashed Suffering
+				{ 10, 186366 }, -- Stygian Chain Greaves
+				{ 11, 186357 }, -- Sorrowful Trousers
+				{ 12, 186370 }, -- Caged Legplates
 			},
 		},
-		{ -- Halondrus the Reclaimer
-			EncounterJournalID = 2463,
+		{ -- Antros
+			EncounterJournalID = 2468,
 			[NORMAL_RAID_DIFF] = {
-				{ 1 , 191020 }, -- Venerated Leg Module
-				{ 2 , 181511 }, -- Nether Precision
-				{ 3 , 182325 }, -- Ravenous Consumption
-				{ 4 , 183507 }, -- Triple Threat
-				{ 5 , 191021 }, -- Zenith Leg Module
-				{ 6 , 182748 }, -- Borne of Blood
-				{ 7 , 189832 }, -- Greatboots of the Roaming Goliath
-				{ 8 , 191018 }, -- Dreadful Leg Module
-				{ 9 , 182621 }, -- One With the Beast
-				{ 10, 183478 }, -- Fury of the Skies
-				{ 11, 182137 }, -- Magma Fist
-				{ 12, 188263 }, -- Reclaimer's Intensity Core
-				{ 13, 189833 }, -- Taciturn Keeper's Lapis
-				{ 14, 189806 }, -- Lightshatter Hatchet
-				{ 15, 191019 }, -- Mystic Leg Module
-				{ 16, 188264 }, -- Earthbreaker's Impact
-				{ 17, 181944 }, -- Resonant Words
-				{ 18, 181700 }, -- Scalding Brew
-				{ 19, 189834 }, -- Guardstaff of the Great Cycle
-				{ 20, 189781 }, -- Obscured Fractal Prism
-				{ 21, 181712 }, -- Depths of Insanity
-				{ 22, 189831 }, -- Ephemera-Stained Sollerets
-				{ 23, 182187 }, -- Meat Shield
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-		},
-		{ -- Anduin Wrynn
-			EncounterJournalID = 2469,
-			[NORMAL_RAID_DIFF] = {
-				{ 1 , 182681 }, -- Vengeful Shock
-				{ 2 , 181848 }, -- Accelerated Cold
-				{ 3 , 191005 }, -- Dreadful Helm Module
-				{ 4 , 183197 }, -- Controlled Destruction
-				{ 5 , 189835 }, -- Anduin's Princely Vestments
-				{ 6 , 189839 }, -- Soulwarped Seal of Wrynn
-				{ 7 , 188262 }, -- The Lion's Roar
-				{ 8 , 182686 }, -- Powerful Precision
-				{ 9 , 191002 }, -- Mystic Helm Module
-				{ 10, 181737 }, -- Nourishing Chi
-				{ 11, 189836 }, -- Wrists of the Wicked Star
-				{ 12, 189840 }, -- Remnant's Blasphemous Scourgebelt
-				{ 13, 191003 }, -- Venerated Helm Module
-				{ 14, 180932 }, -- Fueled by Violence
-				{ 15, 182769 }, -- Combusting Engine
-				{ 16, 189841 }, -- Soulwarped Seal of Menethil
-				{ 17, 189837 }, -- King's Wolfheart Waistband
-				{ 18, 191004 }, -- Zenith Helm Module
-				{ 19, 182142 }, -- Embrace of Earth
-				{ 20, 189838 }, -- Beacon of Stormwind
-				{ 21, 183514 }, -- Perforated Veins
-				{ 22, 183480 }, -- Taste for Blood
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-		},
-		{ -- Lords of Dread
-			EncounterJournalID = 2457,
-			[NORMAL_RAID_DIFF] = {
-				{ 1 , 188261 }, -- Intrusive Thoughtcage
-				{ 2 , 181786 }, -- Eternal Hunger
-				{ 3 , 191009 }, -- Zenith Shoulder Module
-				{ 4 , 182465 }, -- Truth's Wake
-				{ 5 , 189847 }, -- Shroud of the Sire's Chosen
-				{ 6 , 191006 }, -- Dreadful Shoulder Module
-				{ 7 , 181462 }, -- Coordinated Offensive
-				{ 8 , 181962 }, -- Mental Recovery
-				{ 9 , 183485 }, -- Savage Combatant
-				{ 10, 189844 }, -- Gauntlets of Unseen Guests
-				{ 11, 182598 }, -- Demon Muzzle
-				{ 12, 191007 }, -- Mystic Shoulder Module
-				{ 13, 189842 }, -- Cuffs of the Covert Commander
-				{ 14, 189845 }, -- Ruined Crest of Lordaeron
-				{ 15, 183184 }, -- Stinging Strike
-				{ 16, 188255 }, -- Heart of the Swarm
-				{ 17, 189843 }, -- Grasps of Abducted Fate
-				{ 18, 191008 }, -- Venerated Shoulder Module
-				{ 19, 182109 }, -- Totemic Surge
-				{ 20, 181461 }, -- Ice Bite
-				{ 21, 189846 }, -- Alandien's Tortured Twinblades
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-		},
-		{ -- Rygelon
-			EncounterJournalID = 2467,
-			[NORMAL_RAID_DIFF] = {
-				{ 1 , 189850 }, -- Handguards of Hidden Realms
-				{ 2 , 183468 }, -- Born Anew
-				{ 3 , 191013 }, -- Zenith Chest Module
-				{ 4 , 182461 }, -- Echoing Blessings
-				{ 5 , 189851 }, -- Devastated Worldshard
-				{ 6 , 191010 }, -- Dreadful Chest Module
-				{ 7 , 180943 }, -- Cacophonous Roar
-				{ 8 , 189848 }, -- Treads of Titanic Curiosity
-				{ 9 , 189852 }, -- Antumbra, Shadow of the Cosmos
-				{ 10, 191011 }, -- Mystic Chest Module
-				{ 11, 181498 }, -- Grounding Surge
-				{ 12, 189854 }, -- Rygelon's Heraldric Ring
-				{ 13, 189849 }, -- Interdimensional Manica
-				{ 14, 189853 }, -- Astral Verdict
-				{ 15, 188254 }, -- Grim Eclipse
-				{ 16, 182368 }, -- Relentless Onslaught
-				{ 17, 191012 }, -- Venerated Chest Module
-				{ 18, 183497 }, -- Recuperator
-				{ 19, 191001 }, -- Observer's Umbral Shiv
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-		},
-		{ -- The Jailer
-			EncounterJournalID = 2464,
-			[NORMAL_RAID_DIFF] = {
-				{ 1, 183491 }, -- Ready for Anything
-				{ 2, 182131 }, -- Haunting Apparitions
-				{ 3, 182480 }, -- Reversal of Fortune
-				{ 4, 189862 }, -- Gavel of the First Arbiter
-				{ 5, 182318 }, -- Viscous Ink
-				{ 6, 189855 }, -- Bindings of the Banished One
-				{ 7, 189859 }, -- Worldkiller Iris
-				{ 8, 189856 }, -- Runecarver's Twisted Ward
-				{ 9, 189860 }, -- Forbidden Truth
-				{ 10, 188252 }, -- Chains of Domination
-				{ 11, 182449 }, -- Resolute Barrier
-				{ 12, 189818 }, -- Domination's Deliverance
-				{ 13, 181975 }, -- Hardened Bones
-				{ 14, 189857 }, -- Epochal Oppressor's Greaves
-				{ 15, 189861 }, -- Zovastrum, the Unmaking
-				{ 16, 188253 }, -- Scars of Fraternal Strife
-				{ 17, 181510 }, -- Lingering Numbness
-				{ 18, 189858 }, -- Legguards of the Ultimate Threat
-			},
-			[HEROIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[MYTHIC_PRE_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
-			},
-			[RF_DIFF] = {
-				GetItemsFromDiff = NORMAL_RAID_DIFF,
+				{ 1, 187507 }, -- Adaptive Armor Fragment
+				{ 2, 190614 }, -- Antros' Entrusted Bascinet
+				{ 3, 190616 }, -- Controlled Sequence Clasp
+				{ 4, 190618 }, -- Lattice of the Distant Keeper
+				{ 5, 190620 }, -- Sav'thul's Calamitous Tantour
+				{ 6, 187506 }, -- Condensed Anima Sphere
+				{ 7, 190615 }, -- Cosmic Guardian's Casing
+				{ 8, 190617 }, -- Destruction-Core Handlers
+				{ 9, 190619 }, -- Antecedent's Aliform Joggers
+				{ 10, 190621 }, -- Dealic Deterrent Stockings
 			},
 		},
 	}
@@ -2782,4 +2345,442 @@ data["Sanctum of Domination"] = {
 		},
 	}
 }
+
+data["Sepulcher of the First Ones"] = {
+	EncounterJournalID = 1195,
+	MapID = 2047,
+	ContentType = RAID_CONTENT,
+	TableType = RAID_ITTYPE,
+	items = 
+	{
+		{ -- Vigilant Guardian
+			EncounterJournalID = 2458,
+			[NORMAL_RAID_DIFF] = {
+				{ 1, 183402 }, -- Bloodletting
+				{ 2, 188273 }, -- Auxiliary Attendant Chime
+				{ 3, 182736 }, -- Rolling Agony
+				{ 4, 189777 }, -- Unstable Giant's Cuffs
+				{ 5, 189770 }, -- Pre-Fabricated Footpads
+				{ 6, 189774 }, -- Fractured Colossus Core
+				{ 7, 189778 }, -- Legplates of the Slumbering Sentinel
+				{ 8, 189584 }, -- Sepulcher's Savior
+				{ 9, 181734 }, -- Magi's Brand
+				{ 10, 183505 }, -- Maim, Mangle
+				{ 11, 181742 }, -- Walk with the Ox
+				{ 12, 189775 }, -- Helm of Solemn Vigil
+				{ 13, 189779 }, -- Key to the Immortal Hearth
+				{ 14, 182622 }, -- Resplendent Light
+				{ 15, 189771 }, -- Ancient Materium Tassets
+				{ 16, 189772 }, -- Modified Defense Grid
+				{ 17, 181843 }, -- Shining Radiance
+				{ 18, 182126 }, -- High Voltage
+				{ 19, 183479 }, -- Umbral Intensity
+				{ 20, 189776 }, -- Girdle of the First Gate
+				{ 21, 180944 }, -- Merciless Bonegrinder
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Skolex, the Insatiable Ravener
+			EncounterJournalID = 2465,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 189811 }, -- Infinitely Collapsing Coil
+				{ 2 , 189815 }, -- Lurking Predator's Camouflage
+				{ 3 , 189819 }, -- Assimilated Safeguard
+				{ 4 , 181980 }, -- Embrace Death
+				{ 5 , 181469 }, -- Indelible Victory
+				{ 6 , 189812 }, -- Devourer's Sandblown Hidebinders
+				{ 7 , 181508 }, -- Fortifying Ingredients
+				{ 8 , 183167 }, -- Strength of the Pack
+				{ 9 , 181838 }, -- Charitable Soul
+				{ 10, 189809 }, -- Skolex's Ravenous Skinguards
+				{ 11, 182466 }, -- Shade of Terror
+				{ 12, 188267 }, -- Bells of the Endless Feast
+				{ 13, 182110 }, -- Crippling Hex
+				{ 14, 189810 }, -- Ephemera-Softened Exoskeleton
+				{ 15, 189814 }, -- Gluttonous Gardbrace
+				{ 16, 189817 }, -- Rift-Scarred Solcrusher
+				{ 17, 189813 }, -- Mantle of the Broken Beast
+				{ 18, 183502 }, -- Prepared for All
+				{ 19, 183484 }, -- Unchecked Aggression
+				{ 20, 182383 }, -- Dancing with Fate
+				{ 21, 182336 }, -- Golden Path
+				{ 22, 189816 }, -- Crystallized Viscera Spike
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Artificer Xy'mox
+			EncounterJournalID = 2470,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 181844 }, -- Pain Transformation
+				{ 2 , 188265 }, -- Cache of Acquired Treasures
+				{ 3 , 189823 }, -- Stolen Nathrian Slippers
+				{ 4 , 189827 }, -- Cartel Xy's Proof of Initiation
+				{ 5 , 183488 }, -- Unstoppable Growth
+				{ 6 , 181756 }, -- Incantation of Swiftness
+				{ 7 , 189824 }, -- Unlicensed Hyperlight Handlers
+				{ 8 , 189828 }, -- Xy Captain's Crossbow
+				{ 9 , 180935 }, -- Crash the Ramparts
+				{ 10, 189821 }, -- Illicit Artifact Holster
+				{ 11, 189825 }, -- Veiled Auctioneer's Vambraces
+				{ 12, 189829 }, -- Forerunner's Relic Blade
+				{ 13, 188266 }, -- Pulsating Riftshard
+				{ 14, 182128 }, -- Call of Flame
+				{ 15, 182469 }, -- Rejuvenating Wind
+				{ 16, 183506 }, -- Lethal Poisons
+				{ 17, 189822 }, -- Imported Illidari Spaulders
+				{ 18, 189826 }, -- Enforcer's Containment Cinch
+				{ 19, 189830 }, -- Replicated Relic Blade
+				{ 20, 181836 }, -- Spirit Drain
+				{ 21, 182743 }, -- Focused Malignancy
+				{ 22, 182667 }, -- Focused Light
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Dausegne, the Fallen Oracle
+			EncounterJournalID = 2459,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 189784 }, -- Epaulets of the Ailing Aria
+				{ 2 , 189788 }, -- Maestro's Malice
+				{ 3 , 189773 }, -- Clasp of Crooked Crescendos
+				{ 4 , 181504 }, -- Infernal Cascade
+				{ 5 , 189785 }, -- Oracle's Chromatic Cuirass
+				{ 6 , 189793 }, -- Sash of the Silent Sonata
+				{ 7 , 181776 }, -- Vicious Contempt
+				{ 8 , 182648 }, -- Sharpshooter's Focus
+				{ 9 , 189782 }, -- Haunting Hymnal Robes
+				{ 10, 189786 }, -- Song-Mad Sabatons
+				{ 11, 189790 }, -- Final Forte
+				{ 12, 182134 }, -- Unruly Winds
+				{ 13, 181866 }, -- Withering Plague
+				{ 14, 182677 }, -- Punish the Guilty
+				{ 15, 183510 }, -- Count the Odds
+				{ 16, 188272 }, -- Resonant Reservoir
+				{ 17, 182471 }, -- Soul Furnace
+				{ 18, 189791 }, -- Drape of Mournful Melodies
+				{ 19, 189787 }, -- Dausegne's Dissonant Halo
+				{ 20, 181942 }, -- Focused Mending
+				{ 21, 181495 }, -- Jade Bond
+				{ 22, 189807 }, -- Discordant Deathblade
+				{ 23, 182751 }, -- Tyrant's Soul
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Prototype Pantheon
+			EncounterJournalID = 2460,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 183472 }, -- Evolved Swarm
+				{ 2 , 182346 }, -- Tumbling Waves
+				{ 3 , 189796 }, -- Duty's Ascendant Breastplate
+				{ 4 , 182685 }, -- Increased Scrutiny
+				{ 5 , 182646 }, -- Repeat Decree
+				{ 6 , 182339 }, -- Necrotic Barrage
+				{ 7 , 182347 }, -- Essential Extraction
+				{ 8 , 182292 }, -- Brutal Grasp
+				{ 9 , 189797 }, -- Wristwraps of Night's Renewal
+				{ 10, 182442 }, -- Veteran's Repute
+				{ 11, 182962 }, -- Catastrophic Origin
+				{ 12, 183474 }, -- Endless Thirst
+				{ 13, 182348 }, -- Lavish Harvest
+				{ 14, 181600 }, -- Ire of the Ascended
+				{ 15, 189798 }, -- Moccasins of Dreadful Absolution
+				{ 16, 181553 }, -- Gift of the Lich
+				{ 17, 183199 }, -- Withering Ground
+				{ 18, 188271 }, -- The First Sigil
+				{ 19, 189789 }, -- Pursuit of Victory
+				{ 20, 181774 }, -- Imbued Reflections
+				{ 21, 189783 }, -- Sin-Steeped Coronet
+				{ 22, 182961 }, -- Fatal Decimation
+				{ 23, 189799 }, -- Elysia's Promise
+				{ 24, 182331 }, -- Empowered Release
+				{ 25, 182129 }, -- Fae Fermata
+				{ 26, 182767 }, -- The Long Summer
+				{ 27, 182964 }, -- Soul Eater
+				{ 28, 181775 }, -- Way of the Fae
+				{ 29, 181639 }, -- Siphoned Malice
+				{ 30, 181539 }, -- Discipline of the Grove
+				{ 101, 189800 }, -- Prelude to Pride
+				{ 102, 189795 }, -- Winter's Stampeding Striders
+				{ 103, 182130 }, -- Shattered Perceptions
+				{ 104, 183493 }, -- Sudden Fractures
+				{ 105, 182335 }, -- Spirit Attunement
+				{ 106, 183471 }, -- Deep Allegiance
+				{ 107, 182288 }, -- Impenetrable Gloom
+				{ 108, 181981 }, -- Festering Transfusion
+				{ 109, 181770 }, -- Bone Marrow Hops
+				{ 110, 183463 }, -- Unnatural Malice
+				{ 111, 182778 }, -- Ringing Clarity
+				{ 112, 182706 }, -- Brooding Pool
+				{ 113, 182777 }, -- Hallowed Discernment
+				{ 114, 189794 }, -- Boots of Ceaseless Conflict
+				{ 115, 181974 }, -- Courageous Ascension
+				{ 116, 183494 }, -- Septic Shock
+				{ 117, 183492 }, -- Reverberation
+				{ 118, 182651 }, -- Destructive Reverberations
+				{ 119, 182321 }, -- Enfeebled Mark
+				{ 120, 182770 }, -- Righteous Might
+				{ 121, 182463 }, -- Harrowing Punishment
+				{ 122, 182345 }, -- Elysian Dirge
+				{ 123, 182295 }, -- Proliferation
+				{ 124, 183495 }, -- Lashing Scars
+				{ 125, 181759 }, -- Strike with Clarity
+				{ 126, 182440 }, -- Piercing Verdict
+				{ 127, 188270 }, -- Elegy of the Eternals
+				{ 128, 182960 }, -- Soul Tithe
+				{ 129, 183473 }, -- Conflux of Elements
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Lihuvim, Principal Architect
+			EncounterJournalID = 2461,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 188269 }, -- Pocket Protoforge
+				{ 2 , 182755 }, -- Ashen Remains
+				{ 3 , 182608 }, -- Virtuous Command
+				{ 4 , 189804 }, -- Combustible Collaboration Girdle
+				{ 5 , 189808 }, -- Lihuvim's Severing Scalpel
+				{ 6 , 182624 }, -- Show of Force
+				{ 7 , 182140 }, -- Dissonant Echoes
+				{ 8 , 189801 }, -- Ephemera-Charged Thinking Cap
+				{ 9 , 181435 }, -- Calculated Strikes
+				{ 10, 183482 }, -- Sudden Ambush
+				{ 11, 181982 }, -- Everfrost
+				{ 12, 189754 }, -- Genesis Lathe
+				{ 13, 189802 }, -- Loquacious Keeper's Peridot
+				{ 14, 191015 }, -- Mystic Hand Module
+				{ 15, 189805 }, -- Bracers of the Inscrutable Inventor
+				{ 16, 191017 }, -- Zenith Hand Module
+				{ 17, 188268 }, -- Architect's Ingenuity Core
+				{ 18, 182143 }, -- Swirling Currents
+				{ 19, 181455 }, -- Icy Propulsion
+				{ 20, 183512 }, -- Planned Execution
+				{ 21, 189803 }, -- Automa-Tender's Tights
+				{ 22, 191016 }, -- Venerated Hand Module
+				{ 23, 191014 }, -- Dreadful Hand Module
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Halondrus the Reclaimer
+			EncounterJournalID = 2463,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 191020 }, -- Venerated Leg Module
+				{ 2 , 181511 }, -- Nether Precision
+				{ 3 , 182325 }, -- Ravenous Consumption
+				{ 4 , 183507 }, -- Triple Threat
+				{ 5 , 191021 }, -- Zenith Leg Module
+				{ 6 , 182748 }, -- Borne of Blood
+				{ 7 , 189832 }, -- Greatboots of the Roaming Goliath
+				{ 8 , 191018 }, -- Dreadful Leg Module
+				{ 9 , 182621 }, -- One With the Beast
+				{ 10, 183478 }, -- Fury of the Skies
+				{ 11, 182137 }, -- Magma Fist
+				{ 12, 188263 }, -- Reclaimer's Intensity Core
+				{ 13, 189833 }, -- Taciturn Keeper's Lapis
+				{ 14, 189806 }, -- Lightshatter Hatchet
+				{ 15, 191019 }, -- Mystic Leg Module
+				{ 16, 188264 }, -- Earthbreaker's Impact
+				{ 17, 181944 }, -- Resonant Words
+				{ 18, 181700 }, -- Scalding Brew
+				{ 19, 189834 }, -- Guardstaff of the Great Cycle
+				{ 20, 189781 }, -- Obscured Fractal Prism
+				{ 21, 181712 }, -- Depths of Insanity
+				{ 22, 189831 }, -- Ephemera-Stained Sollerets
+				{ 23, 182187 }, -- Meat Shield
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Anduin Wrynn
+			EncounterJournalID = 2469,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 182681 }, -- Vengeful Shock
+				{ 2 , 181848 }, -- Accelerated Cold
+				{ 3 , 191005 }, -- Dreadful Helm Module
+				{ 4 , 183197 }, -- Controlled Destruction
+				{ 5 , 189835 }, -- Anduin's Princely Vestments
+				{ 6 , 189839 }, -- Soulwarped Seal of Wrynn
+				{ 7 , 188262 }, -- The Lion's Roar
+				{ 8 , 182686 }, -- Powerful Precision
+				{ 9 , 191002 }, -- Mystic Helm Module
+				{ 10, 181737 }, -- Nourishing Chi
+				{ 11, 189836 }, -- Wrists of the Wicked Star
+				{ 12, 189840 }, -- Remnant's Blasphemous Scourgebelt
+				{ 13, 191003 }, -- Venerated Helm Module
+				{ 14, 180932 }, -- Fueled by Violence
+				{ 15, 182769 }, -- Combusting Engine
+				{ 16, 189841 }, -- Soulwarped Seal of Menethil
+				{ 17, 189837 }, -- King's Wolfheart Waistband
+				{ 18, 191004 }, -- Zenith Helm Module
+				{ 19, 182142 }, -- Embrace of Earth
+				{ 20, 189838 }, -- Beacon of Stormwind
+				{ 21, 183514 }, -- Perforated Veins
+				{ 22, 183480 }, -- Taste for Blood
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Lords of Dread
+			EncounterJournalID = 2457,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 188261 }, -- Intrusive Thoughtcage
+				{ 2 , 181786 }, -- Eternal Hunger
+				{ 3 , 191009 }, -- Zenith Shoulder Module
+				{ 4 , 182465 }, -- Truth's Wake
+				{ 5 , 189847 }, -- Shroud of the Sire's Chosen
+				{ 6 , 191006 }, -- Dreadful Shoulder Module
+				{ 7 , 181462 }, -- Coordinated Offensive
+				{ 8 , 181962 }, -- Mental Recovery
+				{ 9 , 183485 }, -- Savage Combatant
+				{ 10, 189844 }, -- Gauntlets of Unseen Guests
+				{ 11, 182598 }, -- Demon Muzzle
+				{ 12, 191007 }, -- Mystic Shoulder Module
+				{ 13, 189842 }, -- Cuffs of the Covert Commander
+				{ 14, 189845 }, -- Ruined Crest of Lordaeron
+				{ 15, 183184 }, -- Stinging Strike
+				{ 16, 188255 }, -- Heart of the Swarm
+				{ 17, 189843 }, -- Grasps of Abducted Fate
+				{ 18, 191008 }, -- Venerated Shoulder Module
+				{ 19, 182109 }, -- Totemic Surge
+				{ 20, 181461 }, -- Ice Bite
+				{ 21, 189846 }, -- Alandien's Tortured Twinblades
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- Rygelon
+			EncounterJournalID = 2467,
+			[NORMAL_RAID_DIFF] = {
+				{ 1 , 189850 }, -- Handguards of Hidden Realms
+				{ 2 , 183468 }, -- Born Anew
+				{ 3 , 191013 }, -- Zenith Chest Module
+				{ 4 , 182461 }, -- Echoing Blessings
+				{ 5 , 189851 }, -- Devastated Worldshard
+				{ 6 , 191010 }, -- Dreadful Chest Module
+				{ 7 , 180943 }, -- Cacophonous Roar
+				{ 8 , 189848 }, -- Treads of Titanic Curiosity
+				{ 9 , 189852 }, -- Antumbra, Shadow of the Cosmos
+				{ 10, 191011 }, -- Mystic Chest Module
+				{ 11, 181498 }, -- Grounding Surge
+				{ 12, 189854 }, -- Rygelon's Heraldric Ring
+				{ 13, 189849 }, -- Interdimensional Manica
+				{ 14, 189853 }, -- Astral Verdict
+				{ 15, 188254 }, -- Grim Eclipse
+				{ 16, 182368 }, -- Relentless Onslaught
+				{ 17, 191012 }, -- Venerated Chest Module
+				{ 18, 183497 }, -- Recuperator
+				{ 19, 191001 }, -- Observer's Umbral Shiv
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+		{ -- The Jailer
+			EncounterJournalID = 2464,
+			[NORMAL_RAID_DIFF] = {
+				{ 1, 183491 }, -- Ready for Anything
+				{ 2, 182131 }, -- Haunting Apparitions
+				{ 3, 182480 }, -- Reversal of Fortune
+				{ 4, 189862 }, -- Gavel of the First Arbiter
+				{ 5, 182318 }, -- Viscous Ink
+				{ 6, 189855 }, -- Bindings of the Banished One
+				{ 7, 189859 }, -- Worldkiller Iris
+				{ 8, 189856 }, -- Runecarver's Twisted Ward
+				{ 9, 189860 }, -- Forbidden Truth
+				{ 10, 188252 }, -- Chains of Domination
+				{ 11, 182449 }, -- Resolute Barrier
+				{ 12, 189818 }, -- Domination's Deliverance
+				{ 13, 181975 }, -- Hardened Bones
+				{ 14, 189857 }, -- Epochal Oppressor's Greaves
+				{ 15, 189861 }, -- Zovastrum, the Unmaking
+				{ 16, 188253 }, -- Scars of Fraternal Strife
+				{ 17, 181510 }, -- Lingering Numbness
+				{ 18, 189858 }, -- Legguards of the Ultimate Threat
+			},
+			[HEROIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[MYTHIC_PRE_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+			[RF_DIFF] = {
+				GetItemsFromDiff = NORMAL_RAID_DIFF,
+			},
+		},
+	}
+}
+
 

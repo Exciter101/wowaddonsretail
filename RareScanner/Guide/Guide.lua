@@ -902,6 +902,11 @@ private.CONTAINER_GUIDE = {
 	["3806202023"] = { 
 		[RSConstants.ENTRANCE] = { x = 0.7934, y = 0.3650 };
 	}; --Ancient Spear Shards
+	["2010162024"] = { 
+		[RSConstants.STEP1] = { x = 0.4471, y = 0.6199, comment = AL["NOTE_201016_1"] }; 
+		[RSConstants.STEP2] = { x = 0.4468, y = 0.6020, comment = AL["NOTE_201016_1"] }; 
+		[RSConstants.STEP3] = { x = 0.4418, y = 0.6198, comment = AL["NOTE_201016_1"] }; 
+	}; --Harmonic Crystal Harmonizer
 }
 
 ---============================================================================

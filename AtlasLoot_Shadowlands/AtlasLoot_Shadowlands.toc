@@ -1,6 +1,6 @@
 ## Interface: 100002
 ## Author: Arith	
-## Version: v1.03
+## Version: v1.04
 ## Dependencies: AtlasLoot
 ## LoadOnDemand: 1
 
@@ -26,3 +26,4 @@
 Core\Core.lua
 Core\Instance.lua
 Core\Faction.lua
+Core\Mounts.lua

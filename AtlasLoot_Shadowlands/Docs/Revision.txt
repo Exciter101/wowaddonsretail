@@ -1,6 +1,13 @@
-﻿$Id: Revision.txt 8 2022-11-20 07:29:37Z arithmandar $
+﻿$Id: Revision.txt 10 2022-12-03 08:38:11Z arithmandar $
 Revision History:
 =================
+
+* v1.04 (Dec. 03, 2022)
+==========================
+- Fixed encounter ID , now the following boss name is showing properly:
+  - Blightbone in The Necrotic Wake,
+  - Hakkar the Soulflayer in De Other Side,
+  - Lord Chamberlain in Halls of Atonement
 
 * v1.03 (Nov. 20, 2022)
 ==========================
