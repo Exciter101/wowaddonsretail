@@ -907,6 +907,12 @@ private.CONTAINER_GUIDE = {
 		[RSConstants.STEP2] = { x = 0.4468, y = 0.6020, comment = AL["NOTE_201016_1"] }; 
 		[RSConstants.STEP3] = { x = 0.4418, y = 0.6198, comment = AL["NOTE_201016_1"] }; 
 	}; --Harmonic Crystal Harmonizer
+	["3812232025"] = { 
+		[RSConstants.ENTRANCE..1] = { x = 0.3242, y = 0.7561 };
+		[RSConstants.ENTRANCE..2] = { x = 0.3251, y = 0.7490 };
+		[RSConstants.ENTRANCE..3] = { x = 0.3311, y = 0.7414 };
+		[RSConstants.ENTRANCE..4] = { x = 0.3398, y = 0.7469 };
+	}; --Cracked Hourglass
 }
 
 ---============================================================================

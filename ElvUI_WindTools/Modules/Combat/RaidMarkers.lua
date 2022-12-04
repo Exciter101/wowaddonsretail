@@ -410,8 +410,8 @@ function RM:CreateButtons()
 			"OnEnter",
 			function(self)
 				if RM.db.buttonAnimation then
-					local progress = animGroup:GetProgress()
-					local currentScale = tex:GetScale()
+					local progress = F.Or(animGroup:GetProgress(), 0)
+					local currentScale = F.Or(tex:GetScale(), 1)
 					if abs(progress) > 0.002 and tex.__fromScale and tex.__toScale then
 						currentScale = tex.__fromScale + (tex.__toScale - tex.__fromScale) * progress
 					end
@@ -420,9 +420,7 @@ function RM:CreateButtons()
 					tex.__toScale = RM.db.buttonAnimationScale
 					scaleAnim:SetScaleFrom(currentScale, currentScale)
 					scaleAnim:SetScaleTo(RM.db.buttonAnimationScale, RM.db.buttonAnimationScale)
-					scaleAnim:SetDuration(
-						(RM.db.buttonAnimationScale - currentScale) / (RM.db.buttonAnimationScale - 1) * RM.db.buttonAnimationDuration
-					)
+					scaleAnim:SetDuration((tex.__toScale - currentScale) / (tex.__toScale - 1) * RM.db.buttonAnimationDuration)
 					animGroup:Play()
 				end
 
@@ -441,8 +439,8 @@ function RM:CreateButtons()
 			"OnLeave",
 			function(self)
 				if RM.db.buttonAnimation then
-					local progress = animGroup:GetProgress()
-					local currentScale = tex:GetScale()
+					local progress = F.Or(animGroup:GetProgress(), 0)
+					local currentScale = F.Or(tex:GetScale(), 1)
 					if abs(progress) > 0.002 and tex.__fromScale and tex.__toScale then
 						currentScale = tex.__fromScale + (tex.__toScale - tex.__fromScale) * progress
 					end

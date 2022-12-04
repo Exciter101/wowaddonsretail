@@ -1,48 +1,68 @@
-# Version: 3.08
-2022/12/01 Released
+# Version: 3.09
+2022/12/04 Released
+## ❗ Important
+- [Advanced] Profile now includes custom list setting for extra action bars.
+- [Extra Action Bars] Remove Torghast related items from bar 1's default item group.
+- [Extra Action Bars] Change Shadowlands potions and flasks in bar 2's default item group to Dragonflight potions and flasks.
+- [Extra Action Bars] Change Shadowlands food in bar 3's default item group to Dragonflight food.
 ## ✳️ New
-- [Skins] Add skin for profession order frame.
+- [Super Tracker] Support TomTom style command parsing (e.g. /way 10,20) for Blizzard Waypoint, no need to install TomTom.
+- [Extra Action Bars] Update openable item list for Dragonflight. Thanks mcc1
 ## 💪 Improvement
-- [Turn In] Fix the error that cannot be temporarily disabled by pressing the modifier key.
-- [Turn In] Update the smart chat functionality. Now WindTools can analyze the option which is related to the quest in the gossips and select it automatically.
-- [Skins] Fix the skin of the adventure map.
-- [Skins] Fix the skin of the ElvUI totem tracker.
-- [Raid Markers] Fix the error that may be caused by the Lua math calculation error.
+- [Extra Action Bars] Fix custom options and add item icon for easier selection.
+- [Raid Markers] Fix animation calculation error.
+- [Turn In] Fix a possible error.
+- [Skins] Fix scenario skin.
 
 ------
-# 版本: 3.08
-2022/12/01 发布
+# 版本: 3.09
+2022/12/04 发布
+## ❗ 重要
+- [高级] 配置文件现在会包含额外物品条呃自定义设定.
+- [额外物品条] 条 1 的默认物品组移除了托加司相关物品.
+- [额外物品条] 条 2 的默认物品组中的暗影国度药水和药剂更改为巨龙时代药水和药剂.
+- [额外物品条] 条 3 的默认物品组中的暗影国度食物更改为巨龙时代食物.
 ## ✳️ 新增
-- [美化皮肤] 新增专业制作订单框体皮肤.
+- [超级追踪] 支持暴雪路径点 TomTom 风格指令解析 (比如: /way 10,20), 不需要安装 TomTom.
+- [额外物品条] 更新巨龙时代版本中的可开启物品. 感谢 mcc1
 ## 💪 改善
-- [交接] 修复无法通过按下修饰键暂时停用的错误.
-- [交接] 更新智能聊天功能, 现在能够分析对话中任务相关的聊天并自动对话.
-- [美化皮肤] 修复冒险地图皮肤.
-- [美化皮肤] 修复 ElvUI 图腾追踪器皮肤.
-- [团队标记] 修复一个可能由 Lua 数学计算误差导致的错误.
+- [额外物品条] 自定义功能修复, 且增加物品图标方便筛选.
+- [团队标记] 修复动画计算错误.
+- [交接] 修复一个可能的错误.
+- [美化皮肤] 修复场景皮肤.
 
 ------
-# 版本: 3.08
-2022/12/01 發布
+# 版本: 3.09
+2022/12/04 發布
+## ❗ 重要
+- [進階] 配置文件現在會包含額外物品條的自訂設定.
+- [額外物品條] 條 1 的默認物品組移除了托加斯特相關物品.
+- [額外物品條] 條 2 的默認物品組中的暗影之境藥水和藥劑更改為巨龍崛起藥水和藥劑.
+- [額外物品條] 條 3 的默認物品組中的暗影之境食物更改為巨龍崛起食物.
 ## ✳️ 新增
-- [美化皮膚] 新增專業製作訂單框體皮膚.
+- [超級追蹤] 支援暴雪路徑點 TomTom 風格指令解析 (比如: /way 10,20), 不需要安裝 TomTom.
+- [額外物品條] 更新巨龍崛起版本中的可開啟物品. 感謝 mcc1
 ## 💪 改善
-- [交接] 修復無法通過按下修飾鍵暫時停用的錯誤.
-- [交接] 更新智能聊天功能, 現在能夠分析對話中任務相關的聊天並自動對話.
-- [美化皮膚] 修復冒險地圖皮膚.
-- [美化皮膚] 修復 ElvUI 圖騰追蹤器皮膚.
-- [團隊標記] 修復一個可能由 Lua 數學計算誤差導致的錯誤.
+- [額外物品條] 自訂功能修復, 且增加物品圖示方便篩選.
+- [團隊標記] 修復了動效計算錯誤.
+- [交接] 修復一個可能的錯誤.
+- [美化皮膚] 修復場景皮膚.
 
 ------
-# 버전: 3.08
-2022/12/01 Released
+# 버전: 3.09
+2022/12/04 Released
+## ❗ 중요 사항
+- [Advanced] Profile now includes custom list setting for extra action bars.
+- [Extra Action Bars] Remove Torghast related items from bar 1's default item group.
+- [Extra Action Bars] Change Shadowlands potions and flasks in bar 2's default item group to Dragonflight potions and flasks.
+- [Extra Action Bars] Change Shadowlands food in bar 3's default item group to Dragonflight food.
 ## ✳️ 신규 사항
-- [Skins] Add skin for profession order frame.
+- [Super Tracker] Support TomTom style command parsing (e.g. /way 10,20) for Blizzard Waypoint, no need to install TomTom.
+- [Extra Action Bars] Update openable item list for Dragonflight. Thanks mcc1
 ## 💪 개선 사항
-- [Turn In] Fix the error that cannot be temporarily disabled by pressing the modifier key.
-- [Turn In] Update the smart chat functionality. Now WindTools can analyze the option which is related to the quest in the gossips and select it automatically.
-- [Skins] Fix the skin of the adventure map.
-- [Skins] Fix the skin of the ElvUI totem tracker.
-- [Raid Markers] Fix the error that may be caused by the Lua math calculation error.
+- [Extra Action Bars] Fix custom options and add item icon for easier selection.
+- [Raid Markers] Fix animation calculation error.
+- [Turn In] Fix a possible error.
+- [Skins] Fix scenario skin.
 
 ------

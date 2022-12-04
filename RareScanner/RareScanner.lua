@@ -1126,7 +1126,7 @@ local function RefreshDatabaseData(previousDbVersion)
 		end
 		
 		-- Fix current filters
-		if (not private.db.general.filtersFixed and previousDbVersion < 69) then
+		if (not private.db.general.filtersFixed and previousDbVersion and previousDbVersion < 69) then
 			for npcID, _ in pairs(private.db.general.filteredRares) do
 				private.db.general.filteredRares[npcID] = true
 			end
@@ -1258,11 +1258,16 @@ function RareScanner:InitializeDataBase()
 
 	-- Check if rare NPC names database is updated
 	local currentDbVersion = RSGeneralDB.GetDbVersion()
-	local databaseUpdated = currentDbVersion and currentDbVersion.version == RSConstants.CURRENT_DB_VERSION
+	local version = nil
+	local databaseUpdated = false
+	if (currentDbVersion) then
+		version = currentDbVersion.version
+		databaseUpdated = currentDbVersion.version == RSConstants.CURRENT_DB_VERSION
+	end
 	if (not databaseUpdated) then
-		UpdateRareNamesDB(currentDbVersion.version); -- Internally calls to RefreshDatabaseData once its done
+		UpdateRareNamesDB(version); -- Internally calls to RefreshDatabaseData once its done
 	else
-		RefreshDatabaseData(currentDbVersion.version)
+		RefreshDatabaseData(version)
 	end
 end
 

@@ -915,6 +915,7 @@ if AL then
 	AL["NOTE_375530"] = "The most of these treasures are accessible only with a flying mount, so if you cannot reach it keep advancing in the campaign."
 	AL["NOTE_375668"] = "It is hidden in a cave behind the waterfall. This cave is accessible from the top. Reach the edge of the waterfall and look down, you will see a stone that is sticking out of the water; that is the entrance. You have to jump down onto it and walk through the water."
 	AL["NOTE_376175"] = "You need a [Fullsails Supply Chest Key] to open it. They key is dropped by nearby enemies."
+	AL["NOTE_376426"] = "It can be found as soon as you reach renown 16 with the [Dragonscale Expedition]."
 	AL["NOTE_376587"] = "It can be found as soon as you reach renown 2 with the [Dragonscale Expedition]."
 	AL["NOTE_377317"] = "Kill [Shimmermaw] and it will drop [Gilded key]. Use the key to open the treasure."
 	AL["NOTE_377899"] = "Read the [Observant Riddles: A Field Guide]. In order to solve the riddle you have to gather three items ([Adventurer's Lost Soap Bar], [Marmoni's Prize] and [Well-Preserved Bone]) and merge them in front of the Field Guide."

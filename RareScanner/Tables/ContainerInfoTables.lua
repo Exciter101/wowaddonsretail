@@ -699,7 +699,7 @@ private.CONTAINER_INFO = {
 	[380580] = { zoneID = 2022, artID = { 1706 }, x = 6800, y = 2680, overlay = { "6800-2680" }, reset = false, questID = { 70283 }, prof = 333 }; --Lava-Infused Seed
 	[380590] = { zoneID = 2022, artID = { 1706 }, x = 2510, y = 7330, overlay = { "2510-7330" }, reset = false, prof = 171 }; --Well Insulated Mug
 	[380591] = { zoneID = 2022, artID = { 1706 }, x = 5040, y = 4510, overlay = { "5040-4510" }, reset = false, questID = { 70292 }, prof = 755 }; --Closely Guarded Shiny
-	[380598] = { zoneID = 2022, artID = { 1706 }, x = 3550, y = 6430, overlay = { "3550-6430" }, reset = false, prof = 164 }; --Singed Chest
+	[194874] = { zoneID = 2022, artID = { 1706 }, x = 3550, y = 6430, overlay = { "3550-6430" }, reset = false, prof = 164 }; --Singed Chest
 	[380604] = { zoneID = 2022, artID = { 1706 }, x = 2200, y = 8700, overlay = { "2200-8700","7480-3790" }, reset = false, prof = 164 }; --Mysterious Banner
 	[380607] = { zoneID = 2022, artID = { 1706 }, x = 2490, y = 6970, overlay = { "2490-6970" }, reset = false, prof = 197 }; --Itinerant Singed Fabric
 	[380610] = { zoneID = 2022, artID = { 1706 }, x = 6790, y = 5790, overlay = { "6790-5790" }, reset = false, prof = 773 }; --Pulsing Earth Rune
@@ -730,7 +730,7 @@ private.CONTAINER_INFO = {
 	[380611] = { zoneID = 2023, artID = { 1705 }, x = 7920, y = 8380, overlay = { "7920-8380" }, reset = false, prof = 171 }; --Canteen of Suspicious Water
 	[380612] = { zoneID = 2023, artID = { 1705 }, x = 8570, y = 2520, overlay = { "8570-2520" }, reset = false, prof = 773 }; --Sign Language Reference Sheet
 	[380620] = { zoneID = 2023, artID = { 1705 }, x = 8111, y = 3785, overlay = { "8111-3787" }, reset = false, questID = { 70313 }, prof = 164 }; --Ancient Spear Shards
-	[380709] = { zoneID = 2023, artID = { 1705 }, x = 5090, y = 6650, overlay = { "5090-6650" }, reset = false, prof = 164 }; --Falconer Gauntlet Drawings
+	[380709] = { zoneID = 2023, artID = { 1705 }, x = 5090, y = 6650, overlay = { "5090-6650" }, reset = false, questID = { 70353 }, prof = 164 }; --Falconer Gauntlet Drawings
 	[380842] = { zoneID = 2023, artID = { 1705 }, x = 8230, y = 7339, overlay = { "8230-7338" }, reset = false, questID = { 70379 } }; --Gold Coin
 	[380847] = { zoneID = 2023, artID = { 1705 }, x = 3321, y = 5534, overlay = { "3321-5534" }, reset = false, questID = { 70391 } }; --Emerald Gem Cluster
 	[380859] = { zoneID = 2023, artID = { 1705 }, x = 5201, y = 5832, overlay = { "5198-5839" }, reset = false, questID = { 70400 } }; --Tuskarr Toy Boat

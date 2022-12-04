@@ -11,6 +11,7 @@ local print = print
 local strfind = strfind
 local strmatch = strmatch
 local tonumber = tonumber
+local tostring = tostring
 local tremove = tremove
 local type = type
 local unpack = unpack
@@ -288,4 +289,15 @@ function F.In(val, tbl)
     end
 
     return false
+end
+
+function F.IsNaN(val)
+    return tostring(val) == tostring(0/0)
+end
+
+function F.Or(val, default)
+    if not val or F.IsNaN(val) then
+        return default
+    end
+    return val
 end
