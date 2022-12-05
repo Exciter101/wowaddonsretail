@@ -913,6 +913,20 @@ private.CONTAINER_GUIDE = {
 		[RSConstants.ENTRANCE..3] = { x = 0.3311, y = 0.7414 };
 		[RSConstants.ENTRANCE..4] = { x = 0.3398, y = 0.7469 };
 	}; --Cracked Hourglass
+	["1986042025"] = { 
+		[RSConstants.ENTRANCE] = { x = 0.5276, y = 0.8324 };
+	}; --Cracked Hourglass
+	["3806232024"] = { 
+		[RSConstants.ENTRANCE] = { x = 0.5305, y = 0.6528 };
+	}; --Spelltouched Tongs
+	["3761752022"] = { 
+		[RSConstants.DOT..1] = { x = 0.7660, y = 0.4280, comment = AL["NOTE_376175_1"] };
+		[RSConstants.DOT..2] = { x = 0.8000, y = 0.4400, comment = AL["NOTE_376175_1"] };
+		[RSConstants.DOT..3] = { x = 0.8220, y = 0.4260, comment = AL["NOTE_376175_1"] };
+		[RSConstants.DOT..4] = { x = 0.8120, y = 0.4599, comment = AL["NOTE_376175_1"] };
+		[RSConstants.DOT..5] = { x = 0.7920, y = 0.4520, comment = AL["NOTE_376175_1"] };
+		[RSConstants.DOT..6] = { x = 0.7800, y = 0.4390, comment = AL["NOTE_376175_1"] };
+	}; --Fullsails Supply Chest
 }
 
 ---============================================================================

@@ -30,10 +30,10 @@ function ElvUI_EltreumUI:ElvUIVersionCheck()
 		whileDead = 1,
 		hideOnEscape = false,
 	}
-	if E.version < 13.08 then
+	if E.version < 13.09 then
 		E:StaticPopup_Show('ELVUIVERSIONCHECK')
 		ElvUI_EltreumUI:Print("Your ElvUI version is out of date, please update to avoid issues!")
-	elseif E.version > 13.10 then
+	elseif E.version > 13.11 then
 		E:StaticPopup_Show('ELVUIVERSIONCHECK2')
 		ElvUI_EltreumUI:Print("Your ElvUI version is newer than Eltruism, you might run into issues unless you update Eltruism!")
 	end
@@ -279,10 +279,10 @@ function ElvUI_EltreumUI:OldVersionCheck()
 		if E.db["actionbar"]["bar1"]["paging"]["DEMONHUNTER"] == "[vehicleui] 12; [overridebar] 14;[possessbar] 12;[bonusbar:5] 11;;" then
 			E.db["actionbar"]["bar1"]["paging"]["DEMONHUNTER"] = "[vehicleui] 12; [overridebar] 14;[possessbar] 12;[bonusbar:5] 11;"
 		end
-	elseif E.private.ElvUI_EltreumUI.install_version > "3.4.4" and E.private.ElvUI_EltreumUI.install_version < "3.6.4" then
+	elseif E.private.ElvUI_EltreumUI.install_version > "3.4.4" and E.private.ElvUI_EltreumUI.install_version < "3.6.5" then
 		if E.db.actionbar.bar4.visibility == "[vehicleui] show; [overridebar] show; [possessbar] show; show;" then
 			E.db["actionbar"]["bar1"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"
-			E.db["actionbar"]["bar4"]["visibility"] = "[vehicleui] show; [overridebar] show; [possessbar] show; show;"
+			E.db["actionbar"]["bar4"]["visibility"] = "[vehicleui] show; [overridebar] show; [possessbar] show; [petbattle] hide; show;"
 			E.db["actionbar"]["bar2"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"
 			E.db["actionbar"]["bar3"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"
 			E.db["actionbar"]["bar5"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"
@@ -290,7 +290,7 @@ function ElvUI_EltreumUI:OldVersionCheck()
 			E.db["actionbar"]["bar8"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"
 			E.db["actionbar"]["bar9"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"
 		elseif E.db.actionbar.bar1.visibility == "[vehicleui] show; [overridebar] show; [possessbar] show; show;" then
-			E.db["actionbar"]["bar1"]["visibility"] = "[vehicleui] show; [overridebar] show; [possessbar] show; show;"
+			E.db["actionbar"]["bar1"]["visibility"] = "[vehicleui] show; [overridebar] show; [possessbar] show; [petbattle] hide; show;"
 			E.db["actionbar"]["bar4"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"
 			E.db["actionbar"]["bar2"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"
 			E.db["actionbar"]["bar3"]["visibility"] = "[vehicleui] hide; [bonusbar:5] hide; [overridebar] hide; [possessbar] hide; [petbattle] hide; show"

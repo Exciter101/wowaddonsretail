@@ -139,6 +139,22 @@ local PRICE_INFO = {
 	["78874"] = { itemID = 78874 }, -- Shoulders of the Corrupted Vanquisher
 	["78875"] = { itemID = 78875 }, -- Shoulders of the Corrupted Conqueror
 	["78876"] = { itemID = 78876 }, -- Shoulders of the Corrupted Protector
+	-- added after dragonflight
+	["magmote"] = { itemID = 202173 }, -- Magmote
+	["DenseHide193216"] = { itemID = 193216 }, -- Dense Hide
+	["DenseHide193217"] = { itemID = 193217 }, -- Dense Hide
+	["DenseHide193218"] = { itemID = 193218 }, -- Dense Hide
+	["SereviteOre"] = { itemID = 190396 }, -- Serevite Ore
+	["dragonArtifact"] = { itemID = 192055} , -- Dragon Isles Artifact
+	["centaurTrophy"] = { itemID = 200093} , -- Centaur Hunting Trophy
+	["tuskarrTotem"] = { itemID = 200071} , -- Sacred Tuskarr Totem
+	["titanRelic"] = { itemID = 199906} , -- Titan Relic
+	["IridescentPlume"] = { itemID = 201401} , -- Iridescent Plume
+	["PrimalWool"] = { itemID = 201405} , -- Tuft of Primal Wool
+	["AwakenedAir"] = { itemID = 190327} , -- Awakened Air
+	["OccasionalSand"] = { itemID = 194562} , -- Occasional Sand
+	["ResilientLeather"] = { itemID = 193210} , -- Resilient Leather
+	
 	-- currencies
 	["stygia"]	= { currencyID = 1767 }, -- Stygia, added in 9.0.1
 	["reservoiranima"]	= { currencyID = 1813 }, -- Reservoir Anima, added in 9.0.1
@@ -168,6 +184,8 @@ local PRICE_INFO = {
 	["timewarped"] 		= {currencyID = 1166}, -- Timewarped Badge
 	-- others
 	["money"] 		= { func = GetCoinTextureString },
+	-- DragonFlight
+	["dragonSupplies"] = { currencyID = 2003} , -- Dragon Isles Supplies
 }
 
 local Cache = {}

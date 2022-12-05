@@ -64,6 +64,10 @@ function ElvUI_EltreumUI:Shadows()
 					_G.OrderHallCommandBar:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
 					if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.OrderHallCommandBar.shadow) end
 				end
+				if _G.OrderHallTalentFrame and not _G.OrderHallTalentFrame.shadow then
+					_G.OrderHallTalentFrame:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+					if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.OrderHallTalentFrame.shadow) end
+				end
 			end
 			if (arg == "Blizzard_ArchaeologyUI") or IsAddOnLoaded("Blizzard_ArchaeologyUI") then
 				if _G.ArcheologyDigsiteProgressBar and _G.ArcheologyDigsiteProgressBar.FillBar and not _G.ArcheologyDigsiteProgressBar.FillBar.shadow then
@@ -682,6 +686,9 @@ function ElvUI_EltreumUI:Shadows()
 			_G.RaidUtilityPanel,
 			_G.RaidUtility_CloseButton,
 			_G.EditModeManagerFrame,
+			_G.PVPMatchScoreboard,
+			_G.PVPMatchResults,
+			_G.MajorFactionRenownFrame,
 			--_G.ImmersionFrame.TalkBox,
 		}
 		for _, frame in pairs(blizzardframes) do
@@ -1405,10 +1412,10 @@ function ElvUI_EltreumUI:Shadows()
 						if not E.db.unitframe.units.target.castbar.iconAttached then
 							if E.db["unitframe"]["units"]["target"]["castbar"]["iconAttachedTo"] == "Castbar" then
 								_G["ElvUF_Target_CastBar"].shadow:ClearAllPoints()
-								_G["ElvUF_Target_CastBar"].shadow:SetPoint("TOPLEFT",_G["ElvUF_Target_CastBar"].backdrop, "TOPLEFT",-E.db.ElvUI_EltreumUI.skins.shadow.length,E.db.ElvUI_EltreumUI.skins.shadow.length)
-								_G["ElvUF_Target_CastBar"].shadow:SetPoint("BOTTOMLEFT",_G["ElvUF_Target_CastBar"].backdrop, "BOTTOMLEFT",-E.db.ElvUI_EltreumUI.skins.shadow.length,E.db.ElvUI_EltreumUI.skins.shadow.length)
-								_G["ElvUF_Target_CastBar"].shadow:SetPoint("TOPRIGHT",_G["ElvUF_Target_CastBar"].Icon.bg, "TOPRIGHT",E.db.ElvUI_EltreumUI.skins.shadow.length,-E.db.ElvUI_EltreumUI.skins.shadow.length)
-								_G["ElvUF_Target_CastBar"].shadow:SetPoint("BOTTOMRIGHT",_G["ElvUF_Target_CastBar"].Icon.bg, "BOTTOMRIGHT",E.db.ElvUI_EltreumUI.skins.shadow.length,-E.db.ElvUI_EltreumUI.skins.shadow.length)
+								_G["ElvUF_Target_CastBar"].shadow:SetPoint("TOPLEFT",_G["ElvUF_Target_CastBar"].Icon.bg, "TOPLEFT",-E.db.ElvUI_EltreumUI.skins.shadow.length,E.db.ElvUI_EltreumUI.skins.shadow.length)
+								_G["ElvUF_Target_CastBar"].shadow:SetPoint("BOTTOMLEFT",_G["ElvUF_Target_CastBar"].Icon.bg, "BOTTOMLEFT",-E.db.ElvUI_EltreumUI.skins.shadow.length,-E.db.ElvUI_EltreumUI.skins.shadow.length)
+								_G["ElvUF_Target_CastBar"].shadow:SetPoint("TOPRIGHT",_G["ElvUF_Target_CastBar"].backdrop, "TOPRIGHT",E.db.ElvUI_EltreumUI.skins.shadow.length,-E.db.ElvUI_EltreumUI.skins.shadow.length)
+								_G["ElvUF_Target_CastBar"].shadow:SetPoint("BOTTOMRIGHT",_G["ElvUF_Target_CastBar"].backdrop, "BOTTOMRIGHT",E.db.ElvUI_EltreumUI.skins.shadow.length,-E.db.ElvUI_EltreumUI.skins.shadow.length)
 							end
 						elseif E.db.unitframe.units.target.castbar.iconAttached then
 							_G["ElvUF_Target_CastBar"].shadow:ClearAllPoints()
@@ -1440,7 +1447,7 @@ function ElvUI_EltreumUI:Shadows()
 
 			--focus castbar
 			if E.db.unitframe.units.focus.castbar.overlayOnFrame == "None" and E.db.unitframe.units.focus.castbar.icon then
-				if _G["ElvUF_Focus_CastBar"].shadow then
+				if _G["ElvUF_Focus_CastBar"] and _G["ElvUF_Focus_CastBar"].shadow then
 					if E.db["unitframe"]["units"]["focus"]["orientation"] == "RIGHT" then
 						if not E.db.unitframe.units.focus.castbar.iconAttached then
 							if E.db["unitframe"]["units"]["focus"]["castbar"]["iconAttachedTo"] == "Castbar" then

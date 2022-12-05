@@ -1,6 +1,6 @@
 ## Interface: 100002
 ## Author: Arith	
-## Version: v1.02
+## Version: v1.03
 ## Dependencies: AtlasLoot
 ## LoadOnDemand: 1
 
@@ -21,4 +21,8 @@
 ## X-AtlasLoot-LootModule: 1
 ## X-AtlasLoot-ModuleName: Dragonflight
 
-data.lua
+Core\Core.lua
+Core\Instance.lua
+Core\Faction.lua
+Core\PvP.lua
+Core\Mounts.lua

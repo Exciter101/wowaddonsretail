@@ -1,4 +1,4 @@
--- $Id: data.lua 4 2022-11-13 12:31:34Z arithmandar $
+-- $Id: Instance.lua 8 2022-11-20 08:02:32Z arithmandar $
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
@@ -12,20 +12,9 @@ local GetAchievementInfo = GetAchievementInfo
 -- ----------------------------------------------------------------------------
 -- AddOn namespace.
 -- ----------------------------------------------------------------------------
-local addonname = ...
+local _, private = ...
 local AtlasLoot = _G.AtlasLoot
-local data = AtlasLoot.ItemDB:Add(addonname, 10)
-
-local moduleMeta = {
-		addonName = addonname,
-		icon = "Interface\\ICONS\\achievement_mythicdungeons_shadowlands",
-		name = EXPANSION_NAME9,
-		tt_title = nil,		-- ToolTip title
-		tt_text = nil,		-- ToolTip text
-}
-
-AtlasLoot:RegisterModules(addonname, moduleMeta)
-
+local data = private.data
 local AL = AtlasLoot.Locales
 
 local RF_DIFF = data:AddDifficulty(AL["Raid Finder"], "LFRWithPreset", {
