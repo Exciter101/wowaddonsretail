@@ -1,0 +1,11 @@
+## Interface: 100002
+## Title: HandyNotes_Valdrakken
+## Notes: Valdrakken map locations.
+## Author: Keyboardturn
+## Version: 0.0.1
+## SavedVariables: HandyNotes_ValdrakkenDB
+## RequiredDeps: HandyNotes
+
+Core.lua
+locations.lua
+icons.lua
