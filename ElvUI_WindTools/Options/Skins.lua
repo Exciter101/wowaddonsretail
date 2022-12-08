@@ -1115,12 +1115,26 @@ options.addons = {
             addonName = "PremadeGroupsFilter",
             addonskinsKey = "PremadeGroupsFilter"
         },
+        raiderIO = {
+            order = 10,
+            type = "toggle",
+            name = L["RaiderIO"],
+            addonName = "RaiderIO",
+            addonskinsKey = "RaiderIO"
+        },
         -- rematch = {
         --     order = 10,
         --     type = "toggle",
         --     name = L["Rematch"],
         --     addonName = "Rematch"
         -- },
+        simulationcraft = {
+            order = 10,
+            type = "toggle",
+            name = L["Simulationcraft"],
+            addonName = "Simulationcraft",
+            addonskinsKey = "Simulationcraft"
+        },
         tinyInspect = {
             order = 10,
             type = "toggle",

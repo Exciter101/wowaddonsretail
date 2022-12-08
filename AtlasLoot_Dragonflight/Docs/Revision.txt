@@ -1,6 +1,10 @@
-﻿$Id: Revision.txt 9 2022-12-04 07:48:23Z arithmandar $
+﻿$Id: Revision.txt 12 2022-12-05 14:19:53Z arithmandar $
 Revision History:
 =================
+
+* v1.04 (Dec. 05, 2022)
+==========================
+- Added tabards, companions, and toys
 
 * v1.03 (Dec. 04, 2022)
 ==========================

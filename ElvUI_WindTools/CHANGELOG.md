@@ -1,44 +1,56 @@
-# Version: 3.10
-2022/12/05 Released
-## ❗ Important
-- ElvUI minimum version requirement is adjusted to 13.10.
+# Version: 3.11
+2022/12/06 Released
+## ✳️ New
+- [Skins] Add Simulationcraft skin.
+- [Skins] Add RaiderIO skin.
 ## 💪 Improvement
-- [Rectangle Minimap] Adapt to ElvUI 13.10.
-- [Skins] ElvUI Minimap skin adapt to ElvUI 13.10.
-- [Skins] Fix a logic error.
-- [Minimap Icons] Ignore random queue icons.
+- [Instance Difficulty] Fix default anchor error.
+- [Extra Item Bar] Ignore Ruby Whelp Shell by default.
+- [Announcement] Add Valdrakken portal support.
+- [Announcement] Add new feasts added in Dragonflight.
+- [Turn In] Smart chat supports more quests.
+- [Skins] Update BugSack skin.
 
 ------
-# 版本: 3.10
-2022/12/05 发布
-## ❗ 重要
-- ElvUI 最低版本要求调整为 13.10.
+# 版本: 3.11
+2022/12/06 发布
+## ✳️ 新增
+- [美化皮肤] 新增 Simulationcraft 插件的美化皮肤.
+- [美化皮肤] 新增 RaiderIO 插件的美化皮肤.
 ## 💪 改善
-- [矩形小地图] 适配 ElvUI 13.10.
-- [美化皮肤] ElvUI 小地图皮肤适配 ElvUI 13.10.
-- [美化皮肤] 修复一个逻辑错误.
-- [小地图图标] 忽略随机队列图标.
+- [副本难度] 修复默认锚点错误.
+- [额外物品条] 默认忽略红玉雏龙蛋壳.
+- [通告] 新增瓦德拉肯传送门通告.
+- [通告] 新增巨龙时代大餐通告.
+- [交接] 智能对话支持更多任务.
+- [美化皮肤] 更新 BugSack 美化皮肤.
 
 ------
-# 版本: 3.10
-2022/12/05 發布
-## ❗ 重要
-- ElvUI 最低版本要求調整為 13.10.
+# 版本: 3.11
+2022/12/06 發布
+## ✳️ 新增
+- [美化皮膚] 新增 Simulationcraft 插件的美化皮膚.
+- [美化皮膚] 新增 RaiderIO 插件的美化皮膚.
 ## 💪 改善
-- [矩形小地圖] 適配 ElvUI 13.10.
-- [美化皮膚] ElvUI 小地圖皮膚適配 ElvUI 13.10.
-- [美化皮膚] 修復一個邏輯錯誤.
-- [小地圖圖示] 忽略隨機隊列圖示.
+- [副本难度] 修復預設錨點錯誤.
+- [額外物品條] 預設忽略晶紅幼龍之殼.
+- [通告] 新增沃卓肯傳送門通告.
+- [通告] 新增巨龍崛起大餐通告.
+- [交接] 智能對話支援更多任務.
+- [美化皮膚] 更新 BugSack 美化皮膚.
 
 ------
-# 버전: 3.10
-2022/12/05 Released
-## ❗ 중요 사항
-- ElvUI minimum version requirement is adjusted to 13.10.
+# 버전: 3.11
+2022/12/06 Released
+## ✳️ 신규 사항
+- [Skins] Add Simulationcraft skin.
+- [Skins] Add RaiderIO skin.
 ## 💪 개선 사항
-- [Rectangle Minimap] Adapt to ElvUI 13.10.
-- [Skins] ElvUI Minimap skin adapt to ElvUI 13.10.
-- [Skins] Fix a logic error.
-- [Minimap Icons] Ignore random queue icons.
+- [Instance Difficulty] Fix default anchor error.
+- [Extra Item Bar] Ignore Ruby Whelp Shell by default.
+- [Announcement] Add Valdrakken portal support.
+- [Announcement] Add new feasts added in Dragonflight.
+- [Turn In] Smart chat supports more quests.
+- [Skins] Update BugSack skin.
 
 ------

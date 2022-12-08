@@ -1,9 +1,9 @@
-## Changed in v24
+## Changed in v27
 
-* Profession knowledge: fixed some locations, added some questids thanks to tkmonk
-* More quest and loot contributions from Marthammor
-* Improved the Bakar locations
-* Don't show dragon race locations until you know dragonriding
-* Show more information about requirements in tooltips
-* Make the label for a unit level requirement prettier
+* Changed the group-hiding behavior: hiding a group from the top-level menu will now apply to all zones, and if you want to hide one in only a specific zone you'll have to go into the "zones" submenu
+* Add the War Supply Chests, hidden by default because they're only relevant if you're in war mode
+* Add the Best Spell Ever quest for Mages in Azure Span, for Polymorph: Duck
+* Profession Knowledge: Flashfrozen Scroll questid, thanks to tfmonk
+* Honor Our Ancestors: show that Muqur will accept *any* quality of boot enchant, thanks to Mr-nUUb
+* Add assorted rares and loot, mostly in Ohn'ahran Plains
 

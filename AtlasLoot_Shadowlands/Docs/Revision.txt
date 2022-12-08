@@ -1,6 +1,11 @@
-﻿$Id: Revision.txt 14 2022-12-04 07:47:36Z arithmandar $
+﻿$Id: Revision.txt 16 2022-12-05 14:16:55Z arithmandar $
 Revision History:
 =================
+
+* v1.07 (Dec. 05, 2022)
+==========================
+- Added tabards
+- Grouped mounts, tabards, and faction items into Collections
 
 * v1.06 (Dec. 04, 2022)
 ==========================

@@ -11,12 +11,12 @@ local dfenchknowledge = {
 }
 -- https://www.wowhead.com/guide/professions/knowledge-point-treasure-locations-dragon-isles
 ns.RegisterPoints(ns.WAKINGSHORES, {
-    [57508360] = {
+    [57508359] = {
         note = "Flashfrozen Enclave, in frozen cave system.",
         loot = {
             198798, -- Flashfrozen Scroll
         },
-        quest = nil,
+        quest = 70320,
     },
     [67962677] = {
         note = "Scalecracker Keep, next to a lava flower in a flower.",
@@ -45,19 +45,19 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 }, dfenchknowledge)
 
 ns.RegisterPoints(ns.AZURESPAN, {
-    [38505920] = {
+    [38505911] = {
         note = "Azure Archives, in a leveled tomb with a rare mob on the NW side. Tome is lying on the floor to the right of the entrance.",
         loot = {
             198799, -- Forgotten Arcane Tome
         },
-        quest = nil,
+        quest = 70336,
     },
-    [45216114] = {
+    [45186108] = {
         note = "Just east of Azure Archives. Click on Mana-Starved Crystal Cluster to spawn a mob. Kill the mob and click the crystal that spawns.",
         loot = {
             201013, -- Faintly Enchanted Remains
         },
-        quest = nil,
+        quest = 70290,
     },
     [21564554] = {
         loot = {
@@ -68,11 +68,11 @@ ns.RegisterPoints(ns.AZURESPAN, {
 }, dfenchknowledge)
 
 ns.RegisterPoints(ns.THALDRASZUS, {
-    [59907040] = {
+    [59927034] = {
         note = "South of Tyrhold.",
         loot = {
             198800, -- Fractured Titanic Sphere
         },
-        quest = nil,
+        quest = 70342,
     },
 }, dfenchknowledge)

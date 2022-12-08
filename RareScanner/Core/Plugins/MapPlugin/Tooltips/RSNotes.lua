@@ -91,6 +91,9 @@ function RSNotes.GetNote(entityID, mapID)
 	-- Grand hunting party bosses
 	elseif (RSUtils.Contains(RSConstants.HUNTING_PARTY_NPCS, entityID)) then
 		return AL["NOTE_HUNTING_PARTY_NPCS"]
+	-- Grand hunting party bosses
+	elseif (RSUtils.Contains(RSConstants.OMINOUS_CONCHS_NPCS, entityID)) then
+		return AL["NOTE_OMINOUS_CONCHS_NPCS"]
 	end
 	
 	-- Rune of constructs Containers
