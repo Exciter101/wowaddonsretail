@@ -203,7 +203,7 @@ map.nodes[14083747] = Rare({
     note = L['brackenhide_rare_note'],
     rewards = {
         Achievement({id = 16678, criteria = 56127}),
-        Transmog({item = 200259, slot = L['shild']}), -- Forest Dweller's Shield
+        Transmog({item = 200259, slot = L['shield']}), -- Forest Dweller's Shield
         Transmog({item = 200267, slot = L['plate']}), -- Reinforced Garden Tenders
         Item({item = 197121, quest = 69322}), -- Highland Drake: Tan Horns
         DC.RenewedProtoDrake.SnubSnout
@@ -317,7 +317,7 @@ map.nodes[10863229] = Rare({
         Transmog({item = 200266, slot = L['crossbow']}), -- Gnollish Chewtoy Launcher
         Transmog({item = 200283, slot = L['leather']}), -- Gnoll-Gnawed Breeches
         Item({item = 197150, quest = 69351}), -- Highland Drake: Spiked Club Tail
-        Item({item = 19982, quest = 69182}) -- Cliffside Wylderdrake: Ears
+        Item({item = 196982, quest = 69182}) -- Cliffside Wylderdrake: Ears
     }
 }) -- Snarglebone
 
@@ -592,7 +592,7 @@ map.nodes[16303849] = PT.Alchemy({
 
 map.nodes[16703880] = PT.Leatherworking({
     id = 198658,
-    quest = nil,
+    quest = 70266,
     note = L['pt_leath_decay_infused_tanning_oil_note']
 }) -- Decay-Infused Tanning Oil
 
@@ -670,7 +670,7 @@ map.nodes[67061316] = PT.Alchemy({
 
 map.nodes[17762167] = PM.Engineering({
     id = 194838,
-    quest = nil,
+    quest = 70252,
     note = L['pm_engi_frizz_buzzcrank'],
     rewards = {
         Item({item = 190456, note = '25'}), -- Artisan's Mettle

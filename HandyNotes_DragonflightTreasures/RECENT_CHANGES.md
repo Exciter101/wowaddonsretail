@@ -1,7 +1,7 @@
-## Changed in v28
+## Changed in v29
 
-* Profession Knowledge: Blacksmithing thanks to tfmonk
-* Waking Shores: correct location for Enkine the Voracious and explain how to summon it
-* Ohn'ahran Plains: better display for Honor Our Ancestors; clarify Lizi's Reins requirements
-* Azure Span: Breezebiter's spawn location has been found; add loot and a rotation explanation to the Brackenhide Hollow rares
+* Give the known ["super rares"](https://www.wowhead.com/news/defeat-super-rares-each-day-for-up-to-385-item-level-gear-330298) a distinctive icon and a note explaining the concept
+* Some improvements to the grand hunt bosses
+* Show Khadin on the map after doing his quests, since you can return to trade shards for knowledge
+* Add the generic-daily for Lizi's Reins so we can hide the point after you're done for the day
 

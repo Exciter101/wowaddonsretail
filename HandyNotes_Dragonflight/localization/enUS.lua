@@ -199,6 +199,7 @@ L['options_icons_dreamguard_desc'] = 'Display  the location of Dreamguards for {
 --------------------------------- THALDRASZUS ---------------------------------
 -------------------------------------------------------------------------------
 
+L['ancient_protector_note'] = 'Kill nearby {npc:193244} to get {item:197708}. Combine 5 {item:197708} to create a {item:197733} and use it to activate nearby Titanic Reactors.'
 L['blightpaw_note'] = 'Talk to {npc:193222} nearby and agree to help him.'
 L['weeping_vilomah_note'] = 'Talk to {npc:193206} to summon the rare.'
 L['woofang_note'] = 'Pet {npc:193156} to spawn the rare.'
@@ -314,4 +315,4 @@ L['options_icons_stories_desc'] = 'Quest locations for the {achievement:16406} a
 L['all_sides_of_the_story_garrick_and_shuja_note'] = 'Start the Questline and listen to the story of {npc:184449} and {npc:184451}.'
 L['all_sides_of_the_story_duroz_and_kolgar_note'] = 'In a small room underneath the Platform.\n\nStart the Questline and listen to the story of {npc:194800} and {npc:194801}. More quests will be unlocked in the next two weeks.'
 L['all_sides_of_the_story_tarjin_note'] = 'Start the Questline with {quest:70779}.\n{npc:196214} will tell you another story every week.'
-L['all_sides_of_the_story_veritistrasz_note'] = 'Start the quest {quest:70132} to all the stories of {npc:194076}.\nAfter that you will unlock {quest:70134} followed by {quest:70268}.\n\nFor the last qust you will need {item:198661} which is found inside ' .. ns.color.Yellow('Dragonbane Keep') .. '.'
+L['all_sides_of_the_story_veritistrasz_note'] = 'Start the quest {quest:70132} to all the stories of {npc:194076}.\nAfter that you will unlock {quest:70134} followed by {quest:70268}.\n\nFor the last quest you will need {item:198661} which is found inside ' .. ns.color.Yellow('Dragonbane Keep') .. '.'

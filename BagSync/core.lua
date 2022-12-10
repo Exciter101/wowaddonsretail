@@ -27,41 +27,28 @@ BSYC.IsClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 --BSYC.IsTBC_C = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 BSYC.IsWLK_C = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 
-BSYC.debugSwitch = false --custom option just for me to debug stuff, do not turn this on :P, you have been warned
-BSYC.debugInfo = true
-BSYC.debugTrace = false
-
 local debugf = tekDebug and tekDebug:GetFrame("BagSync")
 function BSYC.DEBUG(level, sName, ...)
-	if level == 2 and not BSYC.debugInfo then return end --only do info if we enable it
-	if level == 3 and not BSYC.debugTrace then return end --only do traces if we enable it
-	
-    if debugf and BSYC.debugSwitch then
-		local debugStr = string.join(", ", tostringall(...))
-		local color = "778899" -- slate gray
+	local BSOpts = BagSyncDB
+	BSOpts = BagSyncDB["options§"]
+	if not BSOpts or not BSOpts.debug or not BSOpts.debug.enable then return end
 
-		if level == 1 then
-			--debug
-			color = "4DD827" --fel green
-		elseif level == 2 then
-			--info
-			color = "ffff00" --yellow
-		elseif level == 3 then
-			--trace
-			color = "09DBE0" --teal blue
-		elseif level == 4 then
-			--warn
-			color = "FF3C38" --rose red
-		end
-		
-		local moduleName = string.format("|cFF"..color.."[%s]|r: ", sName)
+	--old tekDebug code just in case I want to track old debugging method
+    if debugf then
+		local debugStr = string.join(", ", tostringall(...))
+		local moduleName = string.format("|cFFffff00[%s]|r: ", sName)
 		debugStr = moduleName..debugStr
 		debugf:AddMessage(debugStr)
 	end
+
+	local Debug = BSYC:GetModule("Debug")
+	if not Debug then return end
+
+	Debug:AddMessage(level, sName, ...)
 end
 
 local function Debug(level, ...)
-    if BSYC.debugSwitch and BSYC.DEBUG then BSYC.DEBUG(level, "CORE", ...) end
+	BSYC.DEBUG(level, "CORE", ...)
 end
 
 --According to https://github.com/Xruptor/BagSync/issues/196 this partciular OnEvent causes a significant delay on startup for users.
@@ -84,6 +71,35 @@ function BSYC:GetHashTableLen(tbl)
 	return count
 end
 
+function BSYC:serializeTable(val, name, skipnewlines, depth)
+    skipnewlines = skipnewlines or false
+    depth = depth or 0
+
+    local tmp = string.rep(" ", depth)
+
+    if name then tmp = tmp .. name .. " = " end
+
+    if type(val) == "table" then
+        tmp = tmp .. "{" .. (not skipnewlines and "\n" or "")
+
+        for k, v in pairs(val) do
+            tmp =  tmp .. self:serializeTable(v, k, skipnewlines, depth + 1) .. "," .. (not skipnewlines and "\n" or "")
+        end
+
+        tmp = tmp .. string.rep(" ", depth) .. "}"
+    elseif type(val) == "number" then
+        tmp = tmp .. tostring(val)
+    elseif type(val) == "string" then
+        tmp = tmp .. string.format("%q", val)
+    elseif type(val) == "boolean" then
+        tmp = tmp .. (val and "true" or "false")
+    else
+        tmp = tmp .. "\"[inserializeable datatype:" .. type(val) .. "]\""
+    end
+
+    return tmp
+end
+
 function BagSync_ShowWindow(windowName)
     if windowName == "Gold" then
         BSYC:GetModule("Tooltip"):MoneyTooltip()
@@ -100,6 +116,9 @@ function BSYC:ParseItemLink(link, count)
 	if link then
 		if not count then count = 1 end
 		
+		--there are times link comes in as a number and breaks string matching, convert to string to fix
+		if type(link) == "number" then link = tostring(link) end
+		
 		--if we are parsing a database entry just return it, chances are it's a battlepet anyways
 		local qLink, qCount, qIdentifier = strsplit(";", link)
 		if qLink and qCount then
@@ -114,10 +133,7 @@ function BSYC:ParseItemLink(link, count)
 		if isBattlepet then
 			return BSYC:CreateFakeBattlePetID(link, count)
 		end
-	
-		--there are times link comes in as a number and breaks string matching, convert to string to fix
-		if type(link) == "number" then link = tostring(link) end
-		
+
 		local result = link:match("item:([%d:]+)")
 		local shortID = self:GetShortItemID(link)
 		
@@ -142,6 +158,8 @@ function BSYC:ParseItemLink(link, count)
 		-----------------------------
 		
 		if result then
+			--https://wowpedia.fandom.com/wiki/ItemLink
+			
 			--split everything into a table so we can count up to the bonusID portion
 			local countSplit = {strsplit(":", result)}
 			result = shortID --set this to default shortID, if we have something we will replace it below
@@ -160,16 +178,15 @@ function BSYC:ParseItemLink(link, count)
 					local newItemStr = ""
 					
 					--11th place because 13 is bonus ID, one less from 13 (12) would be technically correct, but we have to compensate for ItemID we added in front so substract another one (11).
-					--string.rep repeats a pattern.
-					newItemStr = countSplit[1]..string.rep(":", 11)
+					newItemStr = countSplit[1]..":::::::::::"
 					
 					--lets add the bonusID's, ignore the end past bonusID's
 					for i=13, (13 + bonusCount) do
 						newItemStr = newItemStr..":"..countSplit[i]
 					end
-					
+
 					--add the unknowns at the end, upgradeValue doesn't always have to be supplied.
-					result = newItemStr..":::" --replace the default shortid with our new corrected one
+					result = newItemStr.."::::::" --replace the default shortid with our new corrected one (total 19 variables in https://wowpedia.fandom.com/wiki/ItemLink)
 				end
 			end
 		end

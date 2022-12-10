@@ -200,6 +200,7 @@ L['options_icons_dreamguard_desc'] = 'Afficher les emplacements des Gardes-rêve
 --------------------------------- THALDRASZUS ---------------------------------
 -------------------------------------------------------------------------------
 
+L['ancient_protector_note'] = 'Tuez des {npc:193244} proches pour obtenir {item:197708}. Combinez 5 {item:197708} pour créer un {item:197733} et utilisez-le pour activer les Réacteurs titanesques à proximité.'
 L['blightpaw_note'] = 'Parlez à l\'{npc:193222} à proximité et acceptez de l\'aider.'
 L['weeping_vilomah_note'] = 'Parlez à {npc:193206} pour invoquer le rare.'
 L['woofang_note'] = 'Caressez {npc:193156} pour faire apparaître le rare.'
@@ -310,8 +311,8 @@ L['grand_theft_mammoth_note'] = 'Chevauchez le {npc:194625} jusqu\'au {npc:19816
 L['options_icons_grand_theft_mammoth'] = '{achievement:16493}'
 L['options_icons_grand_theft_mammoth_desc'] = 'Afficher les emplacements des {npc:194625s} pour le haut-fait {achievement:16493}.'
 
-L['options_icons_stories'] = nil
-L['options_icons_stories_desc'] = nil
+L['options_icons_stories'] = '{achievement:16406}'
+L['options_icons_stories_desc'] = 'Afficher les emplacements des quêtes pour le haut-fait {achievement:16406}.'
 L['all_sides_of_the_story_garrick_and_shuja_note'] = 'Commencez la suite de quêtes et écoutez l\'histoire de {npc:184449} et {npc:184451}.'
 L['all_sides_of_the_story_duroz_and_kolgar_note'] = 'Dans une petite pièce sous la plate-forme.\n\nCommencez la suite de quêtes et écoutez l\'histoire de {npc:194800} et {npc:194801}. D\'autres quêtes seront débloquées dans les deux semaines suivantes.'
 L['all_sides_of_the_story_tarjin_note'] = 'Commencez la suite de quêtes avec {quest:70779}.\n{npc:196214} vous racontera une autre histoire chaque semaine.'

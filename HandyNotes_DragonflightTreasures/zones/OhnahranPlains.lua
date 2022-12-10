@@ -92,6 +92,13 @@ ns.RegisterPoints(MAPID, {
         minimap=true,
         path=81657175,
     },
+    [52043344] = { -- Khadin
+        npc=193110,
+        hide_before=ns.conditions.QuestComplete(69979), -- A worthy hunt
+        note="Trade {item:191784:Dragon Shard of Knowledge} for Profession Knowledge",
+        atlas="profession", minimap=true,
+        group="professionknowledge",
+    },
 })
 
 -- Divine Kiss of Ohn'ahra mount:
@@ -128,7 +135,7 @@ ns.RegisterPoints(MAPID, {
 ns.RegisterPoints(MAPID, {
     [56127701] = {
         npc=190014, -- Initiate Radiya
-        quest=71195, --todo: generic-daily?
+        quest={71195, 71203, any=true}, -- 71203 is the daily
         progress={71196, 71197, 71198, 71199, 71195},
         loot={
             {192799, mount=1639}, -- Lizi's Reins

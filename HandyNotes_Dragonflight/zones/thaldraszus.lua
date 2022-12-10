@@ -45,7 +45,9 @@ local tpf = Map({id = 2085, settings = false}) -- The Primalist Future
 map.nodes[59075874] = Rare({
     id = 193664,
     quest = 69963,
-    rewards = {Achievement({id = 16679, criteria = 56158})}
+    note = L['ancient_protector_note'],
+    rewards = {Achievement({id = 16679, criteria = 56158})},
+    pois = {POI({60755543, 60736211, 59225648, 59266104})} -- Titanic Reactors
 }) -- Ancient Protector
 
 map.nodes[31097121] = Rare({ -- requirement ?
@@ -743,7 +745,11 @@ map.nodes[54285271] = ns.node.PrettyNeat({
     rewards = {Achievement({id = 16446, criteria = 12})}
 }) -- Iridescent Peafowl
 
-val.nodes[56674327] = NewPerspective(10)
+-------------------------------------------------------------------------------
+-------------------------- FRAMING A NEW PERSPECTIVE --------------------------
+-------------------------------------------------------------------------------
+
+val.nodes[56674327] = NewPerspective({criteria = 56003, parent = map.id}) -- Valdrakken's Portal Room
 
 -------------------------------------------------------------------------------
 ------------------------------ A LEGENDARY ALBUM ------------------------------

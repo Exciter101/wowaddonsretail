@@ -190,7 +190,7 @@ ns.DRAGON_CUSTOMIZATIONS = {
         SharkSnout = Item({item = 197400, quest = 69601}),
         ShortSpikedCrest = Item({item = 197364, quest = 69565}),
         SilverAndBlueArmor = Item({item = 197347, quest = 69548}),
-        SilverAndPurpleArmor = Item({item = 197350, quest = nil}),
+        SilverAndPurpleArmor = Item({item = 197350, quest = 69551}),
         SkyterrorPattern = Item({item = 197396, quest = 69597}),
         SnubSnout = Item({item = 197398, quest = 69599}),
         SpikedClubTail = Item({item = 197402, quest = 69603}),
@@ -399,16 +399,11 @@ ns.node.PrettyNeat = PrettyNeat
 local NewPerspective = Class('NewPerspective', Collectible, {
     icon = 1109100,
     -- sublabel = L['new_perspective_note'],
-    group = ns.groups.NEW_PERSPECTIVE,
-    rewards = function(self)
-        return Achievement({id = 16634, criteria = self.criteria})
-    end
+    group = ns.groups.NEW_PERSPECTIVE
 }) -- That's Pretty Neat!
 
-function NewPerspective:Initialize(criteria) self.criteria = criteria end
-
-function NewPerspective.getters:label()
-    return select(1, GetAchievementCriteriaInfo(16634, self.criteria), nil)
+function NewPerspective.getters:rewards()
+    return {Achievement({id = 16634, criteria = self.criteria})}
 end
 
 ns.node.NewPerspective = NewPerspective

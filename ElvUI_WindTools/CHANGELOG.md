@@ -1,56 +1,44 @@
-# Version: 3.11
-2022/12/06 Released
+# Version: 3.12
+2022/12/10 Released
 ## ✳️ New
-- [Skins] Add Simulationcraft skin.
-- [Skins] Add RaiderIO skin.
+- [Item Link] Add a new feature to display item quality as number. Enabled by default.
 ## 💪 Improvement
-- [Instance Difficulty] Fix default anchor error.
-- [Extra Item Bar] Ignore Ruby Whelp Shell by default.
-- [Announcement] Add Valdrakken portal support.
-- [Announcement] Add new feasts added in Dragonflight.
-- [Turn In] Smart chat supports more quests.
-- [Skins] Update BugSack skin.
+- [Extra Item Bar] Fix the problem that the custom list and blacklist options cannot be loaded correctly sometimes.
+- [Already Known] Fix a bug of item color in guild bank.
+- [Item Link] Fix the problem that the item quality cannot be displayed correctly after if translate feature is on.
+- [Item Link] Fix the problem that Lua errors will be generated when add icon is enabled.
 
 ------
-# 版本: 3.11
-2022/12/06 发布
+# 版本: 3.12
+2022/12/10 发布
 ## ✳️ 新增
-- [美化皮肤] 新增 Simulationcraft 插件的美化皮肤.
-- [美化皮肤] 新增 RaiderIO 插件的美化皮肤.
+- [物品链接] 新增数字化物品品质功能. 默认启用.
 ## 💪 改善
-- [副本难度] 修复默认锚点错误.
-- [额外物品条] 默认忽略红玉雏龙蛋壳.
-- [通告] 新增瓦德拉肯传送门通告.
-- [通告] 新增巨龙时代大餐通告.
-- [交接] 智能对话支持更多任务.
-- [美化皮肤] 更新 BugSack 美化皮肤.
+- [额外物品条] 修复有时候无法正确加载自定义列表和黑名单选项的问题.
+- [已知配方上色] 修复公会银行中物品颜色显示错误.
+- [物品链接] 修复启用物品翻译后无法正确显示物品品质的问题.
+- [物品链接] 修复有时添加图标功能会产生 Lua 错误的问题.
 
 ------
-# 版本: 3.11
-2022/12/06 發布
+# 版本: 3.12
+2022/12/10 發布
 ## ✳️ 新增
-- [美化皮膚] 新增 Simulationcraft 插件的美化皮膚.
-- [美化皮膚] 新增 RaiderIO 插件的美化皮膚.
+- [物品鏈接] 新增數字化物品品質功能. 預設啟用.
 ## 💪 改善
-- [副本难度] 修復預設錨點錯誤.
-- [額外物品條] 預設忽略晶紅幼龍之殼.
-- [通告] 新增沃卓肯傳送門通告.
-- [通告] 新增巨龍崛起大餐通告.
-- [交接] 智能對話支援更多任務.
-- [美化皮膚] 更新 BugSack 美化皮膚.
+- [額外物品條] 修復有時候無法正確加載自訂列表和黑名單設定的問題.
+- [物品鏈接] 修復啟用物品翻譯後無法正確顯示物品品質的問題.
+- [物品鏈接] 修復有時添加圖示功能會產生 Lua 錯誤的問題.
+- [已知配方上色] 修復公會銀行中物品顏色顯示錯誤.
 
 ------
-# 버전: 3.11
-2022/12/06 Released
+# 버전: 3.12
+2022/12/10 Released
 ## ✳️ 신규 사항
-- [Skins] Add Simulationcraft skin.
-- [Skins] Add RaiderIO skin.
+- [Item Link] Add a new feature to display item quality as number. Enabled by default.
 ## 💪 개선 사항
-- [Instance Difficulty] Fix default anchor error.
-- [Extra Item Bar] Ignore Ruby Whelp Shell by default.
-- [Announcement] Add Valdrakken portal support.
-- [Announcement] Add new feasts added in Dragonflight.
-- [Turn In] Smart chat supports more quests.
-- [Skins] Update BugSack skin.
+- [Extra Item Bar] Fix the problem that the custom list and blacklist options cannot be loaded correctly sometimes.
+- [Already Known] Fix a bug of item color in guild bank.
+- [Item Link] Fix the problem that the item quality cannot be displayed correctly after if translate feature is on.
+- [Item Link] Fix the problem that Lua errors will be generated when add icon is enabled.
 
 ------
