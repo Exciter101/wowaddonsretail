@@ -115,6 +115,7 @@ L['leyline_note'] = 'Réalignez la ligne tellurique.'
 L['options_icons_layline'] = '{achievement:16638}'
 L['options_icons_layline_desc'] = 'Afficher les emplacements de toutes les lignes telluriques pour le haut-fait {achievement:16638}.'
 
+L['river_rapids_wrangler_note'] = 'Parlez à {npc:186157} et sélectionnez "J\'aimerais refaire une descente des rapides". Vous avez 60 secondes pour récupérer 40x charges de {spell:373490}.'
 L['seeing_blue_note'] = 'Volez du sommet des archives d’Azur jusqu’à l’assemblée de Cobalt sans atterrir.'
 L['snowman_note'] = 'Il y a trois {npc:197599s} dans la zone (elles ont pu être déplacées par d\'autres joueurs), faites-les rouler vers les deux enfants {npc:197838} et {npc:197839}.\nVous obtenez le haut-fait lorsque les boules de neige ont la bonne taille.'
 L['temperamental_skyclaw_note'] = [[
@@ -144,7 +145,7 @@ L['mysterious_wand_note'] = 'Ramassez la |cFFFFFD00Clé en cristal|r et placez-l
 -------------------------------------------------------------------------------
 
 L['hunter_of_the_deep_note'] = 'Cliquez sur le râtelier d\'armes et tirez sur les poissons jusqu\'à ce que le rare apparaisse.'
-L['scaleseeker_mezeri_note'] = 'Offrez un {item:194681} à {npc:193224} et elle révélera le rare.'
+L['scaleseeker_mezeri_note'] = 'Offrez un {item:194681} à {npc:193224} et suivez-la jusqu\'à ce qu\'elle révèle le rare.'
 L['shade_of_grief_note'] = 'Cliquez sur la {npc:193166} pour faire apparaître le rare.'
 L['windscale_the_stormborn_note'] = 'Tuez les {npc:192367s} canalisant dans l\'{npc:192357}.'
 L['zarizz_note'] = 'Cliquez et ' .. ns.color.Orange('/siffler') .. ' les quatre {npc:193169s} pour invoquer le rare.'
@@ -196,6 +197,8 @@ L['dreamguard_note'] = 'Ciblez le Garde-rêve et ' .. ns.color.Orange('/dormir')
 L['options_icons_dreamguard'] = '{achievement:16574}'
 L['options_icons_dreamguard_desc'] = 'Afficher les emplacements des Gardes-rêves pour {achievement:16574}'
 
+L['tome_of_polymoph_duck'] = 'Utilisez {spell:1953} pour entrer dans la grotte et interagir avec le livre |cFFFFFD00La tempête de mana pour les novices|r pour terminer la quête.'
+
 -------------------------------------------------------------------------------
 --------------------------------- THALDRASZUS ---------------------------------
 -------------------------------------------------------------------------------
@@ -235,6 +238,10 @@ L['craft_creche_crowler_note'] = 'Achetez auprès de {npc:187444} ' .. ns.color.
 L['bivigosas_blood_sausages_note'] = 'Achetez auprès de l\'{npc:188895} ' .. ns.color.NPC('<Nourriture et boissons>') .. ' au |cFFFFFD00Poste Gelikyr|r.'
 L['options_icons_specialties'] = '{achievement:16621}'
 L['options_icons_specialties_desc'] = 'Afficher les emplacements des aliments et boissons pour le haut-fait {achievement:16621}.'
+L['options_icons_new_perspective'] = '{achievement:16634}'
+L['options_icons_new_perspective_desc'] = 'Afficher les emplacements des panoramas pour le haut-fait {achievement:16634}.'
+L['new_perspective_note'] = 'Prenez une photo du panorama avec l\'Appareil P.R.O.F.I.L. L\'emplacement sera marqué par un cercle lumineux violet dès que vous aurez activé le mode appareil photo.\n\nSi vous n\'obtenez pas de crédit pour ce haut-fait, modifiez la perspective.'
+L['ruby_feast_gourmand'] = 'Chaque jour, un chef invité au hasard sert des plats et des boissons variés.'
 
 -------------------------------------------------------------------------------
 ------------------------------ THE WAKING SHORE -------------------------------
@@ -317,3 +324,16 @@ L['all_sides_of_the_story_garrick_and_shuja_note'] = 'Commencez la suite de quê
 L['all_sides_of_the_story_duroz_and_kolgar_note'] = 'Dans une petite pièce sous la plate-forme.\n\nCommencez la suite de quêtes et écoutez l\'histoire de {npc:194800} et {npc:194801}. D\'autres quêtes seront débloquées dans les deux semaines suivantes.'
 L['all_sides_of_the_story_tarjin_note'] = 'Commencez la suite de quêtes avec {quest:70779}.\n{npc:196214} vous racontera une autre histoire chaque semaine.'
 L['all_sides_of_the_story_veritistrasz_note'] = 'Commencez la quête {quest:70132} pour écouter toutes les histoires de {npc:194076}.\nEnsuite, vous débloquerez {quest:70134} puis {quest:70268}.\n\nPour la dernière quête, vous aurez besoin du {item:198661} qui se trouve à l\'intérieur du ' .. ns.color.Yellow('Donjon du Fléau-des-Dragons') .. '.'
+
+L['slumbering_worldsnail_note1'] = [[
+1. Récupérez 3x {item:193201} et 30x {item:191251} sur les monstres se trouvant dans la |cFFFFFD00Citadelle d'Obsidienne|r pour créer une {item:191264}.
+
+2. Échangez la {item:191264} contre une {item:200069} à {npc:187275}.
+
+3. Il y a 30% de chances que le coffre contienne un {item:199215}.
+
+4. Utiliser l'abonnement vous donnera le débuff {spell:386848} qui vous permettra de farmer des {item:202173} dans la |cFFFFFD00Citadelle d'Obsidienne|r.
+
+5. Rassemblez 1000x {item:202173} pour acheter la {item:192786}.]]
+
+L['slumbering_worldsnail_note2'] = ns.color.Orange('Note : Si vous mourrez, vous perdrez votre debuff d\'abonnement. Vous pouvez acheter un nouvel abonnement auprès de {npc:193310} pour 20x {item:202173} avant de mourir ou bien vous devrez apporter d\'autres clés pour avoir une chance d\'obtenir un nouvel abonnement dans le coffre.')

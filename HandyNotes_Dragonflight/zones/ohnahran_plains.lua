@@ -46,10 +46,11 @@ map.nodes[31607660] = Rare({
 
 map.nodes[30546628] = Rare({
     id = 189652,
-    quest = nil,
+    quest = 73872,
     rewards = {
         Achievement({id = 16677, criteria = 56068}),
-        Transmog({item = 189055, slot = L['wand']}) -- Ghendish's Backup Talisman
+        Transmog({item = 189055, slot = L['wand']}), -- Ghendish's Backup Talisman
+        DC.RenewedProtoDrake.GrayHair
     },
     pois = {
         Path({
@@ -112,10 +113,12 @@ map.nodes[80413867] = Rare({ -- review
 
 map.nodes[87556151] = Rare({
     id = 197009,
-    quest = nil,
+    quest = 73882,
     rewards = {
         Achievement({id = 16677, criteria = 56067}), --
-        Toy({item = 200249}) -- Mage's Chewed Wand
+        Item({item = 200859, note = L['trinket']}), -- Seasoned Hunter's Trophy
+        Toy({item = 200249}), -- Mage's Chewed Wand
+        DC.RenewedProtoDrake.SharkSnout
     }
 }) -- Liskheszaera
 
@@ -204,11 +207,12 @@ map.nodes[42804428] = Rare({ -- review
     }
 }) -- Rustlily
 
-map.nodes[16605120] = Rare({
+map.nodes[20444344] = Rare({
     id = 193215,
-    quest = nil, -- 69865
+    quest = 74073,
     note = L['scaleseeker_mezeri_note'],
-    rewards = {Achievement({id = 16677, criteria = 56079})}
+    rewards = {Achievement({id = 16677, criteria = 56079})},
+    pois = {POI({16605120})} -- Dawnbell
 }) -- Scaleseeker Mezeri
 
 map.nodes[50117517] = Rare({
@@ -228,11 +232,12 @@ map.nodes[61801283] = Rare({
 
 map.nodes[29964103] = Rare({
     id = 187559,
-    quest = 69854,
+    quest = 74075,
     note = L['shade_of_grief_note'],
     rewards = {
-        Achievement({id = 16677, criteria = 56080})
-        -- Transmog({item = , slot = L['']}) -- Name
+        Achievement({id = 16677, criteria = 56080}),
+        Item({item = 200158, note = L['ring']}), -- Eerie Spectral Ring
+        DC.CliffsideWylderdrake.BranchedHorns
     }
 }) -- Shade of Grief
 
@@ -271,7 +276,7 @@ map.nodes[78298276] = Rare({
 
 map.nodes[27605560] = Rare({
     id = 195204,
-    quest = nil,
+    quest = 73976,
     rewards = {Achievement({id = 16677, criteria = 56088})}
 }) -- The Jolly Giant
 
@@ -315,12 +320,12 @@ map.nodes[31456387] = Rare({
     rewards = {
         Achievement({id = 16677, criteria = 56066}),
         Achievement({id = 16446, criteria = 20, note = L['pretty_neat_note']}),
+        Mount({item = 198825, id = 1672}), -- Zenet Hatchling
         Transmog({item = 200131, slot = L['dagger']}), -- Reclaimed Survivalist's Dagger
         Transmog({item = 200314, slot = L['cloth']}), -- Skyspeaker's Envelope
         Transmog({item = 200306, slot = L['cloak']}), -- Tempest Shawl
         DC.RenewedProtoDrake.PurpleHair, --
-        Item({item = 197606, quest = 69810}), -- Windborne Velocidrake: Swept Horns
-        Mount({item = 198825, id = 1672}) -- Zenet Hatchling
+        DC.WindborneVelocidrake.SweptHorns
     }
 }) -- Zenet Avis
 
@@ -375,7 +380,7 @@ map.nodes[22956670] = Rare({
     quest = 72851, -- 66378
     rewards = {
         Transmog({item = 200212, slot = L['mail']}), -- Sand-Encrusted Greaves
-        Item({item = 197111, quest = 69312}) -- Highland Drake: Maned Head
+        DC.HighlandDrake.ManedHead
     }
 }) -- Territorial Coastling
 
@@ -745,6 +750,9 @@ map.nodes[62171310] = Disturbeddirt()
 map.nodes[63251396] = Disturbeddirt()
 map.nodes[65868145] = Disturbeddirt()
 map.nodes[66451981] = Disturbeddirt()
+map.nodes[75003584] = Disturbeddirt()
+map.nodes[85833271] = Disturbeddirt()
+map.nodes[86683243] = Disturbeddirt()
 
 -------------------------------------------------------------------------------
 -------------------------- EXPEDITION SCOUT'S PACKS ---------------------------
@@ -1202,4 +1210,17 @@ end
 
 map.nodes[57473193] = Ohnahra()
 
--- STOP: DO NOT ADD NEW NODES HERE UNLESS THEY BELONG IN MISCELLANEOUS
+-------------------------------------------------------------------------------
+-------------------------------- MISCELLANEOUS --------------------------------
+-------------------------------------------------------------------------------
+
+map.nodes[66333211] = Collectible({
+    label = '{item:200205}',
+    icon = 133739,
+    note = L['tome_of_polymoph_duck'],
+    class = 'MAGE',
+    rewards = {
+        Item({item = 200205}) -- Tome of Polymoph: Duck
+    },
+    pois = {POI({66453173})}
+}) -- Tome of Polymorph: Duck

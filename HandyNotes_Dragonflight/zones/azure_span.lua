@@ -16,6 +16,7 @@ local PM = ns.node.ProfessionMasters
 local PT = ns.node.ProfessionTreasures
 local Rare = ns.node.Rare
 local Scoutpack = ns.node.Scoutpack
+local SuperRare = ns.node.SuperRare
 local Treasure = ns.node.Treasure
 
 local Achievement = ns.reward.Achievement
@@ -110,7 +111,7 @@ map.nodes[13584855] = Rare({
 --     }
 -- }) -- Blightfur
 
-map.nodes[14053096] = Rare({
+map.nodes[14053096] = SuperRare({
     id = 197353,
     quest = 73985,
     fgroup = 'brackenhide',
@@ -119,7 +120,9 @@ map.nodes[14053096] = Rare({
         Achievement({id = 16678, criteria = 56126}),
         Transmog({item = 200131, slot = L['dagger']}), -- Reclaimed Survivalist's Dagger
         Transmog({item = 200232, slot = L['warglaive']}), -- Raptor Talonglaive
+        Transmog({item = 200195, slot = L['plate']}), -- Thunderscale Legguards
         Transmog({item = 200442, slot = L['leather']}), -- Basilisk Hide Jerkin
+        Transmog({item = 200193, slot = L['cloth']}), -- Manafrond Sandals
         Item({item = 200859, note = L['trinket']}), -- Seasoned Hunter's Trophy
         Item({item = 200563, note = L['trinket']}) -- Primal Ritual Shell
     }
@@ -131,7 +134,7 @@ map.nodes[16622798] = Rare({
     rewards = {
         Achievement({id = 16678, criteria = 56108}),
         Achievement({id = 16446, criteria = 3, note = L['pretty_neat_note']}),
-        Item({item = 197595, quest = 69799}) -- Windborne Velocidrake: Finned Ears
+        DC.WindborneVelocidrake.FinnedEars
         -- Transmog({item = , slot = L['']}) -- Name
     }
 }) -- Blue Terror
@@ -150,8 +153,8 @@ map.nodes[27214490] = Rare({
     quest = 73873,
     rewards = {
         Achievement({id = 16678, criteria = 56098}),
-        Item({item = 197005, quest = 69205}), -- Cliffside Wylderdrake: Horned Nose
-        Transmog({item = 200302, slot = L['1h_sword']}) -- Magmaforged Scimitar
+        Transmog({item = 200302, slot = L['1h_sword']}), -- Magmaforged Scimitar
+        DC.CliffsideWylderdrake.HornedNose
     },
     pois = {
         Path({
@@ -171,7 +174,7 @@ map.nodes[50043631] = Rare({ -- review
         Transmog({item = 199026, slot = L['1h_sword']}), -- Fire-Blessed Blade
         Transmog({item = 200310, slot = L['cloak']}), -- Stole of the Iron Phantom
         DC.RenewedProtoDrake.WhiteHorns, --
-        Item({item = 196985, quest = 69185}), -- Cliffside Wylderdrake: Horned Jaw
+        DC.CliffsideWylderdrake.HornedJaw, --
         Item({item = 198070}) -- Tattered Seavine
     },
     pois = {POI({50523672, 49973821, 49223842})}
@@ -196,7 +199,7 @@ map.nodes[64992995] = Rare({
 --     }
 -- }) -- Frostpaw
 
-map.nodes[14083747] = Rare({
+map.nodes[14083747] = SuperRare({
     id = 197354,
     quest = 73996,
     fgroup = 'brackenhide',
@@ -205,8 +208,8 @@ map.nodes[14083747] = Rare({
         Achievement({id = 16678, criteria = 56127}),
         Transmog({item = 200259, slot = L['shield']}), -- Forest Dweller's Shield
         Transmog({item = 200267, slot = L['plate']}), -- Reinforced Garden Tenders
-        Item({item = 197121, quest = 69322}), -- Highland Drake: Tan Horns
-        DC.RenewedProtoDrake.SnubSnout
+        DC.RenewedProtoDrake.SnubSnout, --
+        DC.HighlandDrake.TanHorns
     }
 }) -- Gnarls
 
@@ -228,14 +231,18 @@ map.nodes[19234362] = Rare({ -- required 67030
     }
 }) -- Grumbletrunk
 
-map.nodes[16213364] = Rare({
+map.nodes[16213364] = SuperRare({
     id = 197356,
     quest = 74004,
     fgroup = 'brackenhide',
     note = L['brackenhide_rare_note'],
     rewards = {
-        Achievement({id = 16678, criteria = 56128})
-        -- Transmog({item = , slot = L['']}) -- Name
+        Achievement({id = 16678, criteria = 56128}),
+        Transmog({item = 200266, slot = L['crossbow']}), -- Gnollish Chewtoy Launcher
+        Transmog({item = 200283, slot = L['leather']}), -- Gnoll-Gnawed Breeches
+        Toy({item = 200178}), -- Infected Ichor
+        DC.CliffsideWylderdrake.Ears, --
+        DC.CliffsideWylderdrake.DualHornedChin
     }
 }) -- High Shaman Rotknuckle
 
@@ -255,7 +262,7 @@ map.nodes[40514797] = Rare({
     rewards = {
         Achievement({id = 16678, criteria = 56100}),
         Transmog({item = 200283, slot = L['leather']}), -- Gnoll-Gnawed Breeches
-        Item({item = 197150, quest = 69351}) -- Highland Drake: Spiked Club Tail
+        DC.HighlandDrake.SpikedClubTail
     }
 }) -- Mange the Outcast
 
@@ -307,7 +314,7 @@ map.nodes[26494939] = Rare({ -- review -- required 67030
     }
 }) -- Skag the Thrower
 
-map.nodes[10863229] = Rare({
+map.nodes[10863229] = SuperRare({
     id = 197344,
     quest = 74032,
     fgroup = 'brackenhide',
@@ -316,8 +323,8 @@ map.nodes[10863229] = Rare({
         Achievement({id = 16678, criteria = 56125}),
         Transmog({item = 200266, slot = L['crossbow']}), -- Gnollish Chewtoy Launcher
         Transmog({item = 200283, slot = L['leather']}), -- Gnoll-Gnawed Breeches
-        Item({item = 197150, quest = 69351}), -- Highland Drake: Spiked Club Tail
-        Item({item = 196982, quest = 69182}) -- Cliffside Wylderdrake: Ears
+        DC.HighlandDrake.SpikedClubTail, --
+        DC.CliffsideWylderdrake.Ears
     }
 }) -- Snarglebone
 
@@ -404,8 +411,8 @@ map.nodes[23503317] = Rare({
         Transmog({item = 200135, slot = L['2h_sword']}), -- Corroded Greatsword
         Transmog({item = 200245, slot = L['2h_mace']}), -- Leviathan Lure
         Transmog({item = 200187, slot = L['staff']}), -- Rod of Glacial Force
-        Item({item = 197098, quest = 69299}), -- Highland Drake: Finned Back
-        Item({item = 197001, quest = 69201}) -- Cliffside Wylderdrake: Finned Cheek
+        DC.HighlandDrake.FinnedBack, --
+        DC.CliffsideWylderdrake.FinnedCheek
     }
 }) -- Cascade
 
@@ -433,7 +440,7 @@ map.nodes[17254144] = Rare({
     quest = 72853, -- 69872
     rewards = {
         Item({item = 201728}), -- Vakril's Strongbox
-        Item({item = 197001, quest = 69201}) -- Cliffside Wylderdrake: Finned Cheek
+        DC.CliffsideWylderdrake.FinnedCheek
     }
 }) -- Vakril
 
@@ -443,8 +450,8 @@ map.nodes[36723247] = Rare({
     rewards = {
         Transmog({item = 200283, slot = L['leather']}), -- Gnoll-Gnawed Breeches
         Transmog({item = 200266, slot = L['crossbow']}), -- Gnollish Chewtoy Launcher
-        Item({item = 197150, quest = 69351}), -- Highland Drake: Spiked Club Tail
-        Item({item = 196982, quest = 69182}), -- Cliffside Wylderdrake: Ears
+        DC.HighlandDrake.SpikedClubTail, --
+        DC.CliffsideWylderdrake.Ears, --
         Item({item = 198048}) -- Titan Training Matrix I
     }
 }) -- Sharpfang
@@ -1019,6 +1026,14 @@ map.nodes[50935561] = Collectible({
     rewards = {Achievement({id = 16474})},
     pois = {POI({50955481, 50985611})}
 }) -- Do You Wanna Build a Snowman?
+
+map.nodes[45025405] = Collectible({
+    label = '{achievement:15889}',
+    note = L['river_rapids_wrangler_note'],
+    icon = 134325,
+    requires = ns.requirement.Quest(66155), -- Ruriq's River Rapids Ride
+    rewards = {Achievement({id = 15889})}
+}) -- River Rapids Wrangler
 
 -------------------------------------------------------------------------------
 ---------------------------- TEMPERAMENTAL SKYCLAW ----------------------------
