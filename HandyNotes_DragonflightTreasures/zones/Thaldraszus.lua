@@ -87,10 +87,10 @@ ns.RegisterPoints(MAPID, {
             200760, -- Unstable Arcane Cell
         },
     },
-    [31737253] = { -- Blightpaw the Depraved
-        -- overlaps a bit with plains @ 90204020
+    [31107120] = { -- Blightpaw the Depraved
+        -- overlaps a bit with plains @ 90454003
         criteria=56136,
-        quest=73869,
+        quest=73869, -- also 74096
         npc=193128,
         loot={
             {200178, toy=true}, -- Infected Ichor
@@ -102,7 +102,7 @@ ns.RegisterPoints(MAPID, {
             200127, -- Gold-Alloy Blade
             200432, -- Rotguard Cowl
         },
-        note="Talk to {npc:193222:Archaeologist Koranir} to spawn. Also spawns with {npc:193231:Ancient Tundrafur}. Casts a curse as well.",
+        note="Talk to {npc:193222:Archaeologist Koranir} to engage, along with {npc:193231:Ancient Tundrafur}",
     },
     [38107820] = { -- Pleasant Alpha
         criteria=56137,
@@ -221,9 +221,14 @@ ns.RegisterPoints(MAPID, {
     },
     [47914980] = { -- Woolfang
         criteria=56152,
-        quest=69850,
+        quest=74089, -- 69850,
         npc=193161,
-        loot={},
+        loot={
+            200195, -- Thunderscale Legguards
+            200442, -- Basilisk Hide Jerkin
+            {196976, quest=69176}, -- Cliffside Wylderdrake: Head Mane
+            {197111, quest=69312}, -- Highland Drake: Maned Head
+        },
         note="Pet {npc:193156:Wooly Lamb}",
         vignette=5177,
     },
@@ -277,9 +282,9 @@ ns.RegisterPoints(MAPID, {
         },
         vignette=5203,
     },
-    [59545917] = ns.SUPERRARE{ -- Ancient Protector
+    [59105874] = ns.SUPERRARE{ -- Ancient Protector
         criteria=56158,
-        quest=74055, -- 69963
+        quest=74055, -- 69963 bonus objective, and 72050
         npc=193664,
         loot={
             200138, -- Ancient Dancer's Longspear
@@ -290,6 +295,8 @@ ns.RegisterPoints(MAPID, {
             {197138, quest=69339}, -- Highland Drake: Striped Pattern
             {197586, quest=69790}, -- Windborne Velocidrake: Spiked Back
         },
+        nearby={61005510,59405680,59506070,60906240, label="Pillar"},
+        note="Collect 20x {item:197708:Unstable Matrix Core} from {npc:193244:Titan Defense Matrix} to make 4x {item:197733:Unsustainable Containment Core}, then use one at all four pillars. You'll probably need a group to get this in time.",
         vignette=5236,
     },
 }, {
@@ -310,6 +317,7 @@ ns.RegisterPoints(MAPID, {
             -- 200122, -- Temporal Spyglass
             200182, -- Riveted Drape
             200292, -- Cragforge Pauldrons
+            200163, -- Ring of Embers
         },
         vignette=5239,
     },

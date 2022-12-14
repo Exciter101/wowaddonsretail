@@ -1,7 +1,8 @@
-## Changed in v29
+## Changed in v31
 
-* Give the known ["super rares"](https://www.wowhead.com/news/defeat-super-rares-each-day-for-up-to-385-item-level-gear-330298) a distinctive icon and a note explaining the concept
-* Some improvements to the grand hunt bosses
-* Show Khadin on the map after doing his quests, since you can return to trade shards for knowledge
-* Add the generic-daily for Lizi's Reins so we can hide the point after you're done for the day
+* Starting on adding Disturbed Dirt locations; like the Explorer's Scout Packs these are hidden by default, so turn them on in the menu if you want to see them
+* Waking Shores: fix Slurpo's position, explain the spawn requirements, and show the required item in Azure Span
+* Explain Ingot's position for A Dragon's Day Off if you need it
+* Highest Peaks: fix the renown level requirement, it only needs 6 now
+* Assorted rare quests and loot
 

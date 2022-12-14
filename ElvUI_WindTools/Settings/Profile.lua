@@ -354,7 +354,8 @@ P.item = {
         customList = {},
         blackList = {
             [183040] = true, -- 恆冬符咒
-            [193757] = true -- 晶紅幼龍之殼
+            [193757] = true, -- 晶紅幼龍之殼
+            [200563] = true -- 洪荒儀式龜殼
         },
         bar1 = {
             enable = true,
@@ -634,6 +635,34 @@ P.item = {
 }
 
 P.maps = {
+    eventTracker = {
+        enable = true,
+        spacing = 10,
+        height = 38,
+        font = {
+            name = E.db.general.font,
+            scale = 1,
+            outline = "OUTLINE"
+        },
+        communityFeast = {
+            enable = true,
+            desaturate = false,
+            alert = true,
+            sound = true,
+            soundFile = "OnePlus Surprise",
+            second = 600,
+            stopAlertIfCompleted = true
+        },
+        siegeOnDragonbaneKeep = {
+            enable = true,
+            desaturate = false,
+            alert = true,
+            sound = true,
+            soundFile = "OnePlus Surprise",
+            second = 600,
+            stopAlertIfCompleted = true
+        }
+    },
     rectangleMinimap = {
         enable = false,
         heightPercentage = 0.8

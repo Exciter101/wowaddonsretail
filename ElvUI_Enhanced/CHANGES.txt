@@ -1,10 +1,12 @@
-tag 940bf1de85c8999de7f9db7dd469f7a8bd7ed2c5 4.1.3
+tag d960dd4873beeda254fcf7ddd02de01c6166d8b8 4.1.5
 Author:	Tevoll <git@bockmeulen.nl>
-Date:	Wed Nov 16 12:14:03 2022 +0100
+Date:	Tue Dec 13 21:14:20 2022 +0100
 
-commit 7916f5ed076ec56d9424b7014db23db78ecf3ce2
+commit 98585b0ebc9a1c47c050c89e41c9fcc733802c68
 Author: Tevoll <git@bockmeulen.nl>
-Date:   Wed Nov 16 12:07:11 2022 +0100
+Date:   Tue Dec 13 19:04:55 2022 +0100
 
-    fix minimap button bar for WIP
+    Equipment Set Overlay fix
+    
+    Thanks XelnorOne
 

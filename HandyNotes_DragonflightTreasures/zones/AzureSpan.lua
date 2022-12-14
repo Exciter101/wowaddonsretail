@@ -2,6 +2,11 @@ local myname, ns = ...
 
 local MAPID = ns.AZURESPAN -- Azure Span
 
+-- heart of the deck (66846), in case it becomes relevant later...
+-- 66992 dragon
+-- 66983 life-giver
+-- 66995 adaptive
+
 ns.RegisterPoints(MAPID, {
     -- https://www.wowhead.com/beta/achievement=16300/treasures-of-the-azure-span
     [45135939] = { -- Forgotten Jewel Box
@@ -202,12 +207,12 @@ ns.RegisterPoints(MAPID, {
     },
     [36323583] = { -- Mahg the Trampler
         criteria=56109,
-        quest=nil,
+        quest=73883,
         npc=190244,
         loot={
             200157, -- Pathmaker
+            {197149, quest=69350}, -- Highland Drake: Club Tail
         },
-        route={36323583, 46004100, r=0, g=1, b=0}, -- verify
         minimap=true,
     },
     [26804940] = { -- Skag the Thrower
@@ -343,7 +348,7 @@ ns.RegisterPoints(MAPID, {
         },
         vignette=5184,
     },
-    [54803420] = { -- Spellwrought Snowman
+    [55043408] = { -- Spellwrought Snowman
         criteria=56124,
         quest=74082, -- 69879 on vignette, didn't actually trigger?
         npc=193238,
@@ -457,7 +462,7 @@ ns.RegisterPoints(MAPID, {
     },
     [38185903] = { -- Forgotten Creation
         npc=193214,
-        quest=72840,
+        quest=69864, -- 72840
         loot={
             200210, -- Amnesia
             200758, -- Breastplate of Storied Antiquity

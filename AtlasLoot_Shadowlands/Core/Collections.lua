@@ -1,4 +1,4 @@
--- $Id: Collections.lua 16 2022-12-05 14:16:55Z arithmandar $
+-- $Id: Collections.lua 18 2022-12-12 16:40:25Z arithmandar $
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
@@ -23,10 +23,18 @@ local NORMAL_DIFF = data:AddDifficulty(AL["Normal"], "n", {
 		addDifficultyBonus = true,
 	},
 }, 1)
-local ALLIANCE_DIFF = data:AddDifficulty(FACTION_ALLIANCE, "alliance", nil, 1)
-local HORDE_DIFF = data:AddDifficulty(FACTION_HORDE, "horde", nil, 1)
+-- change sortorder for factions
+local ALLIANCE_DIFF, HORDE_DIFF
+if UnitFactionGroup("player") == "Horde" then
+	HORDE_DIFF = data:AddDifficulty(FACTION_HORDE)
+	ALLIANCE_DIFF = data:AddDifficulty(FACTION_ALLIANCE)
+else
+	ALLIANCE_DIFF = data:AddDifficulty(FACTION_ALLIANCE)
+	HORDE_DIFF = data:AddDifficulty(FACTION_HORDE)
+end
 
-local NORMAL_ITTYPE = data:AddItemTableType("Item", "Item")
+--local NORMAL_ITTYPE = data:AddItemTableType("Item", "Item")
+local NORMAL_ITTYPE = data:GetItemTableType("Item")
 local I_A_ITTYPE  = data:AddItemTableType("Item", "Achievement")
 local PRICE_EXTRA_ITTYPE = data:AddExtraItemTableType("Price")
 local QUEST_EXTRA_ITTYPE = data:AddExtraItemTableType("Quest")
@@ -53,7 +61,7 @@ local COLLECTION_CONTENT = data:AddContentType(AL["Collections"], ATLASLOOT_COLL
 ]]
 
 data["SHADOWLANDSFACTIONS"] = {
-	name = FACTION ,
+	name = FACTION,
 	ContentType = COLLECTION_CONTENT,
 	items = { 
 		{ -- The Ascended

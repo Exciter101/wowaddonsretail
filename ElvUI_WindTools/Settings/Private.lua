@@ -77,6 +77,7 @@ V.misc = {
     noKanjiMath = false,
     pauseToSlash = true,
     skipCutScene = false,
+    onlyStopWatched = true,
     tags = true,
     hotKeyAboveCD = false,
     guildNewsItemLevel = true,
@@ -99,7 +100,8 @@ V.misc = {
             ["Crying"] = false,
             ["Tortollan"] = false,
             ["Smolderheart"] = false,
-            ["Elegy of the Eternals"] = false
+            ["Elegy of the Eternals"] = false,
+            ["Dragon"] = false
         }
     },
     lfgList = {

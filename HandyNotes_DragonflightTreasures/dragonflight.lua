@@ -34,11 +34,13 @@ ns.hiddenConfig = {}
 
 ns.defaults.profile.groupsHidden = {
     scoutpack = true,
+    disturbeddirt = true,
     warsupply = true,
 }
 
 ns.groups["junk"] = BAG_FILTER_JUNK
 ns.groups["scoutpack"] = "Expedition Scout's Pack"
+ns.groups["disturbeddirt"] = "{spell:340561:Disturbed Dirt}"
 ns.groups["warsupply"] = "War Supply Chest"
 ns.groups["glyphs"] = "Dragon Glyphs"
 ns.groups["dailymount"] = "Daily Mounts"
@@ -61,6 +63,3 @@ ns.SUPERRARE = ns.nodeMaker{
 -- Talked to Lethanak at the Life Pools: 72059
 
 -- unlocked dragon customization: 68797
-
--- TODO achievements:
--- Selfie achievements: Framing A New Perspective (16634), That's Pretty Neat! (16446)

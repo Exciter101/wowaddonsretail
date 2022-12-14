@@ -5,6 +5,9 @@ local MAPID = ns.OHNAHRANPLAINS -- Ohn'ahran Plains
 -- forgotten dragon treasure: 53246888
 
 -- Aylaag camp SE: areaPoi 7101
+-- Aylaag camp NE: areaPoi 7102
+
+-- Aylaag caravan: vignette 5453, rewards caravan strongbox 200094, no quest completion
 
 ns.RegisterPoints(MAPID, {
     -- https://www.wowhead.com/beta/achievement=16299/treasures-of-the-ohnahran-plains
@@ -73,6 +76,7 @@ ns.RegisterPoints(MAPID, {
         quest=71033,
         label="Water-Bound Chest",
         loot={
+            197948, -- Stone Sentinel's Greatsword
             197955, -- Sword of the Eternal Guard
         },
         note="Survive the trial of the elements",
@@ -431,7 +435,7 @@ ns.RegisterPoints(MAPID, {
     },
     [80413867] = { -- Irontree
         criteria=56084,
-        quest=66356,
+        quest=73967, -- 66356
         npc=188124,
         loot={},
         vignette=5078,
@@ -439,7 +443,7 @@ ns.RegisterPoints(MAPID, {
     },
     [72222321] = { -- Zerimek
         criteria=56085,
-        quest=nil,
+        quest=73980,
         npc=188451,
         loot={},
         vignette=5087,

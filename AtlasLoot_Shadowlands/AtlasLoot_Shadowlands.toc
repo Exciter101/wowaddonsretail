@@ -1,6 +1,6 @@
 ## Interface: 100002
 ## Author: Arith	
-## Version: v1.07
+## Version: v1.08
 ## Dependencies: AtlasLoot
 ## LoadOnDemand: 1
 
@@ -26,3 +26,4 @@
 Core\Core.lua
 Core\Instance.lua
 Core\Collections.lua
+Core\PvP.lua
