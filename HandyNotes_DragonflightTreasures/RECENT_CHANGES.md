@@ -1,8 +1,6 @@
-## Changed in v31
+## Changed in v33
 
-* Starting on adding Disturbed Dirt locations; like the Explorer's Scout Packs these are hidden by default, so turn them on in the menu if you want to see them
-* Waking Shores: fix Slurpo's position, explain the spawn requirements, and show the required item in Azure Span
-* Explain Ingot's position for A Dragon's Day Off if you need it
-* Highest Peaks: fix the renown level requirement, it only needs 6 now
-* Assorted rare quests and loot
+* Major loot and locations update from wowhead data
+* Show the locations for the Magmashell mount in Waking Shores
+* Profession Knowledge: How To Train Your Whelpling is finally unbugged, and I've got the questid for it
 

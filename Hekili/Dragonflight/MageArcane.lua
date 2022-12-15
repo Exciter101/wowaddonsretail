@@ -994,7 +994,7 @@ spec:RegisterStateExpr( "full_reduction", function ()
 end )
 
 
--- Dragonflight APL 20221207
+-- Dragonflight APL 20221213
 -- aoe_spark_phase starts:
 --     active_enemies>=variable.aoe_target_count&(action.arcane_orb.charges>0|buff.arcane_charge.stack>=3)&(!talent.rune_of_power|cooldown.rune_of_power.ready)&cooldown.radiant_spark.ready&cooldown.touch_of_the_magi.remains<=(gcd.max*2)
 -- aoe_spark_phase ends:
@@ -1003,61 +1003,37 @@ end )
 local realAoeSparkPhase = {}
 local virtualAoeSparkPhase = false
 
-local function updateAoeSparkPhase()
-    if realAoeSparkPhase[ state.display ] == nil then realAoeSparkPhase[ state.display ] = false end
-    local arcaneOrbCharges = GetSpellCharges( 153626 )
-    local arcaneCharges = UnitPower( "player", Enum.PowerType.ArcaneCharges )
+local SetAoeSparkPhase = setfenv( function()
+    if realAoeSparkPhase[ display ] == nil then realAoeSparkPhase[ display ] = false end
 
-    local now = GetTime()
-
-    local ropCooldown = 0
-    local start, duration = GetSpellCooldown( 116011 )
-    ropCooldown = max( 0, start + duration - now )
-
-    local rsCooldown = 0
-    start, duration = GetSpellCooldown( 376103 )
-    rsCooldown = max( 0, start + duration - now )
-
-    local totmCooldown = 0
-    start, duration = GetSpellCooldown( 321507 )
-    totmCooldown = max( 0, start + duration - now )
-
-    local _, gcd = GetSpellBaseCooldown( 61304 )
-    local haste = 100 / ( 100 + UnitSpellHaste( "player" ) )
-    gcd = gcd * haste * 0.001
-
-    if not realAoeSparkPhase[ state.display ] then
-        realAoeSparkPhase[ state.display ] = state.active_enemies >= state.variable.aoe_target_count and ( arcaneOrbCharges > 0 or arcaneCharges >= 3 ) and ( not state.talent.rune_of_power.enabled or ropCooldown == 0 ) and rsCooldown == 0 and totmCooldown <= gcd * 2
+    if not realAoeSparkPhase[ display ] and active_enemies >= variable.aoe_target_count and ( cooldown.arcane_orb.charges > 0 or buff.arcane_charge.stack >= 3 ) and ( not talent.rune_of_power.enabled or cooldown.rune_of_power.remains == 0 ) and cooldown.radiant_spark.remains == 0 and cooldown.touch_of_the_magi.remains <= gcd.max * 2 then
+        realAoeSparkPhase[ display ] = true
     end
 
-    local rsVulnerability = FindUnitDebuffByID( "target", 376104 )
-    local rsDebuff, _, _, _, _, expires = FindUnitDebuffByID( "target", 376103 )
-    local rsRemains = max( 0, ( expires or now )- now )
+    local rsVulnerability = debuff.radiant_spark_vulnerability.up
+    local rsRemains = debuff.radiant_spark.remains
 
-    if realAoeSparkPhase[ state.display ] and not rsVulnerability and rsRemains < 5 and rsCooldown > 0 then
-        realAoeSparkPhase[ state.display ] = false
+    if realAoeSparkPhase[ display ] and not prev[1].radiant_spark and not prev[2].radiant_spark and not debuff.radiant_spark_vulnerability.up and debuff.radiant_spark.remains < 5 and cooldown.radiant_spark.remains > 0 then
+        realAoeSparkPhase[ display ] = false
     end
 
-    virtualAoeSparkPhase = realAoeSparkPhase[ state.display ]
-    print( "virtualAoeSparkPhase", virtualAoeSparkPhase, state.display )
-end
+    virtualAoeSparkPhase = realAoeSparkPhase[ display ]
+end, state )
+
+local UpdateAoeSparkPhase = setfenv( function()
+    if not virtualAoeSparkPhase and active_enemies >= variable.aoe_target_count and ( action.arcane_orb.charges > 0 or buff.arcane_charge.stack >= 3 ) and ( not talent.rune_of_power.enabled or cooldown.rune_of_power.ready ) and cooldown.radiant_spark.ready and cooldown.touch_of_the_magi.remains <= 2 * gcd.max then
+        virtualAoeSparkPhase = true
+    end
+
+    if virtualAoeSparkPhase and not prev[1].radiant_spark and not prev[2].radiant_spark and debuff.radiant_spark_vulnerability.down and dot.radiant_spark.remains < 5 and cooldown.radiant_spark.remains > 0 then
+        virtualAoeSparkPhase = false
+    end
+end, state )
 
 spec:RegisterVariable( "aoe_spark_phase", function ()
-    local start = virtualAoeSparkPhase
-    local phase = virtualAoeSparkPhase
-
-    if not phase and active_enemies >= variable.aoe_target_count and ( action.arcane_orb.charges > 0 or buff.arcane_charge.stack >= 3 ) and
-        ( not talent.rune_of_power.enabled or cooldown.rune_of_power.ready ) and cooldown.radiant_spark.ready and cooldown.touch_of_the_magi.remains <= gcd.max * 2 then
-            phase = true
-    end
-
-    if phase and debuff.radiant_spark_vulnerability.down and dot.radiant_spark.remains < 5 and cooldown.radiant_spark.remains > 0 then
-        phase = false
-    end
-
-    if start ~= phase then print( "aoe_spark_phase_swapped", start, phase, index ) end
-    return phase
+    return virtualAoeSparkPhase
 end )
+
 
 -- spark_phase starts:
 --     buff.arcane_charge.stack>=3&active_enemies<variable.aoe_target_count&(!talent.rune_of_power|cooldown.rune_of_power.ready)&cooldown.radiant_spark.ready&cooldown.touch_of_the_magi.remains<=(gcd.max*7)
@@ -1067,66 +1043,34 @@ end )
 local realSparkPhase = {}
 local virtualSparkPhase = false
 
-local function updateSparkPhase()
-    if realSparkPhase[ state.display ] == nil then realSparkPhase[ state.display ] = false end
+local SetSparkPhase = setfenv( function()
+    if realSparkPhase[ display ] == nil then realSparkPhase[ display ] = false end
 
-    local arcaneCharges = UnitPower( "player", Enum.PowerType.ArcaneCharges )
-
-    local now = GetTime()
-
-    local ropCooldown = 0
-    local start, duration = GetSpellCooldown( 116011 )
-    ropCooldown = max( 0, start + duration - now )
-
-    local rsCooldown = 0
-    start, duration = GetSpellCooldown( 376103 )
-    rsCooldown = max( 0, start + duration - now )
-
-    local totmCooldown = 0
-    start, duration = GetSpellCooldown( 321507 )
-    totmCooldown = max( 0, start + duration - now )
-
-    local _, gcd = GetSpellBaseCooldown( 61304 )
-    local haste = 100 / ( 100 + UnitSpellHaste( "player" ) )
-    gcd = gcd * haste * 0.001
-
-    if not realSparkPhase[ state.display ] then
-        realSparkPhase[ state.display ] = arcaneCharges >= 3 and state.active_enemies < state.variable.aoe_target_count and ( not state.talent.rune_of_power.enabled or ropCooldown == 0 ) and rsCooldown == 0 and totmCooldown <= gcd * 7
-        Hekili:Debug( "RealSparkPhase set to %s.", realSparkPhase[ state.display ] and "true" or "false" )
+    if not realSparkPhase[ display ] and buff.arcane_charge.stack >= 3 and active_enemies < variable.aoe_target_count and ( not state.talent.rune_of_power.enabled or cooldown.rune_of_power.remains == 0 ) and cooldown.radiant_spark.remains == 0 and cooldown.touch_of_the_magi.remains <= gcd.max * 7 then
+        realSparkPhase[ display ] = true
     end
 
-    local rsVulnerability = FindUnitDebuffByID( "target", 376104 )
-    local _, _, _, _, _, expires = FindUnitDebuffByID( "target", 376103 )
-    local rsRemains = max( 0, ( expires or now )- now )
-
-    if realSparkPhase[ state.display ] and not rsVulnerability and rsRemains < 5 and rsCooldown > 0 then
-        realSparkPhase[ state.display ] = false
-        Hekili:Debug( "RealSparkPhase set to false." )
+    if realSparkPhase[ display ] and not prev[1].radiant_spark and not prev[2].radiant_spark and not debuff.radiant_spark_vulnerability.up and debuff.radiant_spark.remains < 5 and cooldown.radiant_spark.remains > 0 then
+        realSparkPhase[ display ] = false
     end
 
-    virtualSparkPhase = realSparkPhase[ state.display ]
-    Hekili:Debug( "VirtualSparkPhase set to %s.", virtualSparkPhase and "true" or "false" )
-end
+    virtualSparkPhase = realSparkPhase[ display ]
+end, state )
 
+local UpdateSparkPhase = setfenv( function()
+    if not virtualSparkPhase and buff.arcane_charge.stack >= 3 and active_enemies < variable.aoe_target_count and ( not talent.rune_of_power.ready or cooldown.rune_of_power.ready ) and cooldown.radiant_spark.ready and cooldown.touch_of_the_magi.remains <= gcd.max * 7 then
+        virtualSparkPhase = true
+    end
+
+    if virtualSparkPhase and not prev[1].radiant_spark and not prev[2].radiant_spark and debuff.radiant_spark_vulnerability.down and dot.radiant_spark.remains < 5 and cooldown.radiant_spark.remains > 0 then
+        virtualSparkPhase = false
+    end
+end, state )
 
 spec:RegisterVariable( "spark_phase", function ()
-    local start = virtualSparkPhase
-    local phase = virtualSparkPhase
-
-    if not phase and buff.arcane_charge.stack >= 3 and active_enemies < variable.aoe_target_count and ( not talent.rune_of_power.ready or cooldown.rune_of_power.ready ) and cooldown.radiant_spark.ready and cooldown.touch_of_the_magi.remains <= gcd.max * 7 then
-        phase = true
-        Hekili:Debug( "vSpark overridden to true at %.2f", delay + offset )
-    end
-
-    if phase and debuff.radiant_spark_vulnerability.down and dot.radiant_spark.remains < 5 and cooldown.radiant_spark.remains > 0 then
-        phase = false
-        print( "vSpark", false, debuff.radiant_spark_vulnerability.down, dot.radiant_spark.remains, cooldown.radiant_spark.remains, dot.radiant_spark.applied, dot.radiant_spark.expires, query_time )
-        Hekili:Debug( "vSpark overridden to false at %.2f", delay + offset )
-    end
-
-    if start ~= phase then Hekili:Debug( "vSpark overridden to %s at %.2f", phase and "true" or "false", delay + offset ) end
-    return phase
+    return virtualSparkPhase
 end )
+
 
 -- rop_phase starts:
 --     talent.rune_of_power&!talent.radiant_spark&buff.arcane_charge.stack>=3&cooldown.rune_of_power.ready&active_enemies<variable.aoe_target_count
@@ -1136,52 +1080,32 @@ end )
 local realRopPhase = {}
 local virtualRopPhase = false
 
-local function updateRopPhase()
-    if realRopPhase[ state.display ] == nil then realRopPhase[ state.display ] = false end
+local SetRopPhase = setfenv( function()
+    if realRopPhase[ display ] == nil then realRopPhase[ display ] = false end
 
-    local arcaneCharges = UnitPower( "player", Enum.PowerType.ArcaneCharges )
-
-    local now = GetTime()
-
-    local ropCooldown = 0
-    local start, duration = GetSpellCooldown( 116011 )
-    ropCooldown = max( 0, start + duration - now )
-
-    local _, gcd = GetSpellBaseCooldown( 61304 )
-    local haste = 100 / ( 100 + UnitSpellHaste( "player" ) )
-    gcd = gcd * haste * 0.001
-
-    if not realRopPhase[ state.display ] then
-        realRopPhase[ state.display ] = state.talent.rune_of_power.enabled and not state.talent.radiant_spark.enabled and arcaneCharges >= 3 and ropCooldown == 0 and state.active_enemies < state.variable.aoe_target_count
+    if not realRopPhase[ display ] and talent.rune_of_power.enabled and not talent.radiant_spark.enabled and buff.arcane_charge.stack >= 3 and cooldown.rune_of_power.remains == 0 and active_enemies < variable.aoe_target_count then
+        realRopPhase[ display ] = true
     end
 
-    local totmDebuff = FindUnitDebuffByID( "target", 210824 )
-
-    if realRopPhase[ state.display ] and ( totmDebuff or not state.talent.rune_of_power.enabled ) then
-        realRopPhase[ state.display ] = false
+    if realRopPhase[ display ] and ( debuff.touch_of_the_magi.up or not talent.rune_of_power.enabled ) then
+        realRopPhase[ display ] = false
     end
 
-    virtualRopPhase = realRopPhase[ state.display ]
-    print( "virtualRopPhase", virtualRopPhase, state.display )
-end
+    virtualRopPhase = realRopPhase[ display ]
+end, state )
 
+local UpdateRopPhase = setfenv( function()
+    if not virtualRopPhase and talent.rune_of_power.enabled and not talent.radiant_spark.enabled and buff.arcane_charge.stack >= 3 and cooldown.rune_of_power.ready and active_enemies < variable.aoe_target_count then
+        virtualRopPhase = true
+    end
+
+    if virtualRopPhase and debuff.touch_of_the_magi.up or not talent.rune_of_power.enabled then
+        virtualRopPhase = false
+    end
+end, state )
 
 spec:RegisterVariable( "rop_phase", function ()
-    local start = virtualRopPhase
-    local phase = virtualRopPhase
-
-    if not phase and talent.rune_of_power.enabled and not talent.radiant_spark.enabled and buff.arcane_charge.stack >= 3 and cooldown.rune_of_power.ready and active_enemies < variable.aoe_target_count then
-        print( "VRop", true )
-        phase = true
-    end
-
-    if debuff.touch_of_the_magi.up or not talent.rune_of_power.enabled then
-        print( "VRop", false )
-        phase = false
-    end
-
-    if start ~= phase then print( "rop_phase_swapped", start, phase, state.index, debuff.touch_of_the_magi.up, talent.rune_of_power.enabled ) end
-    return phase
+    return virtualRopPhase
 end )
 
 
@@ -1213,16 +1137,25 @@ spec:RegisterHook( "reset_precast", function ()
 
     incanters_flow.reset()
 
-    updateAoeSparkPhase()
-    updateSparkPhase()
-    updateRopPhase()
+    SetAoeSparkPhase( display )
+    SetSparkPhase( display )
+    SetRopPhase( display )
+
+    if Hekili.ActiveDebug then Hekili:Debug( "Arcane Phases: aoe_spark_phase[%s], spark_phase[%s], rop_phase[%s]", tostring( virtualAoeSparkPhase ), tostring( virtualSparkPhase ), tostring( virtualRopPhase ) ) end
+end )
+
+spec:RegisterHook( "runHandler", function()
+    UpdateAoeSparkPhase()
+    UpdateSparkPhase()
+    UpdateRopPhase()
+
+    if Hekili.ActiveDebug then Hekili:Debug( "Arcane Phases: aoe_spark_phase[%s], spark_phase[%s], rop_phase[%s]", tostring( virtualAoeSparkPhase ), tostring( virtualSparkPhase ), tostring( virtualRopPhase ) ) end
 end )
 
 
 spec:RegisterStateFunction( "handle_radiant_spark", function()
     if debuff.radiant_spark_vulnerability.down then
         applyDebuff( "target", "radiant_spark_vulnerability" )
-        print( "Applying RSV", state.index, debuff.radiant_spark_vulnerability.remains )
     else
         debuff.radiant_spark_vulnerability.count = debuff.radiant_spark_vulnerability.count + 1
 
@@ -2018,7 +1951,6 @@ spec:RegisterAbilities( {
 
         handler = function ()
             applyDebuff( "target", "radiant_spark" )
-            print( "RS", debuff.radiant_spark.remains )
         end,
 
         copy = { 376103, 307443 }
@@ -2290,5 +2222,5 @@ spec:RegisterOptions( {
 } )
 
 
-spec:RegisterPack( "Arcane", 20221130, [[Hekili:T3X2skUn2VLU2QCGz6PhSbME6uqxv2SVKP2K8qppd4gmnoXGzTnZLQO4BFLKTS1LZrs2a7mzR8sspy5Jo6C)MGz(Z(4SNwfwen73cgee47pCWD(d9hh8Uzpv819rZEAF4Y)m8fYFSlCl5)(tzld3X(4VMKgUI(65PhYws(Onff7Z)X3(2xIl2C457wMU9T5XBpKeweNUBzw46c6)E5BN90ZhItk(LDZEgEVhsG5(OLZ(T3fqGA8QvrLlnkF5SNM9usCEroDJdtJMNLwWGp5F)BSdt0UWNtIwn7Fo7PLzXfrzXH0nC967czO(8LBcZEj6U8cYb70IjNwq2KWLmy8u1ssZEEwbbRqHxVtlU50IIWKODf3f9P0LmC4UQ1EAXXJNwSmnnzv6N3j88SOTHX7YpT4Xtl8doTO)PfENwibSkmi)afhHHN0sCaKfPhwUzE665fBIMVn8Lye4QVoyGlsmlrc6R3qeZ3eVUiE3lZ3N(5OmkHCOtmgiyfVmA(U0pfsHYitSJSO1zr5BOpS8yrp)Xl)tcEaH3YcbtbF42WVmVAbONAo1M90IOT7tZctM)5WS93DyFjISnCx4D7xwWK18hiWIA1l1qt2fryqzZPVyuEbLYm2m9DzsefXZPmfcpnKcwpvjoYzEB6UV2iB0SISduDI1L8tPful7iVKA5MjSZ5llxrjMNw8kIYM0rPAV3gNNhNeLtplVZjzLwY)aiPAiXZHzzudDeC4EM1f5hh9L9jP5SpPb7OuFMzO89Hz)589BcZJmBjAFw0NMtji(CS95ecNrMAIQHF)4g8ISKLrjZPh8sAZ8sl0KDipI8ik7yB8UvMTKzzpNq3thrUHc0uj5HAta1pnCvC4UIsQMm90Gwoo))rIaWqgwkqEv2eu2PD9hmhhdbDCq8prx8Qzp5p2SaTScy0YnPCLluLDvGdjPY4mku13RGe8x5ZHXka9PCIN3NgC3GrTqm5XAXetY3nUKuLrRp3eu9HZev1XGsccb0eT(Zd2oRTSkIj5ijdo)ths2fLf(CCsCXxfSDnSfuhFCtlxhKBKjdL(gdrQv7tGJwzONH(Lw0B7w47YwurM0DsjESXdObq(V69QHNwCwZE6qoLzVM(IuNh0TyKOMTMnDzTBFCdyTIafusxB17OBeKPWZqlCtFTL1ncjgmA8sDuAyOXW6mX)l48qu)9P7PgqkAGXNcjhBYtP)vYbY)Jil(Mtl4FmjzPD5rzFIkpSleG)zo28hyBqL)FzqXD(ZrKTrfrPzkYp4IZq5M8C6wcTy1wwUpIzsuq9pwC3MOWKInLHArdlymEIdu2xJbjdhYjtfcJK8g0Jd5igTlABCu1ZRjM0aYkXL5ltpSRWGEK9ao0mgxHZNr0ODh)v1WW1771KHr1lXdWVc)1WadiGOoMdYcEGIctQff63EMUjRXxLmgaOqpAIhb6AHeoO8Pj6lrlpuqEZ4TrMos3B(ivfuir0Czmng2VRKjXc1SAD1569ebjIjFUVR5RQj8jgXmI8juwTTKVsfynfxAhpx8ux4HLuH3eR3)XHSsJ3ZFjAlC6204fQxbHcT6RGH36IMWeEOxTISOD8RkzMHWtVScNTd7ClK1ZBpKYO0qeIyAWgIJYIlkD9fCPZ6Ofb3mLWkFh0c5HZkUuYB(3fI1ki)RsHy1l0HfF6EoewWvjiSZdLS4ZeScpoe6LjFyO(bMc9SAtGg1NnML1vVU4TTo2oj5QxIBlre1z0xcbhpG9zgSOyYZIAGpTrIiLiCVRiRCVo3O5mkTOggZLIq2b3ADjCfxqfjEkr(8De26Rz)vWywtiyq45K00vjhYl4frOu0eoLCDJ5infrYqosxrigXRZj2vJ(dKxnSRSrg7QHTyZmjGQXyL1xbKZmeNfI9cvo39dUOu9jTKQR0LiXorAl6o7NTXFxD2whN1IWnTF6g991PllnV450KIRxWVeBp7wrIUyoh9Y7AyWT10EDVnWv3qAicqmso1ckNdJuQeFg5B08xR3UQkuApOWZBB0TpIhrNtcDtb719LYtUwdvXJ677aSTHhIh32fQtjf0AKVo8ar9MRYXFDwE6rz57Jssu0UBT2sdu3NY()gvd4j8jzPulRJOVSjKe)HqiF9WZUKi8wAT8508C2Ixh)YMI5sSuQHx2AW0pm9YVxEmtO1OKH4TvvSSbk8dPSn96NHw9x5alsOOz(8)4WQxOzU5qIxxnu55WxypnJK9K98Umz09gtzn5zi80QsCIYDrpjmqiCuikfrz0CaBRkQIUadjNV(q2xnNaKvarJaHbmZPOyfo0zIjVGsqxgsu6nNLHvOrn2qw82CWWNDOjFI7gDvoxDrU1GsqZrpA)ekn6wgVpG2USb7QbJbOwuDjCmMjiLWWK61kFn2CeB2jKyZmvNTkOelSZhgiYhKO5cWwudYuhKBSBKwOD8LIy1eDITqBNuvhm2pP6nDWKCHxBBd4FrKIUxrksLUQ6nZoDfwc67hPh1tOQts7NqFG4xWh8tbrajutlghlIFMLsAP8PibjlDVa5q1vTDYHed3OFvErvnqYWrmCFVvw(Bk0dHeUBxucRWTEIjCtPMpmwHTKhVFt6osC5PzBvtPRctQbTqeZLZuA1)KIGwkQjsivgIeZy0wClm9aQCSRMdkRYxF37Pc9nKd9THYqjbwQyAxIQ0grY(mQPe)EjVN3s4k1TCXuHKBRmlhi8iJ4nJomFjr9M3bjDTBOozu3qzOWufsruetWRusJeTjKXAKCs7gEYFwTPHf8GOkucxbAo9MQuEFvWDYhynlshWM2JjQybEcEgm(rl8fjDiQsIJBR4CZr3w8K5QpBngmDBlKmWgGNKMlUWCnyNwgBF)2t4aQWi94z2)HZOu7XhP7EfftWg7hl8QAiuiY5uRKJC1V6qPCuaahU8cpXl9DRMR365AV(zbUUp4ABoTpdDDFGk2DLLrjAiUwIt4ZixXhCX1ouiA17cX7fpSGZ56daKdWs63UQg016ws7MgDQe0RCzfGJ3veLKeTuT3ebaRDD4wsggHGJ2lAuaYRvAKZ3gNLLMnpERoXb3OTBXFQlxy9oYygCIXRvi7BdOnmkiH5b3Z(4ekgMd)5nHc5pM7ibOQE1fVbP1RMZ)dPXyOHmoSURCQ(gmN0Fnwk7a0XCFQMEYaxnNFbUOyoKgEtdn6Xcx9nIZoAPTJMdWRajAtztUz)Qbef2kRrLLwHMWZOjfh0S5zuFYuPPPCtHhwcoU8vhmqB0GFRo9AxUpjdig2F80xzDfIOWMxevwl17g9GyIBUHy9y42RRjpYyGGoqJPcztaEGdX2J1dXgGQAGsQ(YIRigzvDwINuBRo)MVDy4orB3MGX97IFxtJbJdyvDk6QmM2nSW8XLgp41)3HladUmSiKO5xMJ2pfLXEVQV)gcgqVjLz7ioXiEt)4gIIvmT9web61udj)Gysd)aD2e)phIZOQh5PBjlo8qr62Wc6hql21lr53D6d)BIClrM)hpT4Nt3r2q2J)b15ZJaTIuGpNRvqEEp)V03g8eThQasj3QTdQAILkGgDUGvH)yJyDvWhW4TsKloczjh1kag0BFdCp9babaHiZAh)3)QDYrG8zCYlH7iy4wASwbGYwWvH07mE2PEIHp4I(OvH57HHPS7lfWc7BZri3QZnOSJqPJANSZqJ0pH5chMmcm44oQ9Cb3beQ61qg4cOt9amKvt)ub2yx9jlYf)TdLU7q56RAGyg8cUd3FH5K(dUsEe8r4MNpGryJNpGr4ENbGHdlqR42xeL5oADeefRMXW2Hxi8fPH(sv1fAKb14lxRGwUEssx(amTayX8Mubmu)E0amsyxNpgJyWsSeNkWfQ6NQGnaXSLsBtvGmstv1aoIa3Lb4y2fpxwyaM08zdymzJRgG7Uqhsmt77sK0isUxs7S19ePDygIvGZuNcHB0zOcEIvMjG2DU)FyUHQ3bxfaRDfDBz4vNn4p9HFHrxPa9b(KZEAb7BluYJPTBlDDCsD5cZVRww71tFBfDPUJBN(GHvX71g8IuZJ50h(h)do(iVsEn6UL2n8PQfQ72QyoM(g)Bt3pnpQ4241trRRhDzSHxB6qx3rPR4iFpkHXa4ZMyxbnsIyLmKIV3aOza)M1rMtFnW3Q(9yu5Ml3H4NxE9mOGaRphclU(ooiSLsrG5XkcR0f1WRNHROXXJ0ByHN00znz6ObKphyAO8Gw87h0xefvUbeuefEWX8qMgnpZtIMWwjDdhUQBu99pGUl9qyuE30ReEk3rcpT2O0V)XJ9ajWggEjjQCZfzWrjN6lSGJRx(Ij44lvF)dCC962teCSiRF7tbPCFdEe32IxVYnHVZcxeHhvKTfN03hNoSVxVBGcu54rtJ(BFptJgUN9P6CY0Evde(Rc63rs0anZTcl1ZX(Z4HoN3tgJFilBApkABMRAGB4jZXNyGH)nMRDVbUMJCSVx4w1bBdWRGiYE3aLYGNj2QjUIZ88wFcyKBdwypEeuisYlU4aNxUzsHbuz2bAk494ti(JtFySNXWmudUaZbgI)oJ(1861JJit8h4IqEW4(c6rgwNCGaQHvA6GygJroMgNGOjsrP4DJ6OMR62selHlhqjAOpb5tcaqWd7nTb3GSdo4YuD8uH9liOPkPtI5DW(o0kO3kil0NSBlNQ3stnMUelwbAJfarlS1FQDaOxIxjKd2KhMtiNJBPVDetCMeKqjN3e77bh(czWiYtBYAIplIcIevpPQJBsQgstB4e)XE90ImUk2m95l0I3SjJ7BXEWWbLbf6INLkSq2qfQ)H(3YgeZP(yelyVjQls8yzHSZozc6iwhlPP9cEtVkCVSj2VsHym1VF)(yBB5R0QnmWtf(yaxUn9MsW64rTP9RVNEDICFJC(0meW0C5CLBMrvxvbHP37r6K75saEvCUHVU6ikJ)91tR0tBY8EC4y1WPcQd9OIRwnODt9hB7Wuo(ATIWncdMAM1VvyY3KCa4WMaXDkrwlhjsEHoUtSioAVjw4TTEc2(wS5vYTnRsjwGMOCP4vPdb1QzcNFpdYMnd)49JnTXswkPBIzB63p2YUnCGXDd2KR(cHyBMsVrG0029OsIed6tgcQVQdoDJD6gkDeuGHIcSo6pkf3MhTCk9xHcRmpIKaMr1AluAIDUHWAicI)KUcoRcLoOsZ9RCMhvDtZxoKBu724Eod4aR2iO1h1zW5BjYpc4mDsCWtKdUx0HRkh1fQjpCbNp7bhp68Ah6cg0f(5iWeGBfpCiss(9PoQOnh6J)()63)Xtl(P9eqq0xs(6PfFM2QXSi6vjI41J99manLHCYNUUGeOnDc8jPNq)8ps5XNwKU(0IcAhn)vcB(0IEHK1MKsxa9V(yAXVsBMz1nqI(7ubTpDCAMqEQV2PgtzkhwUO(d8IR9MA35YFpEIS9v31fKNc5UUo3uoNUzs1oEekWX(GCv8s1uxt0QsIQg4PlbSiFmu1kyBSwJv5nybWBjKB06V93UC4NGotpO8DjyOYEHxaaIsdkFsp((je2uF3zjUFqUeuut9Nr1ITWV8etMk(RoHnuws2a4RZ3VXYgIfiHTHav2ONEKzAsb8YP4mfUpqvj6agwgsRpplB1A62Wh1)fEWX93waVQfsWPeF(glEBbrKYJ4sbuRAcNLCq5D81bmW2A4Xn1SU6IYQM)h8supU7r(stO1VT4JAYmj4Qa1HTaQk5DDw77ix23oN6OiqudqbcTvJHwCnNxu5nWuVo(VwVmQDYCGL9qNkIn2igRGjeOBkhlyeAgBvh97PmNioiwlVu7cELECPB7b97MFDNjSFpGnxkvaE3CAHpxWxw(NNfPCkQ7wTqJI1(k))r)aHPRruEs4TKeZaFrnYIlnNMbc4umbpRqzqHsUgcgyUhAC8Myn2t2PD7fQK5KHMqdhIgaRF4aRhqIxylbAaKWVcm0MUv(7)sh1Y8GNkVJhfgdIwjBy2aP74v9(pEGNMI0LH5O8Z0s3iGUlU2wi7zpw1RjDV37g86EbJFfB1YZNPhC5yA)yMvA9rS70gSrjmoo6wphn4Iita(lJciK5)cIudsTbBTMsE)GoszM4eLHOHcIHn)oG4aoo(BeoY)18WbuC03guuux2bnp1EhEwXxOaG)VpgdLZRMoM7V612Tjm64M3uxwKnHixSObxKmini8roTu1aA8RrqSZ1bKezW2M18LDZtHhk2q)kc8P4Thsyl7NZcxx(vBZS)l]] )
+spec:RegisterPack( "Arcane", 20221214.1, [[Hekili:T3v3ZnUXn8)w8KzyKsC8PpTVlJKNPnTp0B6K(GZZsIMALfZrrYss57Uz0O)27Ul)A)ay3LsYQxMKxAtmxcGfalWVfaIzXWf)2INw7xqw8RJgmA0WrdNC3Orthn49lEQ4RPKfpL6h8j)xO)dX(7O)V)TSa)y(F(Rrj(RzVEEY(Sa6FABrrA(p)U39syX29pFxqYU3LhUBFKFrysCqM)Mc2)EW7w80Z7dJk(xXlEgM3tO0mLeS4xVFeLQHRxtkxkjpyXtlEkkmViNXy)eYYSKco9P)7)kFZqI9FoISEXFFXtbzHfKSqFgd3S5oFUOVmyRF2lK7YlOBSJRMDCfLj(bCA8u1ssYEErbvQqPxVJRU54Qc)isCXDKxtc4YWDvR94QdhoUkijjADYNJfEEgzNFyC(XvpEC1Wrhx1)4kVJRKiwLeKVNjJW0tAjoqYIK9bBxMSzzXwYYD(VeIqx91btCrLzPqWE9wLy(2WnfHXVSmn5ZKmMICStggiAfgqwgN8QpJktmzoYiBYi5BzpSCBX2)HbFIkhqYTStWCWhUZ)llRwGd76ycvTLTSGSlLKxWK3PM31breg5YzQkQMMshoFK9dOsYUK4V2AXAxr2EMN6MsTS0cASOYlPXAoJ7G8sWA2w84QFGEeGQJ0ofSlmppmIKZ2l37KfSJAvMzANFS)DPS9ovQgoqtiE2plJf(HkdpWpZl)yYxsJsY5)LwPJP95bhYt9Z(0Y0T(5eZXhsZiVUKPqgwlTphrTmYAt0ZDpmTvUOljGeTKTXl1nllJBs5qoH(iM5yxy8AZXxSWZzmE6OWnwqNk5p0CWS5P(Rd9Jlk1AY6tTZE1Vtr4oYZmN3TSd8uptUoW59XCepXsDgeXTFUc0x8rkNgZ1ycMALnmQR1j6)tTsJbtTqZGXw86fpnCAJJniXLdgqc2MuFqhnWJkXFpWPgUzqXc)HZ3zCnHRmKuRlFDFumjZ)5WOWIVkeAyIPJ60abgI13j(mYXZjS9q)YysDLfdDHfvQj9WSIB7ofHQ69AplQM)EXt7ZzN33WErw4pglgj6pOfvs2NyiEI7oPGgvQx707OF0HhsMlwgrc0jUmbj3((0t2BySb4cMT)vzTkTJOzTssPqSifT05vF6wN(u2)u0E6)h1F8NoUQ(ptbIhNtYEL5te7dydnJ77dCguLftMu1PWQfKDKcssMIpeUlKCWTNt2r1eR3XrulH2HQ8kUBlXpQyBdsHXsrCmSdyPyQYVy6KhUh1zGVHkGmosvxKyYUqsEzEOgdd3yZ3Elds2hdd3GMWqE3q(cjyFb9nd3rmTLuttIHU7jQGhs)7dDfHApvqQI5LkpZybeBFOuQNP8vNOVoCCLiq9y)99zLoSlFHSdgOmlozZkO701F1CE5t7(KV)eONfNmtoaFOt4L)ZsuhOBBdg7P0pwl4ZJLbFWUkmlXXPhyc6wcwcnP(k1sWf0LQoVloW7EYKS(aptuQsH6Gc3yW((1Q8tuZQF84p8XFQa(tDacczhPPQBCBNASNZC3kLnWUj5r50wTvOPujP5dlNPakqw5gtbU6aOfwdtwjE3Fv4qRK8pkfou)A32roAnE0Bsq5ZtKSexhSEdoe820PB04CZHEgEoe3QL41OoU1PQy1ljjZpA5N9ZsBYuPuos1avYEOcHPCY)wVeXNcctx2KsBJPd4)ndXDmLM8na0QUi(qPicdESv3(CusY6O95f1NNCme0uRWKpXdgj0Z4XfzLkZloWlXdngQi2jZWwXTtqjmuLQZtuKCjU3QlHuUkKUHiLNcPDimhK6JWo6qnCG8QHZupXy7mgIJsWQJNM9soqdK)ZyxbrnPdGOO2U410SulR1e5NkCQUE2OSe2gXAPxYu(lbKR1PcR7mCePlcA0HIHZx9ES2bxCESr3rehzGlNgq6HZLkuOwlRWrp8nG02AdXZSFHQKFbRskB83hvaDKJnRezHPLK7FwE1lA4qYRKSVYauXUdgL48cuMKDCviv34)QFyepwBRKWRljjlpLefz(0g2TmKC(st4))gpkvF5dj8zAiGjFzRpfiGqE3E430HkdLPc2e(Y2ILsEdtQa5HE0c4DE)aPc5ZuNCXSRhElBjq9wso9uZZqVDTCm)iMyMV833V(f2DgCaY)BMO8S)l8NMrXTBhXVPW03ycVomQW(InUb1OIUt4KqyRq99jzSBF01d1v9yTHqmHC5M9zF1mOAReAtygHtmZyxTsh2CkKxWuOb(LNTnaX0k1yHNOlExoiaX2Oj8IHrHlSnmk6LOKNjICPf)hf809tfa51GcmNU0KW1mFR4prkws(V7dttDVshJgimFbqIdeWSAXNI05t7ssIxUMe8PLz8(V0k9xwXSwgb4zbqJzHfX1mJ81wglzAbqBAHfYW4nKS4KRTywZwMGI1QmAw0uc92DuF74xt(enwafO7AYxUcYkgNzIlwLRddkJmq3G(fBZJ9ZUcgFiMYes8yLLIRWDMO4PIJjr8s8iDnqw3s)WuLQxKhMULAeZP4w2PcAVQHrnKwi0t5Czv9VYeqlf2ajfOHmNgZowhmRhqnMSHFVDcsg1oKkg0gDIIYqzA1CmvKLsJCkOeSPeTpfnk4Xk9nQBEsf28CTConTxHJIfptxDBB8Zd8xduPppd1eDw90gbb7q4scIsc(DLB94njmwZmlXnC471LrrCexKyK0ulioyLpLZa6XCxepTfvFwBjBCTlhA7QtNQeGjywVoGdc2zjuQceomEJqh964iF0DbvDcHycloq)UkSZUOYQQCIFpGgMMLKEQMW2xLXl88pcfne1PY1Al2jJnpsBx3vaLyJT9WZE1jrQ7YJ0p6cMKOMKWjQiqHc(1lcyT7QTug1ePkMwyCbjkIeOwSYraRDJ)UWOqFWjcbnPG8Avp8BF4xQXpD3lrmFkA248Lp7V(LQMy184WSW1K95l3K5ZVMUYJjz7t59xII(ZpdBv5PjHr5mpskQPcAcV95kROizh3JDFm19HkNLUUQlsF8QvwX2KSygzOBs2e20oroyWhBQ6qt2NWSSKSLH70QESHIc4gwVfAnMW6CuBMCIyFkKZiauHnfHW8auyzE4uGmu)8wyfdBUmmqfpAQEfshdA7)Hu4ormv69)af(14bsIICSXAXXASZ(ANELl0RHZUFt8Zuy858ZuObZ2el)eeAAYb(zLgAnfJwDPRZTdQL8Bbd58Ezwkw4TB6eHMQriHiinLuhpLhV800Jn0Ws8BNo4UjFaR(GEIJJMlcN2Uu2b3fsyA)Pged)oxDAk0p1FEfxOUtuvdqWnP8r2Hq5WXhARuLiYUe(WPweQqamZd(fvm9BiR5zJCLp43)Wj(m2v(mfq7xDdshZw7K8mXv5XAo8QxWPw2A83cf4CddoQHqoJxHZqCp(xjz8X1U5Ni9IN(SFwmntdfQXVX6GxiRViu19gwF8(Er45FpBCQOiZYyXJYty98ZFpfAOpVxGSQU9cj)UJF8Ft1shxn6NpU6xsIPmK)4VxDyHOuRib4VxBfOpV3WV03g9e9XuiPu23Urvn9PcPrhLrv6p1OuxHmdwUvG15iLLoxOqyqWtT094hrCaeGU2nFGhmU7zN5G36INgDq(eQlq3KVXgLpHrMewmbMPshTsNOgWfAEo(u3dtz1R3QqBSzs3IL7pSwTlbhER00Lu)9WuxDmIvOo2yZBXo(xPho90dV9UYtEZ5aIRS8SnRqD4bFwLYiPpozFKHdVo5m1RX6f5SXjM0aueRM1RUjxiERsJsJ6jbOXUsZUGyOfRVMQdeqP30ilsyWZKSJgGe7wUTAQHUHB6MgXrCrVmehXXsQeaQ()q90qJWiEgNpHr8mE7i8fouqtfg62jTRaW5tgupIh6fa(5Lp8SrTP8T7vimCD4UEugj213Oug0dRPnCDZ)cdpX5f1(sNI54h)x8nlJySHUPSsmhxX)AYrF(INOBXTScc9uZhTUFH9rRJvpNKnHrnvVj)Ugf1po)DvNuA6q5XpAyv19MeErQ3w44h)UVRwqLxzD)hVL1bI5Qn192kWcZ)PH3MKopNuCB4M5O9aMTmEBmNp2vok9JXPMhL0ya8Et(9X6FOmPqBQ6HdOnuv4rintvyfansv4PWnrvCb6n(r4PsnpfwPi2DuJ(n8YJYmI3a4Rd)MnGRzVg4Brn2hx15FBanCBU4VnGM)kLZLd5pJTMMhFHxOz(5fevjCOE6J8Vxpde)WbPHeB28jdoCaAOS8uw37h0xuWuMPEM4bp6AEiZdNN5zHtGvsZm)BkJAMODgx6Hm)yE30dCQ7906Ow)(ho0du3Ay2JK0YTJgptIqeiXxOze4DC9YJ6UJVuZeTBC9SWL)2)5F8F(5MOMcVAzSUcwiUSLSaffBfI1y5mc3Je1CJ4D4SxGSicmi8mrREqvF8(PE9UX6SdF4GX9YJJKpCjlc6Z5opC3fGPUYt(CRFTzA1uOFfylYaL)2ZzGbe)YXub4kGWIeU0Km2IHmzG9MTJk3J4qK86vYKAbH9r5QAsJFuj1I4VCWhNpUp9Kd0vFe2CQ)SKPjW67Ho0o0N6zF2UNnVx14Q8dJ6FgQPbAihfwQNdtKqzyPe1B5xlMtX3OLdFJrr3S11GvXt2YpZGH))ZwVhSy9C0Y9TKvRPela2miLT3nqfkYZK51K1XzB)jTl4QDdiFoCa0Hsm8zG4pvLsMjbMVkue0VFgVMu2Z)WupJxwq9kcxsKgE96vliZgoWfh(rtPWibexNExzCfQ3I20MZ8UazRBmR0mPBu4DJ6pmf18KIsz1(xP4WE6Z2j3pF2iabCFQjgCdchCaoS60CdN7OCyYLpklDOflvIDwDASPtSqz0eKyJHJ0EodJWUiC(S3u8mBCVnMMiV1)TzyNs6DutIKWr0XY16S(TVDbtC(OKejNzIDEutFwjwQw7DI8DElkst4uMnc(1P8vUDS8lYxR7AcQlGrr7ZtZJdhjamv8mVnq3sVOM7OWBJgVMtc4qRO736)ZaHQ6YHxvUs4CvLW3ymw64YVUy9rbuazGA(2F01Ds1kR)5c0SH0NDFpzRtvRy8ariHI3PmNK0DbmlyvtQOj)sJ6JdheY8BJznFnAvpPie2EEq7)fvO84L6yVaxGgEjtnNR(XhMIYwQqkPlTwQMzpm1c3gpWi3KMqCdluT6sA1G2UOoh1HqMvQMjB3Qkf5)2k4apSflC8TvZY78HgnA6h3LpgXA4QJKsgkKyJr0x7N9dlUnNemFWDdMy1aqD8aWCv6XwhBvZlxuO7OWGGV7CiP1ZcoClZYOjJDBlB1oje56YjCt6gJ75mHhzn0eRU6otUHwUvcLCM2jAjRVvyA0lXhHou7MORQf1fTzDRUCEVp6WbNx7yxKGtXEob8YyDYgogblrF1SJcxs4hDQZSMUarTd3hQldZp1G8v(tUObrO8NsHPvORALdllm2IEAFKCNnEk(n1BYPvLsRBsXjHXX9l8PDQu4)AomBU0NeB7ITlyg7PNTRPUkv)TkGK9VL)dvD(WZMZLP)hwJmvT(lT6a9VY5DqgSbqyKd04Cn8oWcqiTnxCEoCr)AxaqCWuKFJAD(TfFul8JrVjuDChOQCTMop(oXf(EYyefjIAmpiXwnbP4AoVuUI08KlQWFMkOGWEf6(J437aoDeA2lqoQ6gZ5MQyWkLx34fAflMn2Ky4sEeKO8aRhi44vS6lWtPIuriA74IStEN8zUqjqA6pZSPd80oGDD48dd8Gr4PpBpo09LhNEzC1u(sQFAUdUF4RRuUuEa(mPFDSz3JAZ6C)PRSA9DX2k27o9q(tgCrm9GFlZTAjDqVlMLe8IEIIiCXwfToBf)QSmB40QypINxQMeeGDQ5(Lpt0CifqQEbJhuXozZjA)Kbq3BO4MOlcUiEVH1JCCFl2SYcxjcoAcwTgTvyWuSpphiuOeXhphwLkxMMTOqv(KHWQcWnwEffzWMAOjAMWN(KhzF2tacI3rPT1J6sjRTHbDUwitWO55bB2Uo12AacTO1QZ5Q(QNu0FtCWS)SYO8QF5glKU1rxhHKnqbIJ2nm1nNC8sXf8M34Yuxn6eXJ6SI9BbP58ok1sCH6Gm)QxmsZfIu(Pqx8t9oRcxVIv4mLRJ944PqxBW0WUJxFs4suz9oINPRGTcJ1dcZddNrVUvX2(9Vy6KRy5hDWMy8saNG8xv4wBkRhfRwCBoAvpeaGF47jBRP5lgwXIf)V)]] )
 
