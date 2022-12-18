@@ -954,6 +954,20 @@ options.eventTracker = {
                     min = 0,
                     max = 20,
                     step = 1
+                },
+                backdrop = {
+                    order = 3,
+                    type = "toggle",
+                    name = L["Backdrop"]
+                },
+                yOffset = {
+                    order = 4,
+                    type = "range",
+                    name = L["Y-Offset"],
+                    desc = L["The offset of the frame from the bottom of world map. (Default is -3)"],
+                    min = -300,
+                    max = 300,
+                    step = 1
                 }
             }
         },
@@ -1065,7 +1079,17 @@ options.eventTracker = {
                     type = "toggle",
                     name = L["Stop Alert if Completed"],
                     desc = L["Stop alert when the event is completed in this week."],
-                    width = 2,
+                    width = 1.5,
+                    hidden = function(info)
+                        return not E.db.WT.maps.eventTracker[info[#info - 1]].alert
+                    end
+                },
+                stopAlertIfPlayerNotEnteredDragonlands = {
+                    order = 8,
+                    type = "toggle",
+                    name = L["Only DF Character"],
+                    desc = L["Stop alert when the player have not entered Dragonlands yet."],
+                    width = 1.5,
                     hidden = function(info)
                         return not E.db.WT.maps.eventTracker[info[#info - 1]].alert
                     end
@@ -1138,7 +1162,17 @@ options.eventTracker = {
                     type = "toggle",
                     name = L["Stop Alert if Completed"],
                     desc = L["Stop alert when the event is completed in this week."],
-                    width = 2,
+                    width = 1.5,
+                    hidden = function(info)
+                        return not E.db.WT.maps.eventTracker[info[#info - 1]].alert
+                    end
+                },
+                stopAlertIfPlayerNotEnteredDragonlands = {
+                    order = 8,
+                    type = "toggle",
+                    name = L["Only DF Character"],
+                    desc = L["Stop alert when the player have not entered Dragonlands yet."],
+                    width = 1.5,
                     hidden = function(info)
                         return not E.db.WT.maps.eventTracker[info[#info - 1]].alert
                     end

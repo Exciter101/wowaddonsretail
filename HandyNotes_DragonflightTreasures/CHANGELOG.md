@@ -1,5 +1,15 @@
 # Changelog
 
+## Changed in v35
+
+* Add some recipes that are findable in the open world
+* Assorted data improvements, mostly around Dragonbane Keep and in the Azure Span
+
+## Changed in v34
+
+* Add loot data for the world bosses now they're present
+* Assorted random data-gathering
+
 ## Changed in v33
 
 * Major loot and locations update from wowhead data

@@ -1,4 +1,4 @@
-﻿$Id: Release_Notes.txt 4875 2022-12-11 17:06:20Z arithmandar $
+﻿$Id: Release_Notes.txt 4877 2022-12-15 15:47:54Z arithmandar $
 
 AtlasLoot Enhanced
 
@@ -6,6 +6,11 @@ This mod is distributed under Version 2 of the GPL.
 A copy of the GPL is included in this zip file with links to non-english translations.
 
 Patch Notes
+
+v8.13.11 (Dec. 15, 2022)
+========================
+- Added Evoker to class list
+- Lib update: CallbackHandler
 
 v8.13.10 (Dec. 12, 2022)
 ========================

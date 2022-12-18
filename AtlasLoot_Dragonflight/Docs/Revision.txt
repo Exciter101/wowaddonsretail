@@ -1,6 +1,19 @@
-﻿$Id: Revision.txt 12 2022-12-05 14:19:53Z arithmandar $
+﻿$Id: Revision.txt 18 2022-12-18 05:16:00Z arithmandar $
 Revision History:
 =================
+
+* v1.07 (Dec. 18, 2022)
+==========================
+- Added class tier sets
+
+* v1.06 (Dec. 16, 2022)
+==========================
+- Added PvP Season 1 gears: 
+  - Added Death Knight, Deamon Hunter, Mage, and Priest's gears
+
+* v1.05 (Dec. 15, 2022)
+==========================
+- Added PvP Season 1 gears
 
 * v1.04 (Dec. 05, 2022)
 ==========================

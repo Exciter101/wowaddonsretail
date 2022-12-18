@@ -13,6 +13,8 @@ ns.FACTION_DRAGONSCALE = 2507
 ns.FACTION_VALDRAKKEN = 2510
 ns.FACTION_ISKAARA = 2511
 
+-- 67030 completes alongside 66221 (moving on) and 72366; it's then also completed on any alts, unlike the others
+-- (It's what's in the vignettes as a condition for visibility)
 ns.MAXLEVEL = {ns.conditions.QuestComplete(67030), ns.conditions.Level(70)}
 ns.DRAGONRIDING = ns.conditions.SpellKnown(376777)
 
@@ -55,13 +57,19 @@ ns.SUPERRARE = ns.nodeMaker{
     note="This is a \"super rare\" which can drop higher level loot",
 }
 
--- Intro:
--- Talked to Azurathel: 72285
--- Talked to Genn and Shaw: 72286
--- Talked to Turalyon and Shaw: 72287
+--[[
+notes:
+Intro:
+Talked to Azurathel: 72285
+Talked to Genn and Shaw: 72286
+Talked to Turalyon and Shaw: 72287
 
--- Rescued Waddles: 70872
+Rescued Waddles: 70872
 
--- Talked to Lethanak at the Life Pools: 72059
+Talked to Lethanak at the Life Pools: 72059
 
--- unlocked dragon customization: 68797
+unlocked dragon customization: 68797
+
+Herbalism: looted Dreambloom Petal 71859
+
+--]]

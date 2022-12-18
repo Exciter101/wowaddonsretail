@@ -1,13 +1,17 @@
 local myname, ns = ...
 
-local MAPID = ns.WAKINGSHORES -- Waking Shores
-
---[[ mining walls
+--[[
+mining walls
 52344167 herb
 41079405 ?
+
+Promised to rescue Wu'De Prepfoot @ 35154722: 70709
+
+Tarjin's Tales @ 1616261
+Tale of the Outsider: unlocked 70767, listened 70768
 --]]
 
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.WAKINGSHORES, {
     -- https://www.wowhead.com/beta/achievement=16297/treasures-of-the-waking-shores
     [65804182] = { -- Replica Dragon Goblet
         criteria=54698,
@@ -29,6 +33,7 @@ ns.RegisterPoints(MAPID, {
         active={ns.conditions.QuestComplete(70527), ns.conditions.Item(199061), any=true}, -- A Guide To Rare Fish
         nearby={40924140, label="{spell:199061:Fragrant Plant Scent}"},
         note="Find {item:199061} in other treasures to make this appear, then use the Fragrant Plant nearby",
+        vignette=5397,
     },
     [61347079] = { -- Ruby Gem Cluster
         criteria=54713,
@@ -93,7 +98,7 @@ ns.RegisterPoints(MAPID, {
     minimap=true,
 })
 
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.WAKINGSHORES, {
     [43156738] = { -- FullSails Supply Chest
         quest=65965,
         label="FullSails Supply Chest",
@@ -128,7 +133,7 @@ local drink = ns.nodeMaker{
     minimap=true,
     requires=ns.conditions.OnQuest(65875), -- A Dragon's Day Off
 }
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.WAKINGSHORES, {
     [20163958] = { -- A Dragon's Day Off
         label="{quest:65875}",
         quest=65875,
@@ -154,7 +159,7 @@ ns.RegisterPoints(MAPID, {
 })
 
 -- Rares
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.WAKINGSHORES, {
     -- https://www.wowhead.com/beta/achievement=16676/adventurer-of-the-waking-shores
     [52535855] = { -- Gushgut the Beaksinker
         criteria=56033,
@@ -226,7 +231,7 @@ ns.RegisterPoints(MAPID, {
         loot={},
         minimap=true, -- just a neutral mob wandering, no vignette
     },
-    [52906590] = { -- Brundin the Dragonbane
+    [34607110] = { -- Brundin the Dragonbane
         criteria=56038,
         quest=73890, -- TODO: verify; got this for killing the mammoth when it was all that was left
         npc=192738,
@@ -458,7 +463,7 @@ ns.RegisterPoints(MAPID, {
     },
     [31825440] = { -- Death's Shadow
         criteria=56053,
-        quest=67027, -- check
+        quest=73074, -- 67027 vignette
         npc=190985,
         loot={
             200159, -- Blaze Ring
@@ -469,7 +474,7 @@ ns.RegisterPoints(MAPID, {
     },
     [23825742] = { -- Shas'ith
         criteria=56054,
-        quest=66903, -- check
+        quest=74077, -- 66903 vignette
         npc=189822,
         loot={
             {196976,quest=69176,}, -- Cliffside Wylderdrake: Head Mane
@@ -698,14 +703,14 @@ local drakewing = {
     },
     minimap=true,
 }
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.WAKINGSHORES, {
     [49806960] = {route={49806960, 49807220, 48007680, 47207700, r=1, g=1, b=0}},
     [52205060] = {route={52205060, 53605320, 55205820, r=1, g=1, b=0}},
     [69205480] = {route={69205480, 69405940, 67606020, 63605860, r=1, g=1, b=0}},
     [72824701] = {},
 }, drakewing)
 
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.WAKINGSHORES, {
     [46725013] = { -- Primal Scythid Queen
         quest=66074, -- 57559, 62396
         npc=184853,
@@ -896,10 +901,22 @@ ns.RegisterPoints(MAPID, {
             },
     },
     ]]
+    [55107740] = { -- Basrikron
+        quest=69930, -- 72056
+        worldquest=69930,
+        npc=193535,
+        loot={
+            200736, -- Belt of Living Earth
+            200739, -- Stony Cragwalkers
+            200740, -- Petrified Bracelets
+            200742, -- Hardened Shale Breastplate
+            200762, -- Earthspeaker's Brooch
+        },
+    },
 })
 
 -- Symbols of Hope
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.WAKINGSHORES, {
     [73193776] = { -- Wingrest Embassy
         criteria=55841,
         quest=72096,

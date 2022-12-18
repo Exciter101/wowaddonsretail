@@ -535,6 +535,15 @@ function ElvUI_EltreumUI:Shadows()
 						end
 					end)
 				end
+				if (arg == "Blizzard_PlayerChoice") or IsAddOnLoaded("Blizzard_PlayerChoice") then
+					_G.PlayerChoiceFrame:HookScript("OnShow", function()
+						if not _G.PlayerChoiceFrame.shadow then
+							_G.PlayerChoiceFrame:CreateBackdrop('Transparent')
+							_G.PlayerChoiceFrame:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+							if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.PlayerChoiceFrame.shadow) end
+						end
+					end)
+				end
 				if (arg == "Blizzard_VoidStorageUI") or IsAddOnLoaded("Blizzard_VoidStorageUI") then
 					_G.VoidStorageFrame:HookScript("OnShow", function()
 						if not _G.VoidStorageFrame.shadow then
@@ -608,6 +617,18 @@ function ElvUI_EltreumUI:Shadows()
 								_G.AuctionHouseFrame:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
 								if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.AuctionHouseFrame.shadow) end
 							end
+							if _G.AuctionHouseFrameBuyTab.backdrop and not _G.AuctionHouseFrameBuyTab.backdrop.shadow then
+								_G.AuctionHouseFrameBuyTab.backdrop:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+								if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.AuctionHouseFrameBuyTab.backdrop.shadow) end
+							end
+							if _G.AuctionHouseFrameSellTab.backdrop and not _G.AuctionHouseFrameSellTab.backdrop.shadow then
+								_G.AuctionHouseFrameSellTab.backdrop:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+								if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.AuctionHouseFrameSellTab.backdrop.shadow) end
+							end
+							if _G.AuctionHouseFrameAuctionsTab.backdrop and not _G.AuctionHouseFrameAuctionsTab.backdrop.shadow then
+								_G.AuctionHouseFrameAuctionsTab.backdrop:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+								if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.AuctionHouseFrameAuctionsTab.backdrop.shadow) end
+							end
 						end)
 					end
 				end
@@ -649,7 +670,6 @@ function ElvUI_EltreumUI:Shadows()
 			_G.SpellBookFrameTabButton1.backdrop,
 			_G.SpellBookFrameTabButton2.backdrop,
 			_G.SpellBookFrameTabButton3.backdrop,
-			_G.ItemTextFrame.backdrop,
 			_G.GossipFrame.backdrop,
 			_G.BNToastFrame,
 			_G.TimeAlertFrame,
@@ -689,7 +709,9 @@ function ElvUI_EltreumUI:Shadows()
 			_G.PVPMatchScoreboard,
 			_G.PVPMatchResults,
 			_G.MajorFactionRenownFrame,
+			_G.ItemTextFrame,
 			--_G.ImmersionFrame.TalkBox,
+			_G.ReadyStatus,
 		}
 		for _, frame in pairs(blizzardframes) do
 			if frame and not frame.shadow then
@@ -908,13 +930,21 @@ function ElvUI_EltreumUI:Shadows()
 				_G.PetStableFrame,
 				_G.TaxiFrame,
 				_G.TabardFrame,
-				--_G.ObjectiveTrackerFrame.HeaderMenu.MinimizeButton.backdrop,
+				_G.LossOfControlFrame,
 			}
 			for _, frame in pairs(retailframes) do
 				if frame and not frame.shadow then
 					frame:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
 					if EnhancedShadows then EnhancedShadows:RegisterShadow(frame.shadow) end
 				end
+			end
+
+			--loss of control frame icon
+			if _G.LossOfControlFrame and _G.LossOfControlFrame.Icon and _G.LossOfControlFrame.shadow then
+				_G.LossOfControlFrame.shadow:ClearAllPoints()
+				_G.LossOfControlFrame.shadow:SetPoint("TOPLEFT", _G.LossOfControlFrame.Icon, "TOPLEFT", -E.db.ElvUI_EltreumUI.skins.shadow.length, E.db.ElvUI_EltreumUI.skins.shadow.length)
+				_G.LossOfControlFrame.shadow:SetPoint("BOTTOMRIGHT", _G.LossOfControlFrame.Icon, "BOTTOMRIGHT", E.db.ElvUI_EltreumUI.skins.shadow.length, -E.db.ElvUI_EltreumUI.skins.shadow.length)
+				if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.LossOfControlFrame.shadow) end
 			end
 
 			--main minimize button easier here
@@ -924,6 +954,16 @@ function ElvUI_EltreumUI:Shadows()
 				_G.ObjectiveTrackerFrame.HeaderMenu.MinimizeButton.shadow:SetPoint("TOPLEFT", _G.ObjectiveTrackerFrame.HeaderMenu.MinimizeButton.tex, "TOPLEFT", -2,2)
 				_G.ObjectiveTrackerFrame.HeaderMenu.MinimizeButton.shadow:SetPoint("BOTTOMRIGHT", _G.ObjectiveTrackerFrame.HeaderMenu.MinimizeButton.tex, "BOTTOMRIGHT", 2,-2)
 				--if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.ObjectiveTrackerFrame.HeaderMenu.MinimizeButton.shadow) end
+			end
+
+			if E.db.ElvUI_EltreumUI.skins.quests and E.private.skins.blizzard.objectiveTracker and E.private.skins.blizzard.enable then
+				if _G.ObjectiveTrackerBlocksFrame and _G.ObjectiveTrackerBlocksFrame.ProfessionHeader and _G.ObjectiveTrackerBlocksFrame.ProfessionHeader.MinimizeButton and not _G.ObjectiveTrackerBlocksFrame.ProfessionHeader.MinimizeButton.shadow then
+					_G.ObjectiveTrackerBlocksFrame.ProfessionHeader.MinimizeButton:CreateShadow()
+					_G.ObjectiveTrackerBlocksFrame.ProfessionHeader.MinimizeButton.shadow:ClearAllPoints()
+					_G.ObjectiveTrackerBlocksFrame.ProfessionHeader.MinimizeButton.shadow:SetPoint("TOPLEFT", _G.ObjectiveTrackerBlocksFrame.ProfessionHeader.MinimizeButton.tex, "TOPLEFT", -2,2)
+					_G.ObjectiveTrackerBlocksFrame.ProfessionHeader.MinimizeButton.shadow:SetPoint("BOTTOMRIGHT", _G.ObjectiveTrackerBlocksFrame.ProfessionHeader.MinimizeButton.tex, "BOTTOMRIGHT", 2,-2)
+					--if EnhancedShadows then EnhancedShadows:RegisterShadow(_G.ObjectiveTrackerFrame.ProfessionHeader.MinimizeButton.shadow) end
+				end
 			end
 
 			if E.private.actionbar.enable and E.db.ElvUI_EltreumUI.skins.shadow.actionbars then
@@ -978,6 +1018,7 @@ function ElvUI_EltreumUI:Shadows()
 				_G.PetStableFrame.backdrop,
 				_G.TaxiFrame.backdrop,
 				_G.TabardFrame.backdrop,
+				_G.ItemTextFrame.backdrop,
 			}
 			for _, frame in pairs(classicframes) do
 				if frame and not frame.shadow then
@@ -1578,6 +1619,29 @@ function ElvUI_EltreumUI:Shadows()
 			for i = 1, 8 do
 				local tankmembers = {_G["ElvUF_TankUnitButton"..i]}
 				for _, frame in pairs(tankmembers) do
+					if not frame.shadow then
+						frame:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+						if E.db.ElvUI_EltreumUI.unitframes.infopanelontop and E.db.ElvUI_EltreumUI.unitframes.infopanelontopallframes then
+							frame.shadow:ClearAllPoints()
+							frame.shadow:SetPoint("BOTTOMLEFT", frame.Power,"BOTTOMLEFT", -E.db.ElvUI_EltreumUI.skins.shadow.length, -E.db.ElvUI_EltreumUI.skins.shadow.length)
+							frame.shadow:SetPoint("BOTTOMRIGHT", frame.Power,"BOTTOMRIGHT", E.db.ElvUI_EltreumUI.skins.shadow.length, -E.db.ElvUI_EltreumUI.skins.shadow.length)
+							frame.shadow:SetPoint("TOPLEFT", frame.InfoPanel,"TOPLEFT", -E.db.ElvUI_EltreumUI.skins.shadow.length, E.db.ElvUI_EltreumUI.skins.shadow.length)
+							frame.shadow:SetPoint("TOPRIGHT", frame.InfoPanel,"TOPRIGHT", E.db.ElvUI_EltreumUI.skins.shadow.length, E.db.ElvUI_EltreumUI.skins.shadow.length)
+						end
+						if EnhancedShadows then EnhancedShadows:RegisterShadow(frame.shadow) end
+					end
+					--[[for _, button in pairs(tankmembers) do
+						if not button.shadow then
+							button:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+						end
+					end]]
+				end
+			end
+
+			--tank targets
+			for i = 1, 8 do
+				local tanktargetmembers = {_G["ElvUF_TankUnitButton"..i.."Target"]}
+				for _, frame in pairs(tanktargetmembers) do
 					if not frame.shadow then
 						frame:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
 						if E.db.ElvUI_EltreumUI.unitframes.infopanelontop and E.db.ElvUI_EltreumUI.unitframes.infopanelontopallframes then

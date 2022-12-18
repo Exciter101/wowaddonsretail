@@ -1,12 +1,17 @@
 local myname, ns = ...
 
-local MAPID = ns.THALDRASZUS -- Thaldraszus
-
 --[[ mining walls
 40857586 ?
 --]]
 
-ns.RegisterPoints(MAPID, {
+-- PRIMALIST_TOMORROW = 2085
+-- AZMERLOTH = 2092
+-- GNOLL_WAR = 2090
+-- SHIFTING_SANDS = 2091
+-- PANDAREN_REVOLUTION = 2088
+-- BLACK_EMPIRE = 2089
+
+ns.RegisterPoints(ns.THALDRASZUS, {
     -- https://www.wowhead.com/beta/achievement=16301/treasures-of-thaldraszus
     [33957694] = { -- Cracked Hourglass
         criteria=54810,
@@ -65,7 +70,7 @@ ns.RegisterPoints(MAPID, {
 })
 
 -- Rares
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.THALDRASZUS, {
     -- https://www.wowhead.com/beta/achievement=16679/adventurer-of-thaldraszus
     [51534871] = { -- Razk'vex the Untamed
         criteria=56133,
@@ -334,8 +339,9 @@ ns.RegisterPoints(MAPID, {
             200445, -- Lucky Hunting Charm
         },
         note="In cave, talk to {npc:193206:Boomhooch the Lost} to summon",
-        path=47537168,
+        path={47537168, note="Upper level"},
         vignette=4958,
+        minimap=true,
     },
     [52806760] = { -- Craggravated Elemental
         criteria=56154,
@@ -420,7 +426,7 @@ ns.RegisterPoints(MAPID, {
 }, {
     achievement=16679, -- Adventurer
 })
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.THALDRASZUS, {
     [37538339] = { -- Private Shikzar
         quest=70986,
         npc=193127,
@@ -498,4 +504,19 @@ ns.RegisterPoints(MAPID, {
         },
         vignette=5437,
     },
+    --[[
+    [] = { -- Liskanoth
+        -- TODO: location, quest
+        quest=nil,
+        worldquest=nil,
+        npc=193533,
+        loot={
+                200743, -- Frozen Footwraps
+                200744, -- Glacial Bindings
+                200745, -- Horns of the Futurebane
+                200746, -- Icebound Girdle
+                200763, -- Frosted Scale Drape
+        },
+    },
+    --]]
 })

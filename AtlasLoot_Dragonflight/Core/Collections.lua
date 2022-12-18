@@ -1,4 +1,4 @@
--- $Id: Collections.lua 12 2022-12-05 14:19:53Z arithmandar $
+-- $Id: Collections.lua 18 2022-12-18 05:16:00Z arithmandar $
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
@@ -16,6 +16,7 @@ local _, private = ...
 local AtlasLoot = _G.AtlasLoot
 local data = private.data
 local AL = AtlasLoot.Locales
+local ALIL = AtlasLoot.IngameLocales
 
 local NORMAL_DIFF = data:AddDifficulty(AL["Normal"], "n", {
 	Item = {
@@ -96,7 +97,7 @@ data["MOUNTS"] = {
 	{
 		{
 			name = AL["Mounts"],
-			[NORMAL_DIFF] = {
+			[ALLIANCE_DIFF] = {
 				{  1, 192601, "mount" }, -- Loyal Magmammoth
 				{  2, 192761, "mount" }, -- Tamed Skitterfly
 				{  3, 192762, "mount" }, -- Azure Skitterfly
@@ -104,7 +105,7 @@ data["MOUNTS"] = {
 				{  5, 192775, "mount" }, -- Stormhide Salamanther
 				{  6, 192777, "mount" }, -- Magmashell
 				{  7, 192779 }, -- Scorchpath
-				{  8, 192784, "mount" }, -- Shellack
+				{  8, 192784, "ac16295" }, -- Shellack
 				{  9, 192786, [PRICE_EXTRA_ITTYPE] = "magmote:1000" }, -- Slumbering Worldsnail Shell
 				{ 10, 192791, "mount" }, -- Plainswalker Bearer
 --				{ 11, 192792 }, -- PH Thunder Lizard Green
@@ -117,14 +118,14 @@ data["MOUNTS"] = {
 --				{ 18, 192802 }, -- PH Primal Tallstrider Black
 --				{ 19, 192803 }, -- PH Primal Tallstrider Red
 				{ 13, 192804 }, -- Restless Hornstrider
-				{ 14, 192806, "mount" }, -- Raging Magmammoth
+				{ 14, 192806, "ac16355" }, -- Raging Magmammoth
 --				{ 22, 192807 }, -- PH Lava Mammoth Yellow
 				{ 15, 194034, "mount" }, -- Renewed Proto-Drake
 				{ 16, 194106, "mount" }, -- Highland Drake
 				{ 17, 194521, "mount" }, -- Cliffside Wylderdrake
 				{ 18, 194549, "mount" }, -- Windborne Velocidrake
 				{ 19, 194705, "mount" }, -- Highland Drake
-				{ 20, 198654, "mount" }, -- Otterworldly Ottuk Carrier
+				{ 20, 198654, "ac15834" }, -- Otterworldly Ottuk Carrier
 				{ 21, 198808, "mount" }, -- Guardian Vorquin
 				{ 22, 198809, "mount" }, -- Armored Vorquin Leystrider
 				{ 23, 198810, "mount" }, -- Swift Armored Vorquin
@@ -148,7 +149,10 @@ data["MOUNTS"] = {
 				{ 111, 201788, "mount" }, -- Vicious Sabertooth
 				{ 112, 201789, "mount" }, -- Vicious Sabertooth
 				{ 113, 202086, "mount" }, -- Crimson Gladiator's Drake
-
+			},
+			[HORDE_DIFF] = {
+				GetItemsFromDiff = ALLIANCE_DIFF,
+				{ 20, 198654, "ac15833" }, -- Otterworldly Ottuk Carrier
 			},
 		},
 	},
@@ -371,3 +375,191 @@ data["TOYS"] = {
 	},
 }
 
+data["TIERSETS"] = {
+	name = AL["Tier Sets"],
+	ContentType = COLLECTION_CONTENT,
+	items = {
+		{	-- EVOKER
+			name = "|c"..RAID_CLASS_COLORS["EVOKER"]["colorStr"]..ALIL["EVOKER"],
+			[NORMAL_DIFF] = {
+				{ 1, 200378 }, -- Hauberk of the Awakened
+				{ 2, 200379 }, -- Treads of the Awakened
+				{ 3, 200380 }, -- Gauntlets of the Awakened
+				{ 4, 200381 }, -- Crown of the Awakened
+				{ 5, 200382 }, -- Legguards of the Awakened
+				{ 6, 200383 }, -- Talons of the Awakened
+				{ 7, 200384 }, -- Chain of the Awakened
+				{ 8, 200385 }, -- Bracers of the Awakened
+				{ 9, 200386 }, -- Shroud of the Awakened
+			},
+		},
+		{ -- DEATHKNIGHT
+			name = ATLASLOOT_DEATHKNIGHT_COLOR..ALIL["DEATHKNIGHT"],
+			[NORMAL_DIFF] = {
+				{ 1, 200405 }, -- Breastplate of the Haunted Frostbrood
+				{ 2, 200406 }, -- Sabatons of the Haunted Frostbrood
+				{ 3, 200407 }, -- Grasps of the Haunted Frostbrood
+				{ 4, 200408 }, -- Maw of the Haunted Frostbrood 
+				{ 5, 200409 }, -- Greaves of the Haunted Frostbrood
+				{ 6, 200410 }, -- Jaws of the Haunted Frostbrood
+				{ 7, 200411 }, -- Girdle of the Haunted Frostbrood
+				{ 8, 200412 }, -- Vambraces of the Haunted Frostbrood
+				{ 9, 200413 }, -- Drape of the Haunted Frostbrood
+			},
+		},
+		{ -- DEMONHUNTER
+			name = ATLASLOOT_DEMONHUNTER_COLOR..ALIL["DEMONHUNTER"],
+			[NORMAL_DIFF] = {
+				{ 1, 200342 }, -- Skybound Avenger's Harness
+				{ 2, 200343 }, -- Skybound Avenger's Boots
+				{ 3, 200344 }, -- Skybound Avenger's Grips
+				{ 4, 200345 }, -- Skybound Avenger's Visor
+				{ 5, 200346 }, -- Skybound Avenger's Legguards
+				{ 6, 200347 }, -- Skybound Avenger's Ailerons
+				{ 7, 200348 }, -- Skybound Avenger's Waistwrap
+				{ 8, 200349 }, -- Skybound Avenger's Wristbands
+				{ 9, 200350 }, -- Skybound Avenger's Cape
+			},
+		},
+		{ -- DRUID
+			name = ATLASLOOT_DRUID_COLOR..ALIL["DRUID"],
+			[NORMAL_DIFF] = {
+				{ 1, 200351 }, -- Lost Landcaller's Robes
+				{ 2, 200352 }, -- Lost Landcaller's Moccasins
+				{ 3, 200353 }, -- Lost Landcaller's Claws
+				{ 4, 200354 }, -- Lost Landcaller's Antlers
+				{ 5, 200355 }, -- Lost Landcaller's Leggings
+				{ 6, 200356 }, -- Lost Landcaller's Mantle
+				{ 7, 200357 }, -- Lost Landcaller's Sash
+				{ 8, 200358 }, -- Lost Landcaller's Bindings
+				{ 9, 200359 }, -- Lost Landcaller's Laena
+			},
+		},
+		{ -- HUNTER
+			name = ATLASLOOT_HUNTER_COLOR..ALIL["HUNTER"],
+			[NORMAL_DIFF] = {
+				{ 1, 200387 }, -- Stormwing Harrier's Cuirass
+				{ 2, 200388 }, -- Stormwing Harrier's Sabatons
+				{ 3, 200389 }, -- Stormwing Harrier's Handguards
+				{ 4, 200390 }, -- Stormwing Harrier's Skullmask
+				{ 5, 200391 }, -- Stormwing Harrier's Greaves
+				{ 6, 200392 }, -- Stormwing Harrier's Pinions
+				{ 7, 200393 }, -- Stormwing Harrier's Belt
+				{ 8, 200394 }, -- Stormwing Harrier's Wristguards
+				{ 9, 200395 }, -- Stormwing Harrier's Plumage
+			},
+		},
+		{ -- MAGE
+			name = ATLASLOOT_MAGE_COLOR..ALIL["MAGE"],
+			[NORMAL_DIFF] = {
+				{ 1, 200315 }, -- Crystal Scholar's Tunic
+				{ 2, 200316 }, -- Crystal Scholar's Footwraps
+				{ 3, 200317 }, -- Crystal Scholar's Pageturners
+				{ 4, 200318 }, -- Crystal Scholar's Cowl
+				{ 5, 200319 }, -- Crystal Scholar's Britches
+				{ 6, 200320 }, -- Crystal Scholar's Beacons
+				{ 7, 200321 }, -- Crystal Scholar's Cinch
+				{ 8, 200322 }, -- Crystal Scholar's Cuffs
+				{ 9, 200323 }, -- Crystal Scholar's Cape
+			},
+		},
+		{ -- MONK
+			name = ATLASLOOT_MONK_COLOR..ALIL["MONK"],
+			[NORMAL_DIFF] = {
+				{ 1, 200360 }, -- Chestwrap of the Waking Fist
+				{ 2, 200361 }, -- Gaiters of the Waking Fist
+				{ 3, 200362 }, -- Palms of the Waking Fist
+				{ 4, 200363 }, -- Gaze of the Waking Fist
+				{ 5, 200364 }, -- Legguards of the Waking Fist
+				{ 6, 200365 }, -- Mantle of the Waking Fist
+				{ 7, 200366 }, -- Girdle of the Waking Fist
+				{ 8, 200367 }, -- Cuffs of the Waking Fist
+				{ 9, 200368 }, -- Drape of the Waking Fist
+			},
+		},
+		{ -- PALADIN
+			name = ATLASLOOT_PALADIN_COLOR..ALIL["PALADIN"],
+			[NORMAL_DIFF] = {
+				{ 1, 200414 }, -- Virtuous Silver Breastplate
+				{ 2, 200415 }, -- Virtuous Silver Greatboots
+				{ 3, 200416 }, -- Virtuous Silver Gauntlets
+				{ 4, 200417 }, -- Virtuous Silver Heaume
+				{ 5, 200418 }, -- Virtuous Silver Cuisses
+				{ 6, 200419 }, -- Virtuous Silver Pauldrons
+				{ 7, 200420 }, -- Virtuous Silver Faulds
+				{ 8, 200421 }, -- Virtuous Silver Bracers
+				{ 9, 200422 }, -- Virtuous Silver Cloak
+			},
+		},
+		{ -- PRIEST
+			name = ATLASLOOT_PRIEST_COLOR..ALIL["PRIEST"],
+			[NORMAL_DIFF] = {
+				{ 1, 200324 }, -- Draconic Hierophant's Vestment
+				{ 2, 200325 }, -- Draconic Hierophant's Slippers
+				{ 3, 200326 }, -- Draconic Hierophant's Grips
+				{ 4, 200327 }, -- Draconic Hierophant's Archcowl
+				{ 5, 200328 }, -- Draconic Hierophant's Britches
+				{ 6, 200329 }, -- Draconic Hierophant's Wisdom
+				{ 7, 200330 }, -- Draconic Hierophant's Sash
+				{ 8, 200331 }, -- Draconic Hierophant's Wristbands
+				{ 9, 200332 }, -- Draconic Hierophant's Drape
+			},
+		},
+		{ -- ROGUE
+			name = ATLASLOOT_ROGUE_COLOR..ALIL["ROGUE"],
+			[NORMAL_DIFF] = {
+				{ 1, 200369 }, -- Vault Delver's Brigandine
+				{ 2, 200370 }, -- Vault Delver's Shinguards
+				{ 3, 200371 }, -- Vault Delver's Lockbreakers
+				{ 4, 200372 }, -- Vault Delver's Vizard
+				{ 5, 200373 }, -- Vault Delver's Pantaloons
+				{ 6, 200374 }, -- Vault Delver's Epaulets
+				{ 7, 200375 }, -- Vault Delver's Utility Belt
+				{ 8, 200376 }, -- Vault Delver's Sweatbands
+				{ 9, 200377 }, -- Vault Delver's Camouflage
+			},
+		},
+		{ -- SHAMAN
+			name = ATLASLOOT_SHAMAN_COLOR..ALIL["SHAMAN"],
+			[NORMAL_DIFF] = {
+				{ 1, 200396 }, -- Robe of Infused Earth
+				{ 2, 200397 }, -- Treads of Infused Earth
+				{ 3, 200398 }, -- Gauntlets of Infused Earth
+				{ 4, 200399 }, -- Faceguard of Infused Earth
+				{ 5, 200400 }, -- Leggings of Infused Earth
+				{ 6, 200401 }, -- Calderas of Infused Earth
+				{ 7, 200402 }, -- Faulds of Infused Earth
+				{ 8, 200403 }, -- Cuffs of Infused Earth
+				{ 9, 200404 }, -- Greatcloak of Infused Earth
+			},
+		},
+		{ -- WARLOCK
+			name = ATLASLOOT_WARLOCK_COLOR..ALIL["WARLOCK"],
+			[NORMAL_DIFF] = {
+				{ 1, 200333 }, -- Scalesworn Cultist's Frock
+				{ 2, 200334 }, -- Scalesworn Cultist's Sandals
+				{ 3, 200335 }, -- Scalesworn Cultist's Gloves
+				{ 4, 200336 }, -- Scalesworn Cultist's Scorn
+				{ 5, 200337 }, -- Scalesworn Cultist's Culottes
+				{ 6, 200338 }, -- Scalesworn Cultist's Effigy
+				{ 7, 200339 }, -- Scalesworn Cultist's Girdle
+				{ 8, 200340 }, -- Scalesworn Cultist's Wristwraps
+				{ 9, 200341 }, -- Scalesworn Cultist's Runedrape
+			},
+		},
+		{ -- WARRIOR
+			name = ATLASLOOT_WARRIOR_COLOR..ALIL["WARRIOR"],
+			[NORMAL_DIFF] = {
+				{ 1, 200423 }, -- Husk of the Walking Mountain
+				{ 2, 200424 }, -- Boots of the Walking Mountain
+				{ 3, 200425 }, -- Gauntlets of the Walking Mountain
+				{ 4, 200426 }, -- Casque of the Walking Mountain
+				{ 5, 200427 }, -- Poleyns of the Walking Mountain
+				{ 6, 200428 }, -- Peaks of the Walking Mountain
+				{ 7, 200429 }, -- Core of the Walking Mountain
+				{ 8, 200430 }, -- Bracers of the Walking Mountain
+				{ 9, 200431 }, -- Drape of the Walking Mountain
+			},
+		},
+	},
+}

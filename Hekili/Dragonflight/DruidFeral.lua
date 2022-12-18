@@ -885,8 +885,8 @@ spec:RegisterCombatLogEvent( function( _, subtype, _,  sourceGUID, sourceName, _
 
     if sourceGUID == state.GUID then
         if subtype == "SPELL_AURA_REMOVED" then
-            -- Track Prowl and Shadowmeld dropping, give a 0.2s window for the Rake snapshot.
-            if spellID == 58984 or spellID == 5215 or spellID == 1102547 then
+            -- Track Prowl and Shadowmeld and Sudden Ambush dropping, give a 0.2s window for the Rake snapshot.
+            if spellID == 58984 or spellID == 5215 or spellID == 1102547 or spellID == 391974 or spellID == 340698 then
                 stealth_dropped = GetTime()
             end
         elseif ( subtype == "SPELL_AURA_APPLIED" or subtype == "SPELL_AURA_REFRESH" or subtype == "SPELL_AURA_APPLIED_DOSE" ) then

@@ -1,13 +1,11 @@
 local myname, ns = ...
 
-local MAPID = ns.AZURESPAN -- Azure Span
-
 -- heart of the deck (66846), in case it becomes relevant later...
 -- 66992 dragon
 -- 66983 life-giver
 -- 66995 adaptive
 
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.AZURESPAN, {
     -- https://www.wowhead.com/beta/achievement=16300/treasures-of-the-azure-span
     [45135939] = { -- Forgotten Jewel Box
         criteria=54804,
@@ -61,7 +59,7 @@ ns.RegisterPoints(MAPID, {
     minimap=true,
 })
 
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.AZURESPAN, {
     [45635482] = { -- for The Great Shellkhan in Thaldraszus
         achievement=16679, criteria=56155,
         quest=72121,
@@ -87,7 +85,7 @@ ns.RegisterPoints(MAPID, {
         related={
             [23074372] = {label="{item:201420}", loot={201420}, note="Kill gnolls in the Inn", active=false,}, -- Gnolan's House Special
             [34824533] = {label="{item:201421}", loot={201421}, note="Kill Darktooth gnolls", active=false,}, -- Tuskarr Jerky
-            [58234353] = {label="{item:201422}", loot={201422}, note="Kill gnolls; you may need to have done {quest:66730} or {quest:66270} before this will drop", active=false,}, -- Flash Frozen Meat
+            [57704280] = {label="{item:201422}", loot={201422}, note="Kill gnolls; you may need to have done {quest:66730} or {quest:66270} before this will drop", active=false,}, -- Flash Frozen Meat
         },
         texture=ns.atlas_texture("stablemaster", {r=0, g=0.8, b=1, scale=1.2}),
         minimap=true,
@@ -98,10 +96,19 @@ ns.RegisterPoints(MAPID, {
         path={66433179, note="Blink through the blocked cave entrance with a duck above it"},
         requires=ns.conditions.Class("MAGE"),
     },
+    [67601860] = { -- Primal Bear Cub
+        quest=nil,
+        label="{npc:196768:Primal Bear Cub}",
+        loot={{201838, pet=3359}}, -- Snowclaw Cub
+        -- A Dryadic Remedy: 67606 + 69935
+        hide_before={ns.conditions.QuestComplete(69935)},
+        active={ns.conditions.Item(197744, 3), ns.conditions.Item(198356)}, -- Hornswog Hunk + Honey Snack
+        note="Complete {quest:67606}, buy the {item:198356} from {npc:193310:Dealer Vexil} in Waking Shores; you must have the Honorary Dryad title active",
+    }
 })
 
 -- Rares
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.AZURESPAN, {
     -- https://www.wowhead.com/beta/achievement=16678/adventurer-of-the-azure-span
     [59405520] = { -- Wilrive
         criteria=56097,
@@ -342,9 +349,9 @@ ns.RegisterPoints(MAPID, {
         note="Use crystals in the tower to the North and bring the energies to {npc:193782}",
         nearby={70402370, label="{spell:382076}"},
     },
-    [49463607] = { -- Fisherman Tinnak
+    [49343819] = { -- Fisherman Tinnak
         criteria=56115,
-        quest=74064, -- 70792
+        quest=72730, -- 72254 (had 70792+74064 before)
         npc=193691,
         loot={
             {196985,quest=69185,}, -- Cliffside Wylderdrake: Horned Jaw
@@ -362,11 +369,12 @@ ns.RegisterPoints(MAPID, {
             200563, -- Primal Ritual Shell
         },
         hide_before=ns.conditions.MajorFaction(ns.FACTION_ISKAARA, 7),
+        minimap=true,
         vignette=5475,
         related={
-            [50523672] = {label="{item:381654:Broken Fishing Pole}", note="Click this first!",},
-            [49973821] = {label="{item:385046:Torn Fishing Net}", note="Click this second!",},
-            [49223842] = {label="{item:385047:Old Harpoon}", note="Click this Third! {npc:193691: Fisherman Tinnak's Ghost} spawns closely nearby.",},
+            [50523672] = {label="{item:381654:Broken Fishing Pole}", note="Click this first!", minimap=true,},
+            [49973821] = {label="{item:385046:Torn Fishing Net}", note="Click this second!", minimap=true,},
+            [49223842] = {label="{item:385047:Old Harpoon}", note="Click this third! {npc:193691: Fisherman Tinnak's Ghost} spawns closely nearby", minimap=true,},
         },
     },
     [13604860] = { -- Bisquius
@@ -529,7 +537,7 @@ ns.RegisterPoints(MAPID, {
     --[[
     [] = { -- Moth'go Deeploom
         criteria=56119,
-        quest=nil,
+        quest=74068,
         npc=193735,
         loot={
             {196976,quest=69176,}, -- Cliffside Wylderdrake: Head Mane
@@ -587,7 +595,7 @@ ns.RegisterPoints(MAPID, {
 }, {
     achievement=16678, -- Adventurer
 })
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.AZURESPAN, {
     [23443327] = { -- Cascade
         npc=186962,
         quest=72836, -- 72358?
@@ -661,11 +669,25 @@ ns.RegisterPoints(MAPID, {
         note="Kill the gnolls to summon",
         vignette=5158, -- Thieving Gnolls (also 5484 Sharpfang)
     },
+    --[[
+    [] = { -- Bazual
+        quest=nil,
+        worldquest=nil,
+        npc=193532,
+        loot={
+                200654, -- Magmatic Vestments
+                200660, -- Cinderfang Wrap
+                200661, -- Basalt Brood Stompers
+                200663, -- Shackles of the Dreaded Flame
+                200761, -- Smoldering Sulfuron Signet
+        },
+    },
+    --]]
 })
 
 -- Ley Line in the Span
 -- https://www.wowhead.com/achievement=16638/ley-line-in-the-span
-ns.RegisterPoints(MAPID, {
+ns.RegisterPoints(ns.AZURESPAN, {
     [43786190] = {criteria=55972, quest=72138,}, -- Azure Archives
     [26303631] = {criteria=55973, quest=72139,}, -- Ancient Outlook
     [65402835] = {criteria=55976, quest=72140,}, -- Slyvern Plunge
