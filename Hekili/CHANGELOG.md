@@ -1,8 +1,9 @@
 # Hekili
 
-## [v10.0.2-2.0.7c](https://github.com/Hekili/hekili/tree/v10.0.2-2.0.7c) (2022-12-17)
-[Full Changelog](https://github.com/Hekili/hekili/compare/v10.0.2-2.0.7b...v10.0.2-2.0.7c) [Previous Releases](https://github.com/Hekili/hekili/releases)
+## [v10.0.2-2.0.8a](https://github.com/Hekili/hekili/tree/v10.0.2-2.0.8a) (2022-12-19)
+[Full Changelog](https://github.com/Hekili/hekili/compare/v10.0.2-2.0.8...v10.0.2-2.0.8a) [Previous Releases](https://github.com/Hekili/hekili/releases)
 
-- Enhancement: Treat Windfury Totem as expired if not buffed by it.  
-- Unholy priority update.  
-- Protection Warrior priority tweaks; add details to spec settings.  
+- Demonology: Tweak Demonic Strength/Guillotine interaction.  
+- Windwalker:  Allow ToD to be usable despite breaking Hit Combo.  
+- Vengeance:  Adjust Sigil of Flame ID with Precise Sigils.  
+- Vengeance update.  
