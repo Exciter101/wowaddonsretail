@@ -1,5 +1,5 @@
-## Changed in v35
+## Changed in v36
 
-* Add some recipes that are findable in the open world
-* Assorted data improvements, mostly around Dragonbane Keep and in the Azure Span
+* More loot data obtained
+* Some position fixes for rares in Thaldraszus
 

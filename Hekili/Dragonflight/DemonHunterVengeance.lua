@@ -631,6 +631,34 @@ spec:RegisterHook( "advance_end", function( time )
 end )
 
 
+-- Phases from 20221218 priority and forward.
+spec:RegisterPhase( "the_hunt_ramp_in_progress",
+    function() return talent.the_hunt.enabled and cooldown.the_hunt.remains < 5 and not dot.fiery_brand.ticking end,
+    function() return cooldown.the_hunt.remains >= 5 end,
+"reset_precast", "advance_end", "runHandler" )
+
+spec:RegisterPhase( "elysian_decree_ramp_in_progress",
+    function() return talent.elysian_decree.enabled and cooldown.elysian_decree.remains < 5 and not dot.fiery_brand.ticking end,
+    function() return cooldown.elysian_decree.remains >= 5 end,
+"reset_precast", "advance_end", "runHandler" )
+
+spec:RegisterPhase( "soul_carver_ramp_in_progress",
+    function() return talent.soul_carver.enabled and cooldown.soul_carver.remains<5 and not talent.fiery_demise.enabled and not dot.fiery_brand.ticking end,
+    function() return cooldown.soul_carver.remains >= 5 end,
+"reset_precast", "advance_end", "runHandler" )
+
+spec:RegisterPhase( "fiery_demise_with_soul_carver_in_progress",
+    -- talent.fiery_demise.enabled & talent.soul_carver.enabled & cooldown.soul_carver.up & cooldown.fiery_brand.up & cooldown.immolation_aura.up & cooldown.fel_devastation.remains < 10
+    function() return talent.fiery_demise.enabled and talent.soul_carver.enabled and cooldown.soul_carver.remains < gcd.max and cooldown.fiery_brand.remains < gcd.max and cooldown.immolation_aura.remains < gcd.max and cooldown.fel_devastation.remains < 10 end,
+    function() return cooldown.soul_carver.remains >= gcd.max and cooldown.fiery_brand.remains >= gcd.max and cooldown.immolation_aura.remains >= gcd.max and cooldown.fel_devastation.remains >= gcd.max end,
+"reset_precast", "advance_end", "runHandler" )
+
+-- TODO: Darkglare Boon High Roll not implemented; not sure I see the point yet.
+spec:RegisterPhase( "fiery_demise_without_soul_carver_in_progress",
+    function() return talent.fiery_demise.enabled and ( talent.soul_carver.enabled and cooldown.soul_carver.remains >= gcd.max or not talent.soul_carver.enabled ) and cooldown.fiery_brand.remains < gcd.max and cooldown.immolation_aura.remains < gcd.max and cooldown.fel_devastation.remains < 10 end,
+    function() return cooldown.fiery_brand.remains >= gcd.max and cooldown.immolation_aura.remains >= gcd.max and cooldown.fel_devastation.remains >= 10 end,
+"reset_precast", "advance_end", "runHandler" )
+
 -- Gear Sets
 spec:RegisterGear( "tier29", 200345, 200347, 200342, 200344, 200346 )
 spec:RegisterAura( "decrepit_souls", {
@@ -1407,4 +1435,22 @@ spec:RegisterSetting( "infernal_charges", 1, {
 } )
 
 
-spec:RegisterPack( "Vengeance", 20221218, [[Hekili:TRv3UTnow4NLCJRm2chlROKSdS9f7CvdwKB8G9sjtlrzle9JhjQ0gad9SphsklrsrkzNjDqBXwuKytE435WZ)KmE2E)H3Mqeb798I5lwyVW(XzWpV35oVnK3oI92Cef8cAp8Hmuk8Z)hoBpgLfWM5TKCuifHY8Qc6qhiKJL)2T3UpMCOA3SG80BlJtRsqK48SGcueH(9GB92SRkoH8LmVDAz)caYJ4aVNDF0gqnomeZjfxg4TbyDrEuCcWquaf5Y)1QBdJllQosQFQBOa4xvPy)u0(4aXjIZIWfzOe)ssr8l4phhTIedesYbA)MFWbuXEC5Y9bHZGVpHq)kzgWbcDNV2EUiyH408m)YJaqLmKqzVeNTFI1UQOOzIZolm)RzNo1a)A7PIWefJlEZFxbklKIYneucoJmJpmGsCjEYnH5NhHr4msCaLxI4SRk5fF83if8HeN6yU6ivLy)yco9ZLj5KvGYi7fmXEukwisrrvMp)B(jGg6Zu)KvfO0Jh4Ad22GCa7FOc(aodTlbhojippHQo6MPaNIIZkx6ErBtJCfhkWwCYBLXOmq)fuGX9zUY8FqIqzGGiaHgj(bOIxXf95V4KcmxJTVDTVBjlsuXOfATIv1XUXfzR44XPP58yCFuvbsEn4eGpVIGyhkbTBt75NozyRmrJqkU9sXeuAEXXd5LXSqUByHAsdtLblt6QtN0PILdhLfBkxSoVi6(YpoZpkb0RLsldc0lIj(7Yt3XwILEj7m3PbPvf4jmfo8T9PWWLRx5m90j1XUBcLnVI9XzG42l)b3MLGrVYYNzD29RtGATZY4SCL9eizBsIppphf4tNSuiAXellfPUfVOQI3wVY1LUSBgMOhMtjYG5Aeg4CjmWD(u6)eiuJgy6O86hPnJuLl5inrlTuLc66HAprXbXK1RSNpXAOCoRTDLuzdcLAyYUeuiZLtMW7KksEEdoMRPLSx)YvoQ(MqGH4aGJPmFDMpM1FIPOsLnGRbRlvlQHPYrJX7Jt8ZJ45i6RDCK0oLhWOcXbihkY)Q)(eeecw)u7mZyLvvuNgbUL6Rqy6wdvKUqsLZ5nEER(qCUjanGRKwt1)WUFwrnjVGXcXmtjSuOXZ3Mb51dEz9CvLloCeT7elDaTCLBxnfQiguuvEyIcPuhNPA431AF4l6YmqCA)7zHyyi3QKoM8pRLQm4QIdyKFTkA(IUmfnN2)EkAogD5Nno7)iA5OrJfgTx0gmuoAJP2(AQmoxD59BftfHZnvUYrzTAQxEzY8OwsdIamLksD2Z(i1xIfv49lgAKRU97MUvP4Y0SlDvvS9dhmRxnbX5GJVZIQybrVnGQSeMR9sdU3BZxrfzGvS0BZFCaxVno9yEbPEBuEr92pb(SOQeYNQ3wG)ZQ4cCy92Y8uGoufjpfrOdahlpdow(S6N(VXzWuU)w92Fppd4fB6pPP3iaqsU(Po3SbqIL93M2IQTZ3hyV77dSgucYNasby5jnc99gK4g)FvPvPd5EW943hfWhnS1pPX)Kxd96CpT1lyTnFOivTJRtK(ctAOWCpWtwCx9w6nhqzN3g2NOxZhVke8PNz3BydsE)hVnbqYsCrmYBJyrI6TRxvV1z(57PdMTXm6rGG33jgYPTOi58ErIM9IcWDgbqoVghI7Q3oHRN6QPcZa2ebO7QFqzGlLbTZ1vrqKRaz3BuoSOUeYIYsquSnkk1BNwV90jWk3F(L1Bx0oVUgbyqmxvIzDDaIjH7jGdVEpbM4AzIP0DKlxQUbCFn45YWqtR1Wo6)7Oj5Oj3Z(pR(AhlWbWUdrAD3otkvRs8XLLy2dsCEZSJVUO3R)j47zOjXR1)YmsmgrLan5i7OEyFodDrXTwocak3a9W(HJUZvAPU1P7k9Qnk8msm6FB2RvNlRJ(KUaopCD4mUi3K3AqBIRGvhIlCnuy8Xl24iBXnJE)mz)7FW2)TziTNlgHl33Vy(RMIqhU(y8Rni(x8IeNV7TFwlp0C4UEfhAEqyLT1crsKEGyfcnBf18uXS9rZZfZudkpzmxpiSluEb6HT6nVO85EN0)UYCnyR80O3fuhcly4C2DTEP7OmxEfs5Yy3lQ4vEKAfv)dIKYF0AfkuZq26l38c2GBssor47AY4PSMfkRzrxYidgfMks9HTzQhJpUnpT3fRcvEhx(jX85)HyWt(rLrZz)AKr9VcUSKQ)LW)GLxmZtW2CQwHw(vEZCzPvKaTI6hHd8y7g4KW0DZajkgrim8E7YZjkIQZ1)D3vwR(3ENPQSNRVGTy)PdSbUm1ue3GBo12nnPZuFlUZ56gQbA5JjQxllKauIfmXYCkqlrK1FFwYN2SFh22dwa1AO9THR8InNUoaCAlGED9hiTfuArW2CdYwDhnV)JRQLzDThi92TxA3bCxbRHvmDNLY1veYBU0L9WCXLnOx5flkoVprXLlkI)VheA19tVAj8xnLLPgfF228PQSgVEr)o3TBVlRHRkrDXDnAfVsgoDWJHBB(qD9H7U5sPVy)vCWAq2ClpJh4B4OboMJ9zzTKNOnOx)f0CnXdTEGM9q1OzChX3M3U9icOP7I89Ew1(NZCH0zz4NEu5Woox6zPHY2OkYHCabWZ63zJ49xp]] )
+spec:RegisterSetting( "frailty_stacks", 1, {
+    name = "Require |T1097742:0|t Frailty Stacks",
+    desc = "If set above zero, the default priority will not allow certain abilities to be used unless you have at least this many stacks of |T1097742:0|t Frailty on your target.\n\n"
+        .. "This is an experimental setting.  Requiring too many stacks may result in delays to using your major cooldowns and cause a loss of DPS.",
+    type = "range",
+    min = 0,
+    max = 6,
+    step = 1,
+    width = 1.5
+} )
+
+spec:RegisterStateExpr( "frailty_threshold_met", function()
+    if not talent.soulcrush.enabled then return debuff.frailty.up end
+    return debuff.frailty.stack >= settings.frailty_stacks
+end )
+
+
+
+spec:RegisterPack( "Vengeance", 20221219.5, [[Hekili:TR1sVjUUx8plSbb6FfLantN(xqxCVRMzXSHRUltIjyaRMhihN2PsO8z)ESdPy7yNhuA19X8qZ0y7Z7FNJp2E8C8(dVvBqmS3pMnD2mNzopmX5b3Vo9bVvSxpG9wDaf(eAh8djOy4V)tCYomkjumZRrPOnCoKLMt5dTNXoK9)V92De2(81tctJVnJeNhHyK0KqkAlJ)D4TERwNtIyFlXBTzXFpWZd4qVF4(vhGTKnBWLRfNf6TcKnnDljcKikKZ6S)3YB3qYO5hyfF)8qHW)KhJ9Jr7iHYtqs2IPjOi)mgL8e(gY2LmcSqwkS2F6hUhr3HZwSlCZe47Hm(NSjGeyCt)rNPYmBdoonXp7aWOmbNqjprs2nCW68TBNip7K8dYeULGPV6VMIs2WPBadfHtytkhgOJKHNGtqRJWBgoytA1mccMWiHCPiZV15rp5J)jJwoK8uhs1hjpd7ty44BYIszlb3qYtyMtRRyMI)fff5x(PFe4CUHJrwY2J93NNW8PO4d3W9WHSLoCl8zeLWnNjklXNK4dXZDuCww7Chh9AgbLa(Nqkg3GmmSW(jjauh5hIOpJP(Vaa60CMVCSPbzltA)fSIqEHKSj9fHc4lXwZYvJsvsUokb3l0F9qJkBQsmMHItPh2NMre5sL5qkddjrDkByloc0GNrqolFi5mmWws4QW2iWsZQYXKjgYxPeM)6041CchnYSEuLXYZ4YPNZwfMkm6Uyy6ShxoF8XJ6JD3qU4Eg7Jta)eo7rNXFKAqDP1FvseaJWONfvmhDs2sAQfXVyPJjXpsDSfZgoAKn7zBo91hx66YjBqZl6(P8fz2D1MaM3fb4oDm)xsl0GlyCRY6VtgJYMJXXPL7y7JYPi5qTXTM48b2MBljKWECPZ0HJcttJ45yY1bNqXXisce5DvCDDILJ1sSxhH2iWGQl8oL9LRm42WQJ0bR1ZvoESguvvYZN2gEyOTmyntW1s8M7pniu1euYosKF62YcB19pZv8pz7XiQ8aS9uOi)UieyPfF)Tzu3TwZXQlGHdGzHw7E1h4goBpae8bdXoZ6HoxNwUfOtYILp0ejQLvBVcydSsRC4LvZdgRNESQVLdrgA259gOmZY(eUSWbBbTHxMcD5bulm8tkSAw6QJkhI7u7OV3GExfsFGbDMNxkWOZc4YHkDweFsGN(PpI1jJL6YjmAfk1wp4DwkAhd2cFRAQzA)fq9tcOlJtnNa793BUBODPRLNPvaRfZaMQ)Y68x1L1L4xKbp17WYQM7E8O1GJRadSWT)qG61RSJaUCHO6cvkJDbWwBTJ1XtM)XL)Aqqx9u46Y4AMNvN7FOPAnhz(8tomOpx3sKg8VFijGgKtJ5GERGXZawkDFZZ9w9cIMa4MmVvFl(qkLH3ueCFrqP0lc4xkw2KIV7Ts8t8l8wPNCyGFiUi9th1Z738wfcOjmLG8wjRcfbpUSiaW)bdlcgueyCx(Ql1gi9ekXJb6BVeWzEO645CAEh50cGtpiZjE)zCgCNvgOcLlvM7egRAloWmfbosS(C2hxaUwfWOIaDzWvthRYOiyCrWXJfbJQp)IIGzVnFlHcPg74A4x4Ay1CvGbzDMb)Ef4kr5rS3WhveC6PkuxFzeUAjkpDH2cThan8igcZ80dzi8sApMrPBskmR92inhWp9whv4ztV4HKzlnrZH5bC1061dvjnlL)LYFopzTGM2JLO5IVxEPLpEI2k(QMY)gy40lPaqMOuM03anp0mnZ0OzgNgi0yZl1(ZPamuC98C83zOL299xwwZV899ulSXj0ELTU(ul9xlmWqHUyViyNE6L(RiD6CwcvZEsz)FDM(RNDPLsHAApv(IE8MRNMQjeHY2ybcJ3MANlnOqOqyFPdvJm)WrsfCuBJsW37BAZSrnzhwU4EXCM2PD(BBM1V9HbYSUvSJEDUpu1VTnXVI2LETyf7Y(14Bu7FVTGmum3OMDz8MZkTyxxzwoORKD)uzYSh36JQm)Yuf3svr(p1yHrN)4ERH)BZzzTL0z2Buyu7Ttv)qeotRmWMEoVsiUR1OypfOK5PDEFHj2NtzD3uL6YINmuWe7nr0EMVLZF0uPlUlXAAV5dh2NmI3WG2XOg8nUTGU5H7wvWXwoPAxpGz7hvD2DY9HxEauTdn5QEsSZxzwTtJDGIdbxhQ(5X48L5dTZGf)hBRIU1L01PERU4RaO1ov62LayNt6fHMA98r2JBwURMtG)g7)XEdNTA5gQayVJq7Tgyv5flXAhc27h0yfa96YV1fR9()SxjPrv2TmXTXyIRuuFbFleZ4j7n31Ce3o3RNdBVrlTRBsRyG2zbM2588UEcJ)BLY2LSRl5I9UWSRUNi)5NvypZ)Duh0EzGRxQM905EKQX66TECX5p)d4wVl96TCLW)6(WnFF4Y4j9IZMUzVFbK(fqYiqsfSOJL4mjhkobGmyZSFxmI3F9d]] )
