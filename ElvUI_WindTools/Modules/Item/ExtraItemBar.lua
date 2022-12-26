@@ -1,5 +1,6 @@
 local W, F, E, L = unpack(select(2, ...))
 local EB = W:NewModule("ExtraItemsBar", "AceEvent-3.0")
+local async = W.Utilities.Async
 local S = W.Modules.Skins
 local AB = E.ActionBars
 
@@ -30,7 +31,6 @@ local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
 local IsItemInRange = IsItemInRange
 local IsUsableItem = IsUsableItem
-local Item = Item
 local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
 
@@ -898,7 +898,8 @@ local openableItems = {
     201756, -- 鼓鼓的零錢包
     201817, -- 暮光儲藏箱
     201818, -- 暮光保險箱
-    202142 -- 龍禍要塞保險箱
+    202142, -- 龍禍要塞保險箱
+    202171 -- 龍族錢包
 }
 
 -- 更新任务物品列表
@@ -993,6 +994,7 @@ function EB:CreateButton(name, barDB)
     button:StyleButton()
 
     S:CreateShadowModule(button)
+    S:BindShadowColorWithBorder(button.shadow, button)
 
     return button
 end
@@ -1010,18 +1012,18 @@ function EB:SetUpButton(button, questItemData, slotID)
         button.questLogIndex = questItemData.questLogIndex
         button:SetBackdropBorderColor(0, 0, 0)
 
-        local item = Item:CreateFromItemID(questItemData.itemID)
-        item:ContinueOnItemLoad(
-            function()
+        async.WithItemID(
+            questItemData.itemID,
+            function(item)
                 button.itemName = item:GetItemName()
                 button.tex:SetTexture(item:GetItemIcon())
             end
         )
     elseif slotID then
         button.slotID = slotID
-        local item = Item:CreateFromEquipmentSlot(slotID)
-        item:ContinueOnItemLoad(
-            function()
+        async.WithItemSlotID(
+            slotID,
+            function(item)
                 if button.slotID == slotID then
                     button.itemName = item:GetItemName()
                     button.tex:SetTexture(item:GetItemIcon())

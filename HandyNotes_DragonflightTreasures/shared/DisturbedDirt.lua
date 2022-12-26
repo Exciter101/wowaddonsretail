@@ -3,6 +3,17 @@ local myname, ns = ...
 local dirt = {
     label="Disturbed Dirt",
     loot={
+        -- all the treasure-prerequisite items
+        {199061, quest=70527}, -- A Guide To Rare Fish
+        {194540, quest=67046}, -- Nokhud Armorer's Notes
+        {199065, quest=70534}, -- Sorrowful Letter
+        {199066, quest=70535}, -- Letter of Caution
+        {199068, quest=70537}, -- Time-Lost Memo
+        {198843, quest=70392, requires=ns.conditions.MajorFaction(ns.FACTION_DRAGONSCALE, 21)}, -- Ruby Gem Cluster Map
+        {198843, quest=70392, requires=ns.conditions.MajorFaction(ns.FACTION_DRAGONSCALE, 21)}, -- Emerald Gardens Explorer's Notes
+        {199067, quest=70536, requires=ns.conditions.MajorFaction(ns.FACTION_DRAGONSCALE, 21)}, -- Precious Plans
+        {198852, quest=70407, requires=ns.conditions.MajorFaction(ns.FACTION_DRAGONSCALE, 21)}, -- Bear Termination Orders
+        -- the rest
         192055, -- Dragon Isles Artifact
         201390, -- Devastating Drakonid Waraxe
         201391, -- Drakonid Enforcer's Hidesplitter
@@ -15,9 +26,12 @@ local dirt = {
 }
 
 ns.RegisterPoints(ns.WAKINGSHORES, {
+    [16079022] = {},
+    [16819395] = {},
     [23709660] = {note="In cave"},
     [29079001] = {},
     [33918519] = {note="In cave"},
+    [35388494] = {},
     [35548962] = {},
     [35858968] = {},
     [35938774] = {},
@@ -52,13 +66,21 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
     [51946274] = {},
     [55207077] = {},
     [55568210] = {},
+    [55944339] = {},
     [57544863] = {},
+    [59922354] = {},
+    [60452350] = {},
     [61064821] = {},
+    [61245949] = {},
+    [62222532] = {},
     [64321154] = {},
+    [64501114] = {},
+    [65991048] = {},
     [66034860] = {},
     [66285992] = {},
     [66815535] = {note="In cave"},
     [68892204] = {},
+    [69077886] = {},
     [70244147] = {},
     [74838850] = {},
     [75492173] = {},

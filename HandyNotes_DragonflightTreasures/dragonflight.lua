@@ -42,8 +42,9 @@ ns.defaults.profile.groupsHidden = {
 }
 
 ns.groups["junk"] = BAG_FILTER_JUNK
-ns.groups["scoutpack"] = "Expedition Scout's Pack"
+ns.groups["scoutpack"] = "{spell:388272:Lost Expedition Scout Packs}"
 ns.groups["disturbeddirt"] = "{spell:340561:Disturbed Dirt}"
+ns.groups["magicbound"] = "{npc:191905:Magic-Bound Chest}"
 ns.groups["tuskarrchests"] = "{item:200071:Sacred Tuskarr Totem}"
 ns.groups["warsupply"] = "War Supply Chest"
 ns.groups["glyphs"] = "Dragon Glyphs"
@@ -70,6 +71,7 @@ Talked to Lethanak at the Life Pools: 72059
 
 unlocked dragon customization: 68797
 
-Herbalism: looted Dreambloom Petal 71859
+Herbalism: looted Dreambloom Petal 71858 71859
+Inscriptions: looted Iskaaean Trading Ledger 66376
 
 --]]

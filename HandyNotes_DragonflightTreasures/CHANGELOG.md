@@ -1,5 +1,23 @@
 # Changelog
 
+## Changed in v39
+
+* Show Initiate Radiya's new location on day 5 of the Lizi's Reins quest chain
+* More dirt locations
+* Fix so that loot shows more reliably on some map POIs
+
+## Changed in v38
+
+* Add Magic-Bound Chests (with Dragonscale Expedition rep 16)
+* Honor Our Ancestors: Teerakai Ancestor got hotfixed to want a Fire-Blessed Greatsword instead
+* Show all the treasure-maps in dirt/packs/chests
+* Some minor adjustments to points in Ohn'ahran Plains
+
+## Changed in v37
+
+* Add the Otto mount
+* Add the remainder of the profession knowledge questids, thanks to Shifted
+
 ## Changed in v36
 
 * More loot data obtained

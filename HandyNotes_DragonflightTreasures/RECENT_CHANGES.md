@@ -1,5 +1,6 @@
-## Changed in v36
+## Changed in v39
 
-* More loot data obtained
-* Some position fixes for rares in Thaldraszus
+* Show Initiate Radiya's new location on day 5 of the Lizi's Reins quest chain
+* More dirt locations
+* Fix so that loot shows more reliably on some map POIs
 

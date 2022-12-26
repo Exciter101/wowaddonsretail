@@ -1,6 +1,14 @@
-﻿$Id: Revision.txt 18 2022-12-18 05:16:00Z arithmandar $
+﻿$Id: Revision.txt 24 2022-12-26 15:37:25Z arithmandar $
 Revision History:
 =================
+
+* v1.09 (Dec. 26, 2022)
+==========================
+- Added faction items from Valdrakken Accord
+
+* v1.08 (Dec. 26, 2022)
+==========================
+- Added faction items from Dragonscale Expedition
 
 * v1.07 (Dec. 18, 2022)
 ==========================

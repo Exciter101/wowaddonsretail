@@ -705,6 +705,8 @@ if AL then
 	AL["NOTE_191356_2"] = "Mesa con juguetes"
 	AL["NOTE_191842"] = "Dentro de la cueva."
 	AL["NOTE_192364"] = "Se encuentra disponible cuando en su posición te encuentras con varios NPCs lanzando un hechizo sobre un [Huevo tocado por la tormenta]. Mátalos a todos para empezar el evento."
+	AL["NOTE_192557"] = "Para invocarlo tienes que recoger un [Equipo de trampa para patos], crearla utilizando únicamente materiales de nivel 1 (muy importante porque si no fallará) y luego colocarla en esta posición."
+	AL["NOTE_192557_1"] = "[Equipo de trampa para patos]"
 	AL["NOTE_192983"] = "En la última galería de la cueva."
 	AL["NOTE_193128"] = "Habla con [Arqueólogo Koranir] para iniciar el combate."
 	AL["NOTE_193128_1"] = "[Arqueólogo Koranir]"

@@ -1,4 +1,4 @@
--- $Id: Collections.lua 18 2022-12-18 05:16:00Z arithmandar $
+-- $Id: Collections.lua 23 2022-12-26 15:34:39Z arithmandar $
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
@@ -88,6 +88,268 @@ data["DRAGONFACTIONS"] = {
 	}
 }
 ]]
+
+data["FACTIONS"] = {
+	name = FACTION ,
+	ContentType = COLLECTION_CONTENT,
+	items = { 
+		{ -- Dragonscale Expedition
+			FactionID = 2507,
+			CoinTexture = "Reputation",
+			[NORMAL_DIFF] = {
+				{ 1, "f2507rep33" },
+                { 2, 198387, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:ResilientLeather:3" }, -- Excavator's Mallet
+                { 3, 198717, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:ResilientLeather:3" }, -- Excavator's Punch
+                { 4, 198718, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:193214:3" }, -- Excavator's Chisel
+                { 5, 199746, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:193214:3" }, -- Excavator's Trowel
+				{ 7, "f2507rep34" },
+    			{ 8, 199873, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:75:193050:10" }, -- Renowned Expeditioner's Cape
+    			{ 9, 199874, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:75:193050:10" }, -- Renowned Expeditioner's Cloak
+    			{ 10, 199875, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:75:193050:10" }, -- Renowned Expeditioner's Drape
+    			{ 11, 199876, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:75:193050:10" }, -- Renowned Expeditioner's Armored Shawl
+				{ 13, "f2507rep35" },
+                { 14, 191294, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:15" }, -- Small Expedition Shovel
+                { 15, 198719, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:15" }, -- Plans: Sturdy Expedition Shovel
+				{ 16, "f2507rep36" },
+    			{ 17, 198083, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:75" }, -- Expedition Supply Kit
+				{ 19, "f2507rep37" },
+                { 20, 194102, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:5" }, -- Expedition Excavator
+                { 21, 194325, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201404:5" }, -- Researcher's Magnifier
+                { 22, 194326, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201405:3" }, -- Trusty Sweeper
+				{ 101, "f2507rep39" },
+				{ 102, 197360, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Renewed Proto-Drake: Spined Brow
+                { 103, 197363, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Renewed Proto-Drake: Maned Crest
+                { 104, 197386, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Renewed Proto-Drake: Spiked Jaw
+                { 105, 198781, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Schematic: Gravitational Displacer
+                { 106, 198784, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Schematic: Primal Deconstruction Charge
+                { 107, 194605, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Radiant Malygite
+                { 108, 194606, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Energized Malygite
+                { 109, 194613, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Sensei's 192863
+                { 110, 194614, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Keen 192863
+                { 111, 199811, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Formula: Enchant Cloak - Graceful Avoidance
+                { 112, 199812, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Formula: Enchant Boots - Rider's Reassurance
+				{ 116, "f2507rep41" },
+				{ 117, 198725, "pet3381", [PRICE_EXTRA_ITTYPE] = "201401:3:201404:5:dragonSupplies:150" }, -- Gray Marmoni
+				{ 118, 198726, "pet3380", [PRICE_EXTRA_ITTYPE] = "201401:3:201404:5:dragonSupplies:150" }, -- Black Skitterbug
+				{ 120, "f2507rep42" },
+    			{ 121, 198734, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Relic Handler's Gloves
+    			{ 122, 198735, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Relic Handler's Gloves
+    			{ 123, 198736, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Relic Handler's Grips
+    			{ 124, 198737, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Relic Handler's Gauntlets
+				{ 126, "f2507rep43" },
+                { 127, 198101, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Recipe: Salad on the Side
+                { 128, 194632, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Design: Idol of the Lifebinder
+                { 129, 194635, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Design: Idol of the Earth Warder
+				{ 201, "f2507rep44" },
+    			{ 202, 198775, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:193050:40" }, -- Ensemble: Renowned Expeditioner's Cloth Armor
+    			{ 203, 198776, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:ResilientLeather:20" }, -- Ensemble: Renowned Expeditioner's Leather Armor
+    			{ 204, 198777, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:193214:20" }, -- Ensemble: Renowned Expeditioner's Mail Armor
+    			{ 205, 198778, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:190396:20" }, -- Ensemble: Renowned Expeditioner's Plate Armor
+				{ 207, "f2507rep45" },
+                { 208, 197402, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100" }, -- Renewed Proto-Drake: Spiked Club Tail
+                { 209, 197374, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100" }, -- Renewed Proto-Drake: Swept Horns
+                { 210, 197395, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100" }, -- Renewed Proto-Drake: Harrier Pattern
+                { 211, 198783, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Schematic: Spring-Loaded Khaz'gorite Fabric Cutters
+                { 212, 198782, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Schematic: Bottomless Mireslush Ore Satchel
+                { 213, 194661, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Design: Magnificent Margin Magnifier
+                { 214, 194291, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Master's Wildercloth Fishing Cap
+                { 215, 194289, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Master's Wildercloth Chef's Hat
+                { 216, 194295, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Explorer's Banner of Geology
+                { 217, 194294, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Explorer's Banner of Herbology
+                { 218, 198901, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:25" }, -- Technique: Renewed Proto-Drake: Spined Crest
+				{ 220, "f2507rep47" },
+                { 221, 198720, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:193050:20:192096:2" }, -- Soft Purple Pillow
+                { 222, 198721, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:193050:20:192096:2" }, -- Skinny Reliquary Pillow
+                { 223, 198722, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:193050:20:192096:2" }, -- Small Triangular Pillow
+                { 224, 194281, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Cold Cushion
+                { 225, 194268, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Dragonscale Expedition's Expedition Tent
+				{ 301, "f2507rep48" },
+    			{ 302, 198738, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Dragonscale Expedition Leggings
+    			{ 303, 198739, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Dragonscale Expedition Breeches
+    			{ 304, 198740, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Dragonscale Expedition Greaves
+    			{ 305, 198741, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Dragonscale Expedition Legguards
+				{ 307, "f2507rep49" },
+                { 308, 198728, [PRICE_EXTRA_ITTYPE] = "193050:20:dragonSupplies:150" }, -- Explorer's League Banner
+                { 309, 198729, [PRICE_EXTRA_ITTYPE] = "193050:20:dragonSupplies:150" }, -- Reliquary Banner
+				{ 310, 198730 }, -- Dragonscale Expedition Tabard
+                { 311, 194285, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Azureweave Expedition Pack
+                { 312, 198788, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200" }, -- Technique: Contract: Dragonscale Expedition
+				{ 314, "f2507rep50" },
+                { 315, 198727, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:15" }, -- Expedition Explosives
+				{ 316, "f2507rep51" },
+    			{ 317, 199062, }, -- Ruby Gem Cluster Map
+    			{ 318, 200738, [PRICE_EXTRA_ITTYPE] = "192863:3:dragonSupplies:100" }, -- Onyx Gem Cluster Map
+                { 319, 198796, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:1000" }, -- Quack-E Quack Modulator
+                { 320, 198785, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Schematic: Quack-E
+                { 321, 194283, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Duck-Stuffed Duck Lovie
+                { 322, 198909, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Technique: Illusion Parchment: Magma Missile
+--                { 323, 198780,  }, -- Schematic: Expedition Multi-Toolbox
+				{ 324, "f2507rep52" },
+                { 325, 197010, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190321:1" }, -- Cliffside Wylderdrake: Red Scales
+                { 326, 197144, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190321:1" }, -- Highland Drake: Red Scales
+                { 327, 197614, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190321:1" }, -- Windborne Velocidrake: Red Scales
+				{ 401, "f2507rep55" },
+				{ 402, 197921,  }, -- Primal Infusion
+				{ 403, 192761, "mount", [PRICE_EXTRA_ITTYPE] = "193053:20:201401:5:dragonSupplies:750" }, -- Tamed Skitterfly
+				{ 404, 192762, "mount", [PRICE_EXTRA_ITTYPE] = "193053:20:201401:5:dragonSupplies:750" }, -- Azure Skitterfly
+				{ 405, 192764, "mount" }, -- Verdant Skitterfly
+
+			},
+		},
+		{ -- Valdrakken Accord
+			FactionID = 2510,
+			CoinTexture = "Reputation",
+			[NORMAL_DIFF] = {
+				{ 1, "f2510rep32" },
+				{ 2, 199906,  }, -- Titan Relic
+				{ 4 , "f2510rep33" },
+				{ 5 , 199649, [PRICE_EXTRA_ITTYPE] = "190396:3:dragonSupplies:50" }, -- Dragon Tea Set
+				{ 6 , 199648, [PRICE_EXTRA_ITTYPE] = "193214:3:dragonSupplies:150" }, -- Dragon Dinner Fork
+				{ 7 , 200750, [PRICE_EXTRA_ITTYPE] = "193214:3:dragonSupplies:150" }, -- Dragon Dinner Knife
+				{ 8 , 200751, [PRICE_EXTRA_ITTYPE] = "188658:5:dragonSupplies:150" }, -- Simple Silver Dragon Goblet
+				{ 9 , 200752, [PRICE_EXTRA_ITTYPE] = "188658:3:192838:2:dragonSupplies:150" }, -- Jeweled Silver Dragon Goblet
+				{ 10, 200753, [PRICE_EXTRA_ITTYPE] = "190396:5:dragonSupplies:150" }, -- Simple Gold Dragon Goblet
+				{ 11, 200754, [PRICE_EXTRA_ITTYPE] = "190396:5:192838:2:dragonSupplies:150" }, -- Jeweled Gold Dragon Goblet
+				{ 12, 200752, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:188658:3:192838:2" }, -- Jeweled Silver Dragon Goblet
+				{ 13, 200754, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:190396:5:192838:2" }, -- Jeweled Gold Dragon Goblet
+				{ 16, "f2510rep36" },
+				{ 17, 199647, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:198397" }, -- Dragon Garden Fork
+				{ 18, 199651, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:198397" }, -- Dragon Garden Hoe
+				{ 19, 199652, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:198397" }, -- Dragon Garden Rake
+				{ 20, 199653, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:198397" }, -- Dragon Garden Hand Shovel
+				{ 21, 199654, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:198397" }, -- Dragon Garden Shovel
+				{ 23, "f2510rep39" },
+				{ 24, 196972, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50:" }, -- Cliffside Wylderdrake: Plated Brow
+				{ 25, 196977, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50:" }, -- Cliffside Wylderdrake: Split Head Horns
+				{ 26, 197003, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50:" }, -- Cliffside Wylderdrake: Spiked Cheek
+				{ 101, "f2510rep40" },
+				{ 102, 199655, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193050:20" }, -- Black Dragonspawn Shoulderpads
+				{ 103, 199656, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193050:20" }, -- Blue Dragonspawn Shoulderpads
+				{ 104, 199657, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193050:20" }, -- Bronze Dragonspawn Shoulderpads
+				{ 105, 199658, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193050:20" }, -- Green Dragonspawn Shoulderpads
+				{ 106, 199659, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193050:20" }, -- Red Dragonspawn Shoulderpads
+				{ 108, "f2510rep41" },
+				{ 109, 199817, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Formula: Enchant Cloak - Homebound Speed
+				{ 110, 199818, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Formula: Enchant Boots - Watcher's Loam
+				{ 111, 199246, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Schematic: Tinker: Grounded Circuitry
+				{ 116, "f2510rep43" },
+				{ 117, 199772, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201406:1" }, -- Titan Gatekeeper's Shield
+				{ 118, 199773, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:192850:1:201406:1" }, -- Titan Watcher's Scepter
+				{ 119, 199774, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201406:1" }, -- Ancient Titan Blunderbuss
+				{ 120, 199775, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201406:1" }, -- Titan Keeper's Gladius
+				{ 121, 199776, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:193050:20:192850:1" }, -- Titan Watcher's Broadsword
+				{ 123, "f2510rep44" },
+				{ 124, 191545, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Recipe: Sustaining Alchemist's Stone
+				{ 125, 194479, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Plans: Obsidian Seared Claymore
+				{ 126, 194482, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Plans: Obsidian Seared Invoker
+				{ 127, 194279, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Pattern: Azureweave Slippers
+				{ 128, 194280, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Pattern: Chronocloth Sash
+				{ 201, "f2510rep45" },
+				{ 202, 196998, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:" }, -- Cliffside Wylderdrake: Hook Horns
+				{ 203, 197009, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:" }, -- Cliffside Wylderdrake: Scaled Pattern
+				{ 204, 197020, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:" }, -- Cliffside Wylderdrake: Spear Tail
+				{ 205, 198892, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:25" }, -- Technique: Cliffside Wylderdrake: Red Hair
+				{ 207, "f2510rep46" },
+				{ 208, 199759, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Valdrakken Plate Girdle
+				{ 209, 199760, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Valdrakken Spellweaver's Cord
+				{ 210, 199761, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Valdrakken Dragonspawn Waistguard
+				{ 211, 199762, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Valdrakken Guards Belt
+				{ 216, "f2510rep47" },
+				{ 217, 199680, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10" }, -- Obsidian Drakonid Helmet
+				{ 218, 199681, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10" }, -- Cobalt Drakonid Helmet
+				{ 219, 199682, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10" }, -- Bronze Drakonid Helmet
+				{ 220, 199683, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10" }, -- Verdant Drakonid Helmet
+				{ 221, 199684, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10" }, -- Crimson Drakonid Helmet
+				{ 223, "f2510rep48" },
+				{ 224, 199757, "pet3378", [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:201399:3:201402:1" }, -- Magic Nibbler
+				{ 225, 199758, "pet3379", [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:201399:3:201402:1" }, -- Crimson Proto-Whelp
+				{ 301, "f2510rep49" },
+				{ 302, 194288, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Master's Wildercloth Alchemist's Robe
+				{ 303, 194290, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Master's Wildercloth Enchanter's Hat
+				{ 304, 194292, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Master's Wildercloth Gardening Hat
+				{ 305, 194495, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Plans: Khaz'gorite Sickle
+				{ 306, 194498, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Plans: Khaz'gorite Needle Set
+				{ 307, 194500, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Plans: Khaz'gorite Leatherworker's Toolset
+				{ 308, 199244, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Schematic: Khaz'gorite Delver's Helmet
+				{ 309, 199245, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Schematic: Lapidary's Khaz'gorite Clamps
+				{ 316, "f2510rep50" },
+				{ 317, 199752, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:192838:1:193050:25" }, -- Ensemble: Crimson Valdrakken Clothing
+				{ 318, 199753, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:192847:1:193050:25" }, -- Ensemble: Black Valdrakken Clothing
+				{ 319, 199754, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:192841:1:193050:25" }, -- Ensemble: Azure Valdrakken Clothing
+				{ 320, 199755, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:192844:1:193050:25" }, -- Ensemble: Green Valdrakken Clothing
+				{ 321, 199756, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:192850:1:193050:25" }, -- Ensemble: Bronze Valdrakken Clothing
+				{ 323, "f2510rep51" },
+				{ 324, 196989, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:" }, -- Cliffside Wylderdrake: White Hair
+				{ 325, 197145, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190324:1" }, -- Highland Drake: Bronze Scales
+				{ 326, 197391, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190324:1" }, -- Renewed Proto-Drake: Bronze Scales
+				{ 327, 197613, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190324:1" }, -- Windborne Velocidrake: Bronze Scales
+				{ 401, "f2510rep52" },
+				{ 402, 199763, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Expedition Researcher's Hood
+				{ 403, 199764, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Expedition Mercenary's Helm
+				{ 404, 199765, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Field Scout's Helmet
+				{ 405, 199766, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Expedition Guard's Helm
+				{ 407, "f2510rep53" },
+				{ 408, 198732 }, -- Valdrakken Accord Tabard
+				{ 409, 198941, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200" }, -- Technique: Contract: Valdrakken Accord
+				{ 410, 194287, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Chronocloth Reagent Bag
+				{ 416, "f2510rep55" },
+				{ 417, 194320, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:193210:10" }, -- Reinforced Lavender Bottle
+				{ 418, 198388, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:198397:2" }, -- Swirling Draconian Concoction
+				{ 419, 198389, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:5" }, -- Weighted Potion Cylinder
+				{ 420, 199741, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:198397:2" }, -- Compendium of Advanced Spells
+				{ 421, 199742, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:198397:2" }, -- A Mender's Mentality
+				{ 422, 199743, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5" }, -- Runic Symbols and their Meaning
+				{ 423, 199744, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:5" }, -- Academy Student's Journal
+				{ 424, 199745, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:190321:1" }, -- Everflame Night Torch
+				{ 501, "f2510rep56" },
+				{ 502, 196962, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:188658:20:201404:10" }, -- Cliffside Wylderdrake: Silver and Purple Armor
+				{ 503, 197093, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:188658:20:201404:10" }, -- Highland Drake: Silver and Purple Armor
+				{ 504, 197350, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:188658:20:201404:10" }, -- Renewed Proto-Drake: Silver and Purple Armor
+				{ 505, 197581, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:188658:20:201404:10" }, -- Windborne Velocidrake: Silver and Purple Armor
+				{ 507, "f2510rep57" },
+				{ 508, 199767, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:192838:1:193050:20" }, -- Red Dragon Banner
+				{ 509, 199768, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:192847:1:193050:20" }, -- Black Dragon Banner
+				{ 510, 199769, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:192841:1:193050:20" }, -- Blue Dragon Banner
+				{ 511, 199770, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:192850:1:193050:20" }, -- Bronze Dragon Banner
+				{ 512, 199771, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:192844:1:193050:20" }, -- Green Dragon Banner
+				{ 516, "f2510rep58" },
+				{ 517, 199660, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192847:1" }, -- Obsidian Jeweled Shoulderpads
+				{ 518, 199661, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192841:1" }, -- Azure Jeweled Shoulderpads
+				{ 519, 199662, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192850:1" }, -- Amber Jeweled Shoulderpads
+				{ 520, 199663, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192844:1" }, -- Emerald Jeweled Shoulderpads
+				{ 521, 199664, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192838:1" }, -- Ruby Jeweled Shoulderpads
+				{ 522, 199670, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192847:1" }, -- Black Drakonid Shoulderplates
+				{ 523, 199671, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192841:1" }, -- Cobalt Drakonid Shoulderplates
+				{ 524, 199672, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192850:1" }, -- Bronze Drakonid Shoulderplates
+				{ 525, 199673, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192844:1" }, -- Verdant Drakonid Shoulderplates
+				{ 526, 199674, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:190396:10:192838:1" }, -- Crimson Drakonid Shoulderplates
+				{ 527, 194282, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Cushion of Time Travel
+				{ 528, 198912, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Technique: Illusion Parchment: Whirling Breeze
+				{ 601, "f2510rep59" },
+				{ 602, 199700, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:198397:1:193214:10" }, -- Valdrakken Bladewing Decapitator
+				{ 603, 199702, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:198397:1:193214:10" }, -- Valdrakken Guard's Barrier
+				{ 604, 199705, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:193214:10" }, -- Valdrakken Guard's Spear
+				{ 605, 199707, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Wingguard Polearm
+				{ 606, 199726, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Spellweaver's Scepter
+				{ 607, 199728, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Spellweaver's Stave
+				{ 608, 199730, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Bladewing Staff
+				{ 609, 199732, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Wing Glaive
+				{ 610, 199734, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:192850:1" }, -- Valdrakken Guard's Cutlass
+				{ 611, 199806, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Drakeclaw Barrier
+				{ 612, 199820, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5:201404:5" }, -- Valdrakken Guard's Skullsplitter
+				{ 613, 199821, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5:201404:5" }, -- Valdrakken Serrated Shortsword
+				{ 614, 199823, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:193050:20" }, -- Valdrakken Gatekeeper's Polearm
+				{ 615, 199825, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Belt Knife
+				{ 616, 200456, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5:201404:5" }, -- Valdrakken Armor Opener
+				{ 617, 201795, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Guard's Claw
+				{ 618, 201796, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Valdrakken Drakonid's Claw
+				{ 619, 199736, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:200863:1:201404:5" }, -- Amber Dragonflame Blade
+				{ 620, 199738, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:200864:1:201404:5" }, -- Ruby Dragonflame Blade
+				{ 621, 199739, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:200865:1:201404:5" }, -- Emerald Dragonflame Blade
+			},
+		},
+	}
+}
 
 data["MOUNTS"] = {
 	name = AL["Mounts"],

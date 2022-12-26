@@ -603,6 +603,8 @@ L["STARTING_PRICE_PERCENTAGE_TOOLTIP_TEXT"] = "시작 가격 비율은 게시된
 --[[Translation missing --]]
 L["STOP"] = "Stop"
 L["TEMPORARY_LOWER_CASE"] = "임시"
+--[[Translation missing --]]
+L["TIER"] = "Tier"
 L["TIME_LEFT"] = "남은 시간"
 L["TIME_LEFT_H"] = "남은 시간(시)"
 L["TO_CRAFT_COLON"] = "다음의 재료:"

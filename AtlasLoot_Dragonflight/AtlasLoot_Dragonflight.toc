@@ -1,6 +1,6 @@
 ## Interface: 100002
 ## Author: Arith	
-## Version: v1.07
+## Version: v1.09
 ## Dependencies: AtlasLoot
 ## LoadOnDemand: 1
 

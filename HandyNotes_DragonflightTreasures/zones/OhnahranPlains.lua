@@ -74,11 +74,13 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
         quest=71033,
         label="Water-Bound Chest",
         loot={
+            201442, -- Primal Revenant's Frostblade
+            201443, -- Primal Revenant's Icewall
             197948, -- Stone Sentinel's Greatsword
             197955, -- Sword of the Eternal Guard
         },
         note="Survive the trial of the elements",
-        vignette=5407,
+        vignette=5407, -- and areaPoi 7265
     },
     [82317322] = { -- The Great Swog
         npc=191608,
@@ -136,38 +138,41 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
 -- (It's the Patient Bufonid again)
 ns.RegisterPoints(ns.OHNAHRANPLAINS, {
     [56127701] = {
-        npc=190014, -- Initiate Radiya
-        quest={71195, 71203, any=true}, -- 71203 is the daily
-        progress={71196, 71197, 71198, 71199, 71195},
-        loot={
-            {192799, mount=1639}, -- Lizi's Reins
-        },
+        quest={71199, 71203, any=true}, -- 71199 is day 4, 71203 is the daily
         hide_before=ns.conditions.QuestComplete(66676), -- Sneaking In
-        active={ns.conditions.MajorFaction(2503, 9), ns.conditions.Level(70)}, -- Maruuk rank 9
-        texture=ns.atlas_texture("stablemaster", {r=0, g=0.5, b=1}), scale=1.2, minimap=true,
-        note=function()
-            local function q(quest, label)
-                return (C_QuestLog.IsQuestFlaggedCompleted(quest) and GREEN_FONT_COLOR or RED_FONT_COLOR):WrapTextInColorCode(label)
-            end
-            return "Gather items over a week of quests:\n"..
-                q(71196, "Day 1") ..": 20x {item:192615} from insects\n"..
-                q(71197, "Day 2") ..": 20x {item:192658} from plant mobs\n"..
-                q(71198, "Day 3") ..": 10x {item:194966} from fishing\n"..
-                q(71199, "Day 4") ..": 20x {item:192636} from animals\n"..
-                q(71195, "Day 5") ..": 1x {item:200598} from {npc:190015:Ohn Meluun}"
-        end,
+    },
+    [57667232] = {
+        -- relocates here for day 5...
+        quest={71195, 71203, any=true}, -- 71203 is the daily
+        requires=ns.conditions.QuestComplete(71199), -- day 4 done
         related={
             [53517898] = {
                 label="{item:200598}",
-                npc=190015,
-                quest=71195,
-                hide_before=ns.conditions.QuestComplete(71199), -- day 4
+                npc=190015, -- Ohn Meluun
                 loot={200598}, -- Meluun's Green Curry
                 atlas="food", minimap=true,
             },
         },
     },
 }, {
+    npc=190014, -- Initiate Radiya
+    loot={
+        {192799, mount=1639}, -- Lizi's Reins
+    },
+    progress={71196, 71197, 71198, 71199, 71195},
+    active={ns.conditions.MajorFaction(2503, 9), ns.conditions.Level(70)}, -- Maruuk rank 9
+    texture=ns.atlas_texture("stablemaster", {r=0, g=0.5, b=1}), scale=1.2, minimap=true,
+    note=function()
+        local function q(quest, label)
+            return (C_QuestLog.IsQuestFlaggedCompleted(quest) and GREEN_FONT_COLOR or RED_FONT_COLOR):WrapTextInColorCode(label)
+        end
+        return "Gather items over a week of quests:\n"..
+            q(71196, "Day 1") ..": 20x {item:192615} from insects\n"..
+            q(71197, "Day 2") ..": 20x {item:192658} from plant mobs\n"..
+            q(71198, "Day 3") ..": 10x {item:194966} from fishing\n"..
+            q(71199, "Day 4") ..": 20x {item:192636} from animals\n"..
+            q(71195, "Day 5") ..": 1x {item:200598} from {npc:190015:Ohn Meluun}"
+    end,
     group="dailymount"
 })
 
@@ -205,7 +210,7 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
             [74706980] = ancestor{criteria=55307, quest=71172, active=ns.conditions.Item(190327)}, -- The Carving Winds Ancestor, Awakened Air
             [63265727] = ancestor{criteria=55308, quest=71173, active=ns.conditions.Item(197788, 2)}, -- Sylvan Glade Ancestor, 2x Braised Bruffalon Brisket
             [54707838] = ancestor{criteria=55309, quest=71174, active=ns.conditions.Item(202071)}, -- Ohn'iri Springs Ancestor, Elemental Mote
-            [41635670] = ancestor{criteria=55310, quest=71175, active=ns.conditions.Item(190501)}, -- Teerakai Ancestor, Primal Molten Greatbelt (Blacksmithing)
+            [41635670] = ancestor{criteria=55310, quest=71175, active=ns.conditions.Item(199049)}, -- Teerakai Ancestor, Fire-Blessed Greatsword
             [32757029] = ancestor{criteria=55311, quest=71176, active=ns.conditions.Item(191470, 5)}, -- The Eternal Kurgans Ancestor, 5x Writhebark (Herbalism)
         },
     },
@@ -806,8 +811,8 @@ ns.RegisterPoints(ns.OHNAHRANPLAINS, {
         },
         path=43004800, -- TODO: improve this
     },
-    [82007600] = { -- Strunraan
-        quest=69929,
+    [83507630] = { -- Strunraan
+        quest=69929, -- 72055
         worldquest=69929,
         npc=193534,
         loot={

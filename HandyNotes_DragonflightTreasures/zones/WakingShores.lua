@@ -9,6 +9,7 @@ Promised to rescue Wu'De Prepfoot @ 35154722: 70709
 
 Tarjin's Tales @ 1616261
 Tale of the Outsider: unlocked 70767, listened 70768
+Tale of the Elders: unlocked 70770, listened 70769
 --]]
 
 ns.RegisterPoints(ns.WAKINGSHORES, {
@@ -19,6 +20,7 @@ ns.RegisterPoints(ns.WAKINGSHORES, {
         loot={
             {202019, toy=true}, -- Golden Dragon Goblet
         },
+        active={ns.conditions.QuestComplete(70409), ns.conditions.Item(198854), any=true}, -- Archeologist Artifact Notes
         related={
             [76343420] = {quest=70409,loot={{198854,quest=70409}},atlas="poi-workorders",}, -- Archeologist Artifact Notes
         },
@@ -126,7 +128,15 @@ ns.RegisterPoints(ns.WAKINGSHORES, {
             [22607160] = {label="{npc:186623:Lavaslurper}", note="Drops a {item:201883:Empty Magma Shell} that you should take to {npc:199010:Empowered Snail}"},
         },
         atlas="stablemaster", minimap=true,
-    }
+    },
+    [19403630] = {
+        loot={{198870, mount=1656}}, -- Otto
+        note="First, get the {item:202042:Aquatic Shades} from  {item:202102:Immaculate Sac of Swog Treasures} from {npc:191608:The Great Swog} (Ohn'ahran @ 82,73). It's a lot of fishing, so have fun.\n"..
+            "Now, come here to the dive bar (underwater!). Use the {item:202042:Aquatic Shades} and /dance on the pad for 5 minutes. You'll have a {spell:396539:Dance, Dance 'Til You're Dead} buff if you're in the right place. Pick up the {item:202061:Empty Barrel} you find yourself in front of.\n"..
+            "Next? More fishing! Fish up 100x {item:202072:Frigid Floe Fish} in Iskaara, 25x {item:202073:Calamitous Carp} in lava around Obsidian Citadel, and 1x {item:202074:Kingfin, the Wise Whiskerfish} by Algethar Academy. Put them all in the barrel, and come back here, where Otto will give you the mount.",
+        atlas="stablemaster", color={r=1, g=0, b=1}, minimap=true,
+        active=ns.conditions.Toy(202042), -- Aquatic Shades
+    },
 })
 local drink = ns.nodeMaker{
     atlas="EmberCourt-32x32",
@@ -460,10 +470,9 @@ ns.RegisterPoints(ns.WAKINGSHORES, {
             [66185530] = {quest=70864,label="{item:200066}",note="Top of tower",inbag=200066,atlas="Islands-AzeriteChest",}, -- Well-Preserved Bone
         },
     },
-    [30005530] = { -- Worldcarver A'tir
-        -- TODO: verify vignette-coords
+    [30025538] = { -- Worldcarver A'tir
         criteria=56052,
-        quest=70763,
+        quest=74090, -- vignete 70763
         npc=186859,
         loot={
             {197135,quest=69336,}, -- Highland Drake: Toothy Mouth
@@ -565,7 +574,7 @@ ns.RegisterPoints(ns.WAKINGSHORES, {
         },
         vignette=5513,
     },
-    [33115569] = ns.SUPERRARE{ -- Turboris
+    [33635572] = ns.SUPERRARE{ -- Turboris
         criteria=56058,
         quest=74054,
         npc=187886,

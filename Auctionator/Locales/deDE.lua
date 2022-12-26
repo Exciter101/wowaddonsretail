@@ -538,6 +538,8 @@ L["STARTING_PRICE_PERCENTAGE_TOOLTIP_TEXT"] = "Der Prozentsatz des Startpreises 
 --[[Translation missing --]]
 L["STOP"] = "Stop"
 L["TEMPORARY_LOWER_CASE"] = "temporär"
+--[[Translation missing --]]
+L["TIER"] = "Tier"
 L["TIME_LEFT"] = "Verbleibende Zeit"
 L["TIME_LEFT_H"] = "Restzeit (h)"
 L["TO_CRAFT_COLON"] = "Zum herstellen:"
