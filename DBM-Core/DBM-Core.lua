@@ -70,16 +70,16 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20221223234713"),
+	Revision = parseCurseDate("20221228075622"),
 }
 
 local fakeBWVersion, fakeBWHash
 local bwVersionResponseString = "V^%d^%s"
 -- The string that is shown as version
 if isRetail then
-	DBM.DisplayVersion = "10.0.12"
-	DBM.ReleaseRevision = releaseDate(2022, 12, 23) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
-	fakeBWVersion, fakeBWHash = 243, "d58ab26"
+	DBM.DisplayVersion = "10.0.14"
+	DBM.ReleaseRevision = releaseDate(2022, 12, 27) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	fakeBWVersion, fakeBWHash = 259, "3fbb48c"
 elseif isClassic then
 	DBM.DisplayVersion = "1.14.29 alpha"
 	DBM.ReleaseRevision = releaseDate(2022, 11, 28) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
@@ -4552,16 +4552,17 @@ do
 					if encounterID == eId then
 						self:EndCombat(v, success == 0, nil, "ENCOUNTER_END")
 						sendSync("EE", encounterID.."\t"..success.."\t"..v.id.."\t"..(v.revision or 0))
+						self:CheckAvailableMods()
 						return
 					end
 				end
 			elseif encounterID == v.combatInfo.eId then
 				self:EndCombat(v, success == 0, nil, "ENCOUNTER_END")
 				sendSync("EE", encounterID.."\t"..success.."\t"..v.id.."\t"..(v.revision or 0))
+				self:CheckAvailableMods()
 				return
 			end
 		end
-		self:CheckAvailableMods()
 	end
 
 	function DBM:BOSS_KILL(encounterID, name)
@@ -7448,6 +7449,7 @@ do
 		[96231] = true,--Paldin Rebuke
 		[106839] = true,--Druid Skull Bash
 		[116705] = true,--Monk Spear Hand Strike
+		[147362] = true,--Hunter Countershot
 		[183752] = true,--Demon hunter Disrupt
 		[351338] = true,--Evoker Quell
 	}
