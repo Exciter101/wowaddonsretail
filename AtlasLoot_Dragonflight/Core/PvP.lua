@@ -415,7 +415,7 @@ data["DFSEASON1"] = {
 			},
 		},
 		{ -- EVOKER
-			name = "|c"..RAID_CLASS_COLORS["EVOKER"]["colorStr"]..ALIL["EVOKER"],
+			name = ATLASLOOT_EVOKER_COLOR..ALIL["EVOKER"],
 			[ALLIANCE_DIFF] = {
 				{ 1 , 201504 }, -- Crimson Gladiator's Chain Vest
 				{ 2 , 201505 }, -- Crimson Gladiator's Chain Tunic

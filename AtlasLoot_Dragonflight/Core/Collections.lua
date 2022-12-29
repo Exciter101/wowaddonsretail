@@ -1,4 +1,4 @@
--- $Id: Collections.lua 23 2022-12-26 15:34:39Z arithmandar $
+-- $Id: Collections.lua 27 2022-12-28 13:29:53Z arithmandar $
 -----------------------------------------------------------------------
 -- Upvalued Lua API.
 -----------------------------------------------------------------------
@@ -348,6 +348,253 @@ data["FACTIONS"] = {
 				{ 621, 199739, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:200865:1:201404:5" }, -- Emerald Dragonflame Blade
 			},
 		},
+		{ -- Maruuk Centaur
+			FactionID = 2503,
+			CoinTexture = "Reputation",
+			[NORMAL_DIFF] = {
+				{   1, "f2503rep32" },
+				{   2, 200093, }, -- Centaur Hunting Trophy
+				{   4, "f2503rep33" },
+				{   5, 198402, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:190396:2" }, -- Maruuk Cooking Pot
+				{   6, 200550, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:193217:2" }, -- Very Comfortable Pelt
+				{   7, 200551, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:193217:2" }, -- Comfortable Pile of Pelts
+				{   9 , "f2503rep36" },
+				{  10, 197596, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Windborne Velocidrake: Horned Jaw
+				{  11, 197610, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Windborne Velocidrake: Yellow Horns
+				{  16, "f2503rep37" },
+				{  17, 200481, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Ohn'ir Midnight Helm
+				{  18, 200482, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Shikaar Harrier's Visor
+				{  19, 200483, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10:201405:3" }, -- Nokhud Battle Helm
+				{  20, 200484, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Ohn'ir Dawnlight Hat
+				{  21, 200485, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Ohn'ir Dusklight Cap
+				{  22, 200486, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Ohn'ir Daylight Visor
+				{  23, 200487, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Shikaar Hunter's Visor
+				{  24, 200488, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Shikaar Huntmaster's Visor
+				{  25, 200489, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Shikaar Scout's Visor
+				{  26, 200490, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10:201405:3" }, -- Nokhud Reaver's Helm
+				{  27, 200491, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10:201405:3" }, -- Nokhud Champion's Helm
+				{  28, 200492, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:190396:10:201405:3" }, -- Nokhud Warlord's Helm
+				{  29, 201323, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50:OccasionalSand:1" }, -- Essence of Awakening
+				{ 101, "f2503rep38" },
+				{ 102, 193618, "pet3317", [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:ResilientLeatherr:20:201401:5" }, -- Hoofhelper
+				{ 103, 199813, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Formula: Enchant Chest - Sustained Strength
+				{ 104, 199814, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Formula: Enchant Boots - Plainsrunner's Breeze
+				{ 106, "f2503rep39" },
+				{ 107, 200276, "pet3311" }, -- Ohuna Companion
+				{ 108, 200290, "pet3325" }, -- Bakar Companion
+				{ 109, 192799, "mount" }, -- Lizi's Reins
+				{ 116, "f2503rep41" },
+				{ 117, 200613, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Aylaag Windstone Fragment
+				{ 118, 200457, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Ohn'ahran Plainswalker Boots
+				{ 119, 200458, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Ohn'ahran Plainswalker Greaves
+				{ 120, 200459, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Ohn'ahran Plainswalker Slippers
+				{ 121, 200460, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Ohn'ahran Plainswalker Moccasins
+				{ 201, "f2503rep43" },
+				{ 202, 200493, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20:201401:2" }, -- Ohn'ir Daylight Shoulderpads
+				{ 203, 200494, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20" }, -- Shikaar Scout's Shoulderpads
+				{ 204, 200495, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20:201405:3" }, -- Nokhud Warlord's Shoulderpads
+				{ 205, 200496, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20" }, -- Shikaar Huntmaster's Shoulderpads
+				{ 206, 200487, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Shikaar Hunter's Visor
+				{ 207, 200488, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201401:2:201405:3" }, -- Shikaar Huntmaster's Visor
+				{ 208, 200499, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20:201405:3" }, -- Nokhud Battle Shoulderpads
+				{ 209, 200500, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20:201405:3" }, -- Nokhud Champion's Shoulderpads
+				{ 210, 200501, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20:201405:3" }, -- Nokhud Reaver's Shoulderpads
+				{ 211, 200502, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20:201401:2" }, -- Ohn'ir Midnight Shoulderpads
+				{ 212, 200503, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20:201401:2" }, -- Ohn'ir Dusklight Shoulderpads
+				{ 213, 200504, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:193210:20:201401:2" }, -- Ohn'ir Dawnlight Shoulderpads
+				{ 214, 191547, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Recipe: Alacritous Alchemist Stone
+				{ 215, 194477, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Plans: Obsidian Seared Runeaxe
+				{ 216, 194478, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Plans: Obsidian Seared Facesmasher
+				{ 217, 194480, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Plans: Obsidian Seared Halberd
+				{ 218, 193870, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Pattern: Allied Legguards of Sansok Khan
+				{ 219, 193878, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Pattern: Ancestor's Dew Drippers
+				{ 221, "f2503rep44" },
+				{ 222, 194885 }, -- Ohuna Perch
+				{ 224, "f2503rep45" },
+				{ 225, 197618, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100" }, -- Windborne Velocidrake: Long Snout
+				{ 226, 197623, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100" }, -- Windborne Velocidrake: Spiked Tail
+				{ 227, 198902, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:25" }, -- Technique: Windborne Velocidrake: Black Fur
+				{ 301, "f2503rep47" },
+				{ 302, 200510, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:5" }, -- Huntstrider Spear
+				{ 303, 200511, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5" }, -- Stonework Greatspear
+				{ 304, 200512, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:5" }, -- Teerai Warspear
+				{ 305, 200517, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5" }, -- Nokhud Warspear
+				{ 306, 200518, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5" }, -- Nokhud Goliath's Spear
+				{ 307, 200520, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201402:1" }, -- Mammothbone Knife
+				{ 308, 200521, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201402:1" }, -- Maruuk Boneblade
+				{ 309, 200522, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Maruukai Smith's Tongs
+				{ 310, 200523, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201405:3:201404:5" }, -- Smith's Stoneworked Mallet
+				{ 311, 200524, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:190396:10:201404:5" }, -- Nokhud Warhammer
+				{ 312, 200525, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201405:3:201404:5" }, -- Massive Stone Sledgehammer
+				{ 313, 200534, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5:201405:3" }, -- Toghus Poleaxe
+				{ 316, "f2503rep48" },
+				{ 317, 194496, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Plans: Khaz'gorite Pickaxe
+				{ 318, 194497, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Plans: Khaz'gorite Skinning Knife
+				{ 319, 194499, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Plans: Khaz'gorite Leatherworker's Knife
+				{ 320, 198457, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Pattern: Masterwork Smock
+				{ 321, 198462, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Pattern: Flameproof Apron
+				{ 322, 198463, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Pattern: Expert Alchemist's Hat
+				{ 323, 198464, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Reinforced Pack
+				{ 325, "f2503rep49" },
+				{ 326, 192523, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190327:1" }, -- Renewed Proto-Drake: Green Scales
+				{ 327, 197143, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190327:1" }, -- Highland Drake: Green Scales
+				{ 328, 197011, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190327:1" }, -- Cliffside Wylderdrake: Green Scales
+				{ 401, "f2503rep51" },
+				{ 402, 200543, [PRICE_EXTRA_ITTYPE] = "money:45" }, -- Clan Teerai Pennant
+				{ 403, 200545, [PRICE_EXTRA_ITTYPE] = "money:45" }, -- Clan Shikaar Pennant
+				{ 404, 200546, [PRICE_EXTRA_ITTYPE] = "money:45" }, -- Clan Nokhud Pennant
+				{ 405, 200547, [PRICE_EXTRA_ITTYPE] = "money:45" }, -- Clan Ohn'ir Pennant
+				{ 407, "f2503rep52" },
+				{ 408, 191588, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Recipe: Exultant Incense
+				{ 409, 198713, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Plans: Prototype Explorer's Barding Framework
+				{ 410, 198937, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Technique: Contract: Maruuk Centaur
+				{ 411, 197982, [PRICE_EXTRA_ITTYPE] = "money:1600000" }, -- Pattern: Finished Prototype Explorer's Barding
+				{ 413, "f2503rep53" },
+				{ 414, 194099, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:30" }, -- Shikaar Hunting Horn
+				{ 416, "f2503rep54" },
+				{ 417, 200464, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Maruuk Warrior's Chestplate
+				{ 418, 200465, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Maruuk Harrier's Hauberk
+				{ 419, 200466, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Maruuk Scout's Vest
+				{ 420, 200467, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Maruuk Spiritual Vestments
+				{ 422, "f2503rep55" },
+				{ 423, 197921,  }, -- Primal Infusion
+--[[				
+				{   1, 200539, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5:193210:20" }, -- Khansguard Shield
+				{   1, 200540, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:194863:10:201405:3" }, -- Improvised Maruuk Barrier
+				{   1, 200541, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:188658:5:201405:3" }, -- Fur-Lined Safeguard
+]]
+			},
+		},
+		{ -- Iskaara Tuskarr
+			FactionID = 2511,
+			CoinTexture = "Reputation",
+			[NORMAL_DIFF] = {
+				{ 1, "f2511rep32" },
+				{ 2, 200071 }, -- Sacred Tuskarr Totem
+				{ 4, "f2511rep34" },
+				{ 5, 199892, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:190396:2" }, -- Tuskarr Traveling Soup Pot
+				{ 6, 199650, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:201400:1" }, -- Whale Bone Tea Set
+				{ 7, 200748, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:190396:3" }, -- Tuskarr Ulu Knife
+				{ 8, 200749, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:194863:1" }, -- Tuskarr Clobbering Board
+				{ 10, "f2511rep36" },
+				{ 11, 199531, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201405:3:193050:20" }, -- Red Stocking Cap
+				{ 12, 199532, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201405:3:193050:20" }, -- Grey Stocking Cap
+				{ 13, 199533, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201405:3:193050:20" }, -- Green Stocking Cap
+				{ 14, 199534, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201405:3:193050:20" }, -- Blue Stocking Cap
+				{ 15, 199535, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201405:3:193050:20" }, -- Crimson Ear Warmer
+				{ 16, 199536, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201405:3:193050:20" }, -- Ocean Grey Ear Warmer
+				{ 17, 199537, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201405:3:193050:20" }, -- Forest Green Ear Warmer
+				{ 18, 199538, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200:201405:3:193050:20" }, -- Azure Ear Warmer
+				{ 20, "f2511rep37" },
+				{ 21, 197101, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Highland Drake: Bushy Brow
+				{ 22, 197114, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Highland Drake: Multi-Horned Head
+				{ 23, 197132, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Highland Drake: Spiked Cheek
+				{ 25, "f2511rep39" },
+				{ 26, 193225, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:201402:1:201404:5" }, -- Whiskuk
+				{ 27, 193837, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150:194863:1:201404:5" }, -- Backswimmer Timbertooth
+				{ 101, "f2511rep40" },
+				{ 102, 199815, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Formula: Enchant Cloak - Regenerative Leech
+				{ 103, 199816, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Formula: Enchant Chest - Accelerated Agility
+				{ 104, 194602, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Sensei's Alexstraszite
+				{ 105, 194603, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Radiant Alexstraszite
+				{ 106, 194610, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Keen Ysemerald
+				{ 107, 194611, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Energized Ysemerald
+				{ 108, 194726, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:50" }, -- Design: Kalu'ak Figurine
+				{ 110, "f2511rep42" },
+				{ 111, 199872, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:75:193050:10" }, -- Tuskarr Trader's Cloak
+				{ 112, 199877, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:201405:3:201403:2:193210:20" }, -- Ensemble: Tuskarr Trader's Leather Armor
+				{ 116, "f2511rep43" },
+				{ 117, 197123, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100" }, -- Highland Drake: Thorn Horns
+				{ 118, 197139, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100" }, -- Highland Drake: Large Spotted Pattern
+				{ 119, 197153, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100" }, -- Highland Drake: Bladed Tail
+				{ 120, 198894, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:25" }, -- Technique: Highland Drake: Black Hair
+				{ 122, "f2511rep44" },
+				{ 123, 199884, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Tuskarr Crafter's Bindings
+				{ 124, 199885, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Reinforced Fisherman's Vambraces
+				{ 125, 199886, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Tuskarr Sharkguard Wristguards
+				{ 126, 199887, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Tuskarr Trapper's Bracers
+				{ 201, "f2511rep45" },
+				{ 202, 193875, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Pattern: Allied Heartwarming Fur Coat
+				{ 203, 193876, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Pattern: Snowball Makers
+				{ 204, 194633, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Design: Idol of the Spell-Weaver
+				{ 205, 194634, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Design: Idol of the Dreamer
+				{ 206, 198102, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400" }, -- Recipe: Impossibly Sharp Cutting Knife
+				{ 208, "f2511rep46" },
+				{ 209, 199852, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194730:5:201404:5" }, -- Rustic Fisherman's Pack
+				{ 210, 199853, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194969:5:201404:5" }, -- Tan Fisherman's Pack
+				{ 211, 199854, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194968:5:201404:5" }, -- Dark Fisherman's Pack
+				{ 212, 199855, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194967:5:201404:5" }, -- Burgundy Fisherman's Pack
+				{ 213, 199856, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:201403:2:201404:5" }, -- Rustic Tuskarr Traders Pack
+				{ 214, 199857, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:201403:2:201404:5" }, -- Tan Tuskarr Traders Pack
+				{ 215, 199858, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:201403:2:201404:5" }, -- Dark Tuskarr Traders Pack
+				{ 216, 199859, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:201403:2:201404:5" }, -- Burgundy Tuskarr Traders Pack
+				{ 217, 199860, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:193210:10:201404:5" }, -- Rustic Tuskarr Backpack
+				{ 218, 199861, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:193210:10:201404:5" }, -- Tan Tuskarr Backpack
+				{ 219, 199862, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:193210:10:201404:5" }, -- Dark Tuskarr Backpack
+				{ 220, 199863, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:193210:10:201404:5" }, -- Burgundy Tuskarr Backpack
+				{ 222, "f2511rep47" },
+				{ 223, 199894, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:194730:10:201404:5" }, -- Fisherman's Folly
+				{ 224, 199896, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:194966:5:197756:10" }, -- Rubbery Fish Head
+				{ 301, "f2511rep48" },
+				{ 302, 194660, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Design: Fine-Print Trifocals
+				{ 303, 194663, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Design: Resonant Focus
+				{ 304, 198458, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Resplendent Cover
+				{ 305, 198459, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Lavish Floral Pack
+				{ 306, 198461, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Shockproof Gloves
+				{ 307, 198465, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500" }, -- Pattern: Expert Skinner's Cap
+				{ 309, "f2511rep49" },
+				{ 310, 197012, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190329:1" }, -- Cliffside Wylderdrake: Blue Scales
+				{ 311, 197390, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190329:1" }, -- Renewed Proto-Drake: Blue Scales
+				{ 312, 197612, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:190329:1" }, -- Windborne Velocidrake: Blue Scales
+				{ 314, "f2511rep51" },
+				{ 315, 198731 }, -- Iskaara Tuskarr Tabard
+				{ 316, "f2511rep52" },
+				{ 317, 194311, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Tuskarr Beanbag
+				{ 318, 199888, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Tuskarr Trapper's Spaulders
+				{ 319, 199889, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Tuskarr Boneplate Pauldrons
+				{ 320, 199890, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Tuskarr Crafter's Mantle
+				{ 321, 199891, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:150" }, -- Tuskarr Sharkguard Shoulderguards
+				{ 323, "f2511rep53" },
+				{ 324, 199897, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:100:193210:10:197756:10" }, -- Blue-Covered Beanbag
+				{ 401, "f2511rep54" },
+				{ 402, 199878, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201405:3:201400:2" }, -- Tuskarr Timber Splitter
+				{ 403, 199879, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201405:3:201400:2" }, -- Tuskarr Fisherman's Dagger
+				{ 404, 199880, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201400:2:201399:1" }, -- Tuskarr Leviathan's Hook
+				{ 405, 199881, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201400:2:201399:1" }, -- Tuskarr Fisherman's Harpoon
+				{ 406, 199882, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:194863:3:201405:3" }, -- Tuskarr Mystic's Stave
+				{ 407, 199883, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:600:201400:2:201399:1" }, -- Tuskarr Sharktooth Bolthrower
+				{ 409, "f2511rep55" },
+				{ 410, 198872, "mount", [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:201403:2:201400:2" }, -- Brown Scouting Ottuk
+				{ 411, 200118, "mount", [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750:201403:2:201400:2" }, -- Yellow Scouting Ottuk
+				{ 412, 198940, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:200" }, -- Technique: Contract: Iskaara Tuskarr
+				{ 416, "f2511rep56" },
+				{ 417, 198827, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:194863:5:194123:5" }, -- Magical Snow Sled
+				{ 418, 199899, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:400:194863:5:201403:2" }, -- Iskaara Tug Sled
+				{ 501, "f2511rep58" },
+				{ 502, 199539, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201405:3:193210:10" }, -- Blue Tufted Shoulderpads
+				{ 503, 199540, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201405:3:193210:10" }, -- Green Tufted Shoulderpads
+				{ 504, 199541, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201405:3:193210:10" }, -- Grey Tufted Shoulderpads
+				{ 505, 199542, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201405:3:193210:10" }, -- Red Tufted Shoulderpads
+				{ 506, 199543, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201400:2:193210:10" }, -- Azure Depths Shoulderguards
+				{ 507, 199544, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201400:2:193210:10" }, -- Murky Depths Shoulderguards
+				{ 508, 199545, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201400:2:193210:10" }, -- Grey Depths Shoulderguards
+				{ 509, 199546, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201400:2:193210:10" }, -- Crimson Depths Shoulderguards
+				{ 510, 199547, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201405:3:201399:1" }, -- Spine Reinforced Spaulders
+				{ 511, 199548, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201405:3:201399:1" }, -- Rugged Seaspawn Spaulders
+				{ 512, 199549, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201405:3:201399:1" }, -- Depth Delvers Spaulders
+				{ 513, 199550, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:250:201405:3:201399:1" }, -- Bloody Shorestalker's Spaulders
+				{ 516, "f2511rep59" },
+				{ 517, 198337, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194969:20:201402:1" }, -- Azure Paw Pack
+				{ 518, 198338, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194968:20:201402:1" }, -- Black Print Paw Pack
+				{ 519, 198339, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194966:20:201402:1" }, -- Dark Blue Paw Pack
+				{ 520, 198340, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194967:20:201402:1" }, -- Red Print Paw Pack
+				{ 521, 198341, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:500:194730:20:201402:1" }, -- Tan Paw Pack
+				{ 522, 197981, [PRICE_EXTRA_ITTYPE] = "dragonSupplies:750" }, -- Pattern: Finished Prototype Regal Barding
+				{ 524, "f2511rep60" },
+				{ 525, 201425, "mount", [PRICE_EXTRA_ITTYPE] = "dragonSupplies:1000:201403:5:201400:5" }, -- Yellow War Ottuk
+				{ 526, 201426, "mount", [PRICE_EXTRA_ITTYPE] = "dragonSupplies:1000:201403:5:201400:5" }, -- Brown War Ottuk
+			},
+		},
 	}
 }
 
@@ -641,8 +888,8 @@ data["TIERSETS"] = {
 	name = AL["Tier Sets"],
 	ContentType = COLLECTION_CONTENT,
 	items = {
-		{	-- EVOKER
-			name = "|c"..RAID_CLASS_COLORS["EVOKER"]["colorStr"]..ALIL["EVOKER"],
+		{ -- EVOKER
+			name = ATLASLOOT_EVOKER_COLOR..ALIL["EVOKER"],
 			[NORMAL_DIFF] = {
 				{ 1, 200378 }, -- Hauberk of the Awakened
 				{ 2, 200379 }, -- Treads of the Awakened

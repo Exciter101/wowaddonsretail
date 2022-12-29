@@ -1,6 +1,10 @@
-﻿$Id: Revision.txt 24 2022-12-26 15:37:25Z arithmandar $
+﻿$Id: Revision.txt 27 2022-12-28 13:29:53Z arithmandar $
 Revision History:
 =================
+
+* v1.10 (Dec. 28, 2022)
+==========================
+- Added faction items from Maruuk Centaur / Iskaara Tuskarr
 
 * v1.09 (Dec. 26, 2022)
 ==========================
