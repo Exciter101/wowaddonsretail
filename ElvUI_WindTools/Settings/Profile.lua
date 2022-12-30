@@ -276,7 +276,8 @@ P.announcement = {
         text = L["My new keystone is %keystone%."],
         channel = {
             party = "PARTY"
-        }
+        },
+        command = true,
     }
 }
 
@@ -666,6 +667,13 @@ P.maps = {
             second = 600,
             stopAlertIfCompleted = true,
             stopAlertIfPlayerNotEnteredDragonlands = true
+        },
+        iskaaranFishingNet = {
+            enable = true,
+            alert = true,
+            sound = true,
+            soundFile = "OnePlus Surprise",
+            disableAlertAfterHours = 48,
         }
     },
     rectangleMinimap = {
