@@ -30,9 +30,9 @@ local function IsAppearanceCollected(item)
 		for _, sourceID in pairs(sources) do
 			if C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(sourceID) then
 				if itemID == C_TransmogCollection.GetSourceItemID(sourceID) then
-					return true, true
-				else
 					return true, false
+				else
+					return true, true
 				end
 			end
 		end
@@ -62,12 +62,16 @@ local function CreateModelFrame()
 	end
 
 	function model:SetModelUnit()
+		self:SetUnit("player")
+
 		--if addon.Profile.TooltipPreview_CustomModel then
 			--self:SetUnit("none")
 			--self:SetCustomRace(addon.Profile.TooltipPreview_CustomRace, addon.Profile.TooltipPreview_CustomGender)
 		
 		--else
-			self:SetUnit("player")
+
+
+		--self:SetCustomRace(addon.Profile.TooltipPreview_CustomRace, addon.Profile.TooltipPreview_CustomGender)
 		--end
 	end
 
@@ -159,24 +163,52 @@ end
 function preview:SetAnchor(tooltip, parent)
 	local anchor = addon.db.profile.TooltipPreview_Anchor
 	local relativeAnchor
+	local x,y = parent:GetCenter();
+
 	if anchor == "vertical" then 
-		if ((parent:GetBottom() + self:GetHeight()) > GetScreenHeight() - 100) then 
+		--if ((parent:GetBottom() + self:GetHeight()) > GetScreenHeight() - 100) then 
+		if y / GetScreenHeight() > 0.5 then
 			anchor = "TOP"
 			relativeAnchor = "BOTTOM"
-
 		else
 			anchor = "BOTTOM"
 			relativeAnchor = "TOP"
 		end
 
-	else
-		if self.parent.shoppingTooltips then
-			comparisonTooltip1, comparisonTooltip2 = unpack(self.parent.shoppingTooltips)
-			parent = comparisonTooltip1
-		end
+		if x / GetScreenWidth() > 0.5 then
+				anchor = anchor.."LEFT";
+				relativeAnchor = relativeAnchor.."LEFT";
+			else
+				anchor = anchor.."RIGHT";
+				relativeAnchor = relativeAnchor.."RIGHT";
+			end
 
-		anchor = "TOPLEFT"
-		relativeAnchor = "BOTTOMLEFT"
+	else
+		--[[
+		if self.parent.shoppingTooltips then
+			local comparisonTooltip1, comparisonTooltip2, comparisonTooltip3  = unpack(self.parent.shoppingTooltips)
+			--parent = comparisonTooltip2
+			anchor = "TOPRIGHT"
+			relativeAnchor = "TOPLEFT"
+		else
+			anchor = "TOPLEFT"
+			relativeAnchor = "TOPRIGHT"
+		end
+]]--
+		--local comparisonTooltip1, comparisonTooltip2, comparisonTooltip3 = parent, parent, parent
+		if self.parent.shoppingTooltips then
+			local comparisonTooltip1, comparisonTooltip2, comparisonTooltip3  = unpack(self.parent.shoppingTooltips)
+			parent = comparisonTooltip1
+
+		end
+		local xShift =  x / GetScreenWidth() > 0.5
+		local yShift = y / GetScreenHeight() > 0.5
+		anchor = (xShift and "RIGHT") or "LEFT"
+		relativeAnchor = (xShift and "LEFT") or "RIGHT"
+
+		anchor = (yShift and "TOP"..anchor) or "BOTTOM"..anchor
+		relativeAnchor = (yShift and "TOP"..relativeAnchor) or "BOTTOM"..relativeAnchor
+
 	end
 
 	self:ClearAllPoints()

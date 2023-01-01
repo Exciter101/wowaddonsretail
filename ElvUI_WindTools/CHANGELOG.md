@@ -4,7 +4,7 @@
 - [Extra Item Bar] Fix the issue that the specified quality items cannot be used correctly.
 ## ✳️ New
 - [Event Tracker] Add support for Iskaaran Fishing Net.
-- [Announce] Add support for !keys command.
+- [Announcement] Add support for !keys command.
 ## 💪 Improvement
 - [Extra Item Bar] Update the list of openable items.
 - [Contacts] You can now delete alts via the context menu (right-click menu).
@@ -47,7 +47,7 @@
 - [Extra Item Bar] Fix the issue that the specified quality items cannot be used correctly.
 ## ✳️ 신규 사항
 - [Event Tracker] Add support for Iskaaran Fishing Net.
-- [Announce] Add support for !keys command.
+- [Announcement] Add support for !keys command.
 ## 💪 개선 사항
 - [Extra Item Bar] Update the list of openable items.
 - [Contacts] You can now delete alts via the context menu (right-click menu).
