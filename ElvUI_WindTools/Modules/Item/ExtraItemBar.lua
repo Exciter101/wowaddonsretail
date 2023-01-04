@@ -18,6 +18,7 @@ local unpack = unpack
 local wipe = wipe
 
 local CooldownFrame_Set = CooldownFrame_Set
+local CreateAtlasMarkup = CreateAtlasMarkup
 local CreateFrame = CreateFrame
 local GameTooltip = _G.GameTooltip
 local GetBindingKey = GetBindingKey
@@ -35,6 +36,8 @@ local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
 
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
+local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
+local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 
 -- https://www.wowhead.com/beta/items/consumables/potions/name:Potion/min-level:40
 -- Potion (require level >= 40, Name: Potion, +Shadowlands, +Dragonflight, +Normal)
@@ -403,28 +406,6 @@ local runesDragonflight = {
     198492, -- 梵陀符文：洪荒化身牢獄
     198493, -- 梵陀符文：洪荒化身牢獄
     201325 -- 龍族增強符文
-}
-
--- The items in torghast
-local torghastItems = {
-    168035, -- 淵喉污鼠韁繩
-    168207, -- 掠奪的靈魄能量球
-    170499, -- 淵喉巡者韁繩
-    170540, -- 飢餓的靈魄能量球
-    174464, -- 鬼靈鞍具
-    176331, -- 精華掩蔽藥水
-    176409, -- 活力虹吸精華
-    176443, -- 消逝狂亂藥水
-    184662, -- 被徵用的靈魄能量球
-    185946, -- 長尾爆炸鼠
-    185947, -- 汲取打擊藥劑
-    185950, -- 時光飛梭藥劑
-    186043, -- 托迦司傳送門操作卷軸
-    186614, -- 靈魂罐
-    186615, -- 召喚雙子之鏡
-    186636, -- 一籠淵喉污鼠
-    186678, -- 淵鑄武器箱
-    186679 -- 統御卷軸
 }
 
 -- https://www.wowhead.com/beta/items/consumables/food-and-drinks/min-req-level:40?filter=86;11;0
@@ -899,6 +880,7 @@ local openableItems = {
     201756, -- 鼓鼓的零錢包
     201817, -- 暮光儲藏箱
     201818, -- 暮光保險箱
+    202080, -- 密庫藏寶箱
     202142, -- 龍禍要塞保險箱
     202171 -- 龍族錢包
 }
@@ -921,12 +903,16 @@ local function UpdateQuestItemList()
 end
 
 -- 更新装备物品列表
+local forceUsableItems = {
+    [193634] = true -- 茂發種子
+}
+
 local equipmentList = {}
 local function UpdateEquipmentList()
     wipe(equipmentList)
     for slotID = 1, 18 do
         local itemID = GetInventoryItemID("player", slotID)
-        if itemID and IsUsableItem(itemID) then
+        if itemID and (IsUsableItem(itemID) or forceUsableItems[itemID]) then
             tinsert(equipmentList, slotID)
         end
     end
@@ -952,7 +938,6 @@ local moduleList = {
     ["FOODDF"] = foodDragonflight,
     ["FOODVENDOR"] = foodDragonflightVendor,
     ["MAGEFOOD"] = conjuredManaFood,
-    ["TORGHAST"] = torghastItems,
     ["BANNER"] = banners,
     ["UTILITY"] = utilities,
     ["OPENABLE"] = openableItems
@@ -972,6 +957,19 @@ function EB:CreateButton(name, barDB)
     tex:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
     tex:SetTexCoord(unpack(E.TexCoords))
 
+    local qualityTier = button:CreateFontString(nil, "OVERLAY")
+    qualityTier:SetTextColor(1, 1, 1, 1)
+    qualityTier:SetPoint("TOPLEFT", button, "TOPLEFT")
+    qualityTier:SetJustifyH("CENTER")
+    F.SetFontWithDB(
+        qualityTier,
+        {
+            size = barDB.qualityTier.size,
+            name = E.db.general.font,
+            style = "OUTLINE"
+        }
+    )
+
     local count = button:CreateFontString(nil, "OVERLAY")
     count:SetTextColor(1, 1, 1, 1)
     count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
@@ -988,9 +986,24 @@ function EB:CreateButton(name, barDB)
     E:RegisterCooldown(cooldown)
 
     button.tex = tex
+    button.qualityTier = qualityTier
     button.count = count
     button.bind = bind
     button.cooldown = cooldown
+
+    button.SetTier = function(self, itemIDOrLink)
+        local level =
+            C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemIDOrLink) or
+            C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemIDOrLink)
+
+        if not level or level == 0 then
+            self.qualityTier:SetText("")
+            self.qualityTier:Hide()
+        else
+            self.qualityTier:SetText(CreateAtlasMarkup(format("Professions-Icon-Quality-Tier%d-Small", level)))
+            self.qualityTier:Show()
+        end
+    end
 
     button:StyleButton()
 
@@ -1000,24 +1013,25 @@ function EB:CreateButton(name, barDB)
     return button
 end
 
-function EB:SetUpButton(button, questItemData, slotID)
+function EB:SetUpButton(button, itemData, slotID)
     button.itemName = nil
     button.itemID = nil
     button.spellName = nil
     button.slotID = nil
     button.countText = nil
 
-    if questItemData then
-        button.itemID = questItemData.itemID
-        button.countText = GetItemCount(questItemData.itemID, nil, true)
-        button.questLogIndex = questItemData.questLogIndex
+    if itemData then
+        button.itemID = itemData.itemID
+        button.countText = GetItemCount(itemData.itemID, nil, true)
+        button.questLogIndex = itemData.questLogIndex
         button:SetBackdropBorderColor(0, 0, 0)
 
         async.WithItemID(
-            questItemData.itemID,
+            itemData.itemID,
             function(item)
                 button.itemName = item:GetItemName()
                 button.tex:SetTexture(item:GetItemIcon())
+                button:SetTier(itemData.itemID)
             end
         )
     elseif slotID then
@@ -1025,16 +1039,16 @@ function EB:SetUpButton(button, questItemData, slotID)
         async.WithItemSlotID(
             slotID,
             function(item)
-                if button.slotID == slotID then
-                    button.itemName = item:GetItemName()
-                    button.tex:SetTexture(item:GetItemIcon())
+                button.itemName = item:GetItemName()
+                button.tex:SetTexture(item:GetItemIcon())
 
-                    local color = item:GetItemQualityColor()
+                local color = item:GetItemQualityColor()
 
-                    if color then
-                        button:SetBackdropBorderColor(color.r, color.g, color.b)
-                    end
+                if color then
+                    button:SetBackdropBorderColor(color.r, color.g, color.b)
                 end
+
+                button:SetTier(item:GetItemID())
             end
         )
     end
@@ -1425,11 +1439,23 @@ function EB:UpdateBar(id)
         end
 
         -- 调整文字风格
+        F.SetFontWithDB(
+            button.qualityTier,
+            {
+                size = barDB.qualityTier.size,
+                name = E.db.general.font,
+                style = "OUTLINE"
+            }
+        )
+
         F.SetFontWithDB(button.count, barDB.countFont)
         F.SetFontWithDB(button.bind, barDB.bindFont)
 
         F.SetFontColorWithDB(button.count, barDB.countFont.color)
         F.SetFontColorWithDB(button.bind, barDB.bindFont.color)
+
+        button.qualityTier:ClearAllPoints()
+        button.qualityTier:SetPoint("TOPLEFT", button, "TOPLEFT", barDB.qualityTier.xOffset, barDB.qualityTier.yOffset)
 
         button.count:ClearAllPoints()
         button.count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", barDB.countFont.xOffset, barDB.countFont.yOffset)

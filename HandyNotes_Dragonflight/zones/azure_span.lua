@@ -15,6 +15,7 @@ local Treasure = ns.node.Treasure
 local Disturbeddirt = ns.node.Disturbeddirt
 local Dragonglyph = ns.node.Dragonglyph
 local Dragonrace = ns.node.Dragonrace
+local ElementalStorm = ns.node.ElementalStorm
 local Flag = ns.node.Flag
 local Fragment = ns.node.Fragment
 local LegendaryCharacter = ns.node.LegendaryCharacter
@@ -232,6 +233,7 @@ map.nodes[14083747] = RareElite({
 map.nodes[32682911] = RareElite({ -- review -- required 67030
     id = 193251,
     quest = 69885,
+    note = L['spawns_hourly'],
     rewards = {
         Achievement({id = 16678, criteria = 56111})
         -- Transmog({item = , slot = L['']}) -- Name
@@ -241,6 +243,7 @@ map.nodes[32682911] = RareElite({ -- review -- required 67030
 map.nodes[19234362] = Rare({ -- required 67030
     id = 193269,
     quest = 74002,
+    note = L['spawns_hourly'],
     rewards = {
         Achievement({id = 16678, criteria = 56112}),
         Transmog({item = 200206, slot = L['bow']}) -- Behemoth Slayer Greatbow
@@ -333,6 +336,7 @@ map.nodes[58813260] = Rare({
 map.nodes[26494939] = Rare({ -- review -- required 67030
     id = 193149,
     quest = 72154,
+    note = L['spawns_hourly'],
     rewards = {
         Achievement({id = 16678, criteria = 56110})
         -- Transmog({item = , slot = L['']}) -- Name
@@ -395,6 +399,7 @@ map.nodes[59405520] = Rare({
     quest = 73900,
     rewards = {
         Achievement({id = 16678, criteria = 56097}),
+        Transmog({item = 200195, slot = L['plate']}), -- Thunderscale Legguards
         Transmog({item = 200193, slot = L['cloth']}), -- Manafrond Sandals
         Item({item = 200859, note = L['trinket']}) -- Seasoned Hunter's Trophy
     }
@@ -416,7 +421,7 @@ map.nodes[28564743] = Rare({
             28564743, 28304800, 27944822, 26974854, 26364841, 26074796,
             25824706, 25764642, 26134540, 26374491, 27124437, 27554428,
             28164470, 28614643, 28564743
-        })
+        }), POI({29804622}) -- Cave
     }
 }) -- Breezebiter
 
@@ -680,7 +685,7 @@ map.nodes[53146614] = PT.Blacksmithing({
 
 map.nodes[57504130] = PT.Leatherworking({
     id = 198683,
-    quest = nil,
+    quest = 70286,
     note = L['pt_leath_treated_hides_note']
 }) -- Treated Hides
 
@@ -1204,6 +1209,30 @@ map.nodes[34204160] = Safari({
 }) -- Vorquin Runt
 
 -------------------------------------------------------------------------------
+------------------------ ELEMENTAL STORMS: AZURE SPAN -------------------------
+-------------------------------------------------------------------------------
+
+map.nodes[11983718] = ElementalStorm({
+    label = format('%s: %s', L['elemental_storm'],
+        L['elemental_storm_brakenhide_hollow']),
+    mapID = map.id,
+    areaPOIs = {7229, 7230, 7231, 7232}
+}) -- Elemental Storm: Brakenhide Hollow
+
+map.nodes[47372200] = ElementalStorm({
+    label = format('%s: %s', L['elemental_storm'],
+        L['elemental_storm_cobalt_assembly']),
+    mapID = map.id,
+    areaPOIs = {7233, 7234, 7235, 7236}
+}) -- Elemental Storm: Cobalt Assembly
+
+map.nodes[58506660] = ElementalStorm({
+    label = format('%s: %s', L['elemental_storm'], L['elemental_storm_imbu']),
+    mapID = map.id,
+    areaPOIs = {7237, 7238, 7239, 7240}
+}) -- Elemental Storm: Imbu
+
+-------------------------------------------------------------------------------
 -------------------------------- MISCELLANEOUS --------------------------------
 -------------------------------------------------------------------------------
 
@@ -1291,6 +1320,18 @@ map.nodes[66333211] = Collectible({
     },
     pois = {POI({66453173})}
 }) -- Tome of Polymorph: Duck
+
+------------------- ACHIEVEMENT: THREE MINUTES OR IT'S FREE -------------------
+
+map.nodes[45635482] = Collectible({
+    label = '{item:200949}',
+    note = L['the_great_shellkhan_note'],
+    icon = 133920,
+    quest = 72110,
+    rewards = {
+        Item({item = 200949}) -- Case of Fresh Gleamfish
+    }
+}) -- Case of Fresh Gleamfish
 
 ----------------------------- MISCELLANEOUS NPCs ------------------------------
 

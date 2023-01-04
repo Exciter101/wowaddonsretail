@@ -70,15 +70,15 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20221228075622"),
+	Revision = parseCurseDate("20230104060624"),
 }
 
 local fakeBWVersion, fakeBWHash
 local bwVersionResponseString = "V^%d^%s"
 -- The string that is shown as version
 if isRetail then
-	DBM.DisplayVersion = "10.0.14"
-	DBM.ReleaseRevision = releaseDate(2022, 12, 27) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	DBM.DisplayVersion = "10.0.16"
+	DBM.ReleaseRevision = releaseDate(2023, 1, 4) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
 	fakeBWVersion, fakeBWHash = 259, "3fbb48c"
 elseif isClassic then
 	DBM.DisplayVersion = "1.14.29 alpha"
@@ -449,7 +449,7 @@ if isRetail then
 		[1220]={45, 1},[1779]={45, 1},--Legion World bosses
 		[1643]={50, 1},[1642]={50, 1},[1718]={50, 1},[1943]={50, 1},[1876]={50, 1},[2105]={50, 1},[2111]={50, 1},[2275]={50, 1},--Bfa World bosses and warfronts
 		[2222]={60, 1},[2374]={60, 1},--Shadowlands World Bosses
-		[2574]={70, 1},--Dragonflight World Bosses
+		[2444]={70, 1},[2512]={70, 1},[2574]={70, 1},--Dragonflight World Bosses
 		--Raids
 		[509]={30, 3},[531]={30, 3},[469]={30, 3},[409]={30, 3},--Classic Raids
 		[564]={30, 3},[534]={30, 3},[532]={30, 3},[565]={30, 3},[544]={30, 3},[548]={30, 3},[580]={30, 3},[550]={30, 3},--BC Raids
@@ -2644,7 +2644,7 @@ function DBM:IsTrivial(customLevel)
 			return true
 		end
 	else
-		--First, auto bail and return non trivial if it's an instancce not in table to prevent nil error
+		--First, auto bail and return non trivial if it's an instance not in table to prevent nil error
 		if not instanceDifficultyBylevel[LastInstanceMapID] then return false end
 		--Content is trivial if player level is 10 higher than content involved
 		local levelDiff = isRetail and 10 or 15
@@ -4538,6 +4538,7 @@ do
 
 	function DBM:ENCOUNTER_END(encounterID, name, difficulty, size, success)
 		self:Debug("ENCOUNTER_END event fired: "..encounterID.." "..name.." "..difficulty.." "..size.." "..success)
+		self:CheckAvailableMods()
 		for i = #inCombat, 1, -1 do
 			local v = inCombat[i]
 			if not v.combatInfo then return end
@@ -4552,14 +4553,12 @@ do
 					if encounterID == eId then
 						self:EndCombat(v, success == 0, nil, "ENCOUNTER_END")
 						sendSync("EE", encounterID.."\t"..success.."\t"..v.id.."\t"..(v.revision or 0))
-						self:CheckAvailableMods()
 						return
 					end
 				end
 			elseif encounterID == v.combatInfo.eId then
 				self:EndCombat(v, success == 0, nil, "ENCOUNTER_END")
 				sendSync("EE", encounterID.."\t"..success.."\t"..v.id.."\t"..(v.revision or 0))
-				self:CheckAvailableMods()
 				return
 			end
 		end

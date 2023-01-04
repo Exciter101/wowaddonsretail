@@ -528,17 +528,10 @@ V.tooltips = {
         header = "TEXTURE",
         raids = {
             enable = true,
-            ["Castle Nathria"] = true,
-            ["Sanctum of Domination"] = true,
-            ["Sepulcher of the First Ones"] = true,
             ["Vault of the Incarnates"] = true
         },
         special = {
             enable = true,
-            ["Shadowlands Keystone Master: Season One"] = false,
-            ["Shadowlands Keystone Master: Season Two"] = false,
-            ["Shadowlands Keystone Master: Season Three"] = true,
-            ["Shadowlands Keystone Master: Season Four"] = true,
             ["Dragonflight Keystone Master: Season One"] = true,
             ["Dragonflight Keystone Hero: Season One"] = true
         },
@@ -546,7 +539,6 @@ V.tooltips = {
             enable = true,
             markHighestScore = true,
             showNoRecord = true,
-            -- DF S1
             ["Temple of the Jade Serpent"] = true,
             ["Shadowmoon Burial Grounds"] = true,
             ["Halls of Valor"] = true,

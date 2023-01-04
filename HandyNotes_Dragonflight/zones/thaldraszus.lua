@@ -15,6 +15,7 @@ local Treasure = ns.node.Treasure
 local Disturbeddirt = ns.node.Disturbeddirt
 local Dragonglyph = ns.node.Dragonglyph
 local Dragonrace = ns.node.Dragonrace
+local ElementalStorm = ns.node.ElementalStorm
 local Flag = ns.node.Flag
 local Fragment = ns.node.Fragment
 local LegendaryCharacter = ns.node.LegendaryCharacter
@@ -31,6 +32,7 @@ local Squirrel = ns.node.Squirrel
 local Achievement = ns.reward.Achievement
 local Currency = ns.reward.Currency
 local Item = ns.reward.Item
+local Mount = ns.reward.Mount
 local Pet = ns.reward.Pet
 local Toy = ns.reward.Toy
 local Transmog = ns.reward.Transmog
@@ -81,6 +83,7 @@ map.nodes[31097121] = Rare({
 map.nodes[59847057] = Rare({ -- required 67030
     id = 193220,
     quest = 69868,
+    note = L['spawns_hourly'],
     rewards = {
         Achievement({id = 16679, criteria = 56149}),
         Transmog({item = 200138, slot = L['polearm']}) -- Ancient Dancer's Longspear
@@ -113,6 +116,7 @@ map.nodes[52746732] = CRAGGRAVATEDELEMENTAL
 map.nodes[47675115] = Rare({ -- required 67030
     id = 193234,
     quest = 73990,
+    note = L['spawns_hourly'],
     rewards = {
         Achievement({id = 16446, criteria = 55398, note = L['pretty_neat_note']}),
         Achievement({id = 16679, criteria = 56147})
@@ -151,16 +155,18 @@ map.nodes[62298177] = Rare({
 map.nodes[52895903] = Rare({
     id = 193246,
     quest = 74013,
+    note = L['spawns_hourly'],
     rewards = {Achievement({id = 16679, criteria = 56141})}
 }) -- Matriarch Remalla
 
--- map.nodes[] = Rare({ -- reqired 67030
---     id = 193688,
---     quest = 69976,
---     rewards = {
---         Achievement({id = 16679, criteria = 56140}),
---     }
--- }) -- Phenran
+map.nodes[59806100] = Rare({ -- reqired 67030
+    id = 193688,
+    quest = 69976,
+    note = L['spawns_hourly'],
+    rewards = {
+        Achievement({id = 16679, criteria = 56140}) --
+    }
+}) -- Phenran
 
 map.nodes[57218420] = Rare({ -- reqired 67030 review
     id = 193210,
@@ -190,19 +196,21 @@ map.nodes[57218420] = Rare({ -- reqired 67030 review
 map.nodes[40087014] = Rare({ -- reqiured 67030
     id = 193240,
     quest = 69880,
+    note = L['spawns_hourly'],
     rewards = {Achievement({id = 16679, criteria = 56148})}
 }) -- Riverwalker Tamopo
 
 map.nodes[50005180] = Rare({ -- reqiured 67030 review
     id = 193666,
     quest = 69966,
+    note = L['spawns_hourly'],
     rewards = {Achievement({id = 16679, criteria = 56151})}
 }) -- Rokmur
 
 map.nodes[37607780] = Rare({ -- reqiured 67030
     id = 193176,
     quest = 69859,
-    note = L['in_cave'],
+    note = L['in_cave'] .. '\n\n' .. L['spawns_hourly'],
     rewards = {
         Achievement({id = 16679, criteria = 56150}), --
         Toy({item = 200148}) -- A Collection Of Me
@@ -225,8 +233,10 @@ map.nodes[47207895] = Rare({ -- review -- reqiured 67030
 map.nodes[38466826] = Rare({
     id = 191305,
     quest = 74085,
+    note = L['the_great_shellkhan_note'],
     rewards = {
         Achievement({id = 16679, criteria = 56155}), --
+        Achievement({id = 16622}), -- Three Minutes or It's Free
         Toy({item = 200999}) -- The Super Shellkhan Gang
     }
 }) -- The Great Shellkhan
@@ -245,7 +255,7 @@ map.nodes[46267317] = Rare({
 map.nodes[35027001] = Rare({ -- reqiured 67030 review
     id = 193146,
     quest = 74036,
-    note = L['in_small_cave'],
+    note = L['in_small_cave'] .. '\n\n' .. L['spawns_hourly'],
     rewards = {
         Achievement({id = 16679, criteria = 56146}),
         Transmog({item = 200291, slot = L['leather']}) -- Waterlogged Racing Grips
@@ -264,6 +274,14 @@ map.nodes[47884976] = Rare({
         Item({item = 200445, note = L['neck']}) -- Lucky Hunting Charm
     }
 }) -- Woolfang
+
+map.nodes[57366540] = Rare({
+    id = 197411,
+    quest = 74057,
+    label = L['large_lunker_sighting'],
+    note = L['large_lunker_sighting_note'],
+    rewards = {Achievement({id = 16678, criteria = 56130})}
+}) -- Astray Splasher
 
 -------------------------------------------------------------------------------
 
@@ -388,6 +406,25 @@ val.nodes[09535629] = Treasure({
 }) -- Tasty Hatchling's Treat
 
 -------------------------------------------------------------------------------
+
+tpf.nodes[28002590] = ns.node.ElementalChest({
+    quest = 71995,
+    parent = map.id,
+    label = L['chest_of_the_elements'],
+    note = L['in_cave'],
+    rewards = {
+        Item({item = 192055}), -- Dragon Isles Artifact
+        Item({item = 199906}), -- Centaur Hunting Trophy
+        Item({item = 190454}), -- Primal Chaos
+        Item({item = 198451, note = L['trinket']}), -- Lifeflame Ampoule
+        Item({item = 198407, note = L['trinket']}), -- Azure Arcanic Amplifier
+        Transmog({item = 201443, slot = L['shield']}), -- Primal Revenant's Icewall
+        Transmog({item = 201444, slot = L['1h_sword']}) -- Primal Revenant's Earthblade
+    },
+    pois = {POI({29282604})} -- Entrance
+}) -- Chest of the Elements
+
+-------------------------------------------------------------------------------
 --------------------------------- BATTLE PETS ---------------------------------
 -------------------------------------------------------------------------------
 
@@ -433,7 +470,7 @@ map.nodes[56274924] = PetBattle({
 
 map.nodes[52208050] = PT.Blacksmithing({
     id = 201006,
-    quest = nil,
+    quest = 70311,
     note = L['pt_smith_draconic_flux_note']
 }) -- Draconic Flux
 
@@ -457,7 +494,7 @@ map.nodes[56304120] = PT.Inscription({
 
 map.nodes[56803050] = PT.Leatherworking({
     id = 198690,
-    quest = nil,
+    quest = 70294,
     note = L['pt_leath_decayed_scales_note']
 }) -- Decayed Scales
 
@@ -499,7 +536,7 @@ map.nodes[60407970] = PT.Tailoring({
 
 val.nodes[13206368] = PT.Inscription({
     id = 198669,
-    quest = nil,
+    quest = 70281,
     parent = map.id,
     note = L['pt_script_how_to_train_your_whelpling_note']
 }) -- How to Train Your Whelpling
@@ -814,7 +851,7 @@ map.nodes[50674562] = HemetNesingwaryJr({
 val.nodes[60921096] = Collectible({
     label = '{item:200904}',
     icon = 237358,
-    note = L['picante_pomfruit_cake_note'],
+    note = L['picante_pomfruit_cake_note'] .. '\n\n' .. L['rumiastrasza_note'],
     group = ns.groups.SPECIALTIES,
     parent = map.id,
     rewards = {Achievement({id = 16621, criteria = 55733})}
@@ -1030,6 +1067,54 @@ map.nodes[44006480] = Safari({
 }) -- Vorquin Runt
 
 -------------------------------------------------------------------------------
+------------------------ ELEMENTAL STORMS: THALDRASZUS ------------------------
+-------------------------------------------------------------------------------
+
+map.nodes[59005879] = ElementalStorm({
+    label = format('%s: %s', L['elemental_storm'], L['elemental_storm_tyrhold']),
+    mapID = map.id,
+    areaPOIs = {7245, 7246, 7247, 7248}
+}) -- Elemental Storm: Tyrhold
+
+map.nodes[59938224] = ElementalStorm({
+    label = format('%s: %s', L['elemental_storm'],
+        L['elemental_storm_primalist_future']),
+    mapID = map.id,
+    areaPOIs = {7298, 7299, 7300, 7301}
+}) -- Elemental Storm: Primalist Future
+
+tpf.nodes[57404187] = ElementalStorm({
+    label = format('%s: %s', L['elemental_storm'],
+        L['elemental_storm_primalist_tomorrow']),
+    mapID = tpf.id,
+    areaPOIs = {7241, 7242, 7243, 7244}
+}) -- Elemental Storm: Primalist Tomorrow
+
+-- ELEMENTAL STORM VENDOR -----------------------------------------------------
+
+local Mythressa = Class('Mythressa', NPC, {
+    id = 196516,
+    icon = 538566,
+    group = ns.groups.ELEMENTAL_STORM,
+    parent = map.id,
+    rewards = {
+        Achievement({id = 16502}), -- Storming the Runway
+        Pet({item = 200173, id = 3287, note = 'x1000'}), -- Ghostflame
+        Pet({item = 200114, id = 3382, note = 'x1000'}), -- Stormie
+        Mount({item = 192775, id = 1622, note = 'x2000'}) -- Stormhide Salamanther
+    }
+}) -- Mythressa <Apprentice Primal Researcher>
+
+function Mythressa.getters:note()
+    local noteStart = L['elemental_storm_mythressa_note_start']
+    local currency = C_CurrencyInfo.GetCurrencyInfo(2118).quantity -- Elemental Overflow
+    local noteEnd = format(L['elemental_storm_mythressa_note_end'], currency)
+    return noteStart .. '\n\n' .. noteEnd
+end
+
+val.nodes[38113773] = Mythressa()
+
+-------------------------------------------------------------------------------
 -------------------------------- MISCELLANEOUS --------------------------------
 -------------------------------------------------------------------------------
 
@@ -1039,7 +1124,7 @@ val.nodes[61261096] = Collectible({
     icon = 629060,
     parent = map.id,
     label = '{achievement:16556}',
-    note = L['ruby_feast_gourmand'],
+    note = L['ruby_feast_gourmand'] .. '\n\n' .. L['rumiastrasza_note'],
     rewards = {
         Achievement({
             id = 16556,
