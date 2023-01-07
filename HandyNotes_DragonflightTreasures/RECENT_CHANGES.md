@@ -1,4 +1,5 @@
-## Changed in v40
+## Changed in v41
 
-* Assorted rare locations and quests
+* Quest ID for Liskanoth
+* Assorted dirt and packs
 
