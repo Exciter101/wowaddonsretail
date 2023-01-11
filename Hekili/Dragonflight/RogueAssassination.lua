@@ -512,11 +512,7 @@ spec:RegisterStateExpr( "persistent_multiplier", function ()
 
     if buff.stealth.up or buff.subterfuge.up then
         if talent.nightstalker.enabled then
-            mult = mult * 2
-        end
-
-        if talent.subterfuge.enabled and this_action == "garrote" then
-            mult = mult * 1.8
+            mult = mult * 1.08
         end
     end
 
@@ -690,7 +686,9 @@ spec:RegisterHook( "reset_precast", function ()
         d.exsanguinated_rate = nil
         d.exsanguinated = nil
 
-        status = format( "%s%-20s  %7.2f  %7.2f  %7.2f  %7s\n", status, aura, d.remains, d.pmultiplier, d.exsanguinated_rate, d.exsanguinated and "true" or "false" )
+        if Hekili.ActiveDebug then
+            status = format( "%s%-20s  %7.2f  %7.2f  %7.2f  %7s\n", status, aura, d.remains, d.pmultiplier, d.exsanguinated_rate, d.exsanguinated and "true" or "false" )
+        end
     end
 
     if Hekili.ActiveDebug then Hekili:Debug( status ) end
@@ -702,7 +700,8 @@ spec:RegisterHook( "reset_precast", function ()
     class.abilities.apply_poison = class.abilities[ action.apply_poison_actual.next_poison ]
 
     if buff.vanish.up then applyBuff( "stealth" ) end
-    if buff.stealth.up and talent.improved_garrote.enabled then applyBuff( "improved_garrote" ) end
+    -- Pad Improved Garrote's expiry in order to avoid ruining your snapshot.
+    if buff.improved_garrote.up then buff.improved_garrote.expires = buff.improved_garrote.expires - 0.05 end
 
     if buff.indiscriminate_carnage.up then
         if action.garrote.lastCast < action.indiscriminate_carnage.lastCast then applyBuff( "indiscriminate_carnage_garrote" ) end
@@ -742,7 +741,7 @@ spec:RegisterHook( "runHandler", function( ability )
         removeBuff( "vanish" )
 
         if buff.improved_garrote.up then
-            buff.improved_garrote.expires = query_time + 3
+            buff.improved_garrote.expires = query_time + 2.95
         end
     end
 

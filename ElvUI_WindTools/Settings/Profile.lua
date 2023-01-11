@@ -120,7 +120,7 @@ P.announcement = {
         player = {
             player = {
                 enable = true,
-                provokeAllText = L["I taunted all enemies in 10 yards!"],
+                tauntAllText = L["I taunted all enemies!"],
                 successText = L["I taunted %target% successfully!"],
                 failedText = L["I failed on taunting %target%!"],
                 channel = {
@@ -145,7 +145,7 @@ P.announcement = {
         others = {
             player = {
                 enable = true,
-                provokeAllText = L["%player% taunted all enemies in 10 yards!"],
+                tauntAllText = L["%player% taunted all enemies!"],
                 successText = L["%player% taunted %target% successfully!"],
                 failedText = L["%player% failed on taunting %target%!"],
                 channel = {
@@ -411,7 +411,7 @@ P.item = {
                     b = 1
                 }
             },
-            include = "QUEST,BANNER,EQUIP,OPENABLE"
+            include = "QUEST,BANNER,EQUIP,PROF,OPENABLE"
         },
         bar2 = {
             enable = true,
@@ -505,7 +505,7 @@ P.item = {
                     b = 1
                 }
             },
-            include = "MAGEFOOD,FOODVENDOR,FOODDF,CUSTOM"
+            include = "MAGEFOOD,FOODVENDOR,FOODDF,RUNE,CUSTOM"
         },
         bar4 = {
             enable = false,

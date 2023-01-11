@@ -12,7 +12,6 @@ local Event = TSM.Include("Util.Event")
 local Log = TSM.Include("Util.Log")
 local Delay = TSM.Include("Util.Delay")
 local ItemString = TSM.Include("Util.ItemString")
-local MatString = TSM.Include("Util.MatString")
 local RecipeString = TSM.Include("Util.RecipeString")
 local TempTable = TSM.Include("Util.TempTable")
 local ItemInfo = TSM.Include("Service.ItemInfo")
@@ -112,14 +111,16 @@ function ProfessionUtil.GetNumCraftableRecipeString(recipeString)
 	local num, numAll = math.huge, math.huge
 	local craftString = CraftString.FromRecipeString(recipeString)
 	for i = 1, Profession.GetNumMats(craftString) do
-		local itemString, quantity = Profession.GetMatInfo(craftString, i)
-		local totalQuantity = CustomPrice.GetItemPrice(itemString, "NumInventory") or 0
-		if not itemString or not quantity or totalQuantity == 0 then
-			return 0, 0
+		local itemString, quantity, _, isQuality = Profession.GetMatInfo(craftString, i)
+		if not isQuality then
+			local totalQuantity = CustomPrice.GetItemPrice(itemString, "NumInventory") or 0
+			if not itemString or not quantity or totalQuantity == 0 then
+				return 0, 0
+			end
+			local bagQuantity = BagTracking.GetCraftingMatQuantity(itemString)
+			num = min(num, floor(bagQuantity / quantity))
+			numAll = min(numAll, floor(totalQuantity / quantity))
 		end
-		local bagQuantity = BagTracking.GetCraftingMatQuantity(itemString)
-		num = min(num, floor(bagQuantity / quantity))
-		numAll = min(numAll, floor(totalQuantity / quantity))
 	end
 	for _, _, itemId in RecipeString.OptionalMatIterator(recipeString) do
 		local itemString = ItemString.Get(itemId)
@@ -283,16 +284,6 @@ function ProfessionUtil.Craft(craftString, recipeId, quantity, useVellum, callba
 	private.craftTimeout = nil
 	private.timeoutTimer:RunForTime(0.5)
 	return quantity
-end
-
-function ProfessionUtil.StoreOptionalMatText(matString, text)
-	local matList = MatString.GetMatList(matString)
-	TSM.db.global.internalData.optionalMatTextLookup[matList] = TSM.db.global.internalData.optionalMatTextLookup[matList] or text
-end
-
-function ProfessionUtil.GetOptionalMatText(matString)
-	local matList = MatString.GetMatList(matString)
-	return TSM.db.global.internalData.optionalMatTextLookup[matList] or OPTIONAL_REAGENT_POSTFIX
 end
 
 function ProfessionUtil.GetCraftResultTooltipFromRecipeString(recipeString)

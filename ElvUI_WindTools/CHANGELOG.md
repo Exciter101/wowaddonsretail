@@ -1,80 +1,88 @@
-# Version: 3.18
-2022/01/03 Released
+# Version: 3.19
+2023/01/11 Released
 ## ❗ Important
-- ElvUI minimum supported version changed to 13.17.
-- [Advanced] Default disable the fix for duplicate groups in premade groups.
+- Compatibility check update.
+- [Extra Item Bar] Move DF weapon runes from UTILITY to RUNE category.
 ## ✳️ New
-- [CVars Editor] Add an option to automatically open the roll history frame.
-- [Extra Item Bar] Add a feature to show the quality of crafted items.
-- [Skins] Add a skin for Battle.net friend invite frame.
+- [Announcement] Add support for Warrior and Paladin taunt all spells.
+- [Extra Item Bar] Add new PROF (Profession Spec Point Items) item group. Thanks Tednik
 ## 💪 Improvement
-- [Announcement] Add support for Ohuna Perch in utilities announcement.
-- [Extra Item Bar] Update openable item list.
-- [Extra Item Bar] Remove Torghast item group.
-- [Extra Item Bar] Even if burgeoning seed (trinket) is temporarily not usable, it will be shown on the bar.
-- [Game Bar] Add Wyrmhole Generator to the Home button options.
-- [Event Tracker] Add two more fishing nets support.
-- [Tooltip] Removed the Shadowlands achievement and raid progress tracking.
-- [Misc] Try to fix the auto skip watched cinematic feature.
+- [Announcement] Fix a possible quest announcement error.
+- [Extra Item Bar] Update openable items list.
+- [Extra Item Bar] Clean up some utility items in Shadowlands.
+- [Extra Item Bar] Add PROF category to bar 1 default settings.
+- [Extra Item Bar] Add RUNE category to bar 3 default settings.
+- [Extra Item Bar] Fix quality icon display when the bar shown with mouseover.
+- [Extra Item Bar] Fix the mouseover animation activation when global fade is enabled.
+- [Game Bar] Add a new Hearthstone toy.
+- [Inspect] Update enchant ID database. Thanks bgp314@NGA
+- [Tooltip] Objective progress data update to 10.0.2.
+- [Rectangle Minimap] HandyNotes icons in minimap that are out of bounds will now be hidden automatically.
 
 ------
-# 版本: 3.18
-2022/01/03 发布
+# 版本: 3.19
+2023/01/11 发布
 ## ❗ 重要
-- ElvUI 最低支持版本变更为 13.17.
-- [高级] 默认关闭预组建队伍中重复队伍的修复功能.
+- 兼容性助手更新.
+- [额外物品条] 将巨龙时代铭文制造的可用于武器的符文从 UTILITY 分类移动到 RUNE 分类.
 ## ✳️ 新增
-- [CVars 编辑器] 新增了自动打开骰装界面的 CVar 选项.
-- [额外物品条] 新增了制造物品品质的显示.
-- [美化皮肤] 新增战网好友请求框体的美化.
+- [通告] 群嘲通告支持战士和圣骑士.
+- [额外物品条] 新增 PROF (专业技能点道具) 分类. 感谢 Tednik
 ## 💪 改善
-- [通告] 实用技能分类中新增对欧胡纳栖枝的支持.
-- [额外物品条] 新增了一些可打开物品.
-- [额外物品条] 移除了托加斯特物品分组.
-- [额外物品条] 就算元气之种饰品暂时不可使用现在也会被显示到条上.
-- [游戏条] 家按钮列表中新增了龙洞发生器.
-- [事件追踪器] 新增两个渔网位置.
-- [鼠标提示] 移除了暗影国度版本的成就和团队进度追踪.
-- [其他] 尝试修复自动跳过已看过动画功能.
+- [通告] 修复一个可能发生的任务通告错误.
+- [额外物品条] 更新可开启物品列表.
+- [额外物品条] 清理暗影国度版本中的一些实用物品.
+- [额外物品条] 条 1 默认设置中增加了 PROF 物品分类.
+- [额外物品条] 条 3 默认设置中增加了 RUNE 物品分类.
+- [额外物品条] 修复了品质图标在启用滑过显示时滞留.
+- [额外物品条] 修复了启用全局渐隐时错误使用鼠标滑过动画的问题.
+- [游戏条] 新增 1 个炉石玩具.
+- [观察] 更新附魔 ID 数据库. 感谢 bgp314@NGA
+- [鼠标提示] 目标进度数据更新至 10.0.2.
+- [矩形小地图] 越界的 HandyNotes 小地图图标现在会自动隐藏.
 
 ------
-# 版本: 3.18
-2022/01/03 發布
+# 版本: 3.19
+2023/01/11 發布
 ## ❗ 重要
-- ElvUI 最低支援版本變更為 13.17.
-- [高級] 預設關閉預組隊伍中重複隊伍的修復功能.
+- 相容性助手更新.
+- [额外物品条] 將巨龍崛起銘文製造的可用於武器的符文從 UTILITY 分類移動到 RUNE 分類.
 ## ✳️ 新增
-- [CVars 編輯器] 新增了自動開啟骰裝介面的 CVar 選項.
-- [額外物品條] 新增了製造物品品質的顯示.
-- [美化皮膚] 新增戰網好友請求框架的美化.
+- [通告] 群嘲通告支援戰士和聖騎士.
+- [额外物品条] 新增 PROF (專業技能點道具) 分類. 感謝 Tednik
 ## 💪 改善
-- [通告] 實用技能分類中新增對歐胡納鷹棲所的支援.
-- [額外物品條] 新增了一些可打開物品.
-- [額外物品條] 移除了托迦司物品分組.
-- [額外物品條] 就算茂發種子飾品暫時不可使用現在也會被顯示到條上.
-- [遊戲條] 家按鈕列表中新增了龍洞產生器.
-- [事件追蹤器] 新增兩個漁網位置.
-- [滑鼠提示] 移除了暗影之境版本的成就和團隊進度追蹤.
-- [其他] 嘗試修復自動跳過已看過動畫功能.
+- [通告] 修復一個可能發生的任務通告錯誤.
+- [额外物品条] 更新可開啟物品列表.
+- [额外物品条] 清理暗影之境版本中的一些實用物品.
+- [额外物品条] 條 1 預設配置中增加了 PROF 物品分類.
+- [额外物品条] 條 3 預設配置中增加了 RUNE 物品分類.
+- [额外物品条] 修復了品質圖示在啟用滑過顯示時滯留.
+- [额外物品条] 修復了啟用全局漸隱時錯誤使用滑鼠滑過動畫的問題.
+- [游戲條] 新增 1 個爐石玩具.
+- [觀察] 更新附魔 ID 數據庫. 感謝 bgp314@NGA
+- [浮動提示] 目標進度數據更新至 10.0.2.
+- [矩形小地圖] 越界的 HandyNotes 小地圖圖示現在會自動隱藏.
 
 ------
-# 버전: 3.18
-2022/01/03 Released
+# 버전: 3.19
+2023/01/11 Released
 ## ❗ 중요 사항
-- ElvUI minimum supported version changed to 13.17.
-- [Advanced] Default disable the fix for duplicate groups in premade groups.
+- Compatibility check update.
+- [Extra Item Bar] Move DF weapon runes from UTILITY to RUNE category.
 ## ✳️ 신규 사항
-- [CVars Editor] Add an option to automatically open the roll history frame.
-- [Extra Item Bar] Add a feature to show the quality of crafted items.
-- [Skins] Add a skin for Battle.net friend invite frame.
+- [Announcement] Add support for Warrior and Paladin taunt all spells.
+- [Extra Item Bar] Add new PROF (Profession Spec Point Items) item group. Thanks Tednik
 ## 💪 개선 사항
-- [Announcement] Add support for Ohuna Perch in utilities announcement.
-- [Extra Item Bar] Update openable item list.
-- [Extra Item Bar] Remove Torghast item group.
-- [Extra Item Bar] Even if burgeoning seed (trinket) is temporarily not usable, it will be shown on the bar.
-- [Game Bar] Add Wyrmhole Generator to the Home button options.
-- [Event Tracker] Add two more fishing nets support.
-- [Tooltip] Removed the Shadowlands achievement and raid progress tracking.
-- [Misc] Try to fix the auto skip watched cinematic feature.
+- [Announcement] Fix a possible quest announcement error.
+- [Extra Item Bar] Update openable items list.
+- [Extra Item Bar] Clean up some utility items in Shadowlands.
+- [Extra Item Bar] Add PROF category to bar 1 default settings.
+- [Extra Item Bar] Add RUNE category to bar 3 default settings.
+- [Extra Item Bar] Fix quality icon display when the bar shown with mouseover.
+- [Extra Item Bar] Fix the mouseover animation activation when global fade is enabled.
+- [Game Bar] Add a new Hearthstone toy.
+- [Inspect] Update enchant ID database. Thanks bgp314@NGA
+- [Tooltip] Objective progress data update to 10.0.2.
+- [Rectangle Minimap] HandyNotes icons in minimap that are out of bounds will now be hidden automatically.
 
 ------

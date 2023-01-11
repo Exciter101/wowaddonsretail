@@ -3,13 +3,43 @@ local RM = W:NewModule("RectangleMinimap", "AceEvent-3.0", "AceHook-3.0")
 local M = E:GetModule("Minimap")
 
 local _G = _G
+local abs = abs
 local ceil = ceil
 local floor = floor
 local format = format
+local hooksecurefunc = hooksecurefunc
 local pairs = pairs
+local select = select
 local sqrt = sqrt
 
 local InCombatLockdown = InCombatLockdown
+local IsAddOnLoaded = IsAddOnLoaded
+
+function RM:HereBeDragons_Pins_AddMinimapIconMap(_, _, icon)
+    hooksecurefunc(
+        icon,
+        "SetPoint",
+        function(pin)
+            if self.db and self.db.enable and self.effectiveHeight then
+                local y = select(5, pin:GetPoint(1))
+                if y and abs(y) > self.effectiveHeight / 2 then
+                    icon:Hide()
+                end
+            end
+        end
+    )
+end
+
+function RM:HandyNotesFix()
+    local lib = _G.LibStub("HereBeDragons-Pins-2.0", true)
+    if not lib then
+        return
+    end
+
+    self.HereBeDragonsPinLib = lib
+
+    self:SecureHook(lib, "AddMinimapIconMap", "HereBeDragons_Pins_AddMinimapIconMap")
+end
 
 function RM:ChangeShape()
     if not self.db then
@@ -64,6 +94,7 @@ function RM:ChangeShape()
     end
 
     self:Minimap_Holder_Size()
+    self.effectiveHeight = newHeight
 end
 
 do
@@ -121,6 +152,10 @@ function RM:Initialize()
 
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("ADDON_LOADED")
+
+    if IsAddOnLoaded("HandyNotes") then
+        self:HandyNotesFix()
+    end
 end
 
 function RM:ADDON_LOADED(_, addon)

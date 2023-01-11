@@ -36,6 +36,7 @@ local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
 
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
+local C_Timer_NewTicker = C_Timer.NewTicker
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 
@@ -394,6 +395,15 @@ local flasksDragonflight = {
 local runes = {
     160053, -- 戰鬥傷痕增強符文
     181468, -- 朦朧增強符文
+    194817, -- 尖嘯符文
+    194819, -- 尖嘯符文
+    194820, -- 尖嘯符文
+    194821, -- 嗡鳴符文
+    194822, -- 嗡鳴符文
+    194823, -- 嗡鳴符文
+    194824, -- 鳴叫符文
+    194825, -- 鳴叫符文
+    194826, -- 鳴叫符文
     198491, -- 梵陀符文：洪荒化身牢獄
     198492, -- 梵陀符文：洪荒化身牢獄
     198493, -- 梵陀符文：洪荒化身牢獄
@@ -402,6 +412,15 @@ local runes = {
 
 -- Runes added in Dragonflight
 local runesDragonflight = {
+    194817, -- 尖嘯符文
+    194819, -- 尖嘯符文
+    194820, -- 尖嘯符文
+    194821, -- 嗡鳴符文
+    194822, -- 嗡鳴符文
+    194823, -- 嗡鳴符文
+    194824, -- 鳴叫符文
+    194825, -- 鳴叫符文
+    194826, -- 鳴叫符文
     198491, -- 梵陀符文：洪荒化身牢獄
     198492, -- 梵陀符文：洪荒化身牢獄
     198493, -- 梵陀符文：洪荒化身牢獄
@@ -680,17 +699,6 @@ local utilities = {
     109076, -- 哥布林滑翔工具組
     132514, -- 自動鐵錘
     132516, -- 槍靴
-    153023, -- 光鑄增強符文
-    171285, -- 影核之油
-    171286, -- 防腐之油
-    171436, -- 孔岩磨刀石
-    171437, -- 幽影磨刀石
-    171438, -- 孔岩平衡石
-    171439, -- 幽影平衡石
-    172233, -- 致命兇殘之鼓
-    172346, -- 荒寂護甲片
-    172347, -- 厚重荒寂護甲片
-    182749, -- 回收的琪瑞安之翼
     191933, -- 洪荒磨石
     191939, -- 洪荒打磨石
     191940, -- 洪荒打磨石
@@ -700,15 +708,6 @@ local utilities = {
     191948, -- 洪荒磨刃石
     191949, -- 洪荒磨刃石
     191950, -- 洪荒磨刃石
-    194817, -- 尖嘯符文
-    194819, -- 尖嘯符文
-    194820, -- 尖嘯符文
-    194821, -- 嗡鳴符文
-    194822, -- 嗡鳴符文
-    194823, -- 嗡鳴符文
-    194824, -- 鳴叫符文
-    194825, -- 鳴叫符文
-    194826, -- 鳴叫符文
     198160, -- 超安全火箭
     198161, -- 超安全火箭
     198162, -- 超安全火箭
@@ -717,6 +716,7 @@ local utilities = {
     198165 -- 無限針堆
 }
 
+-- Openable Items
 local openableItems = {
     54537, -- 心型盒
     92794, -- 騎乘套票
@@ -880,9 +880,217 @@ local openableItems = {
     201756, -- 鼓鼓的零錢包
     201817, -- 暮光儲藏箱
     201818, -- 暮光保險箱
+    202079, -- 密庫藏寶箱
     202080, -- 密庫藏寶箱
     202142, -- 龍禍要塞保險箱
     202171 -- 龍族錢包
+}
+
+-- Profession Items
+-- https://github.com/fang2hou/ElvUI_WindTools/issues/298
+-- Thanks Tednik@GitHub
+local professionItems = {
+    192131, -- 沃卓肯武器鍊
+    192132, -- 龍金磨刀石
+    192443, -- 元素灌注火箭頭盔
+    193891, -- 實驗性物質
+    193897, -- 復甦催化劑
+    193898, -- 晦影骨針
+    193899, -- 洪荒織線紡錘
+    193900, -- 稜彩聚焦裂片
+    193901, -- 洪荒之塵
+    193902, -- 被侵蝕的泰坦器械
+    193903, -- 看守者能量核心
+    193904, -- 鳳凰之羽羽毛筆
+    193905, -- 伊斯凱拉貿易帳本
+    193907, -- 碎裂的提爾石
+    193909, -- 遠古寶石碎片
+    193910, -- 蛻下的龍鱗
+    193913, -- 防腐動物屍塊
+    194039, -- 炙熱礦石樣本
+    194040, -- 石板毛皮
+    194041, -- 漂流花幼苗
+    194042, -- 探險者的草藥學旌旗
+    194043, -- 探險者的草藥學旌旗
+    194044, -- 探險者的草藥學旌旗
+    194045, -- 探險者的地質學旌旗
+    194046, -- 探險者的地質學旌旗
+    194047, -- 探險者的地質學旌旗
+    194054, -- 掘泥幼苗
+    194055, -- 原初泥土
+    194061, -- 窒息孢子
+    194062, -- 堅固的石塊
+    194063, -- 發光碎片
+    194064, -- 細緻晶簇
+    194078, -- 完美的龍金鱗片
+    194079, -- 純淨的賽若拜岩碎礦
+    194080, -- 奇特花芽
+    194081, -- 突變樹根
+    194697, -- 龍族鍊金術概論
+    194698, -- 龍族裁縫概論
+    194699, -- 龍族銘文學概論
+    194700, -- 龍族製皮概論
+    194702, -- 龍族附魔概論
+    194703, -- 龍族珠寶設計概論
+    194704, -- 龍族草藥學概論
+    194708, -- 龍族採礦概論
+    198156, -- 龍洞產生器
+    198454, -- 龍族鍛造概論
+    198510, -- 龍族工程學概論
+    198518, -- 牛頭人講師的超機密鍛造指南
+    198519, -- 牛頭人講師的超機密鍊金術指南
+    198520, -- 牛頭人講師的超機密附魔指南
+    198521, -- 牛頭人講師的超機密工程學指南
+    198522, -- 牛頭人講師的超機密草藥學指南
+    198523, -- 牛頭人講師的超機密銘文學指南
+    198524, -- 牛頭人講師的超機密珠寶設計指南
+    198525, -- 牛頭人講師的超機密製皮指南
+    198526, -- 牛頭人講師的超機密採礦指南
+    198527, -- 牛頭人講師的超機密剝皮指南
+    198528, -- 牛頭人講師的超機密裁縫指南
+    198599, -- 實驗腐朽樣本
+    198606, -- 鐵匠的令狀
+    198607, -- 雕銘師的雕紋
+    198608, -- 鍊金術筆記
+    198609, -- 裁縫樣本
+    198610, -- 附魔師的手稿
+    198611, -- 工程學資料
+    198612, -- 珠寶師設計稿
+    198613, -- 製皮設計
+    198656, -- 繪師的美麗寶石
+    198658, -- 腐朽灌注鞣製油
+    198659, -- 健忘學徒秘典
+    198660, -- 碎片鑰匙
+    198662, -- 一匹奇妙的藍布
+    198663, -- 霜鑄藥水
+    198664, -- 晶化增生
+    198667, -- 備用加拉登工具
+    198669, -- 幼龍訓練指南
+    198670, -- 高尚的瑪里藍鑽
+    198675, -- 熔岩灌注種子
+    198680, -- 腐朽蕨皮毯子
+    198682, -- 雅立史紅晶叢
+    198683, -- 經處理的皮革
+    198684, -- 迷你青銅龍軍團旌旗
+    198685, -- 隔熱良好的杯子
+    198686, -- 霜凍皮紙
+    198687, -- 密切把守的亮晶晶
+    198689, -- 風暴束縛號角
+    198690, -- 腐朽鱗片
+    198692, -- 值得注意的地毯碎塊
+    198693, -- 布滿灰塵的暗月卡
+    198694, -- 肥沃的大地裂片
+    198696, -- 受風祝福的皮革
+    198697, -- 違禁品混合物
+    198699, -- 神秘旌旗
+    198702, -- 飄動焦痕布帛
+    198703, -- 手語參考資料表
+    198704, -- 脈衝大地符文
+    198710, -- 一壺可疑的水
+    198711, -- 盜獵者的背包
+    198712, -- 火水粉樣本
+    198789, -- 完好線圈電容
+    198798, -- 閃凍卷軸
+    198799, -- 遺忘的秘法寶典
+    198800, -- 碎裂的泰坦之球
+    198836, -- 弧光活力修正器
+    198837, -- 奇特碎皮
+    198841, -- 奇特皮革的大型樣本
+    198963, -- 腐朽黏液
+    198964, -- 元素裂片
+    198965, -- 原初之土碎片
+    198966, -- 熔火之球
+    198967, -- 原初乙太
+    198968, -- 洪荒使者符咒
+    198969, -- 守衛者印記
+    198970, -- 可無限連接的雙碼頭
+    198971, -- 奇妙的加拉登符文
+    198972, -- 龍族掩蔽魔法
+    198973, -- 熾熱古董
+    198974, -- 優雅的雕刻裝飾品
+    198975, -- 骨化皮革
+    198976, -- 極致柔軟皮膚
+    198977, -- 雍亞拉編織
+    198978, -- 簡單有效縫合
+    199115, -- 草藥學田野筆記
+    199122, -- 採礦田野筆記
+    199128, -- 剝皮田野筆記
+    200677, -- 夢境花花瓣
+    200678, -- 夢境花
+    200972, -- 蒙塵鐵匠圖表
+    200973, -- 蒙塵雕銘師符文圖畫
+    200974, -- 蒙塵鍊金師研究
+    200975, -- 蒙塵裁縫師圖表
+    200976, -- 蒙塵附魔師研究
+    200977, -- 蒙塵工程師潦草文字
+    200978, -- 蒙塵珠寶師插畫
+    200979, -- 蒙塵製皮師圖表
+    200980, -- 蒙塵草藥師筆記
+    200981, -- 蒙塵礦工筆記
+    200982, -- 蒙塵剝皮師筆記
+    201003, -- 毛茸茸的黏液
+    201004, -- 上古之矛裂片
+    201005, -- 奇怪的錠塊
+    201006, -- 龍之奔流
+    201007, -- 遠古紀念碑
+    201008, -- 熔火錠
+    201009, -- 馴鷹人臂鎧圖畫
+    201010, -- 喀拉希武器圖解
+    201011, -- 魔化鉗
+    201012, -- 秘能殘骸
+    201013, -- 微弱秘能遺骸
+    201014, -- 轟希爾火箭
+    201015, -- 偽造的暗月套卡
+    201016, -- 和諧水晶和諧器
+    201017, -- 火成寶石
+    201018, -- 擅舞之鼓
+    201019, -- 古老的龍織布卷
+    201020, -- 絲柔之喜
+    201023, -- 龍族剝皮概論
+    201268, -- 精良鐵匠圖表
+    201269, -- 精良雕銘師符文圖畫
+    201270, -- 精良鍊金師研究
+    201271, -- 精良裁縫師圖表
+    201272, -- 精良附魔師研究
+    201273, -- 精良工程師潦草文字
+    201274, -- 精良珠寶師插畫
+    201275, -- 精良製皮師圖表
+    201276, -- 精良草藥師筆記
+    201277, -- 精良礦工筆記
+    201278, -- 精良剝皮師筆記
+    201279, -- 上古鐵匠圖表
+    201280, -- 上古雕銘師符文圖畫
+    201281, -- 上古鍊金師研究
+    201282, -- 上古裁縫師圖表
+    201283, -- 上古附魔師研究
+    201284, -- 上古工程師潦草文字
+    201285, -- 上古珠寶師插畫
+    201286, -- 上古製皮師圖表
+    201287, -- 上古草藥師筆記
+    201288, -- 上古礦工筆記
+    201289, -- 上古剝皮師筆記
+    201300, -- 虹彩礦石碎片
+    201301, -- 虹彩礦石
+    201356, -- 火焰微光
+    201357, -- 冰霜微光
+    201358, -- 空氣微光
+    201359, -- 大地微光
+    201360, -- 秩序微光
+    201700, -- 製作知識的筆記本
+    201705, -- 製作知識的筆記本
+    201706, -- 製作知識的筆記本
+    201708, -- 製作知識的筆記本
+    201709, -- 製作知識的筆記本
+    201710, -- 製作知識的筆記本
+    201711, -- 製作知識的筆記本
+    201712, -- 製作知識的筆記本
+    201713, -- 製作知識的筆記本
+    201715, -- 製作知識的筆記本
+    201716, -- 製作知識的筆記本
+    201717, -- 製作知識的筆記本
+    202011, -- 元素充能之石
+    202014, -- 灌能花粉
+    202016 -- 濕透的骸骨
 }
 
 -- 更新任务物品列表
@@ -902,7 +1110,6 @@ local function UpdateQuestItemList()
     end
 end
 
--- 更新装备物品列表
 local forceUsableItems = {
     [193634] = true -- 茂發種子
 }
@@ -940,7 +1147,8 @@ local moduleList = {
     ["MAGEFOOD"] = conjuredManaFood,
     ["BANNER"] = banners,
     ["UTILITY"] = utilities,
-    ["OPENABLE"] = openableItems
+    ["OPENABLE"] = openableItems,
+    ["PROF"] = professionItems
 }
 
 function EB:CreateButton(name, barDB)
@@ -1013,7 +1221,7 @@ function EB:CreateButton(name, barDB)
     return button
 end
 
-function EB:SetUpButton(button, itemData, slotID)
+function EB:SetUpButton(button, itemData, slotID, waitGroup)
     button.itemName = nil
     button.itemID = nil
     button.spellName = nil
@@ -1026,16 +1234,26 @@ function EB:SetUpButton(button, itemData, slotID)
         button.questLogIndex = itemData.questLogIndex
         button:SetBackdropBorderColor(0, 0, 0)
 
+        waitGroup.count = waitGroup.count + 1
         async.WithItemID(
             itemData.itemID,
             function(item)
                 button.itemName = item:GetItemName()
                 button.tex:SetTexture(item:GetItemIcon())
                 button:SetTier(itemData.itemID)
+                E:Delay(
+                    0.1,
+                    function()
+                        -- delay for quality tier fetching and text changing
+                        waitGroup.count = waitGroup.count - 1
+                    end
+                )
             end
         )
     elseif slotID then
         button.slotID = slotID
+
+        waitGroup.count = waitGroup.count + 1
         async.WithItemSlotID(
             slotID,
             function(item)
@@ -1049,6 +1267,14 @@ function EB:SetUpButton(button, itemData, slotID)
                 end
 
                 button:SetTier(item:GetItemID())
+
+                E:Delay(
+                    0.1,
+                    function()
+                        -- delay for quality tier fetching and text changing
+                        waitGroup.count = waitGroup.count - 1
+                    end
+                )
             end
         )
     end
@@ -1272,7 +1498,7 @@ function EB:CreateBar(id)
                 return
             end
 
-            if barDB.mouseOver and barDB.alphaMax and barDB.alphaMin then
+            if not barDB.globalFade and barDB.mouseOver and barDB.alphaMax and barDB.alphaMin then
                 local alphaCurrent = bar:GetAlpha()
                 E:UIFrameFadeIn(
                     bar,
@@ -1291,7 +1517,7 @@ function EB:CreateBar(id)
                 return
             end
 
-            if barDB.mouseOver and barDB.alphaMax and barDB.alphaMin then
+            if not barDB.globalFade and barDB.mouseOver and barDB.alphaMax and barDB.alphaMin then
                 local alphaCurrent = bar:GetAlpha()
                 E:UIFrameFadeOut(
                     bar,
@@ -1314,6 +1540,12 @@ function EB:UpdateBar(id)
     local bar = self.bars[id]
     local barDB = self.db["bar" .. id]
 
+    if bar.waitGroup and bar.waitGroup.ticker then
+        bar.waitGroup.ticker:Cancel()
+    end
+
+    bar.waitGroup = {count = 0}
+
     if InCombatLockdown() then
         self:UpdateBarTextOnCombat(id)
         UpdateAfterCombat[id] = true
@@ -1332,11 +1564,11 @@ function EB:UpdateBar(id)
 
     local buttonID = 1
 
-    local function AddButtons(list)
+    local function addButtons(list)
         for _, itemID in pairs(list) do
             local count = GetItemCount(itemID)
             if count and count > 0 and not self.db.blackList[itemID] and buttonID <= barDB.numButtons then
-                self:SetUpButton(bar.buttons[buttonID], {itemID = itemID})
+                self:SetUpButton(bar.buttons[buttonID], {itemID = itemID}, nil, bar.waitGroup)
                 self:UpdateButtonSize(bar.buttons[buttonID], barDB)
                 buttonID = buttonID + 1
             end
@@ -1346,11 +1578,11 @@ function EB:UpdateBar(id)
     for _, module in ipairs {strsplit("[, ]", barDB.include)} do
         if buttonID <= barDB.numButtons then
             if moduleList[module] then
-                AddButtons(moduleList[module])
+                addButtons(moduleList[module])
             elseif module == "QUEST" then -- 更新任务物品
                 for _, data in pairs(questItemList) do
                     if not self.db.blackList[data.itemID] then
-                        self:SetUpButton(bar.buttons[buttonID], data)
+                        self:SetUpButton(bar.buttons[buttonID], data, nil, bar.waitGroup)
                         self:UpdateButtonSize(bar.buttons[buttonID], barDB)
                         buttonID = buttonID + 1
                     end
@@ -1359,13 +1591,13 @@ function EB:UpdateBar(id)
                 for _, slotID in pairs(equipmentList) do
                     local itemID = GetInventoryItemID("player", slotID)
                     if itemID and not self.db.blackList[itemID] and buttonID <= barDB.numButtons then
-                        self:SetUpButton(bar.buttons[buttonID], nil, slotID)
+                        self:SetUpButton(bar.buttons[buttonID], nil, slotID, bar.waitGroup)
                         self:UpdateButtonSize(bar.buttons[buttonID], barDB)
                         buttonID = buttonID + 1
                     end
                 end
             elseif module == "CUSTOM" then -- 更新自定义列表
-                AddButtons(self.db.customList)
+                addButtons(self.db.customList)
             end
         end
     end
@@ -1491,20 +1723,39 @@ function EB:UpdateBar(id)
         end
     end
 
-    bar.alphaMin = barDB.alphaMin
-    bar.alphaMax = barDB.alphaMax
+    local function updateAlpha()
+        bar.alphaMin = barDB.alphaMin
+        bar.alphaMax = barDB.alphaMax
 
-    if barDB.globalFade then
-        bar:SetAlpha(1)
-        bar:GetParent():SetParent(AB.fadeParent)
-    else
-        if barDB.mouseOver then
-            bar:SetAlpha(barDB.alphaMin)
+        if barDB.globalFade then
+            bar:SetAlpha(1)
+            bar:GetParent():SetParent(AB.fadeParent)
         else
-            bar:SetAlpha(barDB.alphaMax)
+            if barDB.mouseOver then
+                bar:SetAlpha(barDB.alphaMin)
+            else
+                bar:SetAlpha(barDB.alphaMax)
+            end
+
+            bar:GetParent():SetParent(E.UIParent)
         end
-        bar:GetParent():SetParent(E.UIParent)
+
+        if bar.waitGroup.ticker then
+            bar.waitGroup.ticker:Cancel()
+        end
+
+        bar.waitGroup = nil
     end
+
+    bar.waitGroup.ticker =
+        C_Timer_NewTicker(
+        0.1,
+        function()
+            if not bar.waitGroup or bar.waitGroup.count == 0 then
+                updateAlpha()
+            end
+        end
+    )
 end
 
 function EB:UpdateBars()
