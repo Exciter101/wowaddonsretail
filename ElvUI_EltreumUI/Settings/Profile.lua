@@ -160,6 +160,7 @@ P.ElvUI_EltreumUI = {
 			hidealert = false,
 			hidezone = false,
 			hideboss = false,
+			bossScale = 1,
 		},
 		instances = {
 			enable = false,
@@ -302,6 +303,11 @@ P.ElvUI_EltreumUI = {
 		widenameplate = {
 			enable = false,
 			npglow = false,
+		},
+		auras = {
+			enable = false,
+			xOffset = 0,
+			yOffset = 5,
 		},
 	},
 
@@ -1154,6 +1160,8 @@ P.ElvUI_EltreumUI = {
 		blizzcombatmana = false,
 		mapcombathide = false,
 		mapcombathideadjustaura = true,
+		worldmapscale = true,
+		worldmapscalevalue = 1,
 		rightdatatextcombatshow = false,
 		leftdatatextcombatshow = false,
 		dynamicxpbar = false,
@@ -1201,6 +1209,7 @@ P.ElvUI_EltreumUI = {
 			sizey = 9,
 		},
 		taxiscale = 1,
+		bagscale = 1,
 		colorbg = false,
 		musicshuffle = false,
 	},

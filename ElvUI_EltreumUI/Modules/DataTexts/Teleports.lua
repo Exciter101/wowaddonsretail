@@ -10,7 +10,7 @@ local pairs = _G.pairs
 local GetItemIcon = _G.GetItemIcon
 local PlayerHasToy = _G.PlayerHasToy
 local C_ToyBox = _G.C_ToyBox
-local GetItemCooldown = _G.GetItemCooldown
+local GetItemCooldown = (E.Retail or E.Wrath) and C_Container.GetItemCooldown or _G.GetContainerItemCooldown
 local CreateFrame = _G.CreateFrame
 local GetBindLocation = _G.GetBindLocation
 local GetTime = _G.GetTime
@@ -182,6 +182,7 @@ local displayStringEltruismTeleports = "|TInterface\\Addons\\ElvUI_EltreumUI\\Me
 local function EltruismTeleportsOnEvent(self)
 	local sizeString = "\":"..E.db["chat"]["fontSize"]..":"..E.db["chat"]["fontSize"].."\""
 	local start, duration = GetItemCooldown(6948)
+	if not start then return end
 	local cooldown = start + duration - GetTime()
 	if cooldown >= 2 then
 		displayStringEltruismTeleports = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Warcraft3Hearthstone.tga:18:18:0:0:64:64:2:62:2:62|t |cffED7474"..GetBindLocation().."|r"

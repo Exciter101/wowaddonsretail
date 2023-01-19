@@ -73,6 +73,7 @@ local DONATORS = {
 	'|cffB50909markpoops|r',
 	'|cffB50909Michael_|r',
 	'|cffB50909Morthart|r',
+	'|cffB50909Mr.Ditto|r',
 	'|cffB50909Nekator|r',
 	'|cffB50909Nyhilatiant|r',
 	'|cffB50909Oakshlam|r',
@@ -1381,8 +1382,6 @@ function ElvUI_EltreumUI:Configtable()
 								width = 'full',
 								--image = function() return 'Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\EltreumHeader', 3240, 1 end,
 							},
-
-
 							gap1 = {
 								order = 5,
 								type = "description",
@@ -2520,13 +2519,13 @@ function ElvUI_EltreumUI:Configtable()
 							headerlineUFborder = {
 								order = 97,
 								type = "description",
-								name = E.NewSign..L["Unitframe Auras"],
+								name = L["Unitframe Auras"],
 								width = 'full',
 								image = function() return 'Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\EltreumHeader', 3240, 1 end,
 							},
 							enableaurauf = {
 								type = 'toggle',
-								name = E.NewSign..L["Enable Unitframe Auras"],
+								name = L["Enable Unitframe Auras"],
 								width = "full",
 								order = 98,
 								disabled = function() return not E.db.ElvUI_EltreumUI.borders.borders end,
@@ -2535,7 +2534,7 @@ function ElvUI_EltreumUI:Configtable()
 							},
 							ufaurabordersizex = {
 								type = 'range',
-								name = E.NewSign..L["Unitframe Aura Border X offset"],
+								name = L["Unitframe Aura Border X offset"],
 								order = 99,
 								min = 1,
 								max = 100,
@@ -2547,7 +2546,7 @@ function ElvUI_EltreumUI:Configtable()
 							},
 							ufaurabordersizey = {
 								type = 'range',
-								name = E.NewSign..L["Unitframe Aura Border Y offset"],
+								name = L["Unitframe Aura Border Y offset"],
 								order = 100,
 								min = 1,
 								max = 100,
@@ -2559,7 +2558,7 @@ function ElvUI_EltreumUI:Configtable()
 							},
 							ufdebuffaurabordersizex = {
 								type = 'range',
-								name = E.NewSign..L["Unitframes Debuff Aura Border X offset"],
+								name = L["Unitframes Debuff Aura Border X offset"],
 								order = 101,
 								min = 1,
 								max = 100,
@@ -2571,7 +2570,7 @@ function ElvUI_EltreumUI:Configtable()
 							},
 							ufdebuffaurabordersizey = {
 								type = 'range',
-								name = E.NewSign..L["Unitframes Debuff Aura Border Y offset"],
+								name = L["Unitframes Debuff Aura Border Y offset"],
 								order = 102,
 								min = 1,
 								max = 100,
@@ -3096,7 +3095,7 @@ function ElvUI_EltreumUI:Configtable()
 						order = 4,
 						min = 0,
 						max = 1,
-						step = 0.1,
+						step = 0.01,
 						--width = "full",
 						disabled = function() return not E.db.ElvUI_EltreumUI.skins.doom.enable end,
 						get = function() return E.db.ElvUI_EltreumUI.skins.doom.maxAlpha end,
@@ -3892,7 +3891,7 @@ function ElvUI_EltreumUI:Configtable()
 								name = L["Autocast"],
 								order = 100,
 								desc = L["Adds an autocast style glow using class color"],
-								disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable or E.db.ElvUI_EltreumUI.glow.pixel or E.db.ElvUI_EltreumUI.glow.blizzard end,
+								disabled = function() return not (E.db.ElvUI_EltreumUI.glow.enable or E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow or E.db.ElvUI_EltreumUI.glow.enablepet or E.db.ElvUI_EltreumUI.glow.enableUFs) or E.db.ElvUI_EltreumUI.glow.pixel or E.db.ElvUI_EltreumUI.glow.blizzard end,
 								get = function() return E.db.ElvUI_EltreumUI.glow.autocast end,
 								set = function(_, value) E.db.ElvUI_EltreumUI.glow.autocast = value end,
 							},
@@ -3901,7 +3900,7 @@ function ElvUI_EltreumUI:Configtable()
 								name = L["Pixel"],
 								order = 101,
 								desc = L["Adds a pixel style glow using class color"],
-								disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable or E.db.ElvUI_EltreumUI.glow.autocast or E.db.ElvUI_EltreumUI.glow.blizzard end,
+								disabled = function() return not (E.db.ElvUI_EltreumUI.glow.enable or E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow or E.db.ElvUI_EltreumUI.glow.enablepet or E.db.ElvUI_EltreumUI.glow.enableUFs) or E.db.ElvUI_EltreumUI.glow.autocast or E.db.ElvUI_EltreumUI.glow.blizzard end,
 								get = function() return E.db.ElvUI_EltreumUI.glow.pixel end,
 								set = function(_, value) E.db.ElvUI_EltreumUI.glow.pixel = value end,
 							},
@@ -3910,7 +3909,7 @@ function ElvUI_EltreumUI:Configtable()
 								name = 'Blizzard',
 								order = 102,
 								desc = L["Adds a Blizzard style glow using class color"],
-								disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable or E.db.ElvUI_EltreumUI.glow.autocast or E.db.ElvUI_EltreumUI.glow.pixel end,
+								disabled = function() return not (E.db.ElvUI_EltreumUI.glow.enable or E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow or E.db.ElvUI_EltreumUI.glow.enablepet or E.db.ElvUI_EltreumUI.glow.enableUFs) or E.db.ElvUI_EltreumUI.glow.autocast or E.db.ElvUI_EltreumUI.glow.pixel end,
 								get = function() return E.db.ElvUI_EltreumUI.glow.blizzard end,
 								set = function(_, value) E.db.ElvUI_EltreumUI.glow.blizzard = value end,
 							},
@@ -3935,7 +3934,7 @@ function ElvUI_EltreumUI:Configtable()
 						type = 'group',
 						name = L["Glow Colors"],
 						order = 2,
-						disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable and not E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow and not E.db.ElvUI_EltreumUI.glow.enablepet end,
+						disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable and not E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow and not E.db.ElvUI_EltreumUI.glow.enablepet and not E.db.ElvUI_EltreumUI.glow.enableUFs end,
 						args = {
 							headerline1 = {
 								order = 1,
@@ -4179,7 +4178,7 @@ function ElvUI_EltreumUI:Configtable()
 						type = 'group',
 						name = L["Pixel Glow"],
 						order = 3,
-						disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable and not E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow and not E.db.ElvUI_EltreumUI.glow.enablepet end,
+						disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable and not E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow and not E.db.ElvUI_EltreumUI.glow.enablepet and not E.db.ElvUI_EltreumUI.glow.enableUFs end,
 						args = {
 							headerline1 = {
 								order = 1,
@@ -4317,7 +4316,7 @@ function ElvUI_EltreumUI:Configtable()
 						type = 'group',
 						name = L["Autocast Glow"],
 						order = 3,
-						disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable and not E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow and not E.db.ElvUI_EltreumUI.glow.enablepet end,
+						disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable and not E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow and not E.db.ElvUI_EltreumUI.glow.enablepet and not E.db.ElvUI_EltreumUI.glow.enableUFs end,
 						args = {
 							headerline1 = {
 								order = 1,
@@ -4420,7 +4419,7 @@ function ElvUI_EltreumUI:Configtable()
 						type = 'group',
 						name = L["Blizzard Glow"],
 						order = 3,
-						disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable and not E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow and not E.db.ElvUI_EltreumUI.glow.enablepet end,
+						disabled = function() return not E.db.ElvUI_EltreumUI.glow.enable and not E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow and not E.db.ElvUI_EltreumUI.glow.enablepet and not E.db.ElvUI_EltreumUI.glow.enableUFs end,
 						args = {
 							headerline2 = {
 								order = 93,
@@ -4695,20 +4694,20 @@ function ElvUI_EltreumUI:Configtable()
 								type = "description",
 								name = "",
 								width = 'full',
-								hidden = not E.Retail,
+								hidden = E.Classic,
 								image = function() return 'Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\EltreumHeader', 3240, 1 end,
 							},
 							lowlatencycvar ={
 								order = 20,
 								type = 'select',
-								name = LOW_LATENCY_MODE or "",
-								hidden = not E.Retail,
-								desc = OPTION_TOOLTIP_LOW_LATENCY_MODE or "",
+								name = LOW_LATENCY_MODE or "Low Latency Mode",
+								hidden = E.Classic,
+								desc = OPTION_TOOLTIP_LOW_LATENCY_MODE or "Allows the game to use various techniques to reduce input latency",
 								--width = "full",
 								values = {
-									["0"] = VIDEO_OPTIONS_DISABLED or "",
-									["1"] = VIDEO_OPTIONS_BUILTIN or "",
-									["2"] = VIDEO_OPTIONS_NVIDIA_REFLEX or "",
+									["0"] = VIDEO_OPTIONS_DISABLED or "Disabled",
+									["1"] = VIDEO_OPTIONS_BUILTIN or "Built-in",
+									["2"] = VIDEO_OPTIONS_NVIDIA_REFLEX or "NVIDIA Reflex",
 									--["3"] = VIDEO_OPTIONS_NVIDIA_REFLEX_BOOST,
 								},
 								style = 'radio',
@@ -7325,7 +7324,7 @@ function ElvUI_EltreumUI:Configtable()
 					},
 					taxiscale = {
 						type = 'range',
-						name = E.NewSign..L["Flight Frame Scale"],
+						name = L["Flight Frame Scale"],
 						order = 8,
 						min = 0.1,
 						max = 3,
@@ -7338,6 +7337,40 @@ function ElvUI_EltreumUI:Configtable()
 							end
 							if _G["FlightMapFrame"] then
 								_G["FlightMapFrame"]:SetScale(value)
+							end
+						end,
+					},
+					headerworldmapscale = {
+						order = 9,
+						type = "description",
+						name = "",
+						width = 'full',
+						hidden = not E.Retail,
+						image = function() return 'Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\EltreumHeader', 3240, 1 end,
+					},
+					wordlmapscaletoggle = {
+						type = 'toggle',
+						name = E.NewSign..L["Enable World Map Scaling"],
+						order = 10,
+						--desc = "",
+						hidden = not E.Retail,
+						get = function() return E.db.ElvUI_EltreumUI.otherstuff.worldmapscale end,
+						set = function(_, value) E.db.ElvUI_EltreumUI.otherstuff.worldmapscale = value E:StaticPopup_Show('CONFIG_RL') end,
+					},
+					worldmapscalevalue = {
+						type = 'range',
+						name = E.NewSign..L["World Map Scale"],
+						order = 11,
+						min = 0.1,
+						max = 3,
+						step = 0.01,
+						hidden = not E.Retail,
+						--width = "double",
+						disabled = function() return not E.db.ElvUI_EltreumUI.otherstuff.worldmapscale end,
+						get = function() return E.db.ElvUI_EltreumUI.otherstuff.worldmapscalevalue end,
+						set = function(_, value) E.db.ElvUI_EltreumUI.otherstuff.worldmapscalevalue = value
+							if _G["WorldMapFrame"] and E.Retail then
+								_G["WorldMapFrame"]:SetScale(value)
 							end
 						end,
 					},
@@ -8108,6 +8141,46 @@ function ElvUI_EltreumUI:Configtable()
 								disabled = function() return not E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.enableHealthHeight or E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.useelvuinpheight end,
 								get = function() return E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.incombatHeight end,
 								set = function(_, value) E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.incombatHeight = value end,
+							},
+							headernpauras = {
+								order = 13,
+								type = "description",
+								name = E.NewSign..L["Adjust Aura Position"],
+								width = 'full',
+								image = function() return 'Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\EltreumHeader', 3240, 1 end,
+							},
+							npauraposenable = {
+								order = 14,
+								type = 'toggle',
+								name = L["Enable"],
+								desc = L["Adjust the position of the text on Buffs/Debuffs"],
+								width = 'full',
+								get = function() return E.db.ElvUI_EltreumUI.nameplates.auras.enable end,
+								set = function(_, value) E.db.ElvUI_EltreumUI.nameplates.auras.enable = value E:StaticPopup_Show('CONFIG_RL') end,
+							},
+							npaurahorizontaloffset = {
+								type = 'range',
+								name = L["X-Offset"],
+								order = 15,
+								min = 0,
+								max = 20,
+								step = 1,
+								--width = "full",
+								disabled = function() return not E.db.ElvUI_EltreumUI.nameplates.auras.enable end,
+								get = function() return E.db.ElvUI_EltreumUI.nameplates.auras.xOffset end,
+								set = function(_, value) E.db.ElvUI_EltreumUI.nameplates.auras.xOffset = value end,
+							},
+							npauraverticaloffset = {
+								type = 'range',
+								name = L["Y-Offset"],
+								order = 15,
+								min = 0,
+								max = 20,
+								step = 1,
+								--width = "full",
+								disabled = function() return not E.db.ElvUI_EltreumUI.nameplates.auras.enable end,
+								get = function() return E.db.ElvUI_EltreumUI.nameplates.auras.yOffset end,
+								set = function(_, value) E.db.ElvUI_EltreumUI.nameplates.auras.yOffset = value end,
 							},
 							header2 = {
 								order = 905,
@@ -9337,13 +9410,39 @@ function ElvUI_EltreumUI:Configtable()
 								set = function(_, value) E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefontsize = tonumber(value) E:StaticPopup_Show('CONFIG_RL') end,
 							},
 							zoneenable = {
-								order = 34,
+								order = 5,
 								name = L["Enable for Zones, Mail and others"],
 								type = "toggle",
 								desc = L["Such as the Zones, Mail and others"],
 								width = 'full',
 								get = function() return E.db.ElvUI_EltreumUI.skins.zones end,
 								set = function(_, value) E.db.ElvUI_EltreumUI.skins.zones = value E:StaticPopup_Show('CONFIG_RL') end,
+							},
+							headerbossemotescale = {
+								order = 6,
+								type = "description",
+								name = "",
+								width = 'full',
+								hidden = E.Classic,
+								image = function() return 'Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\EltreumHeader', 3240, 1 end,
+							},
+							bossemotescale = {
+								type = 'range',
+								name = E.NewSign..L["Boss Banner Frame Scale"],
+								desc = L["Boss Banner Frame Scale"],
+								order = 7,
+								min = 0.2,
+								max = 3,
+								step = 0.01,
+								width = "double",
+								hidden = E.Classic,
+								disabled = function() return E.db.ElvUI_EltreumUI.skins.blizzframes.hideboss end,
+								get = function() return E.db.ElvUI_EltreumUI.skins.blizzframes.bossScale end,
+								set = function(_, value) E.db.ElvUI_EltreumUI.skins.blizzframes.bossScale = tonumber(value)
+									if _G.RaidBossEmoteFrame then
+										_G.RaidBossEmoteFrame:SetScale(value)
+									end
+								 end,
 							},
 							headerhideblizz = {
 								order = 35,
@@ -9409,7 +9508,7 @@ function ElvUI_EltreumUI:Configtable()
 							},
 							professionscale = {
 								type = 'range',
-								name = E.NewSign..L["Scale"],
+								name = L["Scale"],
 								hidden = not E.Retail,
 								order = 38,
 								min = 0.2,
@@ -9492,7 +9591,7 @@ function ElvUI_EltreumUI:Configtable()
 							},
 							retailtalentscale = {
 								type = 'range',
-								name = E.NewSign..L["Scale"],
+								name = L["Scale"],
 								hidden = not E.Retail,
 								order = 45,
 								min = 0.1,
@@ -9502,6 +9601,28 @@ function ElvUI_EltreumUI:Configtable()
 								set = function(_, value) E.db.ElvUI_EltreumUI.skins.expandedtalentscale = value
 									if _G.ClassTalentFrame then
 										_G.ClassTalentFrame:SetScale(value)
+									end
+								end,
+							},
+							headerbagscale = {
+								order = 46,
+								type = "description",
+								name = L["Bags"],
+								width = 'full',
+								image = function() return 'Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\EltreumHeader', 3240, 1 end,
+							},
+							bagscale = {
+								type = 'range',
+								name = E.NewSign..L["Scale"],
+								order = 47,
+								min = 0.1,
+								max = 4,
+								step = 0.01,
+								--width = "double",
+								get = function() return E.db.ElvUI_EltreumUI.otherstuff.bagscale end,
+								set = function(_, value) E.db.ElvUI_EltreumUI.otherstuff.bagscale = value
+									if _G["ElvUI_ContainerFrame"] then
+										_G["ElvUI_ContainerFrame"]:SetScale(value)
 									end
 								end,
 							},
@@ -9527,13 +9648,13 @@ function ElvUI_EltreumUI:Configtable()
 								type = "description",
 								name = "",
 								width = 'full',
-								hidden = not E.Retail,
+								hidden = E.Classic,
 								image = function() return 'Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\EltreumHeader', 3240, 1 end,
 							},
 							raidbossemoteframe = {
 								order = 53,
 								type = "description",
-								hidden = not E.Retail,
+								hidden = E.Classic,
 								name = L["Remove Blizzard's Boss Emote Frame"],
 								width = "full",
 							},
@@ -9541,7 +9662,7 @@ function ElvUI_EltreumUI:Configtable()
 								order = 54,
 								type = 'toggle',
 								name = L["Enable"],
-								hidden = not E.Retail,
+								hidden = E.Classic,
 								desc = L["Enable removing the Alert Frame that can show up in the middle of the screen"],
 								get = function() return E.db.ElvUI_EltreumUI.skins.bossemote end,
 								set = function(_, value) E.db.ElvUI_EltreumUI.skins.bossemote = value E:StaticPopup_Show('CONFIG_RL') end,
@@ -10411,7 +10532,7 @@ function ElvUI_EltreumUI:Configtable()
 							},
 							shadowsenablechat = {
 								order = 4,
-								name = E.NewSign..CHAT_LABEL,
+								name = CHAT_LABEL,
 								type = "toggle",
 								desc = L["Add Shadows to the Chat Frames"],
 								width = 'full',
@@ -10746,9 +10867,6 @@ function ElvUI_EltreumUI:Configtable()
 									end
 									if _G["GossipFrame"] then
 										_G["GossipFrame"]:SetScale(value)
-									end
-									if _G["WorldMapFrame"] and E.Retail then
-										_G["WorldMapFrame"]:SetScale(value)
 									end
 								end,
 							},

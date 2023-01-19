@@ -95,6 +95,8 @@ LSM:Register("font", "JosefinSans-Bold", [[Interface\Addons\ElvUI_EltreumUI\Medi
 LSM:Register("font", "Neuropol", [[Interface\Addons\ElvUI_EltreumUI\Media\Fonts\neuropolxrg.ttf]])
 LSM:Register("font", "OptimusPrinceps", [[Interface\Addons\ElvUI_EltreumUI\Media\Fonts\OptimusPrinceps.ttf]])
 LSM:Register("font", "Pricedown", [[Interface\Addons\ElvUI_EltreumUI\Media\Fonts\pricedown.ttf]])
+LSM:Register("font", "Reckoner", [[Interface\Addons\ElvUI_EltreumUI\Media\Fonts\Reckoner.ttf]])
+LSM:Register("font", "Reckoner Bold", [[Interface\Addons\ElvUI_EltreumUI\Media\Fonts\Reckoner_Bold.ttf]])
 
 -- Sound
 LSM:Register("sound", "bruh", [[Interface\Addons\ElvUI_EltreumUI\Media\Sound\bruh.ogg]])
@@ -123,6 +125,7 @@ LSM:Register("sound", "Boomerang-1", [[Interface\Addons\ElvUI_EltreumUI\Media\So
 LSM:Register("sound", "Rules of Nature", [[Interface\Addons\ElvUI_EltreumUI\Media\Sound\Rules-of-Nature.ogg]])
 LSM:Register("sound", "Oh no no no", [[Interface\Addons\ElvUI_EltreumUI\Media\Sound\ohnonono.ogg]])
 LSM:Register("sound", "Dispel Illusion", [[Interface\Addons\ElvUI_EltreumUI\Media\Sound\DispelIllusion.ogg]])
+LSM:Register("sound", "Withered Run Away", [[Interface\Addons\ElvUI_EltreumUI\Media\Sound\Withered.ogg]])
 
 --Warcraft 3 sounds
 LSM:Register("sound", "Warcraft 3 - Night Elf Ally Dies", [[Interface\Addons\ElvUI_EltreumUI\Media\Sound\WC3NightElfAllyHeroDies.ogg]])

@@ -1,88 +1,56 @@
-# Version: 3.19
-2023/01/11 Released
+# Version: 3.20
+2023/01/18 Released
 ## ❗ Important
-- Compatibility check update.
-- [Extra Item Bar] Move DF weapon runes from UTILITY to RUNE category.
+- Compatible with ElvUI 13.18.
+- Minimum ElvUI version changed to 13.18.
+- [Event Tracker] Use a new logic to fix the inaccurate time of fishing net.
+- [Event Tracker] If you think the bonus fishing net cannot be recorded correctly, please use the command '/wtet findNet' near the fishing net, and send the output to me via Discord.
 ## ✳️ New
-- [Announcement] Add support for Warrior and Paladin taunt all spells.
-- [Extra Item Bar] Add new PROF (Profession Spec Point Items) item group. Thanks Tednik
+- Add [Class Helper] module, which provides some class-related features. Currently only Death Strike Estimator for BDK.
 ## 💪 Improvement
-- [Announcement] Fix a possible quest announcement error.
-- [Extra Item Bar] Update openable items list.
-- [Extra Item Bar] Clean up some utility items in Shadowlands.
-- [Extra Item Bar] Add PROF category to bar 1 default settings.
-- [Extra Item Bar] Add RUNE category to bar 3 default settings.
-- [Extra Item Bar] Fix quality icon display when the bar shown with mouseover.
-- [Extra Item Bar] Fix the mouseover animation activation when global fade is enabled.
-- [Game Bar] Add a new Hearthstone toy.
-- [Inspect] Update enchant ID database. Thanks bgp314@NGA
-- [Tooltip] Objective progress data update to 10.0.2.
-- [Rectangle Minimap] HandyNotes icons in minimap that are out of bounds will now be hidden automatically.
+- [Paragon Reputation] Update data for Dragonflight.
+- [Announcement] Disable ElvUI's interrupt announcement when interrupt announcement is enabled.
 
 ------
-# 版本: 3.19
-2023/01/11 发布
+# 版本: 3.20
+2023/01/18 发布
 ## ❗ 重要
-- 兼容性助手更新.
-- [额外物品条] 将巨龙时代铭文制造的可用于武器的符文从 UTILITY 分类移动到 RUNE 分类.
+- 适配 ElvUI 13.18 版本改动.
+- 最低 ElvUI 支持版本更改为 13.18.
+- [事件追踪器] 使用一个新的逻辑以解决渔网的时间不准确的问题.
+- [事件追踪器] 如果你遇到额外渔网无法被正确记录, 请在渔网附近使用 '/wtet findNet' 命令, 并将输出内容通过 Discord 发送给我.
 ## ✳️ 新增
-- [通告] 群嘲通告支持战士和圣骑士.
-- [额外物品条] 新增 PROF (专业技能点道具) 分类. 感谢 Tednik
+- 新增 [职业助手] 模块, 用于提供一些职业相关的功能. 暂时只有鲜血死亡骑士的灵打治疗量预估功能.
 ## 💪 改善
-- [通告] 修复一个可能发生的任务通告错误.
-- [额外物品条] 更新可开启物品列表.
-- [额外物品条] 清理暗影国度版本中的一些实用物品.
-- [额外物品条] 条 1 默认设置中增加了 PROF 物品分类.
-- [额外物品条] 条 3 默认设置中增加了 RUNE 物品分类.
-- [额外物品条] 修复了品质图标在启用滑过显示时滞留.
-- [额外物品条] 修复了启用全局渐隐时错误使用鼠标滑过动画的问题.
-- [游戏条] 新增 1 个炉石玩具.
-- [观察] 更新附魔 ID 数据库. 感谢 bgp314@NGA
-- [鼠标提示] 目标进度数据更新至 10.0.2.
-- [矩形小地图] 越界的 HandyNotes 小地图图标现在会自动隐藏.
+- [巅峰声望] 更新巨龙时代版本数据.
+- [通告] 在启用打断通告的情况下, 自动关闭 ElvUI 的打断通告.
 
 ------
-# 版本: 3.19
-2023/01/11 發布
+# 版本: 3.20
+2023/01/18 發布
 ## ❗ 重要
-- 相容性助手更新.
-- [额外物品条] 將巨龍崛起銘文製造的可用於武器的符文從 UTILITY 分類移動到 RUNE 分類.
+- 適配 ElvUI 13.18 版本改動.
+- 最低 ElvUI 支援版本更改為 13.18.
+- [事件追蹤器] 使用一個新的邏輯以解決漁網的時間不準確的問題.
+- [事件追蹤器] 如果你遇到額外漁網無法被正確記錄, 請在漁網旁使用 '/wtet findNet' 命令, 並將輸出內容透過 Discord 發送給我.
 ## ✳️ 新增
-- [通告] 群嘲通告支援戰士和聖騎士.
-- [额外物品条] 新增 PROF (專業技能點道具) 分類. 感謝 Tednik
+- 新增 [職業助手] 模組, 用於提供一些職業相關的功能. 暫時只有血魄死亡騎士的死打治療量預估功能.
 ## 💪 改善
-- [通告] 修復一個可能發生的任務通告錯誤.
-- [额外物品条] 更新可開啟物品列表.
-- [额外物品条] 清理暗影之境版本中的一些實用物品.
-- [额外物品条] 條 1 預設配置中增加了 PROF 物品分類.
-- [额外物品条] 條 3 預設配置中增加了 RUNE 物品分類.
-- [额外物品条] 修復了品質圖示在啟用滑過顯示時滯留.
-- [额外物品条] 修復了啟用全局漸隱時錯誤使用滑鼠滑過動畫的問題.
-- [游戲條] 新增 1 個爐石玩具.
-- [觀察] 更新附魔 ID 數據庫. 感謝 bgp314@NGA
-- [浮動提示] 目標進度數據更新至 10.0.2.
-- [矩形小地圖] 越界的 HandyNotes 小地圖圖示現在會自動隱藏.
+- [巔峰聲望] 更新巨龍崛起版本資料.
+- [通告] 在啟用打斷通告的情況下, 自動關閉 ElvUI 的打斷通告.
 
 ------
-# 버전: 3.19
-2023/01/11 Released
+# 버전: 3.20
+2023/01/18 Released
 ## ❗ 중요 사항
-- Compatibility check update.
-- [Extra Item Bar] Move DF weapon runes from UTILITY to RUNE category.
+- Compatible with ElvUI 13.18.
+- Minimum ElvUI version changed to 13.18.
+- [Event Tracker] Use a new logic to fix the inaccurate time of fishing net.
+- [Event Tracker] If you think the bonus fishing net cannot be recorded correctly, please use the command '/wtet findNet' near the fishing net, and send the output to me via Discord.
 ## ✳️ 신규 사항
-- [Announcement] Add support for Warrior and Paladin taunt all spells.
-- [Extra Item Bar] Add new PROF (Profession Spec Point Items) item group. Thanks Tednik
+- Add [Class Helper] module, which provides some class-related features. Currently only Death Strike Estimator for BDK.
 ## 💪 개선 사항
-- [Announcement] Fix a possible quest announcement error.
-- [Extra Item Bar] Update openable items list.
-- [Extra Item Bar] Clean up some utility items in Shadowlands.
-- [Extra Item Bar] Add PROF category to bar 1 default settings.
-- [Extra Item Bar] Add RUNE category to bar 3 default settings.
-- [Extra Item Bar] Fix quality icon display when the bar shown with mouseover.
-- [Extra Item Bar] Fix the mouseover animation activation when global fade is enabled.
-- [Game Bar] Add a new Hearthstone toy.
-- [Inspect] Update enchant ID database. Thanks bgp314@NGA
-- [Tooltip] Objective progress data update to 10.0.2.
-- [Rectangle Minimap] HandyNotes icons in minimap that are out of bounds will now be hidden automatically.
+- [Paragon Reputation] Update data for Dragonflight.
+- [Announcement] Disable ElvUI's interrupt announcement when interrupt announcement is enabled.
 
 ------
