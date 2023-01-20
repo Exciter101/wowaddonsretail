@@ -1531,9 +1531,9 @@ It might not work correctly with your version!]=]
 	L["X Rotation"] = "X Rotation"
 	L["X Scale"] = "X Escala"
 	--[[Translation missing --]]
-	L["x-Offset"] = "x-Offset"
-	--[[Translation missing --]]
 	L["X-Offset"] = "X-Offset"
+	--[[Translation missing --]]
+	L["x-Offset"] = "x-Offset"
 	L["Y Offset"] = "Y Posicion"
 	--[[Translation missing --]]
 	L["Y Rotation"] = "Y Rotation"
