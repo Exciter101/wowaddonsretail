@@ -6,7 +6,7 @@ local LibToast = LibStub("LibToast-1.0")
 local LSM = LibStub:GetLibrary("LibSharedMedia-3.0")
 local LibParse = LibStub:GetLibrary("LibParse")
 
-local TUJMarketInfo = TUJMarketInfo
+local OEMarketInfo = OEMarketInfo
 local LootAppraiser_GroupLoot = LootAppraiser_GroupLoot
 
 --lootPrompt = 0 -- set to have it show by default upon first loot 
@@ -491,7 +491,7 @@ function private.PreparePricesources()
 	-- only 2 or less price sources -> chat msg: missing modules
 	if LA.Util.tablelength(priceSources) <= 2 then
 		StaticPopupDialogs["LA_NO_PRICESOURCES"] = {
-			text = "|cffff0000Attention!|r Missing additional addons for price sources (e.g. like TradeSkillMaster or The Undermine Journal).\n\n|cffff0000LootAppraiser disabled.|r",
+			text = "|cffff0000Attention!|r Missing additional addons for price sources (e.g. like TradeSkillMaster or Oribos Exchange).\n\n|cffff0000LootAppraiser disabled.|r",
 			button1 = OKAY,
 			timeout = 0,
 			whileDead = true,
@@ -538,9 +538,6 @@ function private.PreparePricesources()
 
 	LA.availablePriceSources = priceSources
 
-	--if TUJTooltip then
-		--TUJTooltip(LA.db.profile.display.enableTUJTooltip)
-	--end
 end
 
 
@@ -1074,32 +1071,37 @@ end
 	end
 end
 -- get item value based on the selected/requested price source
-function private.GetItemValue(itemID, priceSource)
-	--LA.Debug.Log("Sent in priceSource: " .. tostring(priceSource))
-	-- from which addon is our selected price source?
-	if LA.Util.startsWith(LA.CONST.PRICE_SOURCE[LA.GetFromDb("pricesource", "source")], "TUJ:") then
-		-- TUJ price source
+function private.GetItemValue(itemID, priceSource)	
+	--OribosExchange = OE
+	if LA.Util.startsWith(LA.CONST.PRICE_SOURCE[LA.GetFromDb("pricesource", "source")], "OE:") then
+		
 		if priceSource == "VendorSell" then
-			-- if we use TUJ and need 'VendorSell' we have to query the ItemInfo to get the price
 			local VendorSell =  select(11, GetItemInfo(itemID)) or 0
-			LA.Debug.Log("  GetItemValue: special handling for TUJ and pricesource 'VendorSell': " .. tostring(VendorSell))
 			return VendorSell
+
+		--new catch for OribosExchange pricing sources	
+		elseif priceSource == "region" then
+			local priceInfo = {}
+			OEMarketInfo(itemID, priceInfo)
+			LA.Debug.Log("Oribos Exchange pricesource: " .. priceInfo[priceSource])
+			return priceInfo[priceSource]
+
 		else
 			local itemLink
-
 			-- battle pet handling
 			local newItemID = LA.PetData.ItemID2Species(itemID)
 			if newItemID == itemID then
 				itemLink = itemID
+				local priceInfo = {}
+				return priceInfo[priceSource]
 			else
-
 				itemLink = newItemID
+				local priceInfo = {}
+				return priceInfo[priceSource]
 			end
 
-			local priceInfo = {}
-	    	TUJMarketInfo(itemLink, priceInfo)
-
-			return priceInfo[priceSource]
+			--local priceInfo = {}
+			--return priceInfo[priceSource]
 		end
 	else
 		-- TSM price source
@@ -1233,13 +1235,10 @@ function private.GetAvailablePriceSources()
 	end
 
 	-- TUJ
-	if TUJMarketInfo then
-		priceSources["globalMedian"] = "TUJ: Global Median"
-		priceSources["globalMean"] = "TUJ: Global Mean"
-		priceSources["globalStdDev"] = "TUJ: Global Std Dev"
-		priceSources["stddev"] = "TUJ: 14-Day Std Dev"
-		priceSources["market"] = "TUJ: 14-Day Price"
-		priceSources["recent"] = "TUJ: 3-Day Price"
+	-- OE (OribosExchange)
+	if OEMarketInfo then
+		priceSources["region"] = "OE: Median All Realms in Region"
+		--priceSources["market"] = "OE: Median AH 4-Day"
 	end
 
 	return priceSources

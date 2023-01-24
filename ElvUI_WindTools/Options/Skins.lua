@@ -1143,12 +1143,6 @@ options.addons = {
             addonName = "Immersion",
             addonskinsKey = "Immersion"
         },
-        meetingStone = {
-            order = 10,
-            type = "toggle",
-            name = L["NetEase Meeting Stone"],
-            addonName = {"MeetingStone", "MeetingStonePlus"}
-        },
         myslot = {
             order = 10,
             type = "toggle",
@@ -2802,7 +2796,23 @@ options.bigWigsSkin = {
                             min = 5,
                             max = 60,
                             step = 1
-                        }
+                        },
+                        offsetX = {
+                            order = 4,
+                            name = L["X-Offset"],
+                            type = "range",
+                            min = -100,
+                            max = 100,
+                            step = 1
+                        },
+                        offsetY = {
+                            order = 5,
+                            name = L["Y-Offset"],
+                            type = "range",
+                            min = -100,
+                            max = 100,
+                            step = 1
+                        },
                     }
                 }
             }

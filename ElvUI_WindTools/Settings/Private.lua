@@ -81,6 +81,7 @@ V.misc = {
     tags = true,
     hotKeyAboveCD = false,
     guildNewsItemLevel = true,
+    addCNFilter = false,
     moveFrames = {
         enable = true,
         elvUIBags = true,
@@ -129,6 +130,17 @@ V.misc = {
             target = "DESC",
             shortenDescription = true,
             template = "{{score}} {{text}}"
+        },
+        partyKeystone = {
+            enable = true,
+            font = {
+                name = E.db.general.font,
+                size = 12,
+                style = "OUTLINE"
+            }
+        },
+        rightPanel = {
+            enable = true
         }
     }
 }
@@ -225,7 +237,9 @@ V.skins = {
             countDown = {
                 name = F.GetCompatibleFont("Montserrat"),
                 size = 16,
-                style = "OUTLINE"
+                style = "OUTLINE",
+                offsetX = 0,
+                offsetY = -3
             }
         },
         normalBar = {
@@ -385,7 +399,6 @@ V.skins = {
         bugSack = true,
         hekili = true,
         immersion = true,
-        meetingStone = true,
         myslot = true,
         mythicDungeonTools = true,
         omniCD = true,

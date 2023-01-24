@@ -1041,7 +1041,7 @@ function private.OnBtnDestroyTrashClick()
 
             -- grey items
             if link and link:find("ff9d9d9d") then -- Poor = ff9d9d9d
-                PickupContainerItem(bag,slot)
+                C_Container.PickupContainerItem(bag,slot)
                 DeleteCursorItem()
 
                 destroyCounter = destroyCounter + 1
@@ -1124,26 +1124,51 @@ function private.IsDestroyBlacklistedItems()
 end
 
 -- calculate looted item value / hour
+--OLD /gph
+--function private.CalcLootedItemValuePerHour(key)
+--    local offset = LA.Session.GetPauseStart() or time()
+--	local delta = offset - LA.Session.GetCurrentSession("start") - LA.Session.GetSessionPause()
+--	local factor = 3600	--1 hour in seconds (3600)
+--
+--    if delta < factor then
+--        factor = delta
+--    end
+--
+--    local totalItemValue = LA.Session.GetCurrentSession(key) or 0
+--    local livGoldPerHour
+--	
+--    if totalItemValue == 0 then
+--        livGoldPerHour = 0
+--    else
+--        local livPerHour = (totalItemValue/delta*factor)
+--        livGoldPerHour = floor(livPerHour/10000)
+--    end
+--    return tostring(livGoldPerHour)
+--end
+
+-- calculate looted item value / hour
 function private.CalcLootedItemValuePerHour(key)
     local offset = LA.Session.GetPauseStart() or time()
-	local delta = offset - LA.Session.GetCurrentSession("start") - LA.Session.GetSessionPause()
-	local factor = 3600	--1 hour in seconds (3600)
-
-    if delta < factor then
-        factor = delta
-    end
+    local delta = offset - LA.Session.GetCurrentSession("start") - LA.Session.GetSessionPause()
 
     local totalItemValue = LA.Session.GetCurrentSession(key) or 0
+	--LA.Debug.Log("total value " .. totalItemValue)
     local livGoldPerHour
-	
-    if totalItemValue == 0 then
+    if (totalItemValue == 0 or delta == 0 or totalItemValue/delta < 1) then
         livGoldPerHour = 0
     else
-        local livPerHour = (totalItemValue/delta*factor)
-        livGoldPerHour = floor(livPerHour/10000)
+        local copperPerSec = totalItemValue/delta
+        livGoldPerHour = copperPerSec*60*60
     end
-    return tostring(livGoldPerHour)
+
+    return LA.Util.MoneyToString(livGoldPerHour)
 end
+
+
+
+
+
+
 
 function private.IsDisplayEnabled(name)
     if LA.db.profile.display[name] == nil then

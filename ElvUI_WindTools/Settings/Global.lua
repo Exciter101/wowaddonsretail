@@ -3,7 +3,7 @@ local W, F, E, L, V, P, G = unpack(select(2, ...))
 G.core = {
     compatibilityCheck = true,
     cvarAlert = false,
-    fixPlaystyle = true,
+    fixPlaystyle = false,
     logLevel = 2,
     loginMessage = true,
     noDuplicatedParty = false
@@ -30,7 +30,8 @@ G.misc = {
     },
     watched = {
         movies = {}
-    }
+    },
+    lfgList = {}
 }
 
 G.maps = {

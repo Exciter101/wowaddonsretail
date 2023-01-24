@@ -21,7 +21,7 @@ CONST.QUALITY_FILTER = { -- little hack to sort them in the menu
     ["4"] = "|cffa335eeEpic|r"
 }
 
--- TSM predefined price sources + 'Custom' + TUJ price sources
+-- TSM predefined price sources + 'Custom'
 CONST.PRICE_SOURCE = {
     -- TSM price sources
     ["Custom"] = "Custom Price Source",
@@ -34,13 +34,10 @@ CONST.PRICE_SOURCE = {
     ["DBRegionSaleAvg"] = "TSM: Region Global Sale Average",
     ["VendorSell"] = "TSM: VendorSell",
 
-    -- TUJ price sources
-    ["globalMedian"] = "TUJ: Regional Median",
-    ["globalMean"] = "TUJ: Regional Mean",
-    ["globalStdDev"] = "TUJ: Regional Std Dev",
-    ["stddev"] = "TUJ: 14-Day Std Dev",
-    ["market"] = "TUJ: 14-Day Price",
-    ["recent"] = "TUJ: 3-Day Price",
+    --OEMarketInfo (OE)
+	--["market"] = "OE: Median AH 4-Day",
+    ["region"] = "OE: Median All Realms in Region",
+
 }
 
 CONST.PARTYLOOT_MSGPREFIX = "LA_PARTYLOOT"

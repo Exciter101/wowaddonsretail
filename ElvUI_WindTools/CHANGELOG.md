@@ -1,56 +1,75 @@
-# Version: 3.20
-2023/01/18 Released
+# Version: 3.21
+2023/01/23 Released
 ## ❗ Important
-- Compatible with ElvUI 13.18.
-- Minimum ElvUI version changed to 13.18.
-- [Event Tracker] Use a new logic to fix the inaccurate time of fishing net.
-- [Event Tracker] If you think the bonus fishing net cannot be recorded correctly, please use the command '/wtet findNet' near the fishing net, and send the output to me via Discord.
+- Happy Spring Festival!
+- The minimum ElvUI version is changed to 13.21.
+- Remove all support for NetEase Meeting Stone.
 ## ✳️ New
-- Add [Class Helper] module, which provides some class-related features. Currently only Death Strike Estimator for BDK.
+- [LFG List] Add a feature to show the keystone of your party members in the Mythic+ frame.
+- [LFG List] Add a right panel feature to filter groups.
+- [Misc] Add a feature to view groups created by players who are using Simplified Chinese.
 ## 💪 Improvement
-- [Paragon Reputation] Update data for Dragonflight.
-- [Announcement] Disable ElvUI's interrupt announcement when interrupt announcement is enabled.
+- [Skins] The position of the text of BigWigs queue timer bar can now be adjusted.
+- Fix a possible error in the distance datatext. Thanks Azilroka
 
 ------
-# 版本: 3.20
-2023/01/18 发布
+# 版本: 3.21
+2023/01/23 发布
 ## ❗ 重要
-- 适配 ElvUI 13.18 版本改动.
-- 最低 ElvUI 支持版本更改为 13.18.
-- [事件追踪器] 使用一个新的逻辑以解决渔网的时间不准确的问题.
-- [事件追踪器] 如果你遇到额外渔网无法被正确记录, 请在渔网附近使用 '/wtet findNet' 命令, 并将输出内容通过 Discord 发送给我.
+- 新年快乐!
+- 最低 ElvUI 支持版本更改为 13.21.
+- 移除了针对网易集合石插件的支持.
 ## ✳️ 新增
-- 新增 [职业助手] 模块, 用于提供一些职业相关的功能. 暂时只有鲜血死亡骑士的灵打治疗量预估功能.
+- [预组建列表] 新增在传奇钥石界面中显示队友钥石的功能.
+- [预组建列表] 新增一个右侧面板功能, 用于过滤队伍.
+- [其他] 新增查看简体中文队伍的功能.
 ## 💪 改善
-- [巅峰声望] 更新巨龙时代版本数据.
-- [通告] 在启用打断通告的情况下, 自动关闭 ElvUI 的打断通告.
+- [皮肤] BigWigs 进本计时条文字现在可以调整位置.
+- 修复距离数据文字可能产生的错误. 感谢 Azilroka
 
 ------
-# 版本: 3.20
-2023/01/18 發布
+# 版本: 3.21
+2023/01/23 發布
 ## ❗ 重要
-- 適配 ElvUI 13.18 版本改動.
-- 最低 ElvUI 支援版本更改為 13.18.
-- [事件追蹤器] 使用一個新的邏輯以解決漁網的時間不準確的問題.
-- [事件追蹤器] 如果你遇到額外漁網無法被正確記錄, 請在漁網旁使用 '/wtet findNet' 命令, 並將輸出內容透過 Discord 發送給我.
+- 新年快樂!
+- 最低 ElvUI 支援版本更改為 13.21.
+- 移除了對於網易集合石插件的支援.
 ## ✳️ 新增
-- 新增 [職業助手] 模組, 用於提供一些職業相關的功能. 暫時只有血魄死亡騎士的死打治療量預估功能.
+- [預組列表] 新增在傳奇鑰石介面中顯示隊友鑰石的功能.
+- [預組列表] 新增一個右側面板功能, 用於過濾隊伍.
+- [其他] 新增查看簡體中文隊伍的功能.
 ## 💪 改善
-- [巔峰聲望] 更新巨龍崛起版本資料.
-- [通告] 在啟用打斷通告的情況下, 自動關閉 ElvUI 的打斷通告.
+- [皮膚] BigWigs 進本計時條文字現在可以調整位置.
+- 修復距離資訊文字可能產生的錯誤. 感謝 Azilroka
 
 ------
-# 버전: 3.20
-2023/01/18 Released
+# 버전: 3.21
+2023/01/23 Released
 ## ❗ 중요 사항
-- Compatible with ElvUI 13.18.
-- Minimum ElvUI version changed to 13.18.
-- [Event Tracker] Use a new logic to fix the inaccurate time of fishing net.
-- [Event Tracker] If you think the bonus fishing net cannot be recorded correctly, please use the command '/wtet findNet' near the fishing net, and send the output to me via Discord.
+- Happy Seollal Festival!
+- The minimum ElvUI version is changed to 13.21.
+- Remove all support for NetEase Meeting Stone.
 ## ✳️ 신규 사항
-- Add [Class Helper] module, which provides some class-related features. Currently only Death Strike Estimator for BDK.
+- [LFG List] Add a feature to show the keystone of your party members in the Mythic+ frame.
+- [LFG List] Add a right panel feature to filter groups.
+- [Misc] Add a feature to view groups created by players who are using Simplified Chinese.
 ## 💪 개선 사항
-- [Paragon Reputation] Update data for Dragonflight.
-- [Announcement] Disable ElvUI's interrupt announcement when interrupt announcement is enabled.
+- [Skins] The position of the text of BigWigs queue timer bar can now be adjusted.
+- Fix a possible error in the distance datatext. Thanks Azilroka
+
+------
+# Версия: 3.21
+2023/01/23 Релиз
+## ❗ Важные
+- Корейский Новый год!
+- Минимальная версия ElvUI изменена на 13.21.
+- Убрана вся поддержка NetEase Meeting Stone.
+## ✳️ Новые
+- [Список LFG] Добавлена возможность показывать ключи членов Вашей группы во фрейме M+.
+- [Список LFG] Добавлена возможность фильтровать группы в правой панели.
+- [Разное] Добавлена возможность просмотра групп, созданных игроками, которые используют упрощенный китайский язык.
+## 💪 Улучшения
+- [Скины] Положение текста строки таймера очереди BigWigs теперь можно настроить.
+- Исправлена возможная ошибка в инфотексте о расстоянии. Спасибо, Azilroka.
 
 ------
