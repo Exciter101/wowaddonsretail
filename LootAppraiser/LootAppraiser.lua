@@ -489,7 +489,7 @@ function private.PreparePricesources()
 	local priceSources = private.GetAvailablePriceSources() or {}
 
 	-- only 2 or less price sources -> chat msg: missing modules
-	if LA.Util.tablelength(priceSources) <= 2 then
+	if LA.Util.tablelength(priceSources) == 0 then
 		StaticPopupDialogs["LA_NO_PRICESOURCES"] = {
 			text = "|cffff0000Attention!|r Missing additional addons for price sources (e.g. like TradeSkillMaster or Oribos Exchange).\n\n|cffff0000LootAppraiser disabled.|r",
 			button1 = OKAY,

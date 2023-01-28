@@ -12,24 +12,32 @@ local format = format
 local gsub = gsub
 local hooksecurefunc = hooksecurefunc
 local ipairs = ipairs
+local max = max
 local min = min
 local pairs = pairs
 local select = select
 local sort = sort
 local tinsert = tinsert
 local tonumber = tonumber
+local tostring = tostring
 local tremove = tremove
 local type = type
 local unpack = unpack
+local wipe = wipe
 
 local CreateFrame = CreateFrame
+local GetNumGroupMembers = GetNumGroupMembers
+local GetSpecialization = GetSpecialization
+local GetSpecializationInfo = GetSpecializationInfo
+local GetTime = GetTime
 local GetUnitName = GetUnitName
+local InCombatLockdown = InCombatLockdown
 local IsAddOnLoaded = IsAddOnLoaded
 local IsInGroup = IsInGroup
 local LoadAddOn = LoadAddOn
 local UnitClassBase = UnitClassBase
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local GetNumGroupMembers = GetNumGroupMembers
+local WeeklyRewards_LoadUI = WeeklyRewards_LoadUI
 
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
 local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
@@ -131,6 +139,37 @@ local affixLoop = {
     {9, 123, 14, 132},
     {10, 11, 13, 132},
     {9, 7, 3, 132}
+}
+
+local avaliableSortMode = {
+    "DEFAULT",
+    "OVERALL_SCORE",
+    "DUNGEON_SCORE"
+}
+
+local sortMode = {
+    ["DUNGEON_SCORE"] = {
+        text = L["Dungeon Score"],
+        tooltip = L["Leader's Dungeon Score"],
+        func = function(a, b)
+            local _a = (a and a.dungeonScore or 0)
+            local _b = (b and b.dungeonScore or 0)
+            return _a > _b and 1 or _a < _b and -1 or 0
+        end
+    },
+    ["OVERALL_SCORE"] = {
+        text = L["Overall Score"],
+        tooltip = L["Leader's Overall Score"],
+        func = function(a, b)
+            local _a = (a and a.overallScore or 0)
+            local _b = (b and b.overallScore or 0)
+            return _a > _b and 1 or _a < _b and -1 or 0
+        end
+    },
+    ["DEFAULT"] = {
+        text = L["Default"],
+        tooltip = L["Default"]
+    }
 }
 
 local function getKeystoneLevelColor(level)
@@ -501,6 +540,50 @@ function LL:RequestKeystoneData()
     E:Delay(2, self.UpdatePartyKeystoneFrame, self)
 end
 
+LL.refreshRequestTimestamp = 0
+LL.scheduledRefreshTimestamp = 0
+LL.lastRefreshTimestamp = 0
+
+function LL:RefreshSearchAt(timestamp)
+    if self.refreshRequestTimestamp ~= timestamp then
+        return
+    end
+
+    local now = GetTime()
+
+    if now < self.lastRefreshTimestamp + 5 then
+        E:Delay(self.lastRefreshTimestamp + 5.05 - now, self.RefreshSearchAt, self, timestamp)
+        return
+    end
+
+    if
+        _G.PVEFrame:IsVisible() and _G.LFGListFrame.activePanel == _G.LFGListFrame.SearchPanel and
+            _G.LFGListFrame.SearchPanel:IsVisible() and
+            _G.LFGListFrame.SearchPanel.categoryID == 2
+     then
+        _G.LFGListFrame.SearchPanel.RefreshButton:Click()
+    end
+
+    self.lastRefreshTimestamp = timestamp
+end
+
+function LL:RefreshSearch()
+    if not self.db.rightPanel.enable or not self.db.rightPanel.autoRefresh then
+        return
+    end
+
+    local now = GetTime()
+
+    if self.refreshRequestTimestamp == now then
+        return
+    end
+
+    self.refreshRequestTimestamp = now
+    self.scheduledRefreshTimestamp = max(now + 1, self.lastRefreshTimestamp + 5)
+
+    E:Delay(1, self.RefreshSearchAt, self, now)
+end
+
 function LL:InitalizeRightPanel()
     if self.rightPanel then
         return
@@ -512,6 +595,10 @@ function LL:InitalizeRightPanel()
     frame:SetPoint("BOTTOMLEFT", _G.PVEFrame, "BOTTOMRIGHT", 3, 0)
     frame:SetTemplate("Transparent")
     S:CreateShadowModule(frame)
+    if E.private.WT.misc.moveFrames.enable and not W.Modules.MoveFrames.StopRunning then
+        local MF = W.Modules.MoveFrames
+        MF:HandleFrame(frame, "PVEFrame")
+    end
 
     hooksecurefunc(
         frame,
@@ -601,9 +688,9 @@ function LL:InitalizeRightPanel()
         frame.affix:SetScript(
             "OnEnter",
             function()
-                _G.GameTooltip:SetOwner(frame, "ANCHOR_TOP")
+                _G.GameTooltip:SetOwner(frame.affix, "ANCHOR_BOTTOM")
                 _G.GameTooltip:ClearLines()
-                _G.GameTooltip:AddLine(L["Next Affixes"])
+                _G.GameTooltip:AddLine(F.GetWindStyleText(L["Next Affixes"]))
                 for i = 1, 4 do
                     local name, description, fileDataID = C_ChallengeMode_GetAffixInfo(affixLoop[nextAffixIndex][i])
                     _G.GameTooltip:AddLine(" ")
@@ -678,6 +765,7 @@ function LL:InitalizeRightPanel()
                     local dfDB = self:GetPlayerDB("dungeonFilter")
                     btn:SetActive(not btn.active)
                     dfDB[mapID] = btn.active
+                    LL:RefreshSearch()
                 end
             end
         )
@@ -720,8 +808,10 @@ function LL:InitalizeRightPanel()
                 editBox:SetText(0)
             end
 
-            dfDB.leaderScore = tonumber(text)
+            dfDB.leaderScore = tonumber(text) or 0
+            editBox:SetText(tostring(dfDB.leaderScore))
             editBox:ClearFocus()
+            LL:RefreshSearch()
         end
     )
 
@@ -730,12 +820,30 @@ function LL:InitalizeRightPanel()
     addSetActive(leaderScore)
 
     leaderScore:SetScript(
+        "OnEnter",
+        function(btn)
+            _G.GameTooltip:SetOwner(btn, "ANCHOR_TOP", 0, 4)
+            _G.GameTooltip:AddLine(F.GetWindStyleText(L["Leader Score"]), 1, 1, 1)
+            _G.GameTooltip:AddLine(L["The overall mythic+ score of the leader."], 1, 1, 1, true)
+            _G.GameTooltip:Show()
+        end
+    )
+
+    leaderScore:SetScript(
+        "OnLeave",
+        function(btn)
+            _G.GameTooltip:Hide()
+        end
+    )
+
+    leaderScore:SetScript(
         "OnMouseDown",
         function(btn, button)
             if button == "LeftButton" then
                 local dfDB = self:GetPlayerDB("dungeonFilter")
                 btn:SetActive(not btn.active)
                 dfDB.leaderScoreEnable = btn.active
+                LL:RefreshSearch()
             end
         end
     )
@@ -777,8 +885,10 @@ function LL:InitalizeRightPanel()
                 editBox:SetText(0)
             end
 
-            dfDB.leaderDungeonScore = tonumber(text)
+            dfDB.leaderDungeonScore = tonumber(text) or 0
+            editBox:SetText(tostring(dfDB.leaderDungeonScore))
             editBox:ClearFocus()
+            LL:RefreshSearch()
         end
     )
 
@@ -787,40 +897,60 @@ function LL:InitalizeRightPanel()
     addSetActive(leaderDungeonScore)
 
     leaderDungeonScore:SetScript(
+        "OnEnter",
+        function(btn)
+            _G.GameTooltip:SetOwner(btn, "ANCHOR_TOP", 0, 4)
+            _G.GameTooltip:AddLine(F.GetWindStyleText(L["Leader's Dungeon Score"]), 1, 1, 1)
+            _G.GameTooltip:AddLine(L["The recruited dungeon mythic+ score of the leader."], 1, 1, 1, true)
+            _G.GameTooltip:Show()
+        end
+    )
+
+    leaderDungeonScore:SetScript(
+        "OnLeave",
+        function(btn)
+            _G.GameTooltip:Hide()
+        end
+    )
+
+    leaderDungeonScore:SetScript(
         "OnMouseDown",
         function(btn, button)
             if button == "LeftButton" then
                 local dfDB = self:GetPlayerDB("dungeonFilter")
                 btn:SetActive(not btn.active)
                 dfDB.leaderDungeonScoreEnable = btn.active
+                LL:RefreshSearch()
             end
         end
     )
 
     filters.leaderDungeonScore = leaderDungeonScore
 
-    -- Party Join
-    local joinTogether = CreateFrame("Frame", nil, filters)
-    joinTogether:SetSize(filters:GetWidth(), 32)
-    joinTogether:SetPoint("TOP", filters, "TOP", 0, -6 * 7 - 28 * 4 - 32 * 2)
-    joinTogether:SetTemplate()
+    -- Role Available
+    local roleAvailable = CreateFrame("Frame", nil, filters)
+    roleAvailable:SetSize(filters:GetWidth(), 32)
+    roleAvailable:SetPoint("TOP", filters, "TOP", 0, -6 * 7 - 28 * 4 - 32 * 2)
+    roleAvailable:SetTemplate()
 
-    joinTogether.text = joinTogether:CreateFontString(nil, "OVERLAY")
-    joinTogether.text:SetFont(E.media.normFont, 11, "OUTLINE")
-    joinTogether.text:SetPoint("CENTER", joinTogether, "CENTER", 0, 0)
-    joinTogether.text:SetText(L["Join Together"])
-    joinTogether.text:SetJustifyH("CENTER")
+    roleAvailable.text = roleAvailable:CreateFontString(nil, "OVERLAY")
+    roleAvailable.text:SetFont(E.media.normFont, 11, "OUTLINE")
+    roleAvailable.text:SetPoint("CENTER", roleAvailable, "CENTER", 0, 0)
+    roleAvailable.text:SetText(L["Role Available"])
+    roleAvailable.text:SetJustifyH("CENTER")
 
-    joinTogether:SetScript(
+    roleAvailable:SetScript(
         "OnEnter",
         function(btn)
-            _G.GameTooltip:SetOwner(btn, "ANCHOR_TOP")
-            _G.GameTooltip:AddLine(L["Join Together"], 1, 1, 1)
+            _G.GameTooltip:SetOwner(btn, "ANCHOR_TOP", 0, 4)
+            _G.GameTooltip:AddLine(F.GetWindStyleText(L["Role Available"]), 1, 1, 1)
             _G.GameTooltip:AddLine(
-                L["Enable this filter will only show the group that you can join with your friends."] ..
-                    " " ..
-                        L["It will check the role of current party members."] ..
-                            "\n\n" .. C.StringByTemplate(L["It only works when you in a group."], "danger"),
+                format(
+                    "%s %s %s",
+                    L["Enable this filter will only show the group that fits you or your group members to join."],
+                    L["It will check the role of current party members if you are in a group."],
+                    L["Otherwise, it will filter with your current specialization."]
+                ),
                 1,
                 1,
                 1,
@@ -830,27 +960,28 @@ function LL:InitalizeRightPanel()
         end
     )
 
-    joinTogether:SetScript(
+    roleAvailable:SetScript(
         "OnLeave",
         function(btn)
             _G.GameTooltip:Hide()
         end
     )
 
-    addSetActive(joinTogether)
+    addSetActive(roleAvailable)
 
-    joinTogether:SetScript(
+    roleAvailable:SetScript(
         "OnMouseDown",
         function(btn, button)
             if button == "LeftButton" then
                 local dfDB = self:GetPlayerDB("dungeonFilter")
                 btn:SetActive(not btn.active)
-                dfDB.joinTogetherEnable = btn.active
+                dfDB.roleAvailableEnable = btn.active
+                LL:RefreshSearch()
             end
         end
     )
 
-    filters.joinTogether = joinTogether
+    filters.roleAvailable = roleAvailable
 
     frame.filters = filters
 
@@ -860,6 +991,8 @@ function LL:InitalizeRightPanel()
     vaultStatus:SetHeight(32)
     vaultStatus:SetTemplate()
 
+    addSetActive(vaultStatus)
+
     vaultStatus.text = vaultStatus:CreateFontString(nil, "OVERLAY")
     vaultStatus.text:SetFont(E.media.normFont, 13, "OUTLINE")
     vaultStatus.text:SetPoint("CENTER", vaultStatus, "CENTER", 0, 0)
@@ -868,12 +1001,15 @@ function LL:InitalizeRightPanel()
     vaultStatus:SetScript(
         "OnEnter",
         function(btn)
+            vaultStatus:SetActive(true)
+
+            btn.update()
             if not btn.cache then
                 return
             end
 
-            _G.GameTooltip:SetOwner(btn, "ANCHOR_TOP")
-            _G.GameTooltip:AddLine(L["The Great Vault"], 1, 1, 1)
+            _G.GameTooltip:SetOwner(btn, "ANCHOR_TOP", 0, 4)
+            _G.GameTooltip:AddLine(F.GetWindStyleText(L["The Great Vault"]), 1, 1, 1)
             _G.GameTooltip:AddLine(" ")
 
             for i = 1, 8 do
@@ -882,7 +1018,7 @@ function LL:InitalizeRightPanel()
                     local name, _, _, tex = C_ChallengeMode_GetMapUIInfo(btn.cache[i].mapID)
                     _G.GameTooltip:AddDoubleLine(
                         format(
-                            "|c%s%s|r |T%s:14:16:0:0:64:64:4:60:7:57:255:255:255|t %s",
+                            "|c%s%s|r  |T%s:14:16:0:0:64:64:4:60:7:57:255:255:255|t %s",
                             getKeystoneLevelColor(level),
                             level,
                             tex,
@@ -905,6 +1041,9 @@ function LL:InitalizeRightPanel()
                 _G.GameTooltip:AddLine(L["No weekly runs found."], 1, 1, 1)
             end
 
+            _G.GameTooltip:AddLine(" ")
+            _G.GameTooltip:AddLine(L["Click to open the weekly rewards frame."], 1, 1, 1)
+
             _G.GameTooltip:Show()
         end
     )
@@ -912,7 +1051,20 @@ function LL:InitalizeRightPanel()
     vaultStatus:SetScript(
         "OnLeave",
         function()
+            vaultStatus:SetActive(false)
             _G.GameTooltip:Hide()
+        end
+    )
+
+    vaultStatus:SetScript(
+        "OnMouseDown",
+        function(btn, button)
+            if button == "LeftButton" and not InCombatLockdown() then
+                WeeklyRewards_LoadUI()
+                if _G.WeeklyRewardsFrame then
+                    _G.WeeklyRewardsFrame:Show()
+                end
+            end
         end
     )
 
@@ -965,6 +1117,154 @@ function LL:InitalizeRightPanel()
     end
 
     frame.vaultStatus = vaultStatus
+
+    local sortPanel = CreateFrame("Frame", nil, frame)
+    sortPanel:SetPoint("BOTTOMLEFT", vaultStatus, "TOPLEFT", 0, 8)
+    sortPanel:SetPoint("BOTTOMRIGHT", vaultStatus, "TOPRIGHT", 0, 8)
+    sortPanel:SetHeight(32)
+
+    local sortModeButton = CreateFrame("Frame", nil, sortPanel)
+    sortModeButton:SetPoint("RIGHT", sortPanel, "RIGHT", 0, 0)
+    sortModeButton:SetSize(32, 32)
+    sortModeButton:SetTemplate()
+    sortModeButton.tex = sortModeButton:CreateTexture(nil, "OVERLAY")
+    sortModeButton.tex:SetSize(24, 24)
+    sortModeButton.tex:SetPoint("CENTER", sortModeButton, "CENTER", 0, 0)
+    sortModeButton.tex:SetTexture(W.Media.Textures.arrowDown)
+    sortModeButton.tex:SetTexCoord(0, 1, 0, 1)
+    sortModeButton.tex:SetVertexColor(1, 1, 1)
+
+    addSetActive(sortModeButton)
+
+    sortModeButton:SetScript(
+        "OnEnter",
+        function(btn)
+            sortModeButton:SetActive(true)
+
+            _G.GameTooltip:SetOwner(btn, "ANCHOR_RIGHT", 4, -34)
+            _G.GameTooltip:AddLine(btn.descending and L["Descending"] or L["Ascending"], 1, 1, 1)
+            _G.GameTooltip:Show()
+        end
+    )
+
+    sortModeButton:SetScript(
+        "OnLeave",
+        function()
+            sortModeButton:SetActive(false)
+            _G.GameTooltip:Hide()
+        end
+    )
+
+    sortModeButton:SetScript(
+        "OnMouseDown",
+        function(btn, button)
+            if button == "LeftButton" then
+                local dfDB = self:GetPlayerDB("dungeonFilter")
+
+                btn.descending = not btn.descending
+                btn.tex:SetRotation(btn.descending and 0 or 3.14)
+                LL:RefreshSearch()
+                dfDB.sortDescending = btn.descending
+
+                _G.GameTooltip:ClearLines()
+                _G.GameTooltip:SetOwner(btn, "ANCHOR_RIGHT", 4, -34)
+                _G.GameTooltip:AddLine(btn.descending and L["Descending"] or L["Ascending"], 1, 1, 1)
+                _G.GameTooltip:Show()
+            end
+        end
+    )
+
+    sortPanel.sortModeButton = sortModeButton
+
+    local sortByButton = CreateFrame("Frame", nil, sortPanel)
+    sortByButton:SetPoint("LEFT", sortPanel, "LEFT", 0, 0)
+    sortByButton:SetPoint("RIGHT", sortModeButton, "LEFT", -6, 0)
+    sortByButton:SetHeight(32)
+    sortByButton:SetTemplate()
+
+    addSetActive(sortByButton)
+
+    sortByButton.text = sortByButton:CreateFontString(nil, "OVERLAY")
+    sortByButton.text:SetFont(E.media.normFont, 12, "OUTLINE")
+    sortByButton.text:SetPoint("CENTER", sortByButton, "CENTER", 0, 0)
+
+    sortByButton.title = sortByButton:CreateFontString(nil, "OVERLAY")
+    sortByButton.title:SetFont(E.media.normFont, 12, "OUTLINE")
+    sortByButton.title:SetPoint("CENTER", sortByButton, "TOP", 0, 0)
+    sortByButton.title:SetText(F.GetWindStyleText(L["Sort by"]))
+    sortByButton.title:Hide()
+
+    sortByButton:SetScript(
+        "OnEnter",
+        function(btn)
+            sortByButton:SetActive(true)
+            sortByButton.title:Show()
+
+            local tooltip = btn.sortBy and sortMode[btn.sortBy] and sortMode[btn.sortBy].tooltip
+            _G.GameTooltip:SetOwner(btn, "ANCHOR_LEFT", -4, -34)
+            _G.GameTooltip:AddLine(tooltip or "", 1, 1, 1)
+            _G.GameTooltip:Show()
+        end
+    )
+
+    sortByButton:SetScript(
+        "OnLeave",
+        function()
+            sortByButton:SetActive(false)
+            sortByButton.title:Hide()
+            _G.GameTooltip:Hide()
+        end
+    )
+
+    sortByButton:SetScript(
+        "OnMouseDown",
+        function(btn, button)
+            if button == "LeftButton" then
+                local dfDB = self:GetPlayerDB("dungeonFilter")
+
+                if btn.sortBy then
+                    local currentModeID
+                    for i, mode in ipairs(avaliableSortMode) do
+                        if mode == btn.sortBy then
+                            currentModeID = i
+                            break
+                        end
+                    end
+
+                    btn.sortBy = currentModeID and avaliableSortMode[currentModeID + 1] or avaliableSortMode[1]
+                end
+
+                sortByButton.text:SetText(sortMode[btn.sortBy].text)
+                LL:RefreshSearch()
+                dfDB.sortBy = btn.sortBy
+
+                local tooltip = btn.sortBy and sortMode[btn.sortBy] and sortMode[btn.sortBy].tooltip
+                _G.GameTooltip:ClearLines()
+                _G.GameTooltip:SetOwner(btn, "ANCHOR_LEFT", -4, -34)
+                _G.GameTooltip:AddLine(tooltip or "", 1, 1, 1)
+                _G.GameTooltip:Show()
+
+                sortByButton.UpdatePosition()
+            end
+        end
+    )
+
+    sortByButton.UpdatePosition = function()
+        if sortByButton.sortBy == "DEFAULT" then
+            sortModeButton:Hide()
+            sortByButton:ClearAllPoints()
+            sortByButton:SetPoint("LEFT", sortPanel, "LEFT", 0, 0)
+            sortByButton:SetPoint("RIGHT", sortPanel, "RIGHT", 0, 0)
+        else
+            sortModeButton:Show()
+            sortByButton:ClearAllPoints()
+            sortByButton:SetPoint("LEFT", sortPanel, "LEFT", 0, 0)
+            sortByButton:SetPoint("RIGHT", sortModeButton, "LEFT", -6, 0)
+        end
+    end
+
+    sortPanel.sortByButton = sortByButton
+    frame.sortPanel = sortPanel
     self.rightPanel = frame
 end
 
@@ -1020,13 +1320,39 @@ function LL:UpdateRightPanel()
 
     self.rightPanel.filters.leaderDungeonScore.editBox:SetText(dfDB.leaderDungeonScore or 0)
 
-    if dfDB.joinTogetherEnable then
-        self.rightPanel.filters.joinTogether:SetActive(true)
+    if dfDB.roleAvailableEnable then
+        self.rightPanel.filters.roleAvailable:SetActive(true)
     else
-        self.rightPanel.filters.joinTogether:SetActive(false)
+        self.rightPanel.filters.roleAvailable:SetActive(false)
     end
 
     self.rightPanel.vaultStatus.update()
+    self.rightPanel.vaultStatus:SetActive(false)
+
+    if dfDB.sortDescending == nil then
+        dfDB.sortDescending = true
+    end
+
+    if dfDB.sortDescending then
+        self.rightPanel.sortPanel.sortModeButton.descending = true
+        self.rightPanel.sortPanel.sortModeButton.tex:SetRotation(0)
+    else
+        self.rightPanel.sortPanel.sortModeButton.descending = false
+        self.rightPanel.sortPanel.sortModeButton.tex:SetRotation(3.14)
+    end
+
+    self.rightPanel.sortPanel.sortModeButton:SetActive(false)
+
+    if dfDB.sortBy then
+        self.rightPanel.sortPanel.sortByButton.sortBy = dfDB.sortBy
+        self.rightPanel.sortPanel.sortByButton.text:SetText(sortMode[dfDB.sortBy].text)
+    else
+        self.rightPanel.sortPanel.sortByButton.sortBy = avaliableSortMode[1]
+        self.rightPanel.sortPanel.sortByButton.text:SetText(sortMode[avaliableSortMode[1]].text)
+    end
+
+    self.rightPanel.sortPanel.sortByButton:SetActive(false)
+    self.rightPanel.sortPanel.sortByButton.UpdatePosition()
 
     self.rightPanel:Show()
 end
@@ -1057,30 +1383,58 @@ function LL:ResortSearchResults(results)
         DAMAGER = 0
     }
 
-    if dfDB.joinTogetherEnable then
-        local playerRole = UnitGroupRolesAssigned("player")
-        if partyMember[playerRole] then
-            partyMember[playerRole] = partyMember[playerRole] + 1
-        end
+    local sortDatabase = {}
 
+    if dfDB.roleAvailableEnable then
         if IsInGroup() then
-            for i = 1, GetNumGroupMembers() do
-                local role = UnitGroupRolesAssigned("party" .. i)
-                if partyMember[role] then
-                    partyMember[role] = partyMember[role] + 1
+            local playerRole = UnitGroupRolesAssigned("player")
+            if partyMember[playerRole] then
+                partyMember[playerRole] = partyMember[playerRole] + 1
+            end
+
+            local numMembers = GetNumGroupMembers()
+            if numMembers >= 2 then
+                for i = 1, numMembers - 1 do
+                    local role = UnitGroupRolesAssigned("party" .. i)
+                    if partyMember[role] then
+                        partyMember[role] = partyMember[role] + 1
+                    end
                 end
+            end
+        else
+            local specIndex = GetSpecialization()
+            local role = specIndex and select(5, GetSpecializationInfo(specIndex))
+            if partyMember[role] then
+                partyMember[role] = partyMember[role] + 1
             end
         end
     end
 
-    for i = #results, 1, -1 do
-        local resultID = results[i]
-        local pendingStatus = select(3, C_LFGList_GetApplicationInfo(resultID))
+    local pendingResults = {}
+    local waitForSortingResults = {}
 
-        if not pendingStatus then
+    for _, resultID in ipairs(results) do
+        local pendingStatus = select(3, C_LFGList_GetApplicationInfo(resultID))
+        if pendingStatus then
+            tinsert(pendingResults, resultID)
+        else
             local verified = false
 
+            local sortCache = {
+                id = resultID,
+                overallScore = 0,
+                dungeonScore = 0
+            }
+
             local searchResultInfo = C_LFGList_GetSearchResultInfo(resultID)
+
+            if searchResultInfo.leaderOverallDungeonScore then
+                sortCache.overallScore = searchResultInfo.leaderOverallDungeonScore
+            end
+
+            if searchResultInfo.leaderDungeonScoreInfo and searchResultInfo.leaderDungeonScoreInfo.mapScore then
+                sortCache.dungeonScore = searchResultInfo.leaderDungeonScoreInfo.mapScore
+            end
 
             if numFilter == 0 then
                 verified = true
@@ -1093,21 +1447,18 @@ function LL:ResortSearchResults(results)
             end
 
             if verified and dfDB.leaderScoreEnable and dfDB.leaderScore and dfDB.leaderScore > 0 then
-                local score = searchResultInfo.leaderOverallDungeonScore
-                if not score or score < dfDB.leaderScore then
+                if not sortCache.overallScore or sortCache.overallScore < dfDB.leaderScore then
                     verified = false
                 end
             end
 
             if verified and dfDB.leaderDungeonScoreEnable and dfDB.leaderDungeonScore and dfDB.leaderDungeonScore > 0 then
-                local score =
-                    searchResultInfo.leaderDungeonScoreInfo and searchResultInfo.leaderDungeonScoreInfo.mapScore
-                if not score or score < dfDB.leaderDungeonScore then
+                if not sortCache.dungeonScore or sortCache.dungeonScore < dfDB.leaderDungeonScore then
                     verified = false
                 end
             end
 
-            if verified and dfDB.joinTogetherEnable then
+            if verified and dfDB.roleAvailableEnable then
                 local roleCache = {
                     TANK = partyMember.TANK,
                     HEALER = partyMember.HEALER,
@@ -1126,10 +1477,36 @@ function LL:ResortSearchResults(results)
                 end
             end
 
-            if not verified then
-                tremove(results, i)
+            if verified then
+                tinsert(waitForSortingResults, sortCache)
             end
         end
+    end
+
+    local sortBy = dfDB.sortBy or avaliableSortMode[1]
+    if sortMode[sortBy].func then
+        sort(
+            waitForSortingResults,
+            function(a, b)
+                if not a or not b then
+                    return false
+                end
+
+                local result = sortMode[sortBy].func(a, b)
+                result = dfDB.sortDescending and result or result * -1
+                return result == 1
+            end
+        )
+    end
+
+    wipe(results)
+
+    for _, result in ipairs(pendingResults) do
+        tinsert(results, result)
+    end
+
+    for _, result in ipairs(waitForSortingResults) do
+        tinsert(results, result.id)
     end
 
     _G.LFGListFrame.SearchPanel.totalResults = #results
@@ -1158,6 +1535,12 @@ function LL:Initialize()
     self:SecureHook(_G.PVEFrame, "Show", "RequestKeystoneData")
     self:SecureHook("LFGListFrame_SetActivePanel", "UpdateRightPanel")
     self:SecureHook("LFGListUtil_SortSearchResults", "ResortSearchResults")
+    self:SecureHook(
+        "LFGListSearchPanel_DoSearch",
+        function()
+            LL.lastRefreshTimestamp = GetTime()
+        end
+    )
 
     self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "RequestKeystoneData")
     self:RegisterEvent("GROUP_ROSTER_UPDATE", "RequestKeystoneData")

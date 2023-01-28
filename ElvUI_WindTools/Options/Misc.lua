@@ -145,6 +145,13 @@ options.general = {
             type = "toggle",
             name = L["View SC Group"],
             desc = L["Let you can view the group created by Simplified Chinese players."]
+        },
+        autoToggleChatBubble = {
+            order = 13,
+            type = "toggle",
+            name = L["Auto Toggle Chat Bubble"],
+            desc = L["Only show chat bubble in instance."],
+            width = 1.5
         }
     }
 }
@@ -1837,6 +1844,12 @@ options.lfgList = {
                     type = "toggle",
                     name = L["Enable"],
                     desc = L["Add an additional frame to filter the groups."]
+                },
+                autoRefresh = {
+                    order = 2,
+                    type = "toggle",
+                    name = L["Auto Refresh"],
+                    desc = L["Automatically refresh the list after you changing the filter."]
                 }
             }
         }

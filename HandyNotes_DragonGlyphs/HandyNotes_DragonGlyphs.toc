@@ -1,8 +1,8 @@
-## Interface: 100002
+## Interface: 100005
 ## Title: HandyNotes_DragonGlyphs
 ## Notes: Dragon Glyphs on the Map
 ## Author: Keyboardturn
-## Version: 0.0.3
+## Version: 0.0.4
 ## SavedVariables: HandyNotes_DragonGlyphsDB
 ## RequiredDeps: HandyNotes
 

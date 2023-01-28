@@ -278,7 +278,7 @@ DB.points = {
     [1978] = { -- Dragon Isles
         -- [56364797] = { icon="portal", multilabel={PtoOG, L["Teleport to Seat of the Aspects"]}, multinote={Durotar}, faction="Horde" },
         -- [56574817] = { icon="portal", multilabel={PtoSW, L["Teleport to Seat of the Aspects"]}, multinote={ElwynnForest}, faction="Alliance" },
-        [56364797] = { icon="portal", label=PtoOG, note=Durotar, faction="Horde" }, -- quest=?, level=?
+        [56364797] = { icon="portal", label=PtoOG, note=Durotar, faction="Horde" }, -- quest=67030, level=?
         [56574817] = { icon="portal", label=PtoSW, note=ElwynnForest, faction="Alliance" }, -- quest=?, level=?
         [59682678] = { icon="zeppelin", label=ZtoOG, note=Durotar, faction="Horde" },
         [59682677] = { icon="hzeppelin", label=ZtoOG, note=Durotar, faction="Alliance" },

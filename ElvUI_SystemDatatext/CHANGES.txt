@@ -1,12 +1,12 @@
-tag c93c46124c21574ee6a1eb4d8abbf9f5fc32c148 3.0.15-retail
+tag 378ea35f578299196991a7e91ab0005a3d54d2cd 3.0.16-retail
 Author:	Adam Koch <me@adamko.ch>
-Date:	Thu Jan 19 10:48:30 2023 -0500
+Date:	Tue Jan 24 22:34:44 2023 -0500
 
-3.0.15-retail Release
+3.0.16-retail Release
 
-commit a3f3562edefb7673a18e2bd48094ab3fa36c814d
+commit 59981d322912da56bcb047b035ca7b296c83a010
 Author: Adam Koch <me@adamko.ch>
-Date:   Thu Jan 19 10:48:15 2023 -0500
+Date:   Tue Jan 24 22:34:41 2023 -0500
 
-    Implemented ElvUI's Value Color Update change.
+    Update TOC for new patch.
 

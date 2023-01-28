@@ -1,7 +1,6 @@
 # TL;DR Missions
 
-##  (2022-12-12)
+##  (2023-01-25)
  
 
-- Update TLDRMissions.toc  
-- Workaround for issue found in The Waking Shores - the Scouting Map behaves internally like the Covenant Mission Tables for some reason?  
+- TOC update: 1.0.5  

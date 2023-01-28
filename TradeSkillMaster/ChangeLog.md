@@ -1,5 +1,6 @@
-## v4.12.25 Changes
+## v4.12.30 Changes
 
-* [Wrath] Added workaround for 3.4.1 bug with the game not indicating when bags are updated
+* [All] Fixed error when syncing crafting data between accounts
+* [Retail] Fixed AuctionDB realm data showing up to date even if only commodity data is available
 
 [Known Issues](https://support.tradeskillmaster.com/en_US/known_issues)
