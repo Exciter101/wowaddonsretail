@@ -1,6 +1,6 @@
 ## Interface: 100005
-## Title: BetterWardrobe (4.6.4)
-## Version: 4.6.4
+## Title: BetterWardrobe (4.7)
+## Version: 4.7
 ## Author: SLOKnightfall
 ## Notes: 
 ## OptionalDeps: MogIt, CanIMogIt, LegionWardrobe, WardrobeEnhanced, Rarity, TransmogOutfits, ExtendedSets, ElvUI

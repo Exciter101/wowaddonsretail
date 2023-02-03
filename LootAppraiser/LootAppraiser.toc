@@ -1,9 +1,9 @@
-## Interface: 100002
+## Interface: 100005
 ## Title: LootAppraiser
 ## Notes: An addon which keeps track of looted items and relative AH value.
 ## Author: ProfitzTV
-## Version: v2.1.5
-## OptionalDeps: TradeSkillMaster, OribosExchange
+## Version: v2.1.7
+## OptionalDeps: TradeSkillMaster, OribosExchange, Auctionator
 ## SavedVariables: LootAppraiserDB, LALootDB
 ## X-Embeds: Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibExtraTip, LibParse
 

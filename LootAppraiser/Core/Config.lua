@@ -696,7 +696,7 @@ local options = {
                         --generalText78 = { type = "description", order = 78, fontSize = "medium", name = "Testerle (http://www.twitch.tv/testerle)", width = "double", },
                         --blank79 = { type = "description", order = 79, fontSize = "small",name = "",width = "full", },
                         earlyAdoptersHeader = { order = 81, type = "header", name = "Early Adopters/Beta Testers:", },	
-                        generalText100 = { type = "description", order = 100, fontSize = "medium", name = "ACubed10, Brozerian, Conzec89, Goldgoblin, DozerBob, Fatherfajita, GoblinRaset, Hxtasy, JuniorDeBoss, Killerdamage, Morricade, PhatLewts, Selltacular, Skittlezz420, Soulslicer", width = "full", },
+                        generalText100 = { type = "description", order = 100, fontSize = "medium", name = "ACubed10, Brozerian, Conzec89, Goldgoblin, DozerBob, Fatherfajita, GoblinRaset, Hxtasy, JuniorDeBoss, Killerdamage, Morricade, PhatLewts, Selltacular, Skittlezz420, Soulslicer, Pellew", width = "full", },
                     },
                 },
             },

@@ -4,20 +4,13 @@ local MODERN = select(4,GetBuildInfo()) >= 8e4
 local MODERN_CONTAINERS = MODERN or C_Container and C_Container.GetContainerNumSlots
 local CF_CLASSIC = not MODERN
 local AB = assert(T.ActionBook:compatible(2,21), "A compatible version of ActionBook is required")
-local RW = assert(AB:compatible("Rewire",1,14), "A compatible version of Rewire is required")
+local RW = assert(AB:compatible("Rewire",1,25), "A compatible version of Rewire is required")
 local KR = assert(AB:compatible("Kindred",1,14), "A compatible version of Kindred is required")
 local L, EV = AB:locale(), assert(T.Evie)
 local spellFeedback, itemHint, toyHint, mountHint, mountMap
 
 local NormalizeInRange = {[0]=0, 1, [true]=1, [false]=0}
 local _, CLASS = UnitClass("player")
-
-local safequote do
-	local r = {u="\\117", ["{"]="\\123", ["}"]="\\125"}
-	function safequote(s)
-		return (("%q"):format(s):gsub("[{}u]", r))
-	end
-end
 
 if MODERN then -- mount: mount ID
 	local function summonAction(mountID)
@@ -292,7 +285,7 @@ do -- item: items ID/inventory slot
 		if MODERN and iid and PlayerHasToy(iid) and GetItemCount(iid) == 0 then
 			return toyHint(iid, nil, target)
 		elseif iid then
-			cdStart, cdLen, enabled = GetItemCooldown(iid)
+			cdStart, cdLen, enabled = (MODERN_CONTAINERS and C_Container.GetItemCooldown or GetItemCooldown)(iid)
 			local time = GetTime()
 			cdLeft = (cdStart or 0) > 0 and (enabled ~= 0) and (cdStart + cdLen - time)
 		end
@@ -457,66 +450,47 @@ do -- macrotext
 	end
 end
 do -- macro: name
-	local map, f, sm, macroHint = {}, CreateFrame("Frame", nil, nil, "SecureHandlerBaseTemplate") do
-		f:SetFrameRef("Rewire", RW:seclib())
-		f:Execute('macros, RW = newtable(), self:GetFrameRef("Rewire")')
-		f:SetAttribute("RunNamedMacro", [[-- AB_RunStoredMacro_Command
-			return RW:RunAttribute('RunMacro', macros[...])
-		]])
-		sm = GetManagedEnvironment(f).macros
-		local pending
-		local function sync()
-			local s, numGlobal, numChar = "", GetNumMacros()
-			for k in rtable.pairs(sm) do
+	local map, sm = {}, {} do
+		local wmSynced, owner = true, RW:RegisterNamedMacroTextOwner("ab-macro-wrapper", 10)
+		local function syncWMacros()
+			local notify, numGlobal, numChar = false, GetNumMacros()
+			for k in pairs(sm) do
 				if not GetMacroInfo(k) then
-					s = ("%s\nmacros[%s] = nil"):format(s, safequote(k))
-					RW:ClearNamedMacroHandler(k, f)
+					notify, sm[k] = RW:SetNamedMacroText(k, nil, owner, true) or notify, nil
 				end
 			end
 			local ofs = MAX_ACCOUNT_MACROS - numGlobal
 			for i=1,numGlobal + numChar do
-				local name, _, text = GetMacroInfo((i > numGlobal and ofs or 0)+i)
-				if name and sm[name] ~= text then
-					s = ("%s\nmacros[%s] = %s"):format(s, safequote(name), safequote(text))
-					RW:SetNamedMacroHandler(name, f, macroHint)
+				local k, _, text = GetMacroInfo((i > numGlobal and ofs or 0)+i)
+				if k and text ~= sm[k] then
+					notify, sm[k] = RW:SetNamedMacroText(k, "#abmacrowrap " .. k .. "\n" .. text, owner, true) or notify, text
 				end
 			end
-			if s ~= "" then
-				f:Execute(s)
+			if notify then
 				AB:NotifyObservers("macro")
 			end
-			pending = nil
+			wmSynced = true
 			return "remove"
 		end
 		function EV.UPDATE_MACROS()
-			if InCombatLockdown() then
-				pending = pending or EV.RegisterEvent("PLAYER_REGEN_ENABLED", sync) or 1
-			else
-				sync()
+			if not InCombatLockdown() then
+				syncWMacros()
+			elseif wmSynced then
+				EV.PLAYER_REGEN_ENABLED, wmSynced = syncWMacros, nil
 			end
 		end
 	end
-	local function check(name, pri, usable, state, icon, caption, count, cd1, cd2, tf, ta, ext, _stext, ...)
-		local _
-		if usable == nil then
-			if not icon then
-				_, icon = GetMacroInfo(name)
-			end
-			return icon and 10 or false, sm[name] ~= nil, state or 0, icon, caption or name, count or 0, cd1 or 0, cd2 or 0, tf, ta, ext, name, ...
+	RW:SetMetaHintFilter("abmacrowrap", "macroFallback", false, function(_meta, v)
+		if sm[v] then
+			local n, ico = GetMacroInfo(v)
+			return true, not not n, ico, v
 		end
-		return pri, usable, state, icon, caption, count, cd1, cd2, tf, ta, ext, name, ...
-	end
-	local function tail(_, ...)
-		return ...
-	end
-	local function namedMacroHint(name, modState)
-		return tail(check(name, 10, RW:GetMacroAction(sm[name], modState)))
-	end
-	function macroHint(name, _target, modState, priLimit)
-		return check(name, RW:GetMacroAction(sm[name], modState, priLimit))
+	end)
+	local function namedMacroHint(name, cndState)
+		return RW:GetNamedMacroAction(name, cndState)
 	end
 	local function createNamedMacro(name, forceShow)
-		if type(name) == "string" and (forceShow or sm[name]) then
+		if type(name) == "string" and (forceShow or RW:IsNamedMacroKnown(name)) then
 			if not map[name] then
 				map[name] = AB:CreateActionSlot(namedMacroHint, name, "recall", RW:seclib(), "RunSlashCmd", "/runmacro", name)
 			end
@@ -524,22 +498,28 @@ do -- macro: name
 		end
 	end
 	local function describeMacro(name)
-		local n, ico = GetMacroInfo(name)
-		return L"Macro", n or name, ico
+		local _, ico
+		if RW:IsNamedMacroKnown(name) then
+			_, _, ico = RW:GetNamedMacroAction(name)
+		end
+		return L"Macro", name, ico
 	end
 	AB:RegisterActionType("macro", createNamedMacro, describeMacro, {"forceShow"})
 end
-if MODERN then -- battlepet: pet ID
+if MODERN then -- battlepet: pet ID, species ID
 	local petAction, special = {}, {}
 	local function SetBattlePetByID(self, id)
-		local sid, cname, lvl, _, _, _, _, name, _, ptype, _, _, _, _, cb = C_PetJournal.GetPetInfoByPetID(id)
+		local sid, cname, lvl, _, _, _, _, name, _, ptype, _, _, desc, _, cb = C_PetJournal.GetPetInfoByPetID(id)
 		if not sid then return false end
 		local hp, mhp, ap, spd, rarity = C_PetJournal.GetPetStats(id)
-		local qc, nc, icof = ITEM_QUALITY_COLORS[rarity-1], HIGHLIGHT_FONT_COLOR, "|TInterface\\PetBattles\\PetBattle-StatIcons:0:0:0:0:32:32:%d:%d:%d:%d|t %s"
+		local qc, hc, icof = ITEM_QUALITY_COLORS[rarity-1], HIGHLIGHT_FONT_COLOR, "|TInterface\\PetBattles\\PetBattle-StatIcons:0:0:0:0:32:32:%d:%d:%d:%d|t %s"
 		self:AddLine(cname or name, qc.r, qc.g, qc.b)
 		if cb then
-			self:AddLine(UNIT_TYPE_LEVEL_TEMPLATE:format(lvl, _G["BATTLE_PET_NAME_".. ptype]), nc.r, nc.g, nc.b)
-			self:AddLine(icof:format(0, 16, 0, 16, ap) .. "   " .. icof:format(0, 16, 16, 32, spd) .. "   " .. icof:format(16,32,16,32, hp < mhp and (hp .. "/" .. mhp) or hp), nc.r, nc.g, nc.b)
+			self:AddLine(UNIT_TYPE_LEVEL_TEMPLATE:format(lvl, _G["BATTLE_PET_NAME_".. ptype]), hc.r, hc.g, hc.b)
+			self:AddLine(icof:format(0, 16, 0, 16, ap) .. "   " .. icof:format(0, 16, 16, 32, spd) .. "   " .. icof:format(16,32,16,32, hp < mhp and (hp .. "/" .. mhp) or hp), hc.r, hc.g, hc.b)
+		elseif desc then
+			local nc = NORMAL_FONT_COLOR
+			self:AddLine(desc, nc.r, nc.g, nc.b, 1)
 		end
 	end
 	local function battlepetHint(pid)
@@ -555,33 +535,50 @@ if MODERN then -- battlepet: pet ID
 		local function randFaveHint()
 			return HasFullControl(), C_PetJournal.GetSummonedPetGUID() and 1 or 0, ricon, rname, 0, 0, 0, GameTooltip.SetSpellByID, 243819
 		end
-		petAction.FAVE = AB:CreateActionSlot(randFaveHint, nil, "attribute", "type","macro", "macrotext",SLASH_RANDOMFAVORITEPET1)
+		petAction.fave = AB:CreateActionSlot(randFaveHint, nil, "attribute", "type","macro", "macrotext",SLASH_RANDOMFAVORITEPET1)
 		RW:ImportSlashCmd("RANDOMFAVORITEPET", true, false, 20, function(_, _, clause, _target)
 			if clause then
 				return true, randFaveHint()
 			end
 		end)
-		RW:SetCastEscapeAction(GetSpellInfo(243819), petAction.FAVE)
-		RW:SetCastEscapeAction("spell:243819", petAction.FAVE)
+		RW:SetCastEscapeAction(GetSpellInfo(243819), petAction.fave)
+		RW:SetCastEscapeAction("spell:243819", petAction.fave)
 		function special.fave()
 			return L"Battle Pet", rname, ricon, nil, GameTooltip.SetSpellByID, 243819
 		end
 	end
-	local function createBattlePet(pid)
-		local ok, sid = pcall(C_PetJournal.GetPetInfoByPetID, pid)
-		if not (ok and sid) and not special[pid] then return end
-		pid = pid:upper()
-		if not petAction[pid] then
-			petAction[pid] = AB:CreateActionSlot(battlepetHint, pid, "func", C_PetJournal.SummonPetByGUID, pid)
+	local GetBattlePetInfo do -- (petID[, speciesID])
+		local function checkInfoReturn(pid, spid, ok, ...)
+			if ok and ... then
+				return pid, ...
+			elseif spid then
+				local sn = C_PetJournal.GetPetInfoBySpeciesID(spid)
+				local _, pid = C_PetJournal.FindPetIDByName(sn ~= "" and sn or "---")
+				if pid then
+					return GetBattlePetInfo(pid)
+				end
+			end
 		end
-		return petAction[pid]
+		function GetBattlePetInfo(pid, spid)
+			return checkInfoReturn(pid, spid, pcall(C_PetJournal.GetPetInfoByPetID, pid))
+		end
 	end
-	local function describeBattlePet(pid)
+	local function createBattlePet(pid, spid)
+		if special[pid] then return petAction[pid] end
+		local rpid = GetBattlePetInfo(pid, spid)
+		if not rpid then return end
+		local pk = rpid:upper()
+		if not petAction[pk] then
+			petAction[pk] = AB:CreateActionSlot(battlepetHint, rpid, "func", C_PetJournal.SummonPetByGUID, rpid)
+		end
+		return petAction[pk]
+	end
+	local function describeBattlePet(pid, spid)
 		if special[pid] then return special[pid]() end
-		local ok, sid, cn, lvl, _, _, _, _, n, tex = pcall(C_PetJournal.GetPetInfoByPetID, pid)
-		if not (ok and sid) then return L"Battle Pet", "?" end
+		local rpid, _, cn, lvl, _, _, _, _, n, tex = GetBattlePetInfo(pid, spid)
+		if not rpid then return L"Battle Pet", "?" end
 		if (cn or n) and ((lvl or 0) > 1) then cn = "[" .. lvl .. "] " .. (cn or n) end
-		return L"Battle Pet", cn or n or ("#" .. tostring(pid)), tex, nil, SetBattlePetByID, pid
+		return L"Battle Pet", cn or n or ("#" .. tostring(rpid)), tex, nil, SetBattlePetByID, rpid
 	end
 	AB:RegisterActionType("battlepet", createBattlePet, describeBattlePet)
 	RW:SetCommandHint(SLASH_SUMMON_BATTLE_PET1, 60, function(_, _, clause)
@@ -875,7 +872,7 @@ if MODERN then -- toy: item ID, forceShow
 	}
 	function toyHint(iid)
 		local _, name, icon = C_ToyBox.GetToyInfo(iid)
-		local cdStart, cdLength = GetItemCooldown(iid)
+		local cdStart, cdLength = (MODERN_CONTAINERS and C_Container.GetItemCooldown or GetItemCooldown)(iid)
 		local ignUse, usable = IGNORE_TOY_USABILITY[iid]
 		if not PlayerHasToy(iid) then
 			usable = false

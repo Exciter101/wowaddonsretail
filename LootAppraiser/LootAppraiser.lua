@@ -7,6 +7,8 @@ local LSM = LibStub:GetLibrary("LibSharedMedia-3.0")
 local LibParse = LibStub:GetLibrary("LibParse")
 
 local OEMarketInfo = OEMarketInfo
+local AuctionatorInfo = AuctionatorInfo
+local BlizzardVendorSell = 1	-- used to always show blizzard's native vendor sell pricing as a pricesource 
 local LootAppraiser_GroupLoot = LootAppraiser_GroupLoot
 
 --lootPrompt = 0 -- set to have it show by default upon first loot 
@@ -348,39 +350,39 @@ function private.sellGrayItems()
 		
 			if itemLink ~= nil then
 				local _, _, itemID = strfind(itemLink, "item:(%d+):")
-				local name, _, rarity, _, _, _, _, _, _ = GetItemInfo(itemID)
-				local itemInfo = GetItemInfo(itemID)
-				local currentItemValue = private.GetItemValue(itemID, "VendorSell") or 0
-
-				--enumerate how many of the same item for multiplier
-				local iStackCount = GetItemCount(itemInfo)
-				if iStackCount > 1 then
-					currentItemValue = currentItemValue * iStackCount
-				end
-
-				--detect if rarity of 0 (poor gray item)
-				if rarity == 0 and currentItemValue ~= 0 then		--added currentItemValue
-					rarityCounter = rarityCounter + 1
-					LA.Debug.Log("selling gray item: " .. itemLink .. " x" .. iStackCount .. ": " .. GetCoinTextureString(currentItemValue))
-					totalItemValueOfGrays = totalItemValueOfGrays + currentItemValue
-					--output to player
-					--if Verbose is enabled, then only show the total and don't do an output of the sale per item
-					if LA.db.profile.general.sellGrayItemsToVendorVerbose == true then
-
-					else
-						LA:Print("Selling " .. itemLink .. " x" .. iStackCount .. ": " .. GetCoinTextureString(currentItemValue))
-					end
-					
-					
-					C_Container.UseContainerItem(bag, slot)		--perform selling of item
+				if itemID == nil then
+					LA.Debug.Log("No itemID found for " .. itemLink .. " in bag slot " .. bag)
 				else
-					--nothing
+					local name, _, rarity, _, _, _, _, _, _ = GetItemInfo(itemID)
+					local itemInfo = GetItemInfo(itemID)
+					local currentItemValue = private.GetItemValue(itemID, "VendorSell") or 0
+
+					--enumerate how many of the same item for multiplier
+					local iStackCount = GetItemCount(itemInfo)
+					if iStackCount > 1 then
+						currentItemValue = currentItemValue * iStackCount
+					end
+
+					--detect if rarity of 0 (poor gray item)
+					if rarity == 0 and currentItemValue ~= 0 then		--added currentItemValue
+						rarityCounter = rarityCounter + 1
+						LA.Debug.Log("selling gray item: " .. itemLink .. " x" .. iStackCount .. ": " .. GetCoinTextureString(currentItemValue))
+						totalItemValueOfGrays = totalItemValueOfGrays + currentItemValue
+						--output to player
+						--if Verbose is enabled, then only show the total and don't do an output of the sale per item
+						if LA.db.profile.general.sellGrayItemsToVendorVerbose == true then
+
+						else
+							LA:Print("Selling " .. itemLink .. " x" .. iStackCount .. ": " .. GetCoinTextureString(currentItemValue))
+						end
+						
+						
+						C_Container.UseContainerItem(bag, slot)		--perform selling of item
+
+					end
 				end
-			else
-				--no item link, fix for Mythic keystones, etc.
-				--No item link, can't sell
 			end
-		slot = slot + 1	
+			slot = slot + 1	
 		end
 	end
 
@@ -491,7 +493,7 @@ function private.PreparePricesources()
 	-- only 2 or less price sources -> chat msg: missing modules
 	if LA.Util.tablelength(priceSources) == 0 then
 		StaticPopupDialogs["LA_NO_PRICESOURCES"] = {
-			text = "|cffff0000Attention!|r Missing additional addons for price sources (e.g. like TradeSkillMaster or Oribos Exchange).\n\n|cffff0000LootAppraiser disabled.|r",
+			text = "|cffff0000Attention!|r Missing additional addons for price sources (e.g. like TradeSkillMaster, Oribos Exchange, or Auctionator).\n\n|cffff0000LootAppraiser disabled.|r",
 			button1 = OKAY,
 			timeout = 0,
 			whileDead = true,
@@ -508,7 +510,6 @@ function private.PreparePricesources()
 
 		-- price source 'custom'
 		if priceSource == "Custom" then
-		LA.Debug.Log("Here I am - custom price source")
 			-- validate 'custom' price source
 			local isValidCustomPriceSource = LA.TSM.ParseCustomPrice(LA.GetFromDb("pricesource", "customPriceSource"))
 			if not isValidCustomPriceSource then
@@ -737,26 +738,9 @@ function private.HandleItemLooted(itemLink, itemID, quantity, source)
 	-- special handling for poor quality and vendor filter items
 	if quality == 0 then
 		LA.Debug.Log("  " .. tostring(itemID) .. ": poor quality -> price source 'VendorSell'")
-		priceSource = "VendorSell"
+		--priceSource = "VendorSell"
 		
---[[	--depricating this feature since most item IDs are no longer the same
-	elseif LA.CONST.ITEM_FILTER_VENDOR[tostring(itemID)] then
-		LA.Debug.Log("  " .. tostring(itemID) .. ": item filtered by vendor list -> price source 'VendorSell'")
-		priceSource = "VendorSell"
-		--elseif LA.CONST.ITEM_FILTER_NOVALUEITEMS[tostring(itemID)] then
-		--    LA.Debug.Log("  " .. tostring(itemID) .. ": item filtered")
-		--    priceSource = "VendorSell"
---]]
-
 	end
-
-
-
-
-
-
-
-
 
 
 --new working area for category pricing
@@ -811,16 +795,6 @@ if LA.db.profile.general.useSubClasses == true then
 end
 
 
-
-
-
-
-
-
-
-
-
-
 	-- get single item value
 	local singleItemValue = private.GetItemValue(itemID, priceSource) or 0
 	LA.Debug.Log("SIV price source: " .. tostring(singleItemValue))
@@ -868,8 +842,6 @@ end
 			LogLoot(itemID, itemLink, itemValue)			
 		
 		end
-
-
 		
 	else
 		LA.Debug.Log("soulbound item ignored: " .. tostring(itemID))
@@ -966,8 +938,6 @@ end
 	
 	
 
-
-
 	if IsInGroup() == true and LA.GetFromDb("display","showGroupLootAlerts") == true then
 		--opted out of group loot alerts - play only your alerts
 		---print('in group and true', IsInGroup)
@@ -1038,11 +1008,6 @@ end
 	end
 
 
-	
-
-
-
-
 	LA.UI.RefreshUIs()
 
 	-- modules callback
@@ -1071,20 +1036,33 @@ end
 	end
 end
 -- get item value based on the selected/requested price source
-function private.GetItemValue(itemID, priceSource)	
-	--OribosExchange = OE
-	if LA.Util.startsWith(LA.CONST.PRICE_SOURCE[LA.GetFromDb("pricesource", "source")], "OE:") then
-		
-		if priceSource == "VendorSell" then
+function private.GetItemValue(itemID, priceSource)
+	if (LA.Util.startsWith(LA.CONST.PRICE_SOURCE[LA.GetFromDb("pricesource", "source")], "OE:") 
+	or (LA.Util.startsWith(LA.CONST.PRICE_SOURCE[LA.GetFromDb("pricesource", "source")], "AN:")) 
+	or (LA.Util.startsWith(LA.CONST.PRICE_SOURCE[LA.GetFromDb("pricesource", "source")], "BLIZ:"))) then
+	
+		if (priceSource == "VendorSell") then
 			local VendorSell =  select(11, GetItemInfo(itemID)) or 0
 			return VendorSell
+		
+		-- Blizzard's native pricing for vendor selling
+		elseif priceSource == "VendorValue" then
+			local priceInfo = {}
+			local BlizzardVendorSell =  select(11, GetItemInfo(itemID)) or 0
+			return BlizzardVendorSell
 
 		--new catch for OribosExchange pricing sources	
 		elseif priceSource == "region" then
 			local priceInfo = {}
 			OEMarketInfo(itemID, priceInfo)
-			LA.Debug.Log("Oribos Exchange pricesource: " .. priceInfo[priceSource])
 			return priceInfo[priceSource]
+		
+		-- Auctionator pricing
+		elseif priceSource == "Auctionator" then
+			local priceInfo = {}
+			--Usage Auctionator.API.v1.GetAuctionPriceByItemID(string, number)
+			AuctionatorInfo = Auctionator.API.v1.GetAuctionPriceByItemID("LootAppraiser", itemID)
+			return AuctionatorInfo
 
 		else
 			local itemLink
@@ -1234,12 +1212,22 @@ function private.GetAvailablePriceSources()
 		priceSources = LA.TSM.GetAvailablePriceSources() or {}
 	end
 
-	-- TUJ
 	-- OE (OribosExchange)
 	if OEMarketInfo then
 		priceSources["region"] = "OE: Median All Realms in Region"
 		--priceSources["market"] = "OE: Median AH 4-Day"
 	end
+
+	if BlizzardVendorSell == 1 then
+		priceSources["VendorValue"] = "Bliz: Vendor price"
+	end
+
+	-- Auctionator
+	if (IsAddOnLoaded("Auctionator")) and Auctionator and Auctionator.API and Auctionator.API.v1 and Auctionator.API.v1.RegisterForDBUpdate then
+		priceSources["Auctionator"] = "AN: Auctionator"
+	end
+
+
 
 	return priceSources
 end

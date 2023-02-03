@@ -1,8 +1,8 @@
-local _, T = ...
+local COMPAT, _, T = select(4, GetBuildInfo()), ...
 if T.SkipLocalActionBook then return end
 
-local MODERN = select(4,GetBuildInfo()) >= 10e4
-local CF_WRATH = not MODERN and select(4,GetBuildInfo()) >= 3e4
+local MODERN, CF_WRATH = COMPAT >= 10e4, COMPAT < 10e4 and COMPAT >= 3e4
+local MODERN_CONTAINERS = MODERN or C_Container and C_Container.GetContainerNumSlots
 local EV = T.Evie
 local AB = assert(T.ActionBook:compatible(2, 31), "Incompatible ActionBook")
 local KR = assert(T.ActionBook:compatible("Kindred", 1,17), "Incompatible ActionBook/Kindred")
@@ -291,7 +291,7 @@ do -- ready:spell name/spell id/item name/item id
 				local _, iid = GetItemInfo(rc)
 				iid = tonumber((iid or rc):match("item:(%d+)"))
 				if iid then
-					cdS, cdL, _cdA = GetItemCooldown(iid)
+					cdS, cdL, _cdA = (MODERN_CONTAINERS and C_Container.GetItemCooldown or GetItemCooldown)(iid)
 				end
 			end
 			if cdL == 0 or (cdS and cdL and (cdS + cdL) <= gcE) then

@@ -23,8 +23,8 @@ CONST.QUALITY_FILTER = { -- little hack to sort them in the menu
 
 -- TSM predefined price sources + 'Custom'
 CONST.PRICE_SOURCE = {
-    -- TSM price sources
-    ["Custom"] = "Custom Price Source",
+    ["VendorValue"] = "BLIZ: Vendor price",              --Native Blizzard Pricing for Vendor
+    ["Custom"] = "Custom Price Source",                  -- TSM price sources
     ["DBHistorical"] = "TSM: Historical Price",
     ["DBMarket"] = "TSM: Market Value",
     ["DBMinBuyout"] = "TSM: Min Buyout",
@@ -33,11 +33,8 @@ CONST.PRICE_SOURCE = {
     ["DBRegionMinBuyoutAvg"] = "TSM: Region Min Buyout Avg",
     ["DBRegionSaleAvg"] = "TSM: Region Global Sale Average",
     ["VendorSell"] = "TSM: VendorSell",
-
-    --OEMarketInfo (OE)
-	--["market"] = "OE: Median AH 4-Day",
-    ["region"] = "OE: Median All Realms in Region",
-
+    ["region"] = "OE: Median All Realms in Region",     --OEMarketInfo (OE) (add:  ["market"] = "OE: Median AH 4-Day")
+    ["Auctionator"] = "AN: Auctionator",                    -- Auctionator price source
 }
 
 CONST.PARTYLOOT_MSGPREFIX = "LA_PARTYLOOT"

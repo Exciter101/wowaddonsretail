@@ -573,7 +573,7 @@ function UI.PrepareDataContainer(parent)
     local totalItemValue = LA.Session.GetCurrentSession("liv") or 0
     local livValue = LA.Util.MoneyToString(totalItemValue)
     if LA.GetFromDb("display", "showXXXLootedItemValuePerHour") then
-        livValue = livValue .. " (0|cffffd100g|r/h)"
+        livValue = livValue .. " (0|cffffd100|r g/h)"
     end
 
     local lootedItemValue = private.DefineRowForFrame(dataContainer, "showLootedItemValue", "Looted Item Value:", livValue)
@@ -608,7 +608,7 @@ function UI.PrepareDataContainer(parent)
     local totalItemValueGroup = LA.Session.GetCurrentSession("livGroup") or 0
     local livValueGroup = LA.Util.MoneyToString(totalItemValueGroup)
     if LA.GetFromDb("display", "showLootedItemValueGroupPerHour") then
-        livValueGroup = livValueGroup .. " (0|cffffd100g|r/h)"
+        livValueGroup = livValueGroup .. " (0|cffffd100|r g/h)"
     end
 
     local lootedItemValueGroupUI = private.DefineRowForFrame(dataContainer, "showLootedItemValueGroup", "|cFF2DA6EDGroup:|r Looted Item Value:", livValueGroup)
@@ -704,7 +704,7 @@ function UI.RefreshUIs()
         local totalItemValue = LA.Session.GetCurrentSession("liv") or 0
         local livValue = LA.Util.MoneyToString(totalItemValue)
         if LA.GetFromDb("display", "showXXXLootedItemValuePerHour") then
-            livValue = livValue .. " (" .. private.CalcLootedItemValuePerHour("liv") .. "|cffffd100g|r/h)"
+            livValue = livValue .. " (" .. private.CalcLootedItemValuePerHour("liv") .. "|cffffd100|r g/h)"
         end
 
         -- add to main ui
@@ -764,7 +764,7 @@ function UI.RefreshUIs()
         local totalItemValueGroup = LA.Session.GetCurrentSession("livGroup") or 0
         local livValueGroup = LA.Util.MoneyToString(totalItemValueGroup)
         if LA.GetFromDb("display", "showLootedItemValueGroupPerHour") then
-            livValueGroup = livValueGroup .. " (" .. private.CalcLootedItemValuePerHour("livGroup") .. "|cffffd100g|r/h)"
+            livValueGroup = livValueGroup .. " (" .. private.CalcLootedItemValuePerHour("livGroup") .. "|cffffd100|r g/h)"
         end
 
         -- add to main ui
