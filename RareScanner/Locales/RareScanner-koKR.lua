@@ -190,7 +190,6 @@ if AL then
 	AL["FILTER"] = "NPC 필터"
 	AL["FILTER_CONTINENT"] = "대륙/범주"
 	AL["FILTER_CONTINENT_DESC"] = "대륙 또는 범주 이름"
-	AL["FILTER_EVENTS_ONLY_MAP"] = "세계 지도에만 필터 적용"
 	AL["FILTER_ZONE"] = "지역"
 	AL["FILTER_ZONE_DESC"] = "대륙 또는 범주 내부 지역"
 	AL["FILTER_ZONES_LIST"] = "지역 목록"

@@ -24,8 +24,8 @@ RSConstants.LOOT_ITEM_ID = nil
 -- Current versions
 ---============================================================================
 
-RSConstants.CURRENT_DB_VERSION = 83
-RSConstants.CURRENT_LOOT_DB_VERSION = 94
+RSConstants.CURRENT_DB_VERSION = 84
+RSConstants.CURRENT_LOOT_DB_VERSION = 95
 
 ---============================================================================
 -- Current maps (newer)
@@ -79,7 +79,7 @@ RSConstants.ITEM_TYPE = {
 	TOY = 2,
 	PET = 3,
 	MOUNT = 4,
-	ANYTHING = 0
+	DRAKEWATCHER = 5
 }
 
 ---============================================================================
@@ -105,7 +105,7 @@ RSConstants.PROFILE_DEFAULTS = {
 			scanInstances = false,
 			scanOnTaxi = true,
 			scanOnPetBattle = true,
-			scanWorldmapVignette = false,
+			scanWorldmapVignette = true,
 			ignoreCompletedEntities = true,
 			filteredRares = {},
 			filteredContainers = {},
@@ -151,8 +151,7 @@ RSConstants.PROFILE_DEFAULTS = {
 			defaultContainerFilterType = RSConstants.ENTITY_FILTER_ALL
 		},
 		eventFilters = {
-			filtersToggled = true,
-			filterOnlyMap = false
+			defaultEventFilterType = RSConstants.ENTITY_FILTER_ALL
 		},
 		zoneFilters = {
 			filtersToggled = true,
@@ -166,6 +165,7 @@ RSConstants.PROFILE_DEFAULTS = {
 			searchingMounts = true,
 			searchingToys = true,
 			searchingAppearances = true,
+			searchingDrakewatcher = true,
 			showFiltered = true,
 			showDead = true,
 			showWithoutCollectibles = false
@@ -234,6 +234,7 @@ RSConstants.PROFILE_DEFAULTS = {
 			showingMissingPets = true,
 			showingMissingToys = true,
 			showingMissingAppearances = true,
+			showingMissingDrakewatcher = true,
 			numItems = 10,
 			numItemsPerRow = 10,
 			tooltipsCommands = true,
@@ -682,6 +683,7 @@ RSConstants.EXPLORER_FILTER_DROP_MOUNTS = 1
 RSConstants.EXPLORER_FILTER_DROP_PETS = 2
 RSConstants.EXPLORER_FILTER_DROP_TOYS = 3
 RSConstants.EXPLORER_FILTER_DROP_APPEARANCES = 4
+RSConstants.EXPLORER_FILTER_DROP_DRAKEWATCHER = 9
 RSConstants.EXPLORER_FILTER_PART_ACHIEVEMENT = 5
 RSConstants.EXPLORER_FILTER_DEAD = 6
 RSConstants.EXPLORER_FILTER_FILTERED = 7

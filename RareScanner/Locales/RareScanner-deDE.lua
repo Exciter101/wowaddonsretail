@@ -167,7 +167,6 @@ if AL then
 	AL["FILTER"] = "NPC Filter"
 	AL["FILTER_CONTINENT"] = "Kontinent/Kategorie"
 	AL["FILTER_CONTINENT_DESC"] = "Name des Kontinents oder der Kategorie"
-	AL["FILTER_EVENTS_ONLY_MAP"] = "Filter nur auf der Weltkarte aktivieren"
 	AL["FILTER_ZONE"] = "Zone"
 	AL["FILTER_ZONE_DESC"] = "Zone innerhalb des Kontinents oder der Kategorie"
 	AL["FILTER_ZONES_LIST"] = "Gebietsliste"

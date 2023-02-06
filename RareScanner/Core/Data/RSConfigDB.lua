@@ -772,14 +772,6 @@ function RSConfigDB.SetShowingEvents(value)
 	private.db.map.displayEventIcons = value
 end
 
-function RSConfigDB.IsEventFilteredOnlyOnWorldMap()
-	return private.db.eventFilters.filterOnlyMap
-end
-
-function RSConfigDB.SetEventFilteredOnlyOnWorldMap(value)
-	private.db.eventFilters.filterOnlyMap = value
-end
-
 function RSConfigDB.IsShowingCompletedEvents()
 	return private.db.map.keepShowingAfterCompleted
 end
@@ -827,32 +819,74 @@ function RSConfigDB.SetMaxSeenEventTimeFilter(value, clearBak)
 end
 
 function RSConfigDB.IsEventFiltered(eventID)
-	if (eventID) then
-		return private.db.general.filteredEvents[eventID]
+	local filterType = RSConfigDB.GetEventFiltered(eventID)
+	if (filterType and filterType == RSConstants.ENTITY_FILTER_ALL) then
+		return true
 	end
+	
+	return false
+end
 
+function RSConfigDB.IsEventFilteredOnlyWorldmap(eventID)
+	local filterType = RSConfigDB.GetEventFiltered(eventID)
+	if (filterType and filterType == RSConstants.ENTITY_FILTER_WORLDMAP) then
+		return true
+	end
+	
+	return false
+end
+
+function RSConfigDB.IsEventFilteredOnlyAlerts(eventID)
+	local filterType = RSConfigDB.GetEventFiltered(eventID)
+	if (filterType and filterType == RSConstants.ENTITY_FILTER_ALERTS) then
+		return true
+	end
+	
 	return false
 end
 
 function RSConfigDB.GetEventFiltered(eventID)
+	if (eventID and private.db.eventFilters.filteredEvents and private.db.eventFilters.filteredEvents[eventID]) then
+		return private.db.eventFilters.filteredEvents[eventID]
+	end
+	
+	return nil
+end
+
+function RSConfigDB.SetEventFiltered(eventID, filterType)
+	--RSLogger:PrintDebugMessage(string.format("RSConfigDB.SetEventFiltered [%s][%s]", eventID, filterType or ""))
+	if (not private.db.eventFilters.filteredEvents) then
+		private.db.eventFilters.filteredEvents = {}
+	end
+	
 	if (eventID) then
-		local value = private.db.general.filteredEvents[eventID]
-		if (not value) then
-			return true
+		if (filterType) then
+			private.db.eventFilters.filteredEvents[eventID] = filterType
 		else
-			return false
+			private.db.eventFilters.filteredEvents[eventID] = RSConfigDB.GetDefaultEventFilter()
 		end
 	end
 end
 
-function RSConfigDB.SetEventFiltered(eventID, value)
-	if (eventID) then
-		if (value == false) then
-			private.db.general.filteredEvents[eventID] = true
-		else
-			private.db.general.filteredEvents[eventID] = nil
-		end
+function RSConfigDB.DeleteEventFiltered(eventID)
+	--RSLogger:PrintDebugMessage(string.format("RSConfigDB.DeleteEventFiltered [%s]", eventID))
+	if (eventID and private.db.eventFilters.filteredEvents and private.db.eventFilters.filteredEvents[eventID]) then
+		private.db.eventFilters.filteredEvents[eventID] = nil
 	end
+	
+	if (RSUtils.GetTableLength(private.db.eventFilters.filteredEvents) == 0) then
+		private.db.eventFilters.filteredEvents = nil
+	end
+end
+
+function RSConfigDB.SetDefaultEventFilter(filterType)
+	if (filterType) then
+		private.db.eventFilters.defaultEventFilterType = filterType
+	end
+end
+
+function RSConfigDB.GetDefaultEventFilter()
+	return private.db.eventFilters.defaultEventFilterType
 end
 
 ---============================================================================
@@ -1065,6 +1099,14 @@ function RSConfigDB.SetShowingMissingAppearances(value)
 	private.db.loot.showingMissingAppearances = value
 end
 
+function RSConfigDB.IsShowingMissingDrakewatcher()
+	return private.db.loot.showingMissingDrakewatcher
+end
+
+function RSConfigDB.SetShowingMissingDrakewatcher(value)
+	private.db.loot.showingMissingDrakewatcher = value
+end
+
 ---============================================================================
 -- Collection filters
 ---============================================================================
@@ -1115,6 +1157,14 @@ end
 
 function RSConfigDB.IsSearchingAppearances()
 	return private.db.collections.searchingAppearances
+end
+
+function RSConfigDB.SetSearchingDrakewatcher(value)
+	private.db.collections.searchingDrakewatcher = value
+end
+
+function RSConfigDB.IsSearchingDrakewatcher()
+	return private.db.collections.searchingDrakewatcher
 end
 
 function RSConfigDB.SetShowFiltered(value)

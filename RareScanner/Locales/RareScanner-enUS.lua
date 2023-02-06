@@ -195,6 +195,7 @@ if AL then
 	AL["EXPLORER_FILTER_APPEARANCES"] = "Drops missing appearances"
 	AL["EXPLORER_FILTER_COLLECTIONS"] = "Collections"
 	AL["EXPLORER_FILTER_DEAD"] = "Show already killed NPCs"
+	AL["EXPLORER_FILTER_DRAKEWATCHER"] = "Drops missing drakewatcher manuscripts"
 	AL["EXPLORER_FILTER_FILTERED"] = "Show filtered NPCs"
 	AL["EXPLORER_FILTER_MOUNTS"] = "Drops missing mounts"
 	AL["EXPLORER_FILTER_PETS"] = "Drops missing pets"
@@ -210,10 +211,12 @@ if AL then
 	AL["EXPLORER_FOUND_CONTAINERS"] = "Found %s containers with missing collectibles..."
 	AL["EXPLORER_FOUND_NPCS"] = "Found %s NPCs with missing collectibles..."
 	AL["EXPLORER_MISSING_APPEARANCES"] = "Detected %s missing %s appearances..."
+	AL["EXPLORER_MISSING_DRAKEWATCHER"] = "Detected %s missing drakewatcher manuscripts..."
 	AL["EXPLORER_MISSING_MOUNTS"] = "Detected %s missing mounts..."
 	AL["EXPLORER_MISSING_PETS"] = "Detected %s missing pets..."
 	AL["EXPLORER_MISSING_TOYS"] = "Detected %s missing toys..."
 	AL["EXPLORER_NO_MISSING_APPEARANCES"] = "No missing appearances"
+	AL["EXPLORER_NO_MISSING_DRAKEWATCHER"] = "No missing drakewatcher manuscripts"
 	AL["EXPLORER_NO_MISSING_MOUNTS"] = "No missing mounts"
 	AL["EXPLORER_NO_MISSING_PETS"] = "No missing pets"
 	AL["EXPLORER_NO_MISSING_TOYS"] = "No missing toys"
@@ -231,15 +234,12 @@ if AL then
 	AL["FILTER_DEFAULT"] = "Default filter behaviour"
 	AL["FILTER_DEFAULT_DESC"] = "This is the default behaviour that will be applied when filtering using any of the options available in the addon (worldmap commands, visual alerts, RareScanner's explorer, etc.)."
 	AL["FILTER_DESC"] = [=[Uncheck to filter it. Once it is filtered the behaviour selected will apply: 
-- %s: It won't show up in the map and you won't get alerts either.
-- %s: It won't show up in the map but you will still get alerts.
-- %s: It will show up in the map but you won't get alerts.
-Check to unfilter it:
-- It will appear in your map and you will get the alerts.]=]
+	- %s: It won't show up in the map and you won't get alerts either.
+	- %s: It won't show up in the map but you will still get alerts.
+	- %s: It will show up in the map but you won't get alerts.
+	Check to unfilter it:
+	- It will appear in your map and you will get the alerts.]=]
 	AL["FILTER_EVENT_LIST"] = "Filter searching for events"
-	AL["FILTER_EVENT_LIST_DESC"] = "Toggle searching for this event. When disabled you won't get an alert when this event is found."
-	AL["FILTER_EVENTS_ONLY_MAP"] = "Apply filters only to the world map"
-	AL["FILTER_EVENTS_ONLY_MAP_DESC"] = "When enabled you will still get alerts from filtered events but they won't show up in your world map. When disabled you won't get alerts from filtered events at all."
 	AL["FILTER_TYPE_ALERTS"] = "Filter only audio/visual alerts"
 	AL["FILTER_TYPE_ALL"] = "Filter completely"
 	AL["FILTER_TYPE_WORLDMAP"] = "Filter only in the worldmap"
@@ -290,7 +290,9 @@ Check to unfilter it:
 	AL["LOOT_EXPLORER_FILTER_LONG_DESC"] = "In order to use these filters you have to scan with RareScanner's explorer. This process will detect every missing mount, pet, toy and appearance for your current character. |cffffff00Important!: These filters will override the filters under 'Category filters'.|r"
 	AL["LOOT_EXPLORER_OPEN"] = "Open explorer"
 	AL["LOOT_EXPLORER_SHOW_MISSING_APPEARANCES"] = "Show missing appearances"
-	AL["LOOT_EXPLORER_SHOW_MISSING_APPEARANCES_DESC"] = "When activated, you will see missing appearances found explorer the scan in the loot bar and world map tooltips."
+	AL["LOOT_EXPLORER_SHOW_MISSING_APPEARANCES_DESC"] = "When activated, you will see missing appearances found via the explorer in the loot bar and world map tooltips."
+	AL["LOOT_EXPLORER_SHOW_MISSING_DRAKEWATCHER"] = "Show missing drakewatcher manuscripts"
+	AL["LOOT_EXPLORER_SHOW_MISSING_DRAKEWATCHER_DESC"] = "When activated, you will see missing drakewatcher manuscripts found via the explorer in the loot bar and world map tooltips."
 	AL["LOOT_EXPLORER_SHOW_MISSING_MOUNTS"] = "Show missing mounts"
 	AL["LOOT_EXPLORER_SHOW_MISSING_MOUNTS_DESC"] = "When activated, you will see missing mounts found via the explorer in the loot bar and world map tooltips."
 	AL["LOOT_EXPLORER_SHOW_MISSING_PETS"] = "Show missing pets"

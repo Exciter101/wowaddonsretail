@@ -149,13 +149,25 @@ scanner_button.FilterEntityButton:SetScript("OnClick", function(self)
 	local entityID = self:GetParent().npcID
 	if (entityID) then
 		if (RSConstants.IsNpcAtlas(self:GetParent().atlasName)) then
-			RSConfigDB.SetNpcFiltered(entityID)
+			if (RSConfigDB.GetDefaultNpcFilter() == RSConstants.ENTITY_FILTER_WORLDMAP) then
+				RSConfigDB.SetNpcFiltered(entityID, RSConstants.ENTITY_FILTER_ALL)
+			else
+				RSConfigDB.SetNpcFiltered(entityID)
+			end
 			RSLogger:PrintMessage(AL["DISABLED_SEARCHING_RARE"]..self:GetParent().Title:GetText())
 		elseif (RSConstants.IsContainerAtlas(self:GetParent().atlasName)) then
-			RSConfigDB.SetContainerFiltered(entityID)
+			if (RSConfigDB.GetDefaultContainerFilter() == RSConstants.ENTITY_FILTER_WORLDMAP) then
+				RSConfigDB.SetContainerFiltered(entityID, RSConstants.ENTITY_FILTER_ALL)
+			else
+				RSConfigDB.SetContainerFiltered(entityID)
+			end
 			RSLogger:PrintMessage(string.format(AL["DISABLED_SEARCHING_CONTAINER"], self:GetParent().Title:GetText()))
 		else
-			RSConfigDB.SetEventFiltered(entityID, false)
+			if (RSConfigDB.GetDefaultEventFilter() == RSConstants.ENTITY_FILTER_WORLDMAP) then
+				RSConfigDB.SetEventFiltered(entityID, RSConstants.ENTITY_FILTER_ALL)
+			else
+				RSConfigDB.SetEventFiltered(entityID)
+			end
 			RSLogger:PrintMessage(string.format(AL["DISABLED_SEARCHING_EVENT"], self:GetParent().Title:GetText()))
 		end
 		
@@ -193,7 +205,7 @@ scanner_button.UnfilterEnabledButton:SetScript("OnClick", function(self)
 			RSConfigDB.DeleteContainerFiltered(entityID)
 			RSLogger:PrintMessage(string.format(AL["ENABLED_SEARCHING_CONTAINER"], self:GetParent().Title:GetText()))
 		else
-			RSConfigDB.SetEventFiltered(entityID, true)
+			RSConfigDB.DeleteEventFiltered(entityID)
 			RSLogger:PrintMessage(string.format(AL["ENABLED_SEARCHING_EVENT"], self:GetParent().Title:GetText()))
 		end
 		self:Hide()
@@ -524,9 +536,15 @@ function scanner_button:DetectedNewVignette(self, vignetteInfo, isNavigating)
 	elseif (RSConstants.IsEventAtlas(vignetteInfo.atlasName) and not RSConfigDB.IsScanningForEvents()) then
 		RSLogger:PrintDebugMessage(string.format("El evento [%s] se ignora por haber deshabilitado alertas de eventos", entityID))
 		return
-	-- disable alerts for filtered events. Check if the event is filtered, in which case we don't show anything
-	elseif (RSConstants.IsEventAtlas(vignetteInfo.atlasName) and RSConfigDB.IsEventFiltered(entityID) and not RSConfigDB.IsEventFilteredOnlyOnWorldMap()) then
-		RSLogger:PrintDebugMessage(string.format("El evento [%s] se ignora por estar filtrado", entityID))
+	-- disable alerts for filtered events (completely)
+	elseif (RSConstants.IsEventAtlas(vignetteInfo.atlasName) and RSConfigDB.IsEventFiltered(entityID)) then
+		RSLogger:PrintDebugMessage(string.format("El evento [%s] se ignora por estar filtrado (completo)", entityID))
+		return
+	-- disable alerts for filtered events (alerts)
+	elseif (RSConstants.IsEventAtlas(vignetteInfo.atlasName) and RSConfigDB.IsEventFilteredOnlyAlerts(entityID)) then
+		RSLogger:PrintDebugMessage(string.format("El evento [%s] se ignora por estar filtrado (alertas)", entityID))
+		RSRecentlySeenTracker.AddRecentlySeen(entityID, vignetteInfo.atlasName, false)
+		RSMinimap.RefreshAllData(true)
 		return
 	-- disable alerts for filtered zones
 	elseif (not RSConfigDB.IsZoneFilteredOnlyOnWorldMap() and (RSConfigDB.IsZoneFiltered(mapID) or RSConfigDB.IsEntityZoneFiltered(entityID, vignetteInfo.atlasName))) then
@@ -1171,7 +1189,7 @@ local function RefreshDatabaseData(previousDbVersion)
 		table.insert(routines, fixContainerFilters)
 	end
 
-	-- Update older container filters system to newer (10.0.5)
+	-- Update older npc filters system to newer (10.0.5)
 	if (RSUtils.GetTableLength(private.db.general.filteredRares) > 0) then
 		-- Set default behaviour
 		if (private.db.rareFilters.filterOnlyMap) then
@@ -1196,6 +1214,33 @@ local function RefreshDatabaseData(previousDbVersion)
 			end
 		)
 		table.insert(routines, fixNpcFilters)
+	end
+
+	-- Update older event filters system to newer (10.0.5)
+	if (RSUtils.GetTableLength(private.db.general.filteredEvents) > 0) then
+		-- Set default behaviour
+		if (private.db.eventFilters.filterOnlyMap) then
+			RSConfigDB.SetDefaultEventFilter(RSConstants.ENTITY_FILTER_WORLDMAP)
+		else
+			RSConfigDB.SetDefaultEventFilter(RSConstants.ENTITY_FILTER_ALL)
+		end
+		
+		local fixEventFilters = RSRoutines.LoopRoutineNew()
+		fixEventFilters:Init(function() return private.db.general.filteredEvents end, 100,
+			function(context, eventID, value)
+				if (private.db.general.filtersFixed and value == true) then
+					RSConfigDB.SetEventFiltered(eventID)
+				elseif (not private.db.general.filtersFixed and value == false) then
+					RSConfigDB.SetEventFiltered(eventID)
+				end
+			end, 
+			function(context)			
+				private.db.eventFilters.filterOnlyMap = nil
+				private.db.general.filteredEvents = nil
+				RSLogger:PrintDebugMessage("Migrados filtros de Eventos")
+			end
+		)
+		table.insert(routines, fixEventFilters)
 	end
 
 	-- Launch all the routines in order

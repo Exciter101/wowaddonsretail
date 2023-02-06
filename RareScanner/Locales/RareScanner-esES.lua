@@ -195,6 +195,7 @@ if AL then
 	AL["EXPLORER_FILTER_APPEARANCES"] = "Suelta apariencias sin conseguir"
 	AL["EXPLORER_FILTER_COLLECTIONS"] = "Colecciones"
 	AL["EXPLORER_FILTER_DEAD"] = "Mostrar NPCs muertos"
+	AL["EXPLORER_FILTER_DRAKEWATCHER"] = "Suelta manuscritos de dracovigía sin conseguir"
 	AL["EXPLORER_FILTER_FILTERED"] = "Mostrar NPCs filtrados"
 	AL["EXPLORER_FILTER_MOUNTS"] = "Suelta monturas sin conseguir"
 	AL["EXPLORER_FILTER_PETS"] = "Suelta mascotas sin conseguir"
@@ -210,10 +211,12 @@ if AL then
 	AL["EXPLORER_FOUND_CONTAINERS"] = "Encontrados %s contenedores con coleccionables sin conseguir..."
 	AL["EXPLORER_FOUND_NPCS"] = "Encontrados %s NPCs con coleccionables sin conseguir..."
 	AL["EXPLORER_MISSING_APPEARANCES"] = "Detectadas %s apariencias de %s sin conseguir..."
+	AL["EXPLORER_MISSING_DRAKEWATCHER"] = "Detectados %s manuscritos de dracovigía sin conseguir..."
 	AL["EXPLORER_MISSING_MOUNTS"] = "Detectadas %s monturas sin conseguir..."
 	AL["EXPLORER_MISSING_PETS"] = "Detectadas %s mascotas sin conseguir..."
 	AL["EXPLORER_MISSING_TOYS"] = "Detectados %s juguetes sin conseguir..."
 	AL["EXPLORER_NO_MISSING_APPEARANCES"] = "Sin apariencias faltantes"
+	AL["EXPLORER_NO_MISSING_DRAKEWATCHER"] = "Sin manuscritos de dracovigía faltantes"
 	AL["EXPLORER_NO_MISSING_MOUNTS"] = "Sin monturas faltantes"
 	AL["EXPLORER_NO_MISSING_PETS"] = "Sin mascotas faltantes"
 	AL["EXPLORER_NO_MISSING_TOYS"] = "Sin juguetes faltantes"
@@ -231,15 +234,12 @@ if AL then
 	AL["FILTER_DEFAULT"] = "Comportamiento predeterminado del filtro"
 	AL["FILTER_DEFAULT_DESC"] = "Este es el comportamiento predeterminado que se aplicará al filtrar haciendo uso de cualquier opción disponible en el addon (comandos del mapa del mundo, alertas visuales, el explorador de Rarescanner, etc.)"
 	AL["FILTER_DESC"] = [=[Desmarca para filtrarlo. Una vez filtrado se aplicará el comportamiento seleccionado: 
-- %s: No aparecerá en el mapa y tampoco recibirás alertas.
-- %s: No aparecerá en el mapa pero si recibirás alertas.
-- %s: Aparecerá en el mapa pero no recibirás alertas.
-Marca para quitar el filtro:
-- Aparecerá en tu mapa y recibirás alertas.]=]
+	- %s: No aparecerá en el mapa y tampoco recibirás alertas.
+	- %s: No aparecerá en el mapa pero si recibirás alertas.
+	- %s: Aparecerá en el mapa pero no recibirás alertas.
+	Marca para quitar el filtro:
+	- Aparecerá en tu mapa y recibirás alertas.]=]
 	AL["FILTER_EVENT_LIST"] = "Filtro de avisos para eventos"
-	AL["FILTER_EVENT_LIST_DESC"] = "Si se desmarca no se avisará cuando se encuentre a este evento."
-	AL["FILTER_EVENTS_ONLY_MAP"] = "Aplicar los filtros solo en el mapa del mundo"
-	AL["FILTER_EVENTS_ONLY_MAP_DESC"] = "Cuando está activo aún recibirás alertas de eventos filtrados pero no aparecerán en tu mapa del mundo. Cuando esta desactivado no recibirás alertas de eventos filtrados ni aparecerán en el mapa del mundo."
 	AL["FILTER_TYPE_ALERTS"] = "Filtrar solo alertas de audio/visuales"
 	AL["FILTER_TYPE_ALL"] = "Filtrar completamente"
 	AL["FILTER_TYPE_WORLDMAP"] = "Filtrar solo en el mapa del mundo"
@@ -291,6 +291,8 @@ Marca para quitar el filtro:
 	AL["LOOT_EXPLORER_OPEN"] = "Abrir explorador"
 	AL["LOOT_EXPLORER_SHOW_MISSING_APPEARANCES"] = "Mostrar apariencias sin conseguir"
 	AL["LOOT_EXPLORER_SHOW_MISSING_APPEARANCES_DESC"] = "Cuando se activa, se mostrarán todas las apariencias sin conseguir detectadas por el explorador, tanto en tu barra de botín como en las ventanas flotantes del mapa del mundo."
+	AL["LOOT_EXPLORER_SHOW_MISSING_DRAKEWATCHER"] = "Mostrar manuscritos de dracovigía sin conseguir"
+	AL["LOOT_EXPLORER_SHOW_MISSING_DRAKEWATCHER_DESC"] = "Cuando se activa, se mostrarán todos los manuscritos de dracovigía sin conseguir detectados por el explorador, tanto en tu barra de botín como en las ventanas flotantes del mapa del mundo."
 	AL["LOOT_EXPLORER_SHOW_MISSING_MOUNTS"] = "Mostrar monturas sin conseguir"
 	AL["LOOT_EXPLORER_SHOW_MISSING_MOUNTS_DESC"] = "Cuando se activa, se mostrarán todas las monturas sin conseguir detectadas por el explorador, tanto en tu barra de botín como en las ventanas flotantes del mapa del mundo."
 	AL["LOOT_EXPLORER_SHOW_MISSING_PETS"] = "Mostrar mascotas sin conseguir"

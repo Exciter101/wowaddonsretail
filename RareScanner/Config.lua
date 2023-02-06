@@ -874,7 +874,7 @@ local function GetFilterOptions()
 				npc_filter_options.args[string.format(filterTypeLine, containerID)] = nil
 			end
 			
-			-- Remove current containerIDs
+			-- Remove current npcs
 			npcs = {}
 			
 			-- Resets order
@@ -1587,7 +1587,7 @@ local function GetContainerFilterOptions()
 				container_filter_options.args[string.format(filterTypeLine, containerID)] = nil
 			end
 			
-			-- Remove current containerIDs
+			-- Remove current container
 			containers = {}
 			
 			-- Resets order
@@ -1851,38 +1851,119 @@ local function GetEventFilterOptions()
 	if not event_filter_options then
 		-- load continent combo
 		local CONTINENT_MAP_IDS = {}
-		for k, v in pairs(RSMapDB.GetContinents()) do
-			if (v.npcfilter) then
-				if (v.id) then
-					CONTINENT_MAP_IDS[k] = RSMap.GetMapName(k)
+		for continentID, continentInfo in pairs(RSMapDB.GetContinents()) do
+			if (continentInfo.npcfilter) then
+				if (continentInfo.id) then
+					CONTINENT_MAP_IDS[continentID] = RSMap.GetMapName(continentID)
 				else
-					CONTINENT_MAP_IDS[k] = AL["ZONES_CONTINENT_LIST"][k]
+					CONTINENT_MAP_IDS[continentID] = AL["ZONES_CONTINENT_LIST"][continentID]
 				end
 			end
 		end
+					
+		local currentOrder
+		local events = {}
+		local resetResults = function()	
+			-- Remove current results
+			for eventID, _ in pairs (events) do
+				event_filter_options.args[string.format(filterLine, eventID)] = nil
+				event_filter_options.args[string.format(filterTypeLine, eventID)] = nil
+			end
+			
+			-- Remove current events
+			events = {}
+			
+			-- Resets order
+			currentOrder = 6
+		end
+		
+		local addEvent = function(name, eventID)	
+			currentOrder = currentOrder + 1;
+			event_filter_options.args[string.format(filterLine, eventID)] = {
+				order = currentOrder + 0.1,
+				type = "toggle",
+				name = name,
+				desc = string.format(AL["FILTER_DESC"], AL["FILTER_TYPE_ALL"], AL["FILTER_TYPE_WORLDMAP"], AL["FILTER_TYPE_ALERTS"]),
+				get = function() 
+					if (RSConfigDB.GetEventFiltered(eventID) ~= nil) then
+						return false
+					else
+						return true
+					end
+				end,
+				set = function(_, value)
+					if (value) then
+						RSConfigDB.DeleteEventFiltered(eventID)
+					else
+						RSConfigDB.SetEventFiltered(eventID)
+					end
+					RSMinimap.RefreshAllData(true)
+				end,
+				width = 2.15
+			}
+			event_filter_options.args[string.format(filterTypeLine, eventID)] = {
+				order = currentOrder + 0.2,
+				type = "select",
+				name = "",
+				values = FILTERS_TYPE,
+				get = function(_, key)
+					return RSConfigDB.GetEventFiltered(eventID)
+				end,
+				set = function(_, key, value)
+					RSConfigDB.SetEventFiltered(eventID, key)
+					RSMinimap.RefreshAllData(true)
+				end,
+				width = 1.5,
+				disabled = function()
+					if (RSConfigDB.GetEventFiltered(eventID) == nil) then
+						return true
+					else
+						return false
+					end
+				end
+			}
+		end
 
-		local searchEventByZoneID = function(zoneID, eventName)
+		local searchEventByZoneID = function(zoneID, eventName, isContinentZone)
+			if (not isContinentZone) then
+				resetResults();
+			end
+			
 			if (zoneID) then
 				for eventID, info in pairs(RSEventDB.GetAllInternalEventInfo()) do
 					local name = RSEventDB.GetEventName(eventID)
 					if (not name) then
-						name = AL["EVENT"]..' ('..eventID..')'
+						name = string.format("%s (%s)", AL["EVENT"], eventID)
 					else
-						name = name..' ('..eventID..')'
+						name = string.format("%s (%s)", name, eventID)
 					end
-					if (RSEventDB.IsInternalEventInMap(eventID, zoneID, true) and ((eventName and RSUtils.Contains(name, eventName)) or not eventName)) then
-						event_filter_options.args.eventFilters.values[name] = eventID
+					if (RSEventDB.IsInternalEventInMap(eventID, zoneID, true) and ((eventName and RSUtils.Contains(name,eventName)) or not eventName)) then
+						events[eventID] = name
 					end
+				end
+			end
+			
+			if (not isContinentZone) then
+				-- Sort list by name
+				for _, eventID in ipairs (RSUtils.GetSortedKeysByValue(events, function(a, b) return a < b end)) do
+					addEvent(events[eventID], eventID)
 				end
 			end
 		end
 
-		local searchEventByContinentID = function(eventID, eventName)
-			if (eventID) then
-				table.foreach(RSMapDB.GetContinents()[eventID].zones, function(index, zoneID)
+		local searchEventByContinentID = function(continentID, eventName)
+			resetResults();
+			
+			if (continentID) then
+				table.foreach(RSMapDB.GetContinents()[continentID].zones, function(index, zoneID)
 					-- filter checkboxes
-					searchEventByZoneID(zoneID, eventName)
+					searchEventByZoneID(zoneID, eventName, true)
 				end)
+			
+				-- Sort list by name
+				for _, eventID in ipairs (RSUtils.GetSortedKeysByValue(events, function(a, b) return a < b end)) do
+					addEvent(events[eventID], eventID)
+				end
 			end
 		end
 
@@ -1890,10 +1971,10 @@ local function GetEventFilterOptions()
 			if (continentID) then
 				event_filter_options.args.subzones.values = {}
 				private.event_filter_options_subzones = nil
-				table.foreach(RSMapDB.GetContinents()[continentID].zones, function(index, zoneID)
-					local zoneName = RSMap.GetMapName(zoneID)
+				table.foreach(RSMapDB.GetContinents()[continentID].zones, function(index, mapID)
+					local zoneName = RSMap.GetMapName(mapID)
 					if (zoneName) then
-						event_filter_options.args.subzones.values[zoneID] = zoneName
+						event_filter_options.args.subzones.values[mapID] = zoneName
 					end
 				end)
 			end
@@ -1906,20 +1987,8 @@ local function GetEventFilterOptions()
 			handler = RareScanner,
 			desc = AL["EVENT_FILTER"],
 			args = {
-				filterOnlyMap = {
-					order = 1,
-					type = "toggle",
-					name = AL["FILTER_EVENTS_ONLY_MAP"],
-					desc = AL["FILTER_EVENTS_ONLY_MAP_DESC"],
-					get = function() return RSConfigDB.IsEventFilteredOnlyOnWorldMap() end,
-					set = function(_, value)
-						RSConfigDB.SetEventFilteredOnlyOnWorldMap(value)
-						RSMinimap.RefreshAllData(true)
-					end,
-					width = "full",
-				},
 				eventFiltersSearch = {
-					order = 2,
+					order = 1,
 					type = "input",
 					name = AL["FILTERS_SEARCH"],
 					desc = AL["FILTERS_EVENTS_SEARCH_DESC"],
@@ -1927,7 +1996,6 @@ local function GetEventFilterOptions()
 					set = function(_, value)
 						private.event_filter_options_input = value
 						-- search
-						event_filter_options.args.eventFilters.values = {}
 						if (private.event_filter_options_subzones) then
 							searchEventByZoneID(private.event_filter_options_subzones, value)
 						else
@@ -1937,7 +2005,7 @@ local function GetEventFilterOptions()
 					width = "full",
 				},
 				continents = {
-					order = 3.1,
+					order = 2.1,
 					type = "select",
 					name = AL["FILTER_CONTINENT"],
 					desc = AL["FILTER_CONTINENT_DESC"],
@@ -1947,12 +2015,6 @@ local function GetEventFilterOptions()
 						-- initialize
 						if (not private.event_filter_options_continents) then
 							private.event_filter_options_continents = RSConstants.CURRENT_MAP_ID
-
-							-- load submaps combo
-							loadSubmapsCombo(private.event_filter_options_continents)
-
-							-- launch first search zone filters
-							searchEventByContinentID(private.event_filter_options_continents)
 						end
 
 						return private.event_filter_options_continents
@@ -1964,13 +2026,12 @@ local function GetEventFilterOptions()
 						loadSubmapsCombo(key)
 
 						-- search
-						event_filter_options.args.eventFilters.values = {}
 						searchEventByContinentID(key, private.event_filter_options_input)
 					end,
 					width = 1.0,
 				},
 				subzones = {
-					order = 3.2,
+					order = 2.2,
 					type = "select",
 					name = AL["FILTER_ZONE"],
 					desc = AL["FILTER_ZONE_DESC"],
@@ -1986,14 +2047,13 @@ local function GetEventFilterOptions()
 						private.event_filter_options_subzones = key
 
 						-- search
-						event_filter_options.args.eventFilters.values = {}
 						searchEventByZoneID(key, private.event_filter_options_input)
 					end,
 					width = 1.925,
 					disabled = function() return (next(event_filter_options.args.subzones.values) == nil) end,
 				},
 				eventFiltersClear = {
-					order = 3.3,
+					order = 2.3,
 					name = AL["CLEAR_FILTERS_SEARCH"],
 					desc = AL["CLEAR_FILTERS_SEARCH_DESC"],
 					type = "execute",
@@ -2005,51 +2065,65 @@ local function GetEventFilterOptions()
 						-- load subzones combo
 						loadSubmapsCombo(RSConstants.CURRENT_MAP_ID)
 						-- search
-						event_filter_options.args.eventFilters.values = {}
 						searchEventByContinentID(RSConstants.CURRENT_MAP_ID)
 					end,
 					width = 0.5,
 				},
 				separator = {
-					order = 4,
+					order = 3,
 					type = "header",
 					name = AL["EVENT_FILTER"],
 				},
-				eventFiltersToogleAll = {
-					order = 5,
-					name = AL["TOGGLE_FILTERS"],
-					desc = AL["TOGGLE_FILTERS_DESC"],
+				defaultFilter = {
+					order = 4.1,
+					type = "select",
+					name = AL["FILTER_DEFAULT"],
+					desc = string.format(AL["FILTER_DEFAULT_DESC"], AL["FILTERS_FILTER_ALL"]),
+					values = FILTERS_TYPE,
+					get = function(_, key) return RSConfigDB.GetDefaultEventFilter() end,
+					set = function(_, key, value)
+						RSConfigDB.SetDefaultEventFilter(key)
+					end,
+					width = 1.65,
+				},
+				filterAllButton = {
+					order = 4.2,
+					name = AL["FILTERS_FILTER_ALL"],
+					desc = AL["FILTERS_FILTER_ALL_DESC"],
 					type = "execute",
 					func = function()
-						if (next(event_filter_options.args.eventFilters.values) ~= nil) then
-							if (private.db.eventFilters.filtersToggled) then
-								private.db.eventFilters.filtersToggled = false
-							else
-								private.db.eventFilters.filtersToggled = true
-							end
-
-							for k, eventID in pairs(event_filter_options.args.eventFilters.values) do
-								RSConfigDB.SetEventFiltered(eventID, private.db.eventFilters.filtersToggled)
+						for eventID, _ in pairs(events) do
+							if (RSConfigDB.GetEventFiltered(eventID) == nil) then
+								RSConfigDB.SetEventFiltered(eventID)
 							end
 						end
+						
 						RSMinimap.RefreshAllData(true)
 					end,
-					width = "full",
+					width = 1,
 				},
-				eventFilters = {
-					order = 6,
-					type = "multiselect",
-					name = AL["FILTER_EVENT_LIST"],
-					desc = AL["FILTER_EVENT_LIST_DESC"],
-					values = {},
-					get = function(_, eventID) return RSConfigDB.GetEventFiltered(eventID) end,
-					set = function(_, eventID, value)
-						RSConfigDB.SetEventFiltered(eventID, value)
+				unfilterAllButton = {
+					order = 4.3,
+					name = AL["FILTERS_UNFILTER_ALL"],
+					desc = AL["FILTERS_UNFILTER_ALL_DESC"],
+					type = "execute",
+					func = function()
+						for eventID, _ in pairs(events) do
+							RSConfigDB.DeleteEventFiltered(eventID)
+						end
+						
 						RSMinimap.RefreshAllData(true)
 					end,
-				}
+					width = 1,
+				},
 			},
 		}
+		
+		-- load submaps combo
+		loadSubmapsCombo(RSConstants.CURRENT_MAP_ID)
+
+		-- launch first search zone filters
+		searchEventByContinentID(RSConstants.CURRENT_MAP_ID)
 	end
 
 	return event_filter_options
@@ -2466,8 +2540,20 @@ local function GetLootFilterOptions()
 							width = "full",
 							disabled = function() return (not RSConfigDB.IsFilteringByExplorerResults()) end,
 						},
-						open_explorer = {
+						show_drakewatcher = {
 							order = 8,
+							type = "toggle",
+							name = AL["LOOT_EXPLORER_SHOW_MISSING_DRAKEWATCHER"],
+							desc = AL["LOOT_EXPLORER_SHOW_MISSING_DRAKEWATCHER_DESC"],
+							get = function() return RSConfigDB.IsShowingMissingDrakewatcher() end,
+							set = function(_, value)
+								RSConfigDB.SetShowingMissingDrakewatcher(value)
+							end,
+							width = "full",
+							disabled = function() return (not RSConfigDB.IsFilteringByExplorerResults()) end,
+						},
+						open_explorer = {
+							order = 9,
 							name = AL["LOOT_EXPLORER_OPEN"],
 							desc = AL["LOOT_EXPLORER_OPEN"],
 							type = "execute",
@@ -2477,12 +2563,12 @@ local function GetLootFilterOptions()
 							width = "normal",
 						},
 						separator_reset = {
-							order = 9,
+							order = 10,
 							type = "header",
 							name = AL["LOOT_RESET"],
 						},
 						reset = {
-							order = 10,
+							order = 11,
 							name = AL["LOOT_RESET"],
 							desc = AL["LOOT_RESET_DESC"],
 							type = "execute",
@@ -2494,7 +2580,7 @@ local function GetLootFilterOptions()
 						},
 						category_filters = {
 							type = "group",
-							order = 11,
+							order = 12,
 							name = AL["LOOT_CATEGORY_FILTERS"],
 							handler = RareScanner,
 							desc = AL["LOOT_CATEGORY_FILTERS_DESC"],
@@ -2567,7 +2653,7 @@ local function GetLootFilterOptions()
 						},
 						individual = {
 							type = "group",
-							order = 12,
+							order = 13,
 							name = AL["LOOT_INDIVIDUAL_FILTERS"],
 							handler = RareScanner,
 							desc = AL["LOOT_INDIVIDUAL_FILTERS_DESC"],
@@ -2603,7 +2689,7 @@ local function GetLootFilterOptions()
 						},
 						other_filters = {
 							type = "group",
-							order = 13,
+							order = 14,
 							name = AL["LOOT_OTHER_FILTERS"],
 							handler = RareScanner,
 							desc = AL["LOOT_OTHER_FILTERS_DESC"],
