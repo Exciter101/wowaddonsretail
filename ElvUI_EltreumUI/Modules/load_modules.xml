@@ -5,6 +5,7 @@
 	<Script file='Chat/LootIcon.lua'/>
 	<Script file='Chat/Misc.lua'/>
 	<Script file='Chat/ChatColor.lua'/>
+	<!--<Script file='Chat/ChatIcons.lua'/>-->
 	<Script file='DataTexts/Config.lua'/>
 	<Script file='DataTexts/Other.lua'/>
 	<Script file='DataTexts/Stats.lua'/>
@@ -22,6 +23,7 @@
 	<Script file='Misc/Screenshot.lua'/>
 	<Script file='Nameplates/Nameplates.lua'/>
 	<Script file='Nameplates/PowerBar.lua'/>
+	<Script file='Nameplates/ClassificationIcons.lua'/>
 	<Script file='Fonts/SetupFont.lua'/>
 	<Script file='Fonts/OutlineDefault.lua'/>
 	<Script file='Fonts/OutlineCustom.lua'/>
