@@ -1,7 +1,7 @@
-## Changed in v42
+## Changed in v43
 
-* New rares for 10.0.5
-* Improve the Boomthyr rocket engineering treasure a bit; questid thanks to InvisiBilldotnet!
-* Adjust my item comparison tooltips to avoid an error caused by incompletely-updated-for-Dragonflight tooltip addons
-* Fix Emerald Garden Explorer's Notes / Ruby Gem Cluster Map mixup in some tooltips
+* Change the quest used for Lizi's Reins completion
+* Note about Mucka the Raker's bugged adds
+* Add the cosmetic loot in the Tuskarr chests / Decay Covered chests
+* Assorted quests and notes
 

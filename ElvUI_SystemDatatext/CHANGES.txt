@@ -1,12 +1,12 @@
-tag 378ea35f578299196991a7e91ab0005a3d54d2cd 3.0.16-retail
+tag 2f463af78880de8fd245318215690d383aa6dd93 3.1.0-retail
 Author:	Adam Koch <me@adamko.ch>
-Date:	Tue Jan 24 22:34:44 2023 -0500
+Date:	Sat Feb 18 13:21:52 2023 -0500
 
-3.0.16-retail Release
+3.1.0-retail Release
 
-commit 59981d322912da56bcb047b035ca7b296c83a010
+commit 13aca63bb5c1e84ccac4acd2e31f718eff4519b1
 Author: Adam Koch <me@adamko.ch>
-Date:   Tue Jan 24 22:34:41 2023 -0500
+Date:   Sat Feb 18 13:21:32 2023 -0500
 
-    Update TOC for new patch.
+    Implemented ElvUI Library embeds.
 

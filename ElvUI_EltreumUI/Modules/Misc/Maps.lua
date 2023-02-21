@@ -18,8 +18,10 @@ local UiMapPoint = _G.UiMapPoint
 
 --Conversion of Time to Arrive weakaura (new version)
 local EltruismAutopin = CreateFrame("Frame", "EltruismAutoPin")
+
 local EltruismTimeToArriveParent = CreateFrame("Frame", "EltruismTimeToArriveParent")
 EltruismTimeToArriveParent:RegisterEvent("PLAYER_ENTERING_WORLD")
+
 local EltruismTimeToArrive = CreateFrame("Frame", "EltruismTimeToArrive", UIParent)
 EltruismTimeToArrive.TimeText = EltruismTimeToArrive:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
 EltruismTimeToArrive.TimeText:SetJustifyV("TOP")
@@ -46,12 +48,13 @@ function ElvUI_EltreumUI:WaypointTimeToArrive()
 			EltruismAutopin:SetScript("OnEvent", function()
 				EltruismAutopin:UnregisterEvent("PLAYER_STARTED_MOVING")
 				local _, instanceType = IsInInstance()
-				if instanceType ~= "none" then
+				--print(instanceType,event,"autopin")
+				if instanceType ~= "none" then --clears waypoints inside instances
 					C_Map.ClearUserWaypoint()
-				elseif instanceType == "none" then
+				elseif instanceType == "none" then --is in the open world
 					--if event == "USER_WAYPOINT_UPDATED" and C_Map.HasUserWaypoint() == true then
 					if C_Map.HasUserWaypoint() == true then
-						C_Timer.After(0, function() C_SuperTrack.SetSuperTrackedUserWaypoint(true) end)
+						E:Delay(0, function() C_SuperTrack.SetSuperTrackedUserWaypoint(true) end)
 					end
 				end
 			end)
@@ -66,9 +69,10 @@ function ElvUI_EltreumUI:WaypointTimeToArrive()
 		EltruismTimeToArriveParent:RegisterEvent("WAYPOINT_UPDATE")
 		EltruismTimeToArriveParent:RegisterEvent("SUPER_TRACKING_CHANGED")
 		--EltruismTimeToArriveParent:SetScript("OnEvent", function(_, event)
-			EltruismTimeToArriveParent:SetScript("OnEvent", function()
-			--print(event.."waypoint")
-			if C_Map.HasUserWaypoint() == true or C_SuperTrack.IsSuperTrackingAnything() == true then
+		EltruismTimeToArriveParent:SetScript("OnEvent", function()
+			local _, instanceType = IsInInstance()
+			--print(instanceType,event,"waypoint")
+			if (C_Map.HasUserWaypoint() == true or C_SuperTrack.IsSuperTrackingAnything() == true) and (instanceType == "none") then
 				--use throttled onupdate to udpate the text (once per second)
 				EltruismTimeToArrive:SetScript("OnUpdate", function(self, elapsed)
 					--print("onupdate spam"..math.random(1,99))
@@ -85,7 +89,6 @@ function ElvUI_EltreumUI:WaypointTimeToArrive()
 										if d <= E.db.ElvUI_EltreumUI.waypoints.waypointetasetting.distance then
 											return 1
 										elseif d > E.db.ElvUI_EltreumUI.waypoints.waypointetasetting.distance then
-											C_Map.ClearUserWaypoint()
 											return 0
 										end
 									else
@@ -104,7 +107,7 @@ function ElvUI_EltreumUI:WaypointTimeToArrive()
 						local seconds = 0
 						local minutes = 0
 						if not speed or speed == 0 then --might be dragonflying, calculate based on delta distance
-							C_Timer.After(1, function()
+							E:Delay(0, function()
 								local previousdistance = C_Navigation.GetDistance()
 								local speed = math.abs(distance - previousdistance)
 								--print(distance,previousdistance, speed)

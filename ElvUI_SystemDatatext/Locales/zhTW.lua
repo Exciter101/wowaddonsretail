@@ -1,8 +1,7 @@
 -------------------------------------------------------------------------------
--- ElvUI Improved System Datatext By Crackpot (US, Thrall)
+-- ElvUI_SystemDatatext By Crackpot (US, Illidan)
 -------------------------------------------------------------------------------
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("ElvUI_SystemDatatext", "zhTW", false)
+local L = ElvUI[1].Libs.ACL:NewLocale("ElvUI_SystemDatatext", "zhTW", false)
 if not L then return end
 
 --[[Translation missing --]]
@@ -105,4 +104,5 @@ L["World"] = "World"
 L["World Latency:"] = "World Latency:"
 --[[Translation missing --]]
 L["Yes"] = "Yes"
+
 

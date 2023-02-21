@@ -227,7 +227,7 @@ spec:RegisterAuras( {
     -- https://wowhead.com/beta/spell=179057
     chaos_nova = {
         id = 179057,
-        duration = function () return talent.isolated_prey.enabled and active_enemies == 1 and 3 or 2 end,
+        duration = function () return talent.isolated_prey.enabled and active_enemies == 1 and 4 or 2 end,
         type = "Magic",
         max_stack = 1
     },
@@ -1272,12 +1272,12 @@ spec:RegisterAbilities( {
         end,
         handler = function ()
             removeBuff( "unbound_chaos" )
-            if talent.momentum.enabled then applyBuff( "momentum" ) end
-            if cooldown.vengeful_retreat.remains < 1 then setCooldown( "vengeful_retreat", 1 ) end
             setDistance( 5 )
             setCooldown( "global_cooldown", 0.25 )
-            if conduit.felfire_haste.enabled then applyBuff( "felfire_haste" ) end
+            if cooldown.vengeful_retreat.remains < 1 then setCooldown( "vengeful_retreat", 1 ) end
+            if talent.momentum.enabled then applyBuff( "momentum" ) end
             if active_enemies == 1 and talent.isolated_prey.enabled then gain( 25, "fury" ) end
+            if conduit.felfire_haste.enabled then applyBuff( "felfire_haste" ) end
         end,
     },
 
@@ -1472,7 +1472,11 @@ spec:RegisterAbilities( {
 
     -- Talent: Place a Sigil of Flame at your location that activates after $d.    Deals $204598s1 Fire damage, and an additional $204598o3 Fire damage over $204598d, to all enemies affected by the sigil.    |CFFffffffGenerates $389787s1 Fury.|R
     sigil_of_flame = {
-        id = function () return talent.concentrated_sigils.enabled and 204513 or 204596 end,
+        id = function ()
+            if talent.precise_sigils.enabled then return 389810 end
+            if talent.concentrated_sigils.enabled then return 204513 end
+            return 204596
+        end,
         known = 204596,
         cast = 0,
         cooldown = function() return 30 * ( talent.quickened_sigils.enabled and 0.8 or 1 ) end,
@@ -1496,7 +1500,12 @@ spec:RegisterAbilities( {
 
     -- Talent: Place a Sigil of Misery at your location that activates after $d.    Causes all enemies affected by the sigil to cower in fear. Targets are disoriented for $207685d.
     sigil_of_misery = {
-        id = function () return talent.concentrated_sigils.enabled and 207684 or 202140 end,
+        id = function ()
+            if talent.precise_sigils.enabled then return 389813 end
+            if talent.concentrated_sigils.enabled then return 202140 end
+            return 207684
+        end,
+        known = 207684,
         cast = 0,
         cooldown = function () return ( pvptalent.sigil_mastery.enabled and 0.75 or 1 ) * ( talent.improved_sigil_of_misery.enabled and 90 or 120 ) * ( talent.quickened_sigils.enabled and 0.8 or 1 ) end,
         gcd = "spell",
@@ -1505,13 +1514,16 @@ spec:RegisterAbilities( {
         talent = "sigil_of_misery",
         startsCombat = false,
 
-        toggle = "interrupts",
+        toggle = function()
+            if talent.misery_in_defeat.enabled then return "cooldowns" end
+            return "interrupts"
+        end,
 
         handler = function ()
             create_sigil( "misery" )
         end,
 
-        copy = { 207684, 202140 }
+        copy = { 389813, 207684, 202140 }
     },
 
     -- Allows you to see enemies and treasures through physical barriers, as well as enemies that are stealthed and invisible. Lasts $d.    Attacking or taking damage disrupts the sight.
@@ -1606,14 +1618,26 @@ spec:RegisterAbilities( {
         nodebuff = "rooted",
 
         readyTime = function ()
-            if settings.recommend_movement then return 0 end
-            return 3600
+            if settings.retreat_and_return == "fel_rush" then
+                return max( 0, cooldown.fel_rush.remains - 1 )
+            end
+            if settings.retreat_and_return == "felblade" and talent.felblade.enabled then
+                return max( 0, cooldown.felblade.remains - 1 )
+            end
+            if settings.retreat_and_return == "either" then
+                return max( 0, min( cooldown.felblade.remains, cooldown.fel_rush.remains ) - 1 )
+            end
         end,
 
         handler = function ()
             if target.within8 then
                 applyDebuff( "target", "vengeful_retreat" )
                 applyDebuff( "target", "vengeful_retreat_snare" )
+                -- Assume that we retreated away.
+                setDistance( 15 )
+            else
+                -- Assume that we retreated back.
+                setDistance( 5 )
             end
             if talent.tactical_retreat.enabled then applyBuff( "tactical_retreat" ) end
             if talent.momentum.enabled then applyBuff( "momentum" ) end
@@ -1640,29 +1664,6 @@ spec:RegisterOptions( {
 } )
 
 
-spec:RegisterSetting( "recommend_movement", true, {
-    name = "Recommend Movement",
-    desc = "If checked, the addon will recommend |T1247261:0|t Fel Rush / |T1348401:0|t Vengeful Retreat when it is a potential DPS gain.\n\n" ..
-        "These abilities are critical for DPS when using Momentum and similar talents.\n\n" ..
-        "If not using any talents related to movement, you may want to disable this to avoid unnecessary movement in combat.",
-    type = "toggle",
-    width = "full"
-} )
-
-spec:RegisterSetting( "unbound_movement", false, {
-    name = "Recommend Movement for Unbound Chaos",
-    desc = "When Recommend Movement is disabled, you can enable this option to override it and allow |T1247261:0|t Fel Rush to be recommended when Unbound Chaos is active.",
-    type = "toggle",
-    width = "full",
-    disabled = function() return state.settings.recommend_movement end,
-} )
-
-
-spec:RegisterSetting( "demon_blades_head", nil, {
-    name = "Demon Blades",
-    type = "header",
-} )
-
 spec:RegisterSetting( "demon_blades_text", nil, {
     name = "|cFFFF0000WARNING!|r  If using the |T237507:0|t Demon Blades talent, the addon will not be able to predict Fury gains from your auto-attacks.  This will result " ..
         "in recommendations that jump forward in your display(s).",
@@ -1671,12 +1672,92 @@ spec:RegisterSetting( "demon_blades_text", nil, {
 } )
 
 spec:RegisterSetting( "demon_blades_acknowledged", false, {
-    name = "I understand that Demon Blades is unpredictable; don't warn me.",
-    desc = "If checked, the addon will not provide a warning about Demon Blades when entering combat.",
+    name = "I understand that |T237507:0|t Demon Blades is unpredictable; don't warn me.",
+    desc = "If checked, the addon will not provide a warning about |T237507:0|t Demon Blades when entering combat.",
     type = "toggle",
     width = "full",
     arg = function() return false end,
 } )
 
 
-spec:RegisterPack( "Havoc", 20230124, [[Hekili:nZrBpUTT5FlhkMJ8LlUsY2xsgIDbA7gwd2YhM7NTeTf9zHil5PxUR3GH(TVhskkrsrkzl7KvuGE3js(8(R8LS2z9VVEvakhV(lU2UtTDCNnX12E(SPRxL)6r86vhrB)k6j4xIrhG)))a9CYwYxFnkbfqwDwsr6wyKvHhkIq5HjX)skAx(6vBkcJY)T41B0JbxyPhXBx)L5V)9RxTpmiaZMlodqaGI0KDHraGrBjanBYXu82KdBq5VDXp(mkneTjc)aHQwKNgg)vCUx2RXB9YIsYF4zuubEHZdH74doXzYEuMxwokFck(vVGJzJSUJpOBRbpDQzHBtsIcsEjEsqrkLdxUOzHTgCC5Nhoj7ksYTPkbsUn)0qYAOQLDWogOyu6wum2lpjnfhNRFofzyVWC8bgxHIEcNVhL6DS4)(FJWEBs(d9lll8PWiVKDE7IG1PFoHhoKWmO8qaHw(56PTiimlT4ydjbZEl8JIdyVdONc3w(5FO0)NJqb4s)FffVf(XlH57l9)7HPz5KHsscEO0)3trHrL(j7k9)3fHXWxssl9rWmCFBPFokfyNmrSiRe3qWGxabbvQVCueiQMSJGgVneSakf23Yj4IWYPaMQ)629OKmV894K0xhTPy3oPVmHOMoDc8tII8QiNjcy1zPJzQ7iOMdJFYBxsQxBkLpxrWnAxr6RFY69ZFxf1fGpasF6mYU31E8OAthHvnjfFafgN9PN2gm5a6popkc)kyEGrhKfCuegUD0Dv)9gy(bEeYQb18vwJxRkeFV7ykhaqzx42W8LU2MPLxqH5CA5qYbazfk0c)RGphvXW)7jfhhLHZjRoBc1Ef(EaaKNXKjmwYQebko2F6ffMLZWnNvi(6eAVIrwaK7pagUnl)y42V6vC0Bxk6jcSFGetEbvirwlt9abGJQNr2Y(bYHKa8IymkfdeejCJKS3dD8ioh8PLLLlMohee6ucOGxpDIA5m1wI5rXXH7dzUWe8qLIHXX4upkUicYAaEaNJoKKECFswywTQLiEUFQKweh)eEhWXP4Ca35pqIaLSBNhmZQa(m2jmguWaUFgpQ6l4SmmyV6Tbw3xhLhEaV0zKG8)t2tMnYQHffNoFolDMF6u3tH7hqIvljzpDIzhjXPfhfHNIPnGT3A5yFppyXRBJimR3EeW7bJhp(ALm31LO5Im7fPKDyGikY2tWPffifXBskGztdUr5564p6CeBeDsl80PgdqLSdm7WXJb93EsCYSfUNozbHCd8WpZ8Mz0jW9lDShjmckiiJ9vz5PKmHYkKXEg7HJXhcXzlHGIHGAGhy(0jnaDge08UU5vIRdmprlpvZGpyW0zCJGkNqCq4gU2hKvDOTQGN6IiGuueeaFBVx2ly8rIaqBodlT2q95KSSHBfqsDfjVBMSUGyrTbLcrWWeczakIPs5cEkcraau4YXQGGdaKo2doAxRCyKaDsgF80JdJ0SMz)o9bnU3zoyrgGPKNSQP4OifiwYGrDVztwimzRWFwAOuoe04r(j35Ywb57ttEXJP7eINrsacvOgmAioOqatI5plQHhjY3B)44rsvCTCHLlxAcoRHjfK6Zasj78KKQwgnXdmuI25WZyWzih4n2iDyznRMgvwdXG8CiFLiTuoGzCRecgGxDWaINkufm(0PbOtatutPt4PWYiygad0WWRJKrXcNwvUOanQOMan55ntYFwUfL(9dLk7JwdFg0Y1xXNLgFK(zWvMMKgDeHVo1EDEgn10pYubD3W0Ou8L5TbQO8bwSOkbMunjBksJjC9lKS9JQSkL(OGbDLIiirzDFYs2V9NMA0o6IKC3Pt0jJkNBOeRTLNwFevRCBds9HicSQPAOv7CIfkTWxwXCjf50(yrq9M0GikYREkl9mL(cvPQJy6kgPLg9vvfpk0ExbWPBIWVGi7xW)sSURs)WDL(Vq3tHOOsFq)dTBv6tYKu6)3Efg4Nj(S(P4Dqlw7zBQaznqt9L(awaB1Cm5BaSqrhsiOayX0AEQElAaMtQMpAWeLELTQd6sc7a1Z5LdSxge)4an4Cx9xq6PFabOF0g64l8P95ECNsxHq2Ds9Qe)1q7WQ1vwIWI0SnflRApB85YchtKkPtBJQlDNBOeDZD4s7BEtsw2iz64rBQL3VI3HkIaldOnoWubkvT0pkHU5wAis((WL9azZeZ4BHOJuPBT20rivPLHEsvBEDcoMaJGE6yFPLeZS8N6yBh)lUJBPewawKaY7GKDhDNMT5K1(huZP5vEjYn3EKBUF3KBA2k3Hj3CgDNgDXqLBqOmV9qymA4w1eaa4u36a9Uw4OxZcrXqdsBtX4H2J9u7XRxbHpZaWxFkdURx9cIwBq26v)ojWB4HJjPG)0os443WPI3qIt)FkiiP0pdiyiKCrEYbs1LL(qujirr2KYp)pdJHHC(RqkHKyaz0HFJSUgGvEsRVYTaGrTC(JX9bl9bcvaT(jzctU3qQ2aS(gq1ZuXK5ij14PAk56NZ3uW3lGvJw1cQAMWzrXxoGnbYKJyg3qkYjgaXFksDOtCpSyGc5oAju6oiixM(NwbYp(9wGuBdnVFZsJos6NJKv)Tg89cy1SJD59R1p92bytG8s8t)(vQIoX9W8tfQvPLq5Q9t))Razy(PxHaP2g6r9zU5fPPKRUU2TwzNl)SMYPcyDRCzvtnvpfjC65keLWiMQAWamLo9DfOkn2fcxXtRxt1o1hK)5wJt7nUqx5zvdzcQTcaDf17zawnhmVc4AgWeeVv2HmO9r9qRz3JuGxZaxieL2GifGkV5rxgChKwXaSuoRhvds5rn2xI9nxKAcKxTm1XqtushBScGLplAta2qFoQNyQAOeLHncEdHtUEbY7)wAz8HBOjSJbBy(P5Pan(NVuWjFGDkavEqJT8AWit580ujyLtBZeWnyOXpanfOY)SrWzWWs6aZu9FfhZiGnyynWW2Ma3vM5Z1GfQ0XePax5tzYeGnyEnu2VRKbdN9NAWyAGu5utgtdptW0BDfpARgT(AK(MlQE0w(51nUPEvBRjXMIY1mf5augaE7l5BlGRDkNfWh6Mz9ng89c4H2C)zs3df8n(VFlvMMa(nXm0mLpmrY3yW3lGhQj4zs3df80it)gnOebEt5xi3sFY1aMeYz9kis0(Ku6lN4xwVI(D6ZXG1kn8RFH(8myle(o7sVVEvvmW1)8681FXvCksxcELjoLmXMVSk546vz48MfZ3dbYVfva)GxKu7MUl9pDcKcSX12(S0m01jCP)OsF9x4D2AnFP3l9xcU2SxksA4rg1FRUT)u5Gh7XUiGuIeC2flb1D60ugN0FCP)NaJWs)3pV0)D1YkDz7k9VhOr7s)X0fxBTP50TPaT6eUfzfd37icBn)Izl9f4tPT7QzK2BeGmXREE(CXb)veq5zollEvxOQFxBtChhUew7XHYAQvgrjclk7PEYM0H66Ir7pwKu1DfGjK67vivWYohde36vc3q9s)fL(2c(7kpVawuKkmXL0eO)bJqxZ1uvwpPDlpbL1czv10gQs8(osq(hnICJLnsjHQr123lBcHKc6ibdO)PKGcmMSNmJR3AS60DzKzWyolUtFt9tc8DTrHjpcca1UzZQ4QLZqff9wkgCSPYyE4u9DRt9vgtn3QnVvU7vRxj8MaiPxaTJJ9avp3D5AOb4(CHmJJrMXQc3QpfbMM45UUI(Tv0A3djgKUtqTQ9rkW1tvwMSBni1Z2Lbb4R6V)GmjPnDPTVhe1JkBdWVYFuXJBxIh5REbfCQ3Xvk9za1ZQtqD35ipzPaRwNQxQo3Hp0P7042kjtBgxTEQZO214sZJKqsalz9tLYQLA1iLnwqG1z4pDorNwkli192kOvBmt1mryMuEqTyNgE4kntMAlBBw9SoOivTuKBgsDeqQ8B)GIx16eUG0JAkJzHqfyMYj6yoF)vYQwmpQ31F6I7zPyQ9znCtyfS0fkTYXCjfDzK3Tl(8AxZUsOAzK3RkfIJeJbkHC4UZv9aukl2P3Ywu3sAopELkW2VifAzaFKRPKAmcwXcksDfv563x7lrvlELQPTzAUkbXO9MAZWOFGR5e2CPS(9rVxVqAmojUT97Fz4IdZjs5140(1X0oqV6U5ZSlUs7hQpDdPRqhuQ3CckEjF6osak9RsCl412P0Ig89PZ1xfIR5ClTbYm50fuJkkqUMCfnGu(TwqbS5KbNHLER6F02AAtdCcpuikYnNwOZIvKkhxBZRDU9cJKlBv(Ta9)LkvDvtV0uNYb(dBrJDR2ZYHsfD9KIeIwuz706PfX3Dc1GV)eDV9aMq6Pnv1nIR5uixP28U(vOQuk3p97TMCQ5mhDeatFaf7UCCNkVBPI2jnyNmpZXU7tRasPwVfPsXnpG3KPYZmQxvAhIpZXQ7JABqOHo4nXlD0ZnHImh(2QhZY6EQAjFgCLj5cB0fFhZ1e2qQHrLTo(76B8sjFshBLQLsXcDF75pNnuQzlK7pfzNLy8OnByPRXytz10yF9vIHbw(wZV1qvFxjsar7(PVuy)(g3nBBWAlV9HVO0GPH9yDjdWDSRhJ6yJAPPUPRnjlJfrTfD)Oqev27CJqTQo4sElgFxAABbS19rvOIrRo3B0U3y1UyCPTcrHNjjS76G7k9)r(XoyqzVO2pQIk7HxDRJfR5CoB2qWQ(EndmiEp5fQb(pSrCecjY)sE7tZrzoUxGwY9phAjnhl8Txl50slPEnRhMwYLOtm3rHv3LfuHU27z(yX8HSxIhbrM7E463wIP2Y76P0t3JLiU(A3OltC)N9MJuwcZxPbXufMVvfmMPBFDsrLDBNjD2DT12As01pF6QLp1XbT5tDsdj(ulxSSpbr)S5uXIRL)xgqL6RvZEWaQM)PbuaEAgKhlZqb)Y48rXzQUJhstL)FR)F)]] )
+-- Fel Rush
+spec:RegisterSetting( "fel_rush_head", nil, {
+    name = "|T1247261:0|t Fel Rush",
+    type = "header"
+} )
+
+spec:RegisterSetting( "fel_rush_warning", nil, {
+    name = "The |T136194:0|t Isolated Prey, |T1029722:0|t Momentum, and/or |T1392567:0|t Unbound Chaos talents require the use of |T1247261:0|t Fel Rush.  If you do not want "
+        .. "the addon to recommend Fel Rush to trigger the benefit of these talents, you may want to consider a different talent build.",
+    type = "description",
+    width = "full",
+} )
+
+spec:RegisterSetting( "fel_rush_filler", true, {
+    name = "|T1247261:0|t Fel Rush: Filler and Movement",
+    desc = function()
+        return "When enabled, the addon may recommend |T1247261:0|t Fel Rush as a filler ability or for movement.\n\n"
+            .. "These recommendations may occur with |T237507:0|t Demon Blades talented, when your other abilities being on cooldown, and/or because "
+            .. "you are out of range of your target."
+    end,
+    type = "toggle",
+    width = "full"
+} )
+
+
+-- Vengeful Retreat
+spec:RegisterSetting( "retreat_head", nil, {
+    name = "|T1348401:0|t Vengeful Retreat",
+    type = "header"
+} )
+
+spec:RegisterSetting( "retreat_warning", nil, {
+    name = "The |T132308:0|t Initiative, |T1029722:0|t Momentum, and/or |T1348401:0|t Tactical Retreat talents require the use of |T1348401:0|t Vengeful Retreat.  If you do not want "
+        .. "the addon to recommend Vengeful Retreat to trigger the benefit of these talents, you may want to consider a different talent build.",
+    type = "description",
+    width = "full",
+} )
+
+spec:RegisterSetting( "retreat_filler", false, {
+    name = "|T1348401:0|t Vengeful Retreat: Filler and Movement",
+    desc = function()
+        return "When enabled, the addon may recommend |T1348401:0|t Vengeful Retreat as a filler ability or for movement.\n\n"
+            .. "These recommendations may occur with |T237507:0|t Demon Blades talented, when your other abilities being on cooldown, and/or because "
+            .. "you are out of range of your target."
+    end,
+    type = "toggle",
+    width = "full"
+} )
+
+spec:RegisterSetting( "retreat_and_return", "off", {
+    name = "|T1348401:0|t Vengeful Retreat: |T1247261:0|t Fel Rush or |T1344646:0|t Felblade",
+    desc = function()
+        return "When enabled, the addon will |cFFFF0000|rNOT|r recommend |T1348401:0|t Vengeful Retreat unless either |T1247261:0|t Fel Rush "
+            .. "or |T1344646:0|t Felblade are available to quickly return to your current target.  This requirement applies to all Fel Rush and "
+            .. "Vengeful Retreat recommendations, regardless of talents.\n\n"
+            .. "If Felblade is not talented, its cooldown will be ignored.\n\n"
+            .. "This does not guarantee that Fel Rush or Felblade will be the first recommendation after Vengeful Retreat but will ensure that "
+            .. "either/both are available immediately."
+    end,
+    type = "select",
+    values = function()
+        local o = {
+            off = "Disabled (default)",
+            fel_rush = "Require |T1247261:0|t Fel Rush"
+        }
+
+        if state.talent.felblade.enabled then
+            o.felblade = "Require |T1344646:0|t Felblade"
+            o.either = "Either |T1247261:0|t Fel Rush or |T1344646:0|t Felblade"
+        else
+            o.felblade = "|cFFFF0000Require |T1344646:0|t Felblade|r"
+            o.either = "Either |T1247261:0|t Fel Rush or |cFFFF0000|T1344646:0|t Felblade|r"
+        end
+
+        return o
+    end,
+    width = "full"
+} )
+
+
+spec:RegisterPack( "Havoc", 20230218, [[Hekili:nZX(VTTX5)wekMIKJTIiLTtsHLcqtxXsWw2WC3(rrsjEYIi8HgFyxviW)2333rEK3D8osjkL0cu0yZ7UV3pVhEPXYFD5JUoPKLFXCQ5SPMgVBIXTg3p79lFmD)oYYh35S(Ropb)qOta8))BophTg)6E)ihxC1jrzXRHrE0liZ3j1lk8JXoBsx(4Qmp)0pfUCLkmmdXqYoY6LF5U3(2LpU1Z1LumxscGaCU3m18gJ39J5252)ZDiGtYTJjp5e76f(uU9Vq8ZT)3zjBZTDcDZT)VKWNiBYWpssJjoP52VqIj4AE2lH4obatO)(C70TWh3457tIFtq0ZKasykoR1rbWp66uIQ1oH52RGPMMfhsaeeTztUDwcf5u5WRGzH8GNJV3Vtxg87K0uygjtqY(xrmbqp2Jat1jjjcMBkcRx8sb6(tjr(f)()kMS)6C7)resmzbWp(FcxfLH81h36eLaF4tHEPWQ9EMCTEooWbyqh)xC2Nuq8vSfIfVni3hLGmLJpGjKQqrucXNSgiKjGQnocKnGc1znvqmzhfeRCsF9838StSNZkFY1O1WCGVc)kj1kzF4ARe)O0RF2XpJm34AVnSbNymzRtIvsQt6eNW9wU7sgoAaBqZgdE4q9cxhf57g9s4e3SyQ4DX86f2yWX5FU)KSjpj3KQ4i5M8tnjRGQw0c7OHIDIbtpIvAuCmOIqcBtw8(jUKnER9sxyCN6LLLqS8sjbfmQJ)tK0ToXw7Y(9F3NyTk63qivrdbKuNGO4DG1GxYKysGJxyYdAaDI3tE(wrBS24dWw9C8ccIk8)TCa(l)ZvtBURxsC2U0QpaZEn8pzbeRaNN8wN)5Fi3(N8DCblXF2jCnH5F8lEXjP4qrrUGr)Vg745J(HOFVxi8LOyWagMH5Rrl6yGLt4XIOUFfIblxebLA9cNGjBq0yTcXcOll(wkIlKLJbmv911OVOfeajkE)WvzB2i8LjOK9WbiKGVVvj5mHdRglm0tD7ande4WAtuSvtkLnxEWnenlEy0BV7MsQZLeasF6msUYC64HvABUvvPRFAT7KaNF74OiYEWeI4eik4Oi0B9WbL)(ky(UwizvJA2kRW7OseFL54Hcg2Mt1tlV44LYOLawqsbAH91HdO6f2VojBNGDNdOAk(vlFVK0cOZiw0dbPUssDoqq)ayAwV8DER)Qv2oRnXopHW)Amj5CQyaxBHcaYi6xnJKfDdKGixY8qcejoH6UlkDTC2TJKcE2IsR5ZUdIkPsm74U)WbQTXSPJ5zENWqVTEfoPiEOckVWqsSffxGSAyhbiqXZvZe0tLjHSIlYbDnghcsvAbZSmtqb74vL)Ay5xijjeWI0AfSUVom1lGSWyiN8)HPtUD4OAwKF6S5aHdpCO9PWS0XG4cs2dhkmve40SD8WtY4fW2Rhzm9kw4G9R9rM1ARdW7UJhp(CLmdAt00QL9gcGiOAieUJOtmROcclAikkFvffrL7uT4ryHhouBKjfJVWwB8yqhTfJ2Lm38WHrqGtxlYZf(KfvxbC4cJPd5gXX1nP4RIYmb(MYk4yptSiHKaOkQfqOnpquZcVE4GcGEle6Bq78k6EaZJ36swv)onMhJRfuPiXbHuyA4Yvi)zCr8mPl8TTwjVqi7qwuzS9rkTe6YuFrn)WHKQcoU5wrPnAZSYjgIdrqcPhI6zcXSFY3bbaueYUYqz9aKgt7DmRg5AWWvcMxS0y9J0gD70Bu76FLXDGnNlHsEIQgr3u(u7A196nkHGDncInsbLYGGcFUhmVt0kiDBC0lwf6oUOsyAmOau3H9Xfec7HM)fXfSW4xV(9Jhkuz0I5JmzstWD0lkdRJciLKJtskBzu7XRPuQJHNjGZa0hu5iTyzDBfnkTg0G8yiFPyPuoOW4wkilaVQGbONkuTk5WHEOtatuDjmyjIk7h1ckSF)qrum3Or9hsqJkQB0UY8Bf8NfBLOB)qHI3O1ANaDu9vYrPXhQEgmLPoPrvp8SpAvSBbvzNRsJOOW7H6Qj7cMLKIVeRvqrHxxeiQuAjuwXQS4qKLFbtMpS0Ku4JCwZLAb3iP19WirN2pmtRr0Xl2gOsUjIhJlO4QPnNsVdz77PAe5Nm)pQIKHoHtrdtAvRfvPfLLsBZ0bkwKg7qsy1rnL84T8BYIDUYlvriTfwCKcfvzros0DBXSRWq1wGWRuc8GiO75SBl(GLxiKHFdWpiJGgfq4jRvrjjdl)vmRIvAKLRhbneg1rRl3x1fpRTv9r3VxzTFvnbGTvbT09rhC3j(h8ZPyp2EHUdg((52aDcT(LBJ5dZT)R7Hb(jmYJDmzd0U32ITWOyF5O7v4AWPlLGFd3Bo)GiefGwlwPquG(OHeLyXrvPoWGNqvPwPGglbIcgqtX0wVo4oi0J0m3pfeEOAAJ3tBtTyIutUSpTYcYCW5WaWQvvHf3IuSZilk7xC8jXh7IekrvTLJ5DAAQqFF30U5vqh3pLAd(ZKnoz(P4gtd2p4()LB7hr3unfejBpctUg37Ze2oEAiukAJ9ifs9pstNYYTupHeIWWTJ9ryXibMzXhAzxs)lMJbnHiZphSnbK3cjBoCGIDLTOHvOgA9R8uKBMDi3m)Uj3uSZZ9tUzmCGcDrFLBqqnRTzfBI9i5mBa4K3qd1Uwe)9jEoy6G1XesF3vGzthV8riqAca(QdJYC5JV4ql3jz5J0JRXlyxum4pTbdm)kgv8kmI9)ldrsUDcqWqW5S0OGItVbcnbzbtMK)5)UximKXpcjhIcbKrh(vAsSbanns)WmBcyAJm(TXDb9sljjGkzFjdlZV9WsDCBjqREs6W0SlivRbwFdO67KXK(yEv4PCkPQNZ3uW3jGLJR2aQkMWrrXNoG1bYODKy2556fcG4pfj5ujU7x0AUSCnekThUMjt)tRa5nFVfiv2q33TzPwhj1ZrWQ)sd(obSCE828(v6NE5aSoqEk(PF)kQsL4UF(PCvv1qOC2(P)Xkq6NF6ziqQSHERMQSklNuU6kwvMnYoN)zff(5w0x1Pv3NMAj4UFbsef3iNy9jc3pbjOkm2jcx(7ZGIQDQUQdAG6TTuzw5(hPQ8SYHo6kNoJ690aR6RUGe4QhqheBeESN2Hfq79QHw9M4jbV6borikSpDsavCp8on42lTIgyjDkBYgKIJQTFPPxCrQoqE2Yudnn3jCK8saw8C(1bynDNjFw1YHsKgwl41eo58fiAIYFzSmE3f0e2qJnm7CuLGg7ZNk4epQujGkoO2g11yKjDsMYeS05CQd4Am0yhDPeuzFwl40yyjCuLY(V8JPfWxQYhAhCNzMptnwOcNrNeCfpIpDawJ5vFz)2sg0F2FMgJPEsLZ0zm1)mbZU0v8OSA0QlA7RoP6rB4Nx14M8DyUIeRlkxXuedqPb4nV90naUYPCuaVVBM13yW3jG7BZ9hjD3xWx7)(TuzQd4xeZq9uE)ejFJbFNaUVMGhjD3xWtJm9jAqjeEZyxO5CB8AuJHCw(i9NW3eeB5Wp)f6tmQmk3YFcgl2lLan3V8rwqBnh7rU9WC7b52Ih(p9RnVaa52lWQYPJocce26(BKB)a01wU9Hd52QRTJcNkGiFWY8Rx)H9wrsJzVLMLpkDPhwMU8lMsYh2ufGzXZIk2BxXyFxV4b8QSbTkWgr)V650(XJui)AridIptu8rHT4b(rhu(MIrHxZd(Jo37NwQUyMqcByfvHAEhQQanYSUSy1W7xAgVcQQUcdsarX1yGch2J8aLIhf)RX(del3QvS0HpacynUkz7e90uC5h6KUVFAnrxCjmqQ9ojQvW)r7LMGNRA5OUTNdE2mfKg2cPAbJIwdXOx6nQbpV4damBjwDU9BaHovLxQ1LfAZR8SkPYo4vZQyXksTvQLkb2G2ageaeV(eGJuXig1AUQVa6U71esSCoMNGwY8phAjfvcC51sgn0sY7SE)0sMOo5TA9(feFYDGvHUgpDf(ynSRjcIO31gIoZSaZeZglEVswIO)XY99VQYf2ClFdJ8Kgl5nBkcVPrPjkNtjAhiLjP1lMPoWFYpJuLRrXjeiu4IY96xygQ22EQLcvL049lwSw9VHXIYAKcOEPE8Mu5GvXtnNdPQs)0TeuDAtmhsw8EAQdWI6TqYPBe9(LAnp3(k(crApL7dvPC5zfnxpDv5P6MTAjqvTFyZtT4ikPDex9cxXcovkVMuEVOlRorh3XGRQW4hnR1miYqLXq4jcvVYR2JBX9qdPHp5kJq(vIw0AtjMQAUP1GvkENshvUemQpVsywnvX)GxqK)(UQtT5Uxv29eDuLB)EXe8ckBOI(RcckWmz6KBB0NLYxJwbmUtUEx1t9bo(wUE6g26Tuoz31wJu0RPya7o7Q6aLQp0awkAUehY3c)LpY90oXehG2XyApvpdoDnKsFJtIy13LoR2j5xtAHKUkgRk)VMksLhvvvncvQnLVZuMEO0YR4XHWkYRScj1pte(nhqtLbgtL1XShXbv8i3K(LSOKBRsTm4yKNfjVkxNSxOkZ931Q7Y4MkjDN5hhCu8cxfRSI3YLkb13uT200JocFHJjYYcrHKQhglTgGBLnb4MjLh03b8zAcmBQODx5BYLIu5ceUyi1GdPIpCxkELZEFcP2uuCXCU6I0LpZqFU6ZKvhv4TCt3H6VQi9qL)OM30eNLoxbpg6lhOnJ82DFVRk8yBjdhPL3llJHHeTbbz7aKGhGuXQgDwYH8PAZ4XZub285ettH)EMMsODfyfZPi1KxLR(OXpfvn)JJJ28N(m88rY1v8Vw)aZo3YCnhfFNEH0yCcCBZhVC)fh6tsYQpP5tBUzGE5leqHDXzA)yiU3Ms0bL67CxFvERcO0VmXvTxmsnobFF2DQRWWuFULMa5wX0fuJkkqoNCf1Gu85YsbS(KbhHLEJABu2WyDZxCVYBkY1Nwq3lUvQoAL9t2Ah)dfRhv8HC)hsjOMY5wQlsjG9WKvy0Q8UGqPI2Ep4CHkknCA8UWzByGCK3pqpBqGjeEx6LTzyQp)X5Okh0T2uMm52)(VRQXz6Zz0sOl1HsM2Ml7mXDVK3iPg7480h1UvvciIA8yYZ573N13O07eVt9zlYo9HO18e4LqMMgU1XhT0cnsn6JypQd7XQ2OAiB6DXiP4F4glVJqlvCQ7DV3Bgcrp0F)l4ZyR)kGuUd0TEkvOrC7NqYy(D4R55uK280Z7MpnvYNQ4GM8PkPHaFQKlw0LGOB2uVLFJ9ML3Uv8VKKiGKnARMzZ)CrYJLo31sOpf2FIyvbQ0Yn6wt8kXqs3Zpt5s1eMk1U3jlDBum9paTFK(LL))d]] )

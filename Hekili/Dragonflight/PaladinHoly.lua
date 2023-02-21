@@ -468,14 +468,21 @@ spec:RegisterAbilities( {
         cooldown = 120,
         gcd = "spell",
 
-        spend = function() return talent.avenging_crusader.enabled and 5 or 0 end,
-        spendType = function() return talent.avenging_crusader.enabled and "holy_power" or 0 end,
+        spend = function()
+            if talent.avenging_crusader.enabled then
+                return 5, "holy_power"
+            end
+        end,
 
         startsCombat = false,
         toggle = "cooldowns",
 
         handler = function ()
-            if talent.avenging_crusader.enabled then spend( 5, "holy_power" ) end
+            if talent.avenging_crusader.enabled then
+                spend( 5, "holy_power" )
+                applyBuff( "avenging_crusader" )
+                return
+            end
             applyBuff( "avenging_wrath" )
         end,
 
@@ -1011,7 +1018,9 @@ spec:RegisterAbilities( {
         startsCombat = true,
         texture = 613533,
 
-        usable = function () return target.health_pct < 20 end,
+        usable = function ()
+            return target.health_pct < 20 or talent.avenging_wrath.enabled and ( buff.avenging_wrath.up or buff.avenging_crusader.up ), "requires target below 20% health or avenging_wrath active"
+        end,
 
         handler = function ()
             gain( buff.holy_avenger.up and 3 or 1, "holy_power" )
@@ -1327,7 +1336,7 @@ spec:RegisterAbilities( {
         id = 53600,
         cast = 0,
         cooldown = 1,
-        gcd = "spell",
+        gcd = "off",
 
         spend = function ()
             if buff.divine_purpose.up then return 0 end

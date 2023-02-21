@@ -1,12 +1,7 @@
 -------------------------------------------------------------------------------
--- ElvUI_SystemDatatext By Crackpot (US, Thrall)
+-- ElvUI_SystemDatatext By Crackpot (US, Illidan)
 -------------------------------------------------------------------------------
-local debug = false
---[===[@debug@
-debug = true
---@end-debug@]===]
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("ElvUI_SystemDatatext", "enUS", true, debug)
+local L = ElvUI[1].Libs.ACL:NewLocale("ElvUI_SystemDatatext", "enUS", true, true)
 if not L then return end
 
 L["(Hold Shift) Memory Usage"] = true
@@ -59,4 +54,5 @@ L["Total Memory:"] = true
 L["World"] = true
 L["World Latency:"] = true
 L["Yes"] = true
+
 
