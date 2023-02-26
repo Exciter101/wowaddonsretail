@@ -712,6 +712,10 @@ spec:RegisterCombatLogEvent( function( _, subtype, _,  sourceGUID, sourceName, _
                 vesper_damage = 3
                 vesper_used = 0
 
+        -- For any Maelstrom Weapon changes, force an immediate update for responsiveness.
+        elseif spellID == 344179 then
+            Hekili:ForceUpdate( subtype, true )
+
         -- Vesper Totem heal
         elseif spellID == 324522 then
             local now = GetTime()
@@ -947,8 +951,8 @@ spec:RegisterStateFunction( "consume_maelstrom", function( cap )
 end )
 
 spec:RegisterStateFunction( "gain_maelstrom", function( stacks )
-    if talent.witch_doctors_wolf_bones.enabled then
-        reduceCooldown( "feral_spirits", stacks )
+    if talent.witch_doctors_ancestry.enabled then
+        reduceCooldown( "feral_spirits", stacks * talent.witch_doctors_ancestry.rank )
     end
 
     addStack( "maelstrom_weapon", nil, stacks )
@@ -1682,7 +1686,10 @@ spec:RegisterAbilities( {
     -- Talent: Hurls molten lava at the target, dealing $285452s1 Fire damage. Lava Burst will always critically strike if the target is affected by Flame Shock.$?a343725[    |cFFFFFFFFGenerates $343725s3 Maelstrom.|r][]
     lava_burst = {
         id = 51505,
-        cast = 2,
+        cast = function ()
+            if buff.natures_swiftness.up then return 0 end
+            return maelstrom_mod( 2 ) * haste
+        end,
         cooldown = 8,
         gcd = "spell",
         school = "fire",
@@ -1704,6 +1711,8 @@ spec:RegisterAbilities( {
             removeBuff( "lava_surge" )
             removeBuff( "echoing_shock" )
 
+            consume_maelstrom()
+
             if talent.master_of_the_elements.enabled then applyBuff( "master_of_the_elements" ) end
 
             if talent.surge_of_power.enabled then
@@ -1711,7 +1720,7 @@ spec:RegisterAbilities( {
                 removeBuff( "surge_of_power" )
             end
 
-            if buff.primordial_wave.up and state.spec.elemental and legendary.splintered_elements.enabled then
+            if buff.primordial_wave.up and state.spec.elemental and ( talent.splintered_elements.enabled or legendary.splintered_elements.enabled ) then
                 applyBuff( "splintered_elements", nil, active_dot.flame_shock )
             end
             removeBuff( "primordial_wave" )
@@ -1728,7 +1737,7 @@ spec:RegisterAbilities( {
     lava_lash = {
         id = 60103,
         cast = 0,
-        cooldown = function () return 18 * ( buff.hot_hand.up and ( 1 - 0.375 * talent.hot_hand.rank ) or 1 ) * haste end,
+        cooldown = function () return ( 18 - 3 * talent.molten_assault.rank ) * ( buff.hot_hand.up and ( 1 - 0.375 * talent.hot_hand.rank ) or 1 ) * haste end,
         gcd = "spell",
         school = "fire",
 

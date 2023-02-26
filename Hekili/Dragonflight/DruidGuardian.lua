@@ -490,7 +490,7 @@ spec:RegisterAuras( {
     -- https://wowhead.com/beta/spell=164812
     moonfire = {
         id = 164812,
-        duration = function () return mod_circle_dot( 16 ) end,
+        duration = function () return mod_circle_dot( 16 ) * haste end,
         tick_time = function () return mod_circle_dot( 2 ) * haste end,
         type = "Magic",
         max_stack = 1,
@@ -610,7 +610,7 @@ spec:RegisterAuras( {
     -- https://wowhead.com/beta/spell=202347
     stellar_flare = {
         id = 202347,
-        duration = function () return mod_circle_dot( 24 ) end,
+        duration = function () return mod_circle_dot( 24 ) * haste end,
         type = "Magic",
         max_stack = 1
     },
@@ -618,7 +618,7 @@ spec:RegisterAuras( {
     -- https://wowhead.com/beta/spell=164815
     sunfire = {
         id = 164815,
-        duration = function () return mod_circle_dot( 12 ) end,
+        duration = function () return mod_circle_dot( 12 ) * haste end,
         tick_time = function () return mod_circle_dot( 2 ) * haste end,
         type = "Magic",
         max_stack = 1
@@ -643,7 +643,7 @@ spec:RegisterAuras( {
     -- https://wowhead.com/beta/spell=192090
     thrash_bear = {
         id = 192090,
-        duration = function () return mod_circle_dot( 15 ) end,
+        duration = function () return mod_circle_dot( 15 ) * haste end,
         tick_time = function () return mod_circle_dot( 3 ) * haste end,
         max_stack = function () return legendary.luffainfused_embrace and 4 or 3 end,
     },
@@ -956,7 +956,7 @@ end )
 spec:RegisterStateTable( "druid", setmetatable( {
 }, {
     __index = function( t, k )
-        if k == "catweave_bear" then return settings.catweave_bear
+        if k == "catweave_bear" then return false
         elseif k == "owlweave_bear" then return settings.owlweave_bear
         elseif k == "no_cds" then return not toggle.cooldowns
         elseif k == "primal_wrath" then return debuff.rip
@@ -2156,17 +2156,19 @@ spec:RegisterSetting( "ironfur_damage_threshold", 5, {
 } ) ]]
 
 spec:RegisterSetting( "catweave_bear", false, {
-    name = "|T132115:0|t Attempt Catweaving (Experimental)",
-    desc = "If checked, the addon will use the experimental |cFFFFD100catweave|r priority included in the default priority pack.",
+    name = "|T132115:0|t Use Catweaving",
+    desc = "If checked, |T132115:0|t Cat Form may be recommended while you are not actively tanking enemies.\n\n"
+        .. "If unchecked, the addon can still recommend Cat Form abilities when you are in that form.",
     type = "toggle",
     width = "full",
 } )
 
+--[[ Retired 2023-02-21
 spec:RegisterSetting( "owlweave_bear", false, {
     name = "|T136036:0|t Attempt Owlweaving (Experimental)",
     desc = "If checked, the addon will use the experimental |cFFFFD100owlweave|r priority included in the default priority pack.",
     type = "toggle",
     width = "full"
-} )
+} ) ]]
 
-spec:RegisterPack( "Guardian", 20230209, [[Hekili:vV1xpkoos8plOtklStlgcDtpDVc4HB1Pt7QtZlSptWDWarDiHlXPz6ri(SFLTJDCIlNKEMEMvN0ODPXo1)RFvzxH1(R)R1R2sy01FE6KP3oz6Khh7pB2d36VEf71t01RorcFMSh(qc5i8F)3fKSTrKe(cVgNs2YjqEArwiS4bg7u(V9XpUpIDO4PXHPh)yE0XIyclknjmJSJX)7WpUE1tfrXS)iz9tOCF6JRxrkyhsZwVAv0XFhOC02Tu52P5HRxTEvCuolNZ8qc7mL8cf(8NfQdnH8umD76)jSwweJMfraLHettyJpqjzSG0DbSd0GZrXBhxU7RB8UUzW1npvSBhYUkobsuixnazP5QRzG87KZkIcYzWU0SJ1OL6l5K4wNKq88NYsphx7HZipt5p4D)TP1ZCY5TPSXC5BCgDxgn)aFlx3C5Y1n0eA2(xVUz(1n3nZwzUVDsgDQofb5hcZEkn4uAucl)6MLlUUX3GSrN4u9tCQQn6PjVK(mvOj5NIagKBYsy7p4uiSz2DcHqPvlVUz2KkwTJMLggLwKh8eqboPFSNKEoqAdZt(Hmk3KZ4za7ifXmS4D9UFUioo4js(bzcdyfKl8V(cnSGXD80xOzG8YIocwrWsCDd8WPzx3ebmN8cjkMt1XyrY6irvCVMTPPaLAylBgwR2mllk5zkd8v5XPmJ)gjIUXZmTXZmT9yXHx3a)Rx5coteUUzKm8vsmX(EIMLtZEo4jy)ITWxxSsusijlra7fSVeXKtWIS80qf18eucmQBZkI2owHJjiNkXuUeyUnxAK8FvMLtPI)FRzpd4wGKNJs2lOTlEkeFg3pgqs2gegtodjChjrj5Iuw)XZusEp00TPNtQiBn7LCjTzimnnM)vJzhYGWw5E0mgYQMuMRxUTJKK9XuKDWrjoMMMSlkZCziBAF4w4X(Y1nFa2lxnQ8OnbOBMspDMBJghVP)MUArr9kKuRY2BlJs2(QryNZa36AZJtE30gdG2IKa5Nd4LMLfOdKnnOlrRqI7FeAJq)(kyVFrOMEGCgjlViBpvAx7NYR0G2RRmqlbKm72e0FlwfKQEjamFxsXXiw0EIcMWFIdA0MIWfczfiXNAP8Jk)ZgeM7JJc1(yE1NawAW2iQiY0FQzgsZc9o2Tm(MZBimbcZpgrLrcpa8)1Wy4ziGpdkY)z)2BvRnpaj75CqU1v00lKbwOyqHc2vK1O03DVTUoMvJUYqXgB5EZTyez3yBUtYElPe64(23Vjg89tEtvb5BTeeeX8OGbnBsCpvHVLhtPNOz60k1EIlsahi4fp2WO4UZR3Lc6wUoiManxRHZarNuvGWG6amOWNnQ3zf3di43lw5fcWeEpChH2fd4N4AReF3irfwriJUp407Hm2djjJ8vbcPFZStDWEgGPWZWmpDtv1cNSWOplPNushT7LRA6QIJWrm8DF0SApUPCeTRUuy2PHr0u9WmRaqj2MMjtBLj2glUS7(0HcwUNeZFQqDyDnhR9QvLATBPcPcaxcC3zUKhPzuftrqX99nmqVejpnL0lv2eyz4gip3AgAZxtWF3nfp8B3NGL3vVXdhjfW(mRB1EG7an(i)2qsY5jHCNRn0Oov2n2)3H2(3JoPbfA23KAdghwOwszZ7CGFOaZdwuk3q01TYn00BUuE6BuWa31r45PJHJNdbPmzhkY81CkJbav5LNAj4ykV3i7i1PDuQON1TBPvwm903a4i)C0jzV2c5XDzbhbeUsJLjhJSdxN6UBm3zyOqbfXMHJo8RZv3xtvqicDmp(17vSSwHDxlPfB6i7KIPDaS3l7ZpDZGw6B96AqXOCexDN1b5rEWsPlpfe(Y(yGw8P5SAkPRWwZZSlRfpVSFH2kAH)ypmRJhRFs7iu8d3v6Ss8R1VGjokNoURH4ajL3Bsf5ove)cS9spDTUZRHyxR98PpAUpdGOABJv7OSDCL)vThcHePh5hsBl5iVx2zstqzFsQVfeoOSrASXDbQAx08ggGCNF96MdKCgfTLl3qAhOKy2HXNczccDV59Ft3NLEMDqFaZ3obsONjX6ZD2PnPfAbLpt(AeDBaiv8losFXbTM1(TDvMUk)AeprpEk9mfouxAYw9PGFR63NM1wKWKX(sVQ8HGMAnopNXz)74K15fzVe9cjoaIvGs(HWHyBuwUKwvFDt3WK2ft(vr6qoTzUmH5ugLpBbc6idspbpiLvrffsV4tLx9J6Cg1n1cqQyYR0misbqHO1atlxpJgLaGxHWw45r6ccGCwaE84CG8tk)Z1RqVGMEjIv1LmfsJoVGLjjVEM8QgwUQQLtLyqh6HaiUfvXDMS1WumWZH22AmOTVZr8nSJl8V2vFlAyUTlFLF4oieU6jmkg9ghtOn39qfvJAlC7v7Gaktl4URRvUqH86c7sYC07O65eir2aRW4MAHi2WYhPRkv9Wh22yARTb0bn)dDO16f66kozgxh()NzrEFVSeZ7GZ4QsCdxW77kVqnvl9XBnb)1uP21oRNzrtpb4lGM0Y5Bs92x8W6vNHoN5aMRx9x8zchbvEZGct74tg(xkN88VWVA()BbWnWpKNYhGmPGLEKigSC4bOFuA(4R)5)jkbw6(F76MFhcmOzIL)fxUwGQS0wwx56H9n0)lJa6F9p)dH4Xj7NujPx3iEZqGLfyf7IQms5J1vc)WIpQkICdV(XcvfUBeO3l8VPcuFXKBI2TOLkfETxI4p7M7vfVCYFSkzxUmCqBY1GwfSr4swZYpCMpOwPk8NZYHzy1C6m9gIG661mP9YfeyBpSAro0jHKZLNMu2dd0hLeAG9k7Hr9LlxgGjIdW0UbDvnHhz)pUU5n)UAOf8fvV)hT49aLs(cBy(nf50aaZ54n8xWIfQ3jJo3XuZDiFDe4CE4WodaCIGpcIUhIDNKxU0JlddEEVH4MFeh1OrJmvGgtbvMJQOIWIwEodSWhpS7WPSqWC)XZ8g2dXNF6apBLN)1GE12llXYjEoEjjGvWE5iwUakm9HjJNXn4w5hYxBGLtNHPQl87szforxXaED9Qnu6PrJous2Jt(gLSoD4Qieehocq0pohUh67Fqn5hbCs)vns5B(wcuwasFNkDAwKqKvGK8)Mx2OmS6MA3zouitadmOCQ)EgZWFP)uE4Hr3mnxDKhNjvxmW8hSyR680AWDu9wVBZH1BTkcGSnfm8owlA4ITwdzeQAzUhHgVTzXV8(j9eL8YLUN)ULUunIDx2hWelC8Fp432HyqNpABg(iPrZff3rjG(1iyAX9Ei3Q9cFex3xPFp8TFCP8ceXYFuGpOeckZjTN6bBF5cxibKrBtOIjarl3JN1WKx4Rkeu)I0l9Bn8MJ8eeAkkHCJsOmNyNOYZXkkmvvblKaeE9UkAlhSCt)UVFPM4EyYlU1zW3W3IPPzeNQwaAGYcoGhUlEqRtxXza7Bsw)PizgnSGfOBula65hBudZV9YL6w1LlAlqWCKSl9N4HnkwRhxm8H3c6SJc3nfuFKecvyfM13o2DXm3WI2bBOr5Q5aUCHLPC(DA)P7Xb((eiOdrX1BBTSgiCR60plvOkidlnZYZD3iCyvVoN2hsqaVTAEO9CaK3gFRA5hMHSC3C028BM4AfRT0oUwpcq(UrZKxoTnMGNtwUu1IQM(x8TD7dYkNO3FOfle9oZA0LT5vxJ9e8Fvl6Ow77pXyN)uuaL4G9RZ5Yf5jQMF3m8Nn6K(rR)RWXZ8xUYsZQ(M2U2AU2yF1)fZW5yDQFN6GFZMG(8IFOmnFS58AegBVuy(by29AlUOIT9nsY4jWSFv7S6aClm6Xt14O90ex6A03E1AMu1Y1T)QyC3y8JhAuo7AolRgN587N5C)Irv33TJonAt1RpeXCgYcm7(F5q2DCm1btmpnkIW9PzyEIjJ9)1QX56GY2Z2vdR4yMZLnLyoV5AgQj4YY0z1eMkXrztE3HABlLrX0p8EE0bFu6xoaffghYWwWFSQ5RKFIgYFFVVtmDL1)Vp]] )
+spec:RegisterPack( "Guardian", 20230225, [[Hekili:nR1wpkUrw4Fl9SsoG2omy3qNPJW8qIwTAgPnpe28QXgtbyHX2Yx6o9kK)TVNtvUkkBFkd90jzII0KgQQox)oxQtHNT3)1B12GsM3V4m15HPooZNyBp)PPFYBv5RzmVvzbHhd2d)rsWj4F)3vb5BJcsWfEnonylsGI0Q8qyXdLLzf)4h)4(OYdvBMeME6JfrNQIdkJstcZd2vIFo8JER2uffx(5eVn0C)rVvbvLhsZ9wTk60pduoA7wMy7SIqVv42)(PoFVJ9pw7J)3VMwvgLWQ9RYqcw7hLegxTnkzFTF4HGK9SIA)Y0A)p8ZbLVWcEM9HA)0muWkMu)L6VOO4Cof)noz2w7VlnV2)7I2Tgf5TFNg1Eb0sGMaXo2q7IQSS08s4dhaj4d)wb8V)NGQ4A)GeGu)AW)Jly1(Fopnzxfq4FcjQssM4TkoQOSaTPHnIj83)c3lXsc2eZ269tWA5rLS8OaWhfeZskNCGfKxUoD3AGXRFbi5KMDx7Bv7FxT)MQD7i2vvgyOdrwdM4UR6vcUfJCwsuqoxd2OtTOL8lrs8GrsWpFwE6lXToCEWrgEWzFZ065g5820YjO8njNTlNvCa3sT)5Z1(Sew((xR9xu7pBEFL5XHjzuwBkcYpe9SjDDwAusjaVw6w7BRr2OmKQ)asvLrpn550JmUMuKfbmOqNLW2)KrHOpZMXfcPwTS2F(0lSAhlpnmkTQy9gGciPFYiPXZ8mBnqPtryydqkBcfCbWtn7wXlrzS1aocjU90BuW7sKd5m0HwcynWptfkj36PuiImkNPt7r1(J44OYOWJ8mjw4FFcmXPR3gXe6ItT)ybea2CxNOHDpMVyxldaDG0UHVggdNjiFpdCGGalddLI6MCihrmipRHuiD8WxjydTc9Jw3eKFSauqvq3TJOM3sWy5fS8JD2YJ6BbYkhKNei(qRT9ddl5AhC9(MAqyyBvErA4KTPVK0GPsJXpCL9NZofeLiaJpov49Ub2uLj2At(hcZJmdKEcG9mz(LIyglJLRcfL7jUkb8lGZ5uhJI5OQrncCJnhpCUs(UrvzCpxhaQUs8gN0e6eNGwnSUmnT8WAOM36W4GxMuuc9qWT1tPX9qu7J8vaT65aGpaFNil5w77YpiQyfSsOk)(IjNGQQadE9LGxBPh43Z1aZLm)JqdE3Yzo0kaxo7wGvfOi6qODvVevwiJC3sMZsGbeurbmq1MRgpnLlou5ASnNdP1Xnkf2QSHDXHTbO9GUISIkM4mit6BQqz3CpdCwUpigpvOkGOLtV)QQ8eie1HOAbYtZDliOAAotYgIm(22AMKNJevvf(LtqJMGE3a(aj4bDGoUgN)MBTy0xVxGkgDUeEnuicAO0QX9vgPi7GRjtlEvGKcmGfD29tYQc7nxf5Dyl(7OgRsG0TNo5gkpKhuCGRkTcH723k2(P2ELAfGmFqSHE9Vj6XIm1H56vyu9KTSDaaVu0jKi6wZAGa61NsXEW6JYDUsjPBS)G(Uz1su6PTD3os52tuEmxGXaCXukarGfrnmhZx(YC0jzAKQyDWQb)6czp)xaHe0r)gw)1G0vMdZ1LgWItuZ15kfjUQ17pzvxqH)M5fugpZv7mLE1aOFM(9MmDWgPRife9M21GRVWkkBzcmftPi)izBflAA9zOQX0h7tZVYXUnPDmzYnZLW7LvQvRp6j5r6yU8NH08lB1wtwv8ZW2B80TUIsRYjTUJIZt67tllzRTvItUBhGalh6w4fhRIJxVb4KyqF5rzIf(x)olSIppogiHVkUyDZC2GdJZOlcSobphefZJe8igvLAutDVrDbM3GDLRsRSe5rjhzLGxOioTu7ZL9hzvNZ405moQRqpqll30WUmoPRoW53)Dg1UIX28QOTtKdQKtozwfXsG5wFjrlsArazP8)F5qJhJlxAdzul74LRdzssmuyq)6)2t0kC((7Iqnac9GnD(nT92A6XV)oWaw51m0ww0SPYH1YWy1AEDoA6110Ff9OHqTjCZL)UjcRx(TkzT4VxJd5wmQ71IxvqnS7bhe0Dklp5uSKFRA8kebIHbq(ftsXPOYO9bsiz3EzVf9Ojrm8Lz5mC0KbKP7sbXgklFHMYc48)QHwYA5E9h8TP(gUuckNfLa2Iq2wCiHxkN)CqCfunjUayW0Mp6T6Ymgh0U3Fu9NcGaGodp3CBA3uMSrMJMPtfqMQrUBmccYsC5eAasYr)FLEd7gVriQAP3q71WP4LMwOTSEj4mPydN5vWCYztEmbY4qhWWXSqL1cCf5JXbL4EbshInp6T6ZNWN2cDsZKmP2N)AvtQ)cxx3ffRU6wXevaW)09Js499iY2vcSVNJ(CTV)cO0D69r7CheLBnicV(lu8VlmfzYDTG00NRhcrt6mIITgr4DS6IEoFMW9ArHzhtlBCjhLNUu2IcCqscfa4I9qdhE(8DuI4DuA3Dxd1HVW6)O2)n3gNsWDV0A4aEpqPe9YP)nvfS1q82P7XEVCLTRD1D4OVdrNkiNhn6QaaJvshF(8OruTGD(8n0(bCERr0MFch14XJ1vGovTerIsQqbJa3FthwuakRrdu(Fju636guiSbil6EPSgQpQLtTm0)eScvFtlDDASW6XjIwAw60iRM1LMZs5rLe5PPxJiT8gerE6n1OV1UDSi8CxAv5Qozr8)Lma4NXCIn2O7BnipiBmhJFxZtEAP9aMlTDqaS2ee7U6ylKjxUU6Ip1JTTE8Y(R28sKkajPvrUBISn9POgYQ3IAWZERr8crkP6gG1VThIC5JtVXuaNpF9hFSNUC59fnzFahc3X)Eso1hIbx3xzZOFXnYOg(SjGq5oGj3hTg1BsxUGHJAcx9LgCcwVhP59W7MNOIkwtMKLG6q2EHLx9kENpJcoKTXmlas2ShcsAdXVDDMx8WD87JT4eYHKqMZNinXuV1MLHvAcdw46qaIWe8xOQ4106InSTB0bZVGM7dgbOJElgLUOY501cfWgxmP4Ba5yD3WxXZeO(nPbFdLxTQ5ubdA1wGgKPgz5IhoFUThyP78ban6V70s7PwuV3uVJZhI5BjBVHMy6kO2eHnsiiLpPpo3DU50S9bMKreYNZyPBpt5Izk)P5hD4pt4HcotBnUss9b00)afAEJXFdTrxW2uX89amZgtNZ36Qpwbb2dV)cgrTaQa1pf8LL)0CILVoh77F1Zx0dIVSF4K6fmWDtMazz)smA7HovqZsxwuExi3VUjeikRtoR1ESGFfGYoxwqFmuuNa)vNQcl6pJdTD(xIcifhQF9SNplUc1IzZPpBuM6OT)vYAP)B)CPElj62UHUJG2(A)lAf5yBQptEtV5tjpV63RkfmTLKUWLwr5)yv7YyyZERkYyH4pkVz8X059)d]] )

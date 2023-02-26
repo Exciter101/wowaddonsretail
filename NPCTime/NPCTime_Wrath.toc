@@ -1,8 +1,8 @@
-## Interface: 30400
+## Interface: 30401
 ## Title: |cffEEE4AENPC Time|r
 ## Notes: |cffFFC700Slash command: /npctime|r
 ## Author: Yuyuli
-## Version: 1.0.10
+## Version: 1.0.11
 ## SavedVariables: NPCTimeDB
 
 NPCTime.lua

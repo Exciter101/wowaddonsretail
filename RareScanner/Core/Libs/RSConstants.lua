@@ -24,8 +24,8 @@ RSConstants.LOOT_ITEM_ID = nil
 -- Current versions
 ---============================================================================
 
-RSConstants.CURRENT_DB_VERSION = 85
-RSConstants.CURRENT_LOOT_DB_VERSION = 96
+RSConstants.CURRENT_DB_VERSION = 87
+RSConstants.CURRENT_LOOT_DB_VERSION = 98
 
 ---============================================================================
 -- Current maps (newer)
@@ -105,6 +105,7 @@ RSConstants.PROFILE_DEFAULTS = {
 			scanInstances = false,
 			scanOnTaxi = true,
 			scanOnPetBattle = true,
+			scanOnRacingQuest = true,
 			scanWorldmapVignette = true,
 			ignoreCompletedEntities = true,
 			filteredRares = {},
@@ -299,6 +300,12 @@ RSConstants.CONTAINER_LOCKED_VIGNETTE = "vignetteloot-locked"
 RSConstants.EVENT_VIGNETTE = "VignetteEvent"
 RSConstants.EVENT_ELITE_VIGNETTE = "VignetteEventElite"
 RSConstants.EVENT_TORMENTORS_VIGNETTE = "Tormentors-Event"
+
+---============================================================================
+-- SpellIDs
+---============================================================================
+
+RSConstants.RACING_SPELL_ID = 369968
 
 ---============================================================================
 -- MapIDS

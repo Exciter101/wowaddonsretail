@@ -178,6 +178,8 @@ L["CONFIRM"] = "Confirmer"
 L["CONFIRM_POST_BELOW_VENDOR"] = "Si vous vendez cet objet chez un vendeur, vous gagnerez plus d’or, souhaitez-vous placer l’objet à l’hôtel des ventes malgré tout ?"
 L["CONFIRM_POST_LOW_PRICE"] = "Le prix de %s semble un peu bas. Êtes-vous sûr de vouloir vendre à ce prix?"
 L["CONFIRM_POST_PRICE_DROP"] = "Le prix unitaire de %s à une baisse de prix importante. Êtes-vous sûr de vouloir vendre à ce prix ?"
+--[[Translation missing --]]
+L["CONFIRM_UNHIDE_ALL"] = "Are you sure you want to unhide all hidden items?"
 L["CONFIRM_X_TOTAL_PRICE_X"] = "Confirmer %s, prix total %s"
 L["CONTINUE"] = "Continue"
 L["CONTRIBUTORS_HEADER"] = "Contributeurs"

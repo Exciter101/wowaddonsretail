@@ -73,27 +73,31 @@ local function showRealDate(curseDate)
 end
 
 DBM = {
-	Revision = parseCurseDate("20230218045247"),
+	Revision = parseCurseDate("20230224080925"),
 }
 
 local fakeBWVersion, fakeBWHash
 local bwVersionResponseString = "V^%d^%s"
 -- The string that is shown as version
 if isRetail then
-	DBM.DisplayVersion = "10.0.27"
-	DBM.ReleaseRevision = releaseDate(2023, 2, 17) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	DBM.DisplayVersion = "10.0.29"
+	DBM.ReleaseRevision = releaseDate(2023, 2, 24) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	DBM.ForceDisable = 1--When this is incremented, trigger force disable regardless of major patch
 	fakeBWVersion, fakeBWHash = 265, "5c1ee43"
 elseif isClassic then
-	DBM.DisplayVersion = "1.14.33"
-	DBM.ReleaseRevision = releaseDate(2023, 2, 17) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	DBM.DisplayVersion = "1.14.35 alpha"
+	DBM.ReleaseRevision = releaseDate(2023, 2, 22) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	DBM.ForceDisable = 1--When this is incremented, trigger force disable regardless of major patch
 	fakeBWVersion, fakeBWHash = 47, "ca1da33"
 elseif isBCC then
 	DBM.DisplayVersion = "2.6.0 alpha"--When TBC returns (and it will one day). It'll probably be game version 2.6
 	DBM.ReleaseRevision = releaseDate(2023, 2, 16) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	DBM.ForceDisable = 1--When this is incremented, trigger force disable regardless of major patch
 	fakeBWVersion, fakeBWHash = 47, "ca1da33"
 elseif isWrath then
-	DBM.DisplayVersion = "3.4.34"
-	DBM.ReleaseRevision = releaseDate(2023, 2, 17) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	DBM.DisplayVersion = "3.4.36 alpha"
+	DBM.ReleaseRevision = releaseDate(2023, 2, 22) -- the date of the latest stable version that is available, optionally pass hours, minutes, and seconds for multiple releases in one day
+	DBM.ForceDisable = 1--When this is incremented, trigger force disable regardless of major patch
 	fakeBWVersion, fakeBWHash = 47, "ca1da33"
 end
 DBM.HighestRelease = DBM.ReleaseRevision --Updated if newer version is detected, used by update nags to reflect critical fixes user is missing on boss pulls
@@ -209,8 +213,13 @@ DBM.DefaultOptions = {
 	SWarnNameInNote = true,
 	CustomSounds = 0,
 	FilterTankSpec = true,
-	FilterInterrupt2 = "TandFandBossCooldown",
+	FilterBTargetFocus = true,
+	FilterBInterruptCooldown = true,
+	FilterBInterruptHealer = false,
 	FilterInterruptNoteName = false,
+	FilterTTargetFocus = true,
+	FilterTInterruptCooldown = true,
+	FilterTInterruptHealer = false,
 	FilterDispel = true,
 	FilterTrashWarnings2 = true,
 	FilterVoidFormSay = true,
@@ -412,12 +421,14 @@ local mainFrame = CreateFrame("Frame", "DBMMainFrame")
 local playerName = UnitName("player")
 local playerLevel = UnitLevel("player")
 local playerRealm = GetRealmName()
+local normalizedPlayerRealm = playerRealm:gsub("[%s-]+", "")
 local lastCombatStarted = GetTime()
 local chatPrefixShort = "<" .. L.DBM .. "> "
 local usedProfile = "Default"
 local dbmIsEnabled = true
+private.dbmIsEnabled = dbmIsEnabled
 -- Table variables
-local newerVersionPerson, cSyncSender, eeSyncSender, iconSetRevision, iconSetPerson, loadcIds, inCombat, oocBWComms, combatInfo, bossIds, raid, autoRespondSpam, queuedBattlefield, bossHealth, bossHealthuIdCache, lastBossEngage, lastBossDefeat = {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+local newerVersionPerson, forceDisablePerson, cSyncSender, eeSyncSender, iconSetRevision, iconSetPerson, loadcIds, inCombat, oocBWComms, combatInfo, bossIds, raid, autoRespondSpam, queuedBattlefield, bossHealth, bossHealthuIdCache, lastBossEngage, lastBossDefeat = {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
 -- False variables
 local voiceSessionDisabled, targetEventsRegistered, combatInitialized, healthCombatInitialized, watchFrameRestore, questieWatchRestore, bossuIdFound, timerRequestInProgress = false, false, false, false, false, false, false, false
 -- Nil variables
@@ -713,7 +724,7 @@ end
 local function sendSync(protocol, prefix, msg)
 	if dbmIsEnabled or prefix == "V" or prefix == "H" then--Only show version checks if force disabled, nothing else
 		msg = msg or ""
-		local fullname = playerName.."-"..playerRealm
+		local fullname = playerName.."-"..normalizedPlayerRealm
 		if IsInGroup(2) and IsInInstance() then--For BGs, LFR and LFG (we also check IsInInstance() so if you're in queue but fighting something outside like a world boss, it'll sync in "RAID" instead)
 			SendAddonMessage(DBMPrefix, fullname .. "\t" .. (protocol or DBMSyncProtocol) .. "\t" .. prefix .. "\t" .. msg, "INSTANCE_CHAT")
 		else
@@ -732,7 +743,7 @@ private.sendSync = sendSync
 local function sendGuildSync(protocol, prefix, msg)
 	if IsInGuild() and (dbmIsEnabled or prefix == "V" or prefix == "H") then--Only show version checks if force disabled, nothing else
 		msg = msg or ""
-		local fullname = playerName.."-"..playerRealm
+		local fullname = playerName.."-"..normalizedPlayerRealm
 		SendAddonMessage(DBMPrefix, fullname .. "\t" .. (protocol or DBMSyncProtocol) .. "\t" .. prefix.."\t"..msg, "GUILD")--Even guild syncs send realm so we can keep antispam the same across realid as well.
 	end
 end
@@ -740,9 +751,9 @@ private.sendGuildSync = sendGuildSync
 
 --Custom sync function that should only be used for user generated sync messages
 local function sendLoggedSync(protocol, prefix, msg)
-	if dbmIsEnabled or prefix == "V" or prefix == "H" then--Only how version checks if force disabled, nothing else
+	if dbmIsEnabled then
 		msg = msg or ""
-		local fullname = playerName.."-"..playerRealm
+		local fullname = playerName.."-"..normalizedPlayerRealm
 		if IsInGroup(2) and IsInInstance() then--For BGs, LFR and LFG (we also check IsInInstance() so if you're in queue but fighting something outside like a world boss, it'll sync in "RAID" instead)
 			C_ChatInfo.SendAddonMessageLogged(DBMPrefix, fullname .. "\t" .. (protocol or DBMSyncProtocol) .. "\t" .. prefix .. "\t" .. msg, "INSTANCE_CHAT")
 		else
@@ -761,7 +772,7 @@ end
 local function SendWorldSync(self, protocol, prefix, msg, noBNet)
 	if not dbmIsEnabled then return end--Block all world syncs if force disabled
 	DBM:Debug("SendWorldSync running for "..prefix)
-	local fullname = playerName.."-"..playerRealm
+	local fullname = playerName.."-"..normalizedPlayerRealm
 	if IsInRaid() then
 		SendAddonMessage(DBMPrefix, fullname .. "\t" .. (protocol or DBMSyncProtocol) .. "\t" .. prefix.."\t"..msg, "RAID")
 	elseif IsInGroup(1) then
@@ -797,7 +808,7 @@ local function SendWorldSync(self, protocol, prefix, msg, noBNet)
 						end
 					end
 				else
-					if realmName == playerRealm then
+					if realmName == playerRealm or realmName == normalizedPlayerRealm then
 						sameRealm = true
 					end
 				end
@@ -2098,7 +2109,7 @@ do
 			return
 		end
 		if not dbmIsEnabled then
-			self:AddMsg(L.UPDATEREMINDER_DISABLE)
+			self:ForceDisableSpam()
 			return
 		end
 		if self.NewerVersion and showConstantReminder >= 1 then
@@ -2173,8 +2184,10 @@ do
 		if IsInRaid() then
 			if not inRaid then
 				twipe(newerVersionPerson)--Wipe guild syncs on group join so we trigger a new out of date notice on raid join even if one triggered on login
+				twipe(forceDisablePerson)
 				inRaid = true
-				sendSync(DBMSyncProtocol, "H")
+				--sendSync(DBMSyncProtocol, "H")
+				SendAddonMessage("D4", "H", IsInGroup(2) and "INSTANCE_CHAT" or "RAID")--Purposely sent on old protocol to get all versions
 				if dbmIsEnabled then
 					SendAddonMessage("BigWigs", bwVersionQueryString:format(0, fakeBWHash), IsInGroup(2) and "INSTANCE_CHAT" or "RAID")
 				end
@@ -2220,6 +2233,7 @@ do
 					raidGuids[v.guid] = nil
 					raid[i] = nil
 					removeEntry(newerVersionPerson, i)
+					removeEntry(forceDisablePerson, i)
 					fireEvent("DBM_raidLeave", i)
 				else
 					v.updated = nil
@@ -2248,8 +2262,10 @@ do
 			if not inRaid then
 				-- joined a new party
 				twipe(newerVersionPerson)--Wipe guild syncs on group join so we trigger a new out of date notice on raid join even if one triggered on login
+				twipe(forceDisablePerson)
 				inRaid = true
-				sendSync(DBMSyncProtocol, "H")
+				--sendSync(DBMSyncProtocol, "H")
+				SendAddonMessage("D4", "H", IsInGroup(2) and "INSTANCE_CHAT" or "PARTY")
 				if dbmIsEnabled then
 					SendAddonMessage("BigWigs", bwVersionQueryString:format(0, fakeBWHash), IsInGroup(2) and "INSTANCE_CHAT" or "PARTY")
 				end
@@ -2293,6 +2309,7 @@ do
 					raidGuids[v.guid] = nil
 					raid[k] = nil
 					removeEntry(newerVersionPerson, k)
+					removeEntry(forceDisablePerson, k)
 					fireEvent("DBM_partyLeave", k)
 				else
 					v.updated = nil
@@ -2315,6 +2332,7 @@ do
 			fireEvent("DBM_raidLeave", playerName)
 			twipe(raid)
 			twipe(newerVersionPerson)
+			twipe(forceDisablePerson)
 			-- restore playerinfo into raid table on raidleave. (for solo raid)
 			raid[playerName] = {}
 			raid[playerName].name = playerName
@@ -2476,7 +2494,7 @@ do
 	end
 
 	function DBM:GetMyPlayerInfo()
-		return playerName, playerLevel, playerRealm
+		return playerName, playerLevel, playerRealm, normalizedPlayerRealm
 	end
 
 	--Intentionally grabs server name at all times, usually to make sure warning/infoframe target info can name match the combat log in the table
@@ -2490,7 +2508,7 @@ do
 	function DBM:GetShortServerName(name)
 		if not self.Options.StripServerName then return name end--If strip is disabled, just return name
 		local shortName, serverName = string.split("-", name)
-		if serverName and serverName ~= playerRealm then
+		if serverName and serverName ~= playerRealm and serverName ~= normalizedPlayerRealm then
 			return shortName.."*"
 		else
 			return name
@@ -3192,11 +3210,6 @@ do
 		end
 		if not self.Options.SpecialWarningFont or (self.Options.SpecialWarningFont == "Fonts\\2002.TTF" or self.Options.SpecialWarningFont == "Fonts\\ARKai_T.ttf" or self.Options.SpecialWarningFont == "Fonts\\blei00d.TTF" or self.Options.SpecialWarningFont == "Fonts\\FRIZQT___CYR.TTF" or self.Options.SpecialWarningFont == "Fonts\\FRIZQT__.TTF") then
 			self.Options.SpecialWarningFont = "standardFont"
-		end
-		--Migrate interupt always filter to new interrupt disable option
-		if self.Options.FilterInterrupt2 == "Always" then
-			self.Options.FilterInterrupt2 = "TandFandBossCooldown"
-			self.Options.SpamSpecRoleinterrupt = true
 		end
 		--If users previous voice pack was not set to none, don't force change it to VEM, honor whatever it was set to before
 		if self.Options.ChosenVoicePack and self.Options.ChosenVoicePack ~= "None" then
@@ -4014,8 +4027,8 @@ do
 
 	local function SendVersion(guild)
 		if guild then
-			local message = ("%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion)
-			sendGuildSync(DBMSyncProtocol, "GV", message)
+			local message = ("%s\t%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion, tostring(DBM.ForceDisable))
+			sendGuildSync(2, "GV", message)
 			return
 		end
 		if DBM.Options.FakeBWVersion and not dbmIsEnabled then
@@ -4029,18 +4042,22 @@ do
 			VPVersion = "/ VP"..VoicePack..": v"..DBM.VoiceVersions[VoicePack]
 		end
 		if VPVersion then
-			sendSync(DBMSyncProtocol, "V", ("%s\t%s\t%s\t%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion, GetLocale(), tostring(not DBM.Options.DontSetIcons), VPVersion))
+			sendSync(2, "V", ("%s\t%s\t%s\t%s\t%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion, GetLocale(), tostring(not DBM.Options.DontSetIcons), tostring(DBM.ForceDisable), VPVersion))
 		else
-			sendSync(DBMSyncProtocol, "V", ("%s\t%s\t%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion, GetLocale(), tostring(not DBM.Options.DontSetIcons)))
+			sendSync(2, "V", ("%s\t%s\t%s\t%s\t%s"):format(tostring(DBM.Revision), tostring(DBM.ReleaseRevision), DBM.DisplayVersion, GetLocale(), tostring(not DBM.Options.DontSetIcons), tostring(DBM.ForceDisable)))
 		end
 	end
 
-	local function HandleVersion(revision, version, displayVersion, sender)
+	local function HandleVersion(revision, version, displayVersion, forceDisable, sender)
 		if version > DBM.Revision then -- Update reminder
 			if #newerVersionPerson < 4 then
 				if not checkEntry(newerVersionPerson, sender) then
 					newerVersionPerson[#newerVersionPerson + 1] = sender
 					DBM:Debug("Newer version detected from "..sender.." : Rev - "..revision..", Ver - "..version..", Rev Diff - "..(revision - DBM.Revision), 3)
+					if forceDisable > DBM.ForceDisable and not checkEntry(forceDisablePerson, sender) then
+						forceDisablePerson[#forceDisablePerson + 1] = sender
+						DBM:Debug("Newer force disable detected from "..sender.." : Rev - "..forceDisable, 3)
+					end
 				end
 				if #newerVersionPerson == 2 and updateNotificationDisplayed < 2 then--Only requires 2 for update notification.
 					if DBM.HighestRelease < version then
@@ -4066,15 +4083,15 @@ do
 					AddMsg(DBM, L.UPDATEREMINDER_HEADER:match("\n(.*)"):format(displayVersion, showRealDate(version)))
 					showConstantReminder = 1
 				elseif #newerVersionPerson == 3 and updateNotificationDisplayed < 3 then--The following code requires at least THREE people to send that higher revision. That should be more than adaquate
-					--Disable if out of date and it's a major patch.
-					if not testBuild and dbmToc < wowTOC then
+					--Disable if out of date and at least 3 players sent a higher forceDisable revision
+					if not testBuild and #forceDisablePerson == 3 then
 						updateNotificationDisplayed = 3
-						AddMsg(DBM, L.UPDATEREMINDER_MAJORPATCH)
+						DBM:ForceDisableSpam()
 						DBM:Disable(true)
-					--Disallow out of date to run during beta/ptr what so ever.
+					--Disallow out of date to run during beta/ptr what so ever regardless of forceDisable revision
 					elseif testBuild then
 						updateNotificationDisplayed = 3
-						AddMsg(DBM, L.UPDATEREMINDER_DISABLE)
+						DBM:ForceDisableSpam()
 						DBM:Disable(true)
 					end
 				end
@@ -4113,26 +4130,29 @@ do
 		end
 	end
 
-	syncHandlers["V"] = function(sender, _, revision, version, displayVersion, locale, iconEnabled, VPVersion)
+	syncHandlers["V"] = function(sender, protocol, revision, version, displayVersion, locale, iconEnabled, forceDisable, VPVersion)
 		revision, version = tonumber(revision), tonumber(version)
+		if protocol >= 2 then
+			forceDisable = tonumber(forceDisable) or 0
+		end
 		if revision and version and displayVersion and raid[sender] then
 			raid[sender].revision = revision
 			raid[sender].version = version
 			raid[sender].displayVersion = displayVersion
-			raid[sender].VPVersion = VPVersion
+			raid[sender].VPVersion = protocol == 2 and VPVersion or forceDisable--If protocol 1, there is no forceDisable arg
 			raid[sender].locale = locale
 			raid[sender].enabledIcons = iconEnabled or "false"
 			DBM:Debug("Received version info from "..sender.." : Rev - "..revision..", Ver - "..version..", Rev Diff - "..(revision - DBM.Revision), 3)
-			HandleVersion(revision, version, displayVersion, sender)
+			HandleVersion(revision, version, displayVersion, forceDisable, sender)
 		end
 		DBM:GROUP_ROSTER_UPDATE()
 	end
 
-	guildSyncHandlers["GV"] = function(sender, _, revision, version, displayVersion)
-		revision, version = tonumber(revision), tonumber(version)
+	guildSyncHandlers["GV"] = function(sender, _, revision, version, displayVersion, forceDisable)
+		revision, version, forceDisable = tonumber(revision), tonumber(version), tonumber(forceDisable) or 0
 		if revision and version and displayVersion then
 			DBM:Debug("Received G version info from "..sender.." : Rev - "..revision..", Ver - "..version..", Rev Diff - "..(revision - DBM.Revision)..", Display Version "..displayVersion, 3)
-			HandleVersion(revision, version, displayVersion, sender)
+			HandleVersion(revision, version, displayVersion, forceDisable, sender)
 		end
 	end
 
@@ -4250,7 +4270,7 @@ do
 		if not protocol or protocol ~= 8 then return end--Ignore old versions
 		if lastBossEngage[modId..realm] and (GetTime() - lastBossEngage[modId..realm] < 30) then return end--We recently got a sync about this boss on this realm, so do nothing.
 		lastBossEngage[modId..realm] = GetTime()
-		if realm == playerRealm and DBM.Options.WorldBossAlert and not IsEncounterInProgress() then
+		if (realm == playerRealm or realm == normalizedPlayerRealm) and DBM.Options.WorldBossAlert and not IsEncounterInProgress() then
 			modId = tonumber(modId)--If it fails to convert into number, this makes it nil
 			local bossName = modId and (EJ_GetEncounterInfo and EJ_GetEncounterInfo(modId) or DBM:GetModLocalization(modId).general.name) or name or CL.UNKNOWN
 			DBM:AddMsg(L.WORLDBOSS_ENGAGED:format(bossName, floor(health), sender))
@@ -4261,7 +4281,7 @@ do
 		if not protocol or protocol ~= 8 then return end--Ignore old versions
 		if lastBossDefeat[modId..realm] and (GetTime() - lastBossDefeat[modId..realm] < 30) then return end
 		lastBossDefeat[modId..realm] = GetTime()
-		if realm == playerRealm and DBM.Options.WorldBossAlert and not IsEncounterInProgress() then
+		if (realm == playerRealm or realm == normalizedPlayerRealm) and DBM.Options.WorldBossAlert and not IsEncounterInProgress() then
 			modId = tonumber(modId)--If it fails to convert into number, this makes it nil
 			local bossName = modId and (EJ_GetEncounterInfo and EJ_GetEncounterInfo(modId) or DBM:GetModLocalization(modId).general.name) or name or CL.UNKNOWN
 			DBM:AddMsg(L.WORLDBOSS_DEFEATED:format(bossName, sender))
@@ -4290,7 +4310,7 @@ do
 		if not protocol or protocol ~= 8 then return end--Ignore old versions
 		if lastBossEngage[modId..realm] and (GetTime() - lastBossEngage[modId..realm] < 30) then return end
 		lastBossEngage[modId..realm] = GetTime()
-		if realm == playerRealm and DBM.Options.WorldBossAlert and (isRetail and not IsEncounterInProgress() or #inCombat == 0) then
+		if (realm == playerRealm or realm == normalizedPlayerRealm) and DBM.Options.WorldBossAlert and (isRetail and not IsEncounterInProgress() or #inCombat == 0) then
 			local toonName
 			if isRetail then
 				local gameAccountInfo = C_BattleNet.GetGameAccountInfoByID(sender)
@@ -4309,7 +4329,7 @@ do
 		if not protocol or protocol ~= 8 then return end--Ignore old versions
 		if lastBossDefeat[modId..realm] and (GetTime() - lastBossDefeat[modId..realm] < 30) then return end
 		lastBossDefeat[modId..realm] = GetTime()
-		if realm == playerRealm and DBM.Options.WorldBossAlert and not IsEncounterInProgress() then
+		if (realm == playerRealm or realm == normalizedPlayerRealm) and DBM.Options.WorldBossAlert and not IsEncounterInProgress() then
 			local toonName
 			if isRetail then
 				local gameAccountInfo = C_BattleNet.GetGameAccountInfoByID(sender)
@@ -4377,16 +4397,16 @@ do
 
 	--Function to correct a blizzard bug where off realm players have realm name stripped
 	--Had to be custom function due to bugs with two players with same name on different realms
-	local function VerifyRaidName(apiName, SyncedName)
-		local _, serverName = string.split("-", SyncedName)
-		if serverName and serverName ~= playerRealm then
-			return SyncedName--Use synced name with realm added back on
-		else
-			return apiName--Use api name without realm
-		end
-	end
+	--local function VerifyRaidName(apiName, SyncedName)
+	--	local _, serverName = string.split("-", SyncedName)
+	--	if serverName and serverName ~= playerRealm and serverName ~= normalizedPlayerRealm then
+	--		return SyncedName--Use synced name with realm added back on
+	--	else
+	--		return apiName--Use api name without realm
+	--	end
+	--end
 
-	handleSync = function(channel, sender, dbmSender, protocol, prefix, ...)
+	handleSync = function(channel, sender, _, protocol, prefix, ...)--dbmSender unused for now
 		protocol = tonumber(protocol)
 		if protocol < DBMSyncProtocol then
 			return
@@ -4409,9 +4429,12 @@ do
 			handler = syncHandlers[prefix]
 		end
 		if handler then
-			if dbmSender then
-				sender = VerifyRaidName(sender, dbmSender)
-			end
+			--if dbmSender then
+			--	--Strip spaces from realm name, since this is what Unit Tokens expect
+			--	--(newer versions of DBM do this on send, but we double check for older versions)
+			--	dbmSender = dbmSender:gsub("[%s-]+", "")--Needs to be fixed, if this is ever uncommented as right now it'd strip realm
+			--	sender = VerifyRaidName(sender, dbmSender)
+			--end
 			return handler(sender, protocol, ...)
 		end
 	end
@@ -5238,9 +5261,9 @@ do
 				end
 			end
 			if savedDifficulty == "worldboss" and mod.WBEsync then
-				if lastBossEngage[modId..playerRealm] and (GetTime() - lastBossEngage[modId..playerRealm] < 30) then return end--Someone else synced in last 10 seconds so don't send out another sync to avoid needless sync spam.
-				lastBossEngage[modId..playerRealm] = GetTime()--Update last engage time, that way we ignore our own sync
-				SendWorldSync(self, 8, "WBE", modId.."\t"..playerRealm.."\t"..startHp.."\t"..name)
+				if lastBossEngage[modId..normalizedPlayerRealm] and (GetTime() - lastBossEngage[modId..normalizedPlayerRealm] < 30) then return end--Someone else synced in last 10 seconds so don't send out another sync to avoid needless sync spam.
+				lastBossEngage[modId..normalizedPlayerRealm] = GetTime()--Update last engage time, that way we ignore our own sync
+				SendWorldSync(self, 8, "WBE", modId.."\t"..normalizedPlayerRealm.."\t"..startHp.."\t"..name)
 			end
 		end
 	end
@@ -5485,9 +5508,9 @@ do
 				end
 				fireEvent("DBM_Kill", mod)
 				if usedDifficulty == "worldboss" and mod.WBEsync then
-					if lastBossDefeat[modId..playerRealm] and (GetTime() - lastBossDefeat[modId..playerRealm] < 30) then return end--Someone else synced in last 10 seconds so don't send out another sync to avoid needless sync spam.
-					lastBossDefeat[modId..playerRealm] = GetTime()--Update last defeat time before we send it, so we don't handle our own sync
-					SendWorldSync(self, 8, "WBD", modId.."\t"..playerRealm.."\t"..name)
+					if lastBossDefeat[modId..normalizedPlayerRealm] and (GetTime() - lastBossDefeat[modId..normalizedPlayerRealm] < 30) then return end--Someone else synced in last 10 seconds so don't send out another sync to avoid needless sync spam.
+					lastBossDefeat[modId..normalizedPlayerRealm] = GetTime()--Update last defeat time before we send it, so we don't handle our own sync
+					SendWorldSync(self, 8, "WBD", modId.."\t"..normalizedPlayerRealm.."\t"..name)
 				end
 				if self.Options.EventSoundVictory2 and self.Options.EventSoundVictory2 ~= "None" and self.Options.EventSoundVictory2 ~= "" then
 					if self.Options.EventSoundVictory2 == "Random" then
@@ -6024,11 +6047,17 @@ end
 
 function DBM:UnitAura(uId, spellInput, spellInput2, spellInput3, spellInput4, spellInput5)
 	if not uId then return end
-	for i = 1, 60 do
-		local spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3 = UnitAura(uId, i)
-		if not spellName then return end
-		if spellInput == spellName or spellInput == spellId or spellInput2 == spellName or spellInput2 == spellId or spellInput3 == spellName or spellInput3 == spellId or spellInput4 == spellName or spellInput4 == spellId or spellInput5 == spellName or spellInput5 == spellId then
-			return spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3
+	if isRetail and type(spellInput) == "number" and not spellInput2 and UnitIsUnit(uId, "player") then--A simple single spellId check should use more efficent direct blizzard method
+		local spellTable = C_UnitAuras.GetPlayerAuraBySpellID(spellInput)
+		if not spellTable then return end
+		return spellTable.name, spellTable.icon, spellTable.applications, spellTable.dispelName, spellTable.duration, spellTable.expirationTime, spellTable.sourceUnit, spellTable.isStealable, spellTable.nameplateShowPersonal, spellTable.spellId, spellTable.canApplyAura, spellTable.isBossAura, spellTable.isFromPlayerOrPlayerPet, spellTable.nameplateShowAll, spellTable.timeMod, spellTable.points[1] or nil, spellTable.points[2] or nil, spellTable.points[3] or nil
+	else--Either a multi spell check, spell name check, or C_UnitAuras.GetPlayerAuraBySpellID is unavailable
+		for i = 1, 60 do
+			local spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3 = UnitAura(uId, i)
+			if not spellName then return end
+			if spellInput == spellName or spellInput == spellId or spellInput2 == spellName or spellInput2 == spellId or spellInput3 == spellName or spellInput3 == spellId or spellInput4 == spellName or spellInput4 == spellId or spellInput5 == spellName or spellInput5 == spellId then
+				return spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3
+			end
 		end
 	end
 end
@@ -6036,11 +6065,17 @@ end
 --In classic, instead of adding rank back in at beginning where it was pre 8.0, it's 15th arg return at end (value 1)
 function DBM:UnitDebuff(uId, spellInput, spellInput2, spellInput3, spellInput4, spellInput5)
 	if not uId then return end
-	for i = 1, 60 do
-		local spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff(uId, i)
-		if not spellName then return end
-		if spellInput == spellName or spellInput == spellId or spellInput2 == spellName or spellInput2 == spellId or spellInput3 == spellName or spellInput3 == spellId or spellInput4 == spellName or spellInput4 == spellId or spellInput5 == spellName or spellInput5 == spellId then
-			return spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3
+	if isRetail and type(spellInput) == "number" and not spellInput2 and UnitIsUnit(uId, "player") then--A simple single spellId check should use more efficent direct blizzard method
+		local spellTable = C_UnitAuras.GetPlayerAuraBySpellID(spellInput)
+		if not spellTable then return end
+		return spellTable.name, spellTable.icon, spellTable.applications, spellTable.dispelName, spellTable.duration, spellTable.expirationTime, spellTable.sourceUnit, spellTable.isStealable, spellTable.nameplateShowPersonal, spellTable.spellId, spellTable.canApplyAura, spellTable.isBossAura, spellTable.isFromPlayerOrPlayerPet, spellTable.nameplateShowAll, spellTable.timeMod, spellTable.points[1] or nil, spellTable.points[2] or nil, spellTable.points[3] or nil
+	else--Either a multi spell check, spell name check, or C_UnitAuras.GetPlayerAuraBySpellID is unavailable
+		for i = 1, 60 do
+			local spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3 = UnitDebuff(uId, i)
+			if not spellName then return end
+			if spellInput == spellName or spellInput == spellId or spellInput2 == spellName or spellInput2 == spellId or spellInput3 == spellName or spellInput3 == spellId or spellInput4 == spellName or spellInput4 == spellId or spellInput5 == spellName or spellInput5 == spellId then
+				return spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3
+			end
 		end
 	end
 end
@@ -6048,11 +6083,17 @@ end
 --In classic, instead of adding rank back in at beginning where it was pre 8.0, it's 15th arg return at end (value 1)
 function DBM:UnitBuff(uId, spellInput, spellInput2, spellInput3, spellInput4, spellInput5)
 	if not uId then return end
-	for i = 1, 60 do
-		local spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3 = UnitBuff(uId, i)
-		if not spellName then return end
-		if spellInput == spellName or spellInput == spellId or spellInput2 == spellName or spellInput2 == spellId or spellInput3 == spellName or spellInput3 == spellId or spellInput4 == spellName or spellInput4 == spellId or spellInput5 == spellName or spellInput5 == spellId then
-			return spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3
+	if isRetail and type(spellInput) == "number" and not spellInput2 and UnitIsUnit(uId, "player") then--A simple single spellId check should use more efficent direct blizzard method
+		local spellTable = C_UnitAuras.GetPlayerAuraBySpellID(spellInput)
+		if not spellTable then return end
+		return spellTable.name, spellTable.icon, spellTable.applications, spellTable.dispelName, spellTable.duration, spellTable.expirationTime, spellTable.sourceUnit, spellTable.isStealable, spellTable.nameplateShowPersonal, spellTable.spellId, spellTable.canApplyAura, spellTable.isBossAura, spellTable.isFromPlayerOrPlayerPet, spellTable.nameplateShowAll, spellTable.timeMod, spellTable.points[1] or nil, spellTable.points[2] or nil, spellTable.points[3] or nil
+	else--Either a multi spell check, spell name check, or C_UnitAuras.GetPlayerAuraBySpellID is unavailable
+		for i = 1, 60 do
+			local spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3 = UnitBuff(uId, i)
+			if not spellName then return end
+			if spellInput == spellName or spellInput == spellId or spellInput2 == spellName or spellInput2 == spellId or spellInput3 == spellName or spellInput3 == spellId or spellInput4 == spellName or spellInput4 == spellId or spellInput5 == spellName or spellInput5 == spellId then
+				return spellName, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod, value1, value2, value3
+			end
 		end
 	end
 end
@@ -6470,6 +6511,7 @@ do
 	function DBM:Disable(forceDisable)
 		DBMScheduler:Unschedule()
 		dbmIsEnabled = false
+		private.dbmIsEnabled = false
 		forceDisabled = forceDisable
 	end
 
@@ -6481,6 +6523,16 @@ do
 
 	function DBM:IsEnabled()
 		return dbmIsEnabled
+	end
+
+	function DBM:ForceDisableSpam()
+		if testBuild then
+			DBM:AddMsg(L.UPDATEREMINDER_DISABLETEST)
+		elseif dbmToc < wowTOC then
+			DBM:AddMsg(L.UPDATEREMINDER_MAJORPATCH)
+		else
+			DBM:AddMsg(L.UPDATEREMINDER_DISABLE)
+		end
 	end
 end
 
@@ -7682,51 +7734,43 @@ do
 	--checkCooldown should always be passed true except for special rotations like count warnings when you should be alerted it's your turn even if you dropped ball and put it on CD at wrong time
 	--ignoreTandF is passed usually when interrupt is on a main boss or event that is global to entire raid and should always be alerted regardless of targetting.
 	function bossModPrototype:CheckInterruptFilter(sourceGUID, checkOnlyTandF, checkCooldown, ignoreTandF)
-		--Just return true if interrupt filtering is disabled (and it's actually for an interrupt)
-		if DBM.Options.FilterInterrupt2 == "None" and not checkOnlyTandF then return true end
-
-		local unitID = (UnitGUID("target") == sourceGUID) and "target" or not isClassic and (UnitGUID("focus") == sourceGUID) and "focus"
-
-		--Just return true if target or focus is ONLY requirement (not an interrupt check) and we already confirmed T and F
-		if unitID and checkOnlyTandF then return true end--checkOnlyTandF means this isn't an interrupt check at all, skip all the rest and return true if we met TandF rquirement
-
-		--TandF required in all checks except "None" or if ignoreTandF is passed
-		--Just return false if source isn't our target or focus, no need to do further checks
-		if not ignoreTandF and not unitID then
+		--Check healer spec filter
+		if self:IsHealer() and (self.isTrashMod and DBM.Options.FilterTInterruptHealer or not self.isTrashMod and DBM.Options.FilterBInterruptHealer) then
 			return false
 		end
 
-		--Check if cooldown check is actually required
-		local cooldownRequired = checkCooldown--First set to default value defined by arg
-		if cooldownRequired and ((DBM.Options.FilterInterrupt2 == "onlyTandF") or self.isTrashMod and (DBM.Options.FilterInterrupt2 == "TandFandBossCooldown")) then
-			cooldownRequired = false
-		end
-
-		local InterruptAvailable = true--We want to default to true versus false, since some interrupts don't require CD checks
-		if cooldownRequired then
+		--Check if cooldown check is required
+		if checkCooldown and (self.isTrashMod and DBM.Options.FilterTInterruptCooldown or not self.isTrashMod and DBM.Options.FilterBInterruptCooldown) then
 			for spellID, _ in pairs(interruptSpells) do
 				--For an inverse check, don't need to check if it's known, if it's on cooldown it's known
 				--This is possible since no class has 2 interrupt spells (well, actual interrupt spells)
 				if (GetSpellCooldown(spellID)) ~= 0 then--Spell is on cooldown
-					InterruptAvailable = false
+					return false
 				end
 			end
 		end
-		if InterruptAvailable then
-			--Check if it's casting something that's not interruptable at the moment
-			--needed for torghast since many mobs can have interrupt immunity with same spellIds as other mobs that can be interrupted
-			if isRetail and unitID then
-				if UnitCastingInfo(unitID) then
-					local _, _, _, _, _, _, _, notInterruptible = UnitCastingInfo(unitID)
-					if notInterruptible then return false end
-				elseif UnitChannelInfo(unitID) then
-					local _, _, _, _, _, _, notInterruptible = UnitChannelInfo(unitID)
-					if notInterruptible then return false end
-				end
+
+		local unitID = (UnitGUID("target") == sourceGUID) and "target" or not isClassic and (UnitGUID("focus") == sourceGUID) and "focus"
+		--Check if target/focus is required (or if onlyTandF is used, meaning this isn't actually an interrupt API check)
+		if checkOnlyTandF or (self.isTrashMod and DBM.Options.FilterTTargetFocus or not self.isTrashMod and DBM.Options.FilterBTargetFocus) then
+			--Just return false if source isn't our target or focus, no need to do further checks
+			if not ignoreTandF and not unitID then
+				return false
 			end
-			return true
 		end
-		return false
+
+		--Check if it's casting something that's not interruptable at the moment
+		--needed for torghast since many mobs can have interrupt immunity with same spellIds as other mobs that can be interrupted
+		if isRetail and unitID then
+			if UnitCastingInfo(unitID) then
+				local _, _, _, _, _, _, _, notInterruptible = UnitCastingInfo(unitID)
+				if notInterruptible then return false end
+			elseif UnitChannelInfo(unitID) then
+				local _, _, _, _, _, _, notInterruptible = UnitChannelInfo(unitID)
+				if notInterruptible then return false end
+			end
+		end
+		return true
 	end
 end
 
@@ -10685,9 +10729,8 @@ function bossModPrototype:AddBoolOption(name, default, cat, func, extraOption, e
 end
 
 function bossModPrototype:AddSpecialWarningOption(name, default, defaultSound, cat, spellId, optionType)
-	if checkDuplicateObjects[name] and name ~= "timer_berserk" then
+	if checkDuplicateObjects[name] then
 		DBM:Debug("|cffff0000Option already exists for: |r"..name)
-		return
 	else
 		checkDuplicateObjects[name] = true
 	end

@@ -338,13 +338,15 @@ local function shoppingItem(frame)
     frame.QualityContainer.ResetQualityButton:ClearAllPoints()
     frame.QualityContainer.ResetQualityButton:SetPoint("LEFT", frame.QualityContainer.DropDown.DropDown, "RIGHT", 0, 3)
 
-    frame.TierContainer:ClearAllPoints()
-    frame.TierContainer:SetPoint("TOPLEFT", frame.QualityContainer, "BOTTOMLEFT", 0, -20)
-    S:ESProxy("HandleDropDownBox", frame.TierContainer.DropDown.DropDown)
-    S:ESProxy("HandleButton", frame.TierContainer.ResetTierButton)
-    frame.TierContainer.ResetTierButton:SetSize(20, 20)
-    frame.TierContainer.ResetTierButton:ClearAllPoints()
-    frame.TierContainer.ResetTierButton:SetPoint("LEFT", frame.TierContainer.DropDown.DropDown, "RIGHT", 0, 3)
+    if frame.TierContainer then
+        frame.TierContainer:ClearAllPoints()
+        frame.TierContainer:SetPoint("TOPLEFT", frame.QualityContainer, "BOTTOMLEFT", 0, -20)
+        S:ESProxy("HandleDropDownBox", frame.TierContainer.DropDown.DropDown)
+        S:ESProxy("HandleButton", frame.TierContainer.ResetTierButton)
+        frame.TierContainer.ResetTierButton:SetSize(20, 20)
+        frame.TierContainer.ResetTierButton:ClearAllPoints()
+        frame.TierContainer.ResetTierButton:SetPoint("LEFT", frame.TierContainer.DropDown.DropDown, "RIGHT", 0, 3)
+    end
 
     S:ESProxy("HandleButton", frame.Finished)
     S:ESProxy("HandleButton", frame.Cancel)
@@ -396,6 +398,15 @@ local function splashFrame(frame)
     end
 end
 
+local function itemHistoryFrame(frame)
+    frame:StripTextures()
+    frame:SetTemplate("Transparent")
+    S:CreateShadow(frame)
+
+    S:ESProxy("HandleButton", frame.Close)
+    S:ESProxy("HandleButton", frame.Dock)
+end
+
 local function configSellingFrame(frame)
     S:ESProxy("HandleButton", frame.UnhideAll)
 end
@@ -444,6 +455,7 @@ function S:Auctionator()
     hooksecurefunc(_G.AuctionatorExportTextFrameMixin, "OnLoad", reskin(exportTextFrame))
     hooksecurefunc(_G.AuctionatorListExportFrameMixin, "OnLoad", reskin(listExportFrame))
     hooksecurefunc(_G.AuctionatorListImportFrameMixin, "OnLoad", reskin(listImportFrame))
+    hooksecurefunc(_G.AuctionatorItemHistoryFrameMixin, "Init", reskin(itemHistoryFrame))
     hooksecurefunc(_G.AuctionatorShoppingItemMixin, "OnLoad", reskin(shoppingItem))
     hooksecurefunc(_G.AuctionatorSplashScreenMixin, "OnLoad", reskin(splashFrame))
 end
