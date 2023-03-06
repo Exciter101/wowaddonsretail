@@ -1,8 +1,7 @@
-local _, T = ...
+local COMPAT, _, T = select(4,GetBuildInfo()), ...
 if T.SkipLocalActionBook then return end
-local MODERN = select(4,GetBuildInfo()) >= 8e4
+local MODERN, CF_CLASSIC, CI_ERA = COMPAT >= 10e4, COMPAT < 10e4, COMPAT < 2e4
 local MODERN_CONTAINERS = MODERN or C_Container and C_Container.GetContainerNumSlots
-local CF_CLASSIC = not MODERN
 local AB = assert(T.ActionBook:compatible(2,21), "A compatible version of ActionBook is required")
 local RW = assert(AB:compatible("Rewire",1,25), "A compatible version of Rewire is required")
 local KR = assert(AB:compatible("Kindred",1,14), "A compatible version of Kindred is required")
@@ -11,6 +10,13 @@ local spellFeedback, itemHint, toyHint, mountHint, mountMap
 
 local NormalizeInRange = {[0]=0, 1, [true]=1, [false]=0}
 local _, CLASS = UnitClass("player")
+local lowered = setmetatable({}, {__index=function(t,k)
+	if k ~= nil then
+		local r = type(k) == "string" and k:lower() or k
+		t[k] = r
+		return r
+	end
+end})
 
 if MODERN then -- mount: mount ID
 	local function summonAction(mountID)
@@ -60,8 +66,8 @@ if MODERN then -- mount: mount ID
 			if oldID ~= curID then
 				local sname, srank, rname = GetSpellInfo(sid), GetSpellSubtext(sid)
 				rname = sname .. "(" .. (srank or "") .. ")" -- Paladin/Warlock/Death Knight horses have spell ranks
-				changed, mountMap[sid], mountMap[sname], mountMap[sname:lower()], mountMap[rname], mountMap[rname:lower()] =
-					true, curID, curID, curID, curID, curID
+				changed, mountMap[sid], mountMap[lowered[sname]], mountMap[lowered[rname]] =
+					true, curID, curID, curID
 			end
 		end
 		mountMap[150544] = 0
@@ -107,13 +113,13 @@ else
 	mountMap = {}
 end
 do -- spell: spell ID + mount spell ID
+	local actionMap, spellMap = {}, {}
 	local function isCurrentForm(q)
 		local id = GetShapeshiftForm()
 		if id == 0 then return end
 		local _, _, _, sid = GetShapeshiftFormInfo(id)
 		return q == sid or q == GetSpellInfo(sid or 0) or (sid and q and ("" .. sid) == q)
 	end
-	local actionMap, spellMap = {}, {}
 	local SetSpellBookItem, SetSpellByID do
 		if MODERN then
 			function SetSpellBookItem(self, id)
@@ -152,12 +158,19 @@ do -- spell: spell ID + mount spell ID
 			end
 		end
 	end
+	local getSpellIDFromName = CI_ERA and function(n)
+		return (select(7, GetSpellInfo(n or "")))
+	end or function(n)
+		return tonumber(((GetSpellLink(n) or ""):match("spell:(%d+)")))
+	end
 	local function spellHint(n, _modState, target)
 		if not n then return end
-		local mmID = mountMap[n]
+		local nlow = lowered[n]
+		local mmID = mountMap[nlow]
 		if mmID then return mountHint(mmID) end
-		local time, msid, sname, _, _, _, _, _, sid = GetTime(), spellMap[n], GetSpellInfo(n)
+		local sname, _, _, _, _, _, sid = GetSpellInfo(n)
 		if not sname then return end
+		local time, msid = GetTime(), spellMap[nlow] or sid
 		local inRange, usable, nomana, hasRange = NormalizeInRange[IsSpellInRange(n, target or "target")], IsUsableSpell(n)
 		inRange, hasRange = inRange ~= 0, inRange ~= nil
 		local cooldown, cdLength, enabled = GetSpellCooldown(n)
@@ -171,10 +184,10 @@ do -- spell: spell ID + mount spell ID
 			cdLeft, cdLength = chargeStart-time + chargeDuration, chargeDuration
 		end
 		local sbslot = msid and msid ~= 161691 and FindSpellBookSlotBySpellID(msid)
-		return usable, state, GetSpellTexture(n), sname or n, count <= 1 and charges or count, cdLeft, cdLength, sbslot and SetSpellBookItem or (msid or sid) and SetSpellByID, sbslot or sid or msid
+		return usable, state, GetSpellTexture(n), sname or n, count <= 1 and charges or count, cdLeft, cdLength, sbslot and SetSpellBookItem or msid and SetSpellByID, sbslot or msid
 	end
 	function spellFeedback(sname, target, spellId)
-		spellMap[sname] = spellId or spellMap[sname] or tonumber((GetSpellLink(sname) or ""):match("spell:(%d+)"))
+		spellMap[sname] = spellId or spellMap[sname] or getSpellIDFromName(sname)
 		return spellHint(sname, nil, target)
 	end
 	local function createSpell(id, optToken)
@@ -204,32 +217,42 @@ do -- spell: spell ID + mount spell ID
 			id = CF_CLASSIC and select(7, GetSpellInfo(action)) or id
 		end
 		
-		if action and not actionMap[action] then
-			spellMap[action], actionMap[action] = id, AB:CreateActionSlot(spellHint, action, "attribute", "type","spell", "spell",action, "checkselfcast",true, "checkfocuscast",true)
-			if type(action) == "string" then
-				spellMap[action:lower()] = id
+		if action then
+			if not actionMap[action] then
+				actionMap[action] = AB:CreateActionSlot(spellHint, action, "attribute", "type","spell", "spell",action, "checkselfcast",true, "checkfocuscast",true)
+			end
+			if type(action) == "string" and spellMap[action] ~= id then
+				spellMap[lowered[action]] = id
 			end
 		end
 		return actionMap[action]
 	end
-	local function describeSpell(id, optToken)
+	local function describeSpell(q, id, optToken)
 		local name2, _, icon2, rank, name, _, icon = nil, nil, nil, GetSpellSubtext(id), GetSpellInfo(id)
 		local _, castType = RW:IsSpellCastable(id)
 		local laxRank = CF_CLASSIC and optToken ~= "lock-rank" and "lax-rank"
 		if name and castType ~= "forced-id-cast" then
-			rank, name2, icon2 = GetSpellSubtext(name, rank), GetSpellInfo(name, rank)
+			local qRank = (MODERN or q == "list-query" or not laxRank) and rank or nil
+			rank, name2, _, icon2 = GetSpellSubtext(name, rank), GetSpellInfo(name, qRank)
 		end
-		return mountMap[id] and L"Mount" or L"Spell", (name2 or name or "?") .. (rank and rank ~= "" and not laxRank and rank ~= GetSpellSubtext(name) and " (" .. rank .. ")" or ""), icon2 or icon, nil, SetSpellByID, id
+		local srank = rank and rank ~= "" and (rank ~= GetSpellSubtext(name) or (CF_CLASSIC and rank ~= GetSpellSubtext(name, (rank:gsub("%d+", "1"))))) and " (" .. rank .. ")" or ""
+		local ts, ns = q == "list-query" and srank or "", (laxRank or q == "list-query") and "" or srank
+		return mountMap[id] and L"Mount" or (L"Spell" .. ts), (name2 or name or "?") .. ns, icon2 or icon, nil, SetSpellByID, id
 	end
-	AB:RegisterActionType("spell", createSpell, describeSpell)
+	AB:RegisterActionType("spell", createSpell, describeSpell, nil, true)
 	if MODERN then -- specials
 		local gab = GetSpellInfo(161691)
 		actionMap[gab] = AB:CreateActionSlot(spellHint, gab, "conditional", "[outpost]", "attribute", "type","spell", "spell",gab)
-		spellMap[gab], spellMap[gab:lower()] = 161691, 161691
+		spellMap[lowered[gab]] = 161691
 		actionMap[150544] = AB:GetActionSlot("mount", 0)
 	end
 	
 	function EV.SPELLS_CHANGED()
+		for k, v in pairs(spellMap) do
+			if v ~= 161691 then
+				spellMap[k] = nil
+			end
+		end
 		AB:NotifyObservers("spell")
 	end
 end
@@ -243,11 +266,11 @@ do -- item: items ID/inventory slot
 		self:SetInventoryItem("player", slot)
 	end
 	local function GetItemLocation(iid, name, name2)
-		local name2, cb, cs, n = name2 and name2:lower()
+		local name2, cb, cs, n = name2 and lowered[name2]
 		for i=1, lastSlot do
 			if GetInventoryItemID("player", i) == iid then
 				n = GetItemInfo(GetInventoryItemLink("player", i))
-				if n == name or n and name2 and n:lower() == name2 then
+				if n == name or n and name2 and lowered[n] == name2 then
 					return nil, i
 				elseif not cs then
 					cb, cs = nil, i
@@ -261,7 +284,7 @@ do -- item: items ID/inventory slot
 			for j=1, ns(i) do
 				if iid == giid(i, j) then
 					n = GetItemInfo(gil(i, j))
-					if n == name or n and name2 and n:lower() == name2 then
+					if n == name or n and name2 and lowered[n] == name2 then
 						return i, j
 					elseif not cs then
 						cb, cs = i, j

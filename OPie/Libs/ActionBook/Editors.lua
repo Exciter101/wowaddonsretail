@@ -110,7 +110,7 @@ do -- .macrotext
 			local forceRank, tname = token == "spellr"
 			for id in sid:gmatch("%d+") do
 				local name, sr = GetSpellInfo(tonumber(id)), GetSpellSubtext(tonumber(id))
-				if sr and sr ~= "" and (forceRank or MODERN) then name = name .. " (" .. sr .. ")" end
+				if sr and sr ~= "" and (forceRank or MODERN) then name = name .. "(" .. sr .. ")" end
 				if name and names[name] ~= tag then
 					names[name], tname = tag, (tname and (tname .. " / ") or "") .. name
 				end

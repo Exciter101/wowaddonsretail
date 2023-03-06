@@ -46,8 +46,9 @@ if TEN then
 			TenSettingsFrame:Hide()
 		end)
 		TenSettingsFrame:SetScript("OnKeyDown", function(self, key)
-			self:SetPropagateKeyboardInput(key ~= "ESCAPE")
-			if key == "ESCAPE" then
+			local dismiss = key == "ESCAPE" and GetCurrentKeyBoardFocus() == nil
+			self:SetPropagateKeyboardInput(not dismiss)
+			if dismiss then
 				self.ClosePanelButton:Click()
 			end
 		end)
@@ -473,8 +474,11 @@ do -- M:ShowFrameOverlay(self, overlayFrame)
 		container:EnableMouse(1) container:EnableKeyboard(1) container:Hide()
 		container:SetPropagateKeyboardInput(true)
 		container:SetScript("OnKeyDown", function(self, key)
-			if key == "ESCAPE" then self:Hide() end
-			self:SetPropagateKeyboardInput(key ~= "ESCAPE")
+			local dismiss = key == "ESCAPE" and GetCurrentKeyBoardFocus() == nil
+			self:SetPropagateKeyboardInput(not dismiss)
+			if dismiss then
+				self:Hide()
+			end
 		end)
 		container:SetScript("OnMouseWheel", function() end)
 		container.fader = container:CreateTexture(nil, "BACKGROUND")

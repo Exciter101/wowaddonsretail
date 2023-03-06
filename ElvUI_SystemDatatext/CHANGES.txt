@@ -1,12 +1,12 @@
-tag 2f463af78880de8fd245318215690d383aa6dd93 3.1.0-retail
+tag 1fdab8d8694c62905ba790788ff18fb3a4cae33b 3.1.1-retail
 Author:	Adam Koch <me@adamko.ch>
-Date:	Sat Feb 18 13:21:52 2023 -0500
+Date:	Sat Mar 4 15:01:27 2023 -0500
 
-3.1.0-retail Release
+3.1.1-retail Release
 
-commit 13aca63bb5c1e84ccac4acd2e31f718eff4519b1
+commit 661a7745e6b407d2cc1d2351cd145c963ca53c45
 Author: Adam Koch <me@adamko.ch>
-Date:   Sat Feb 18 13:21:32 2023 -0500
+Date:   Sat Mar 4 15:00:59 2023 -0500
 
-    Implemented ElvUI Library embeds.
+    Implemented LibAceConfigHelper, from ElvUI.
 

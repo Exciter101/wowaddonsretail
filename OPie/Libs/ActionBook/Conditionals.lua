@@ -241,13 +241,15 @@ end
 do -- horde/alliance
 	local function syncFactionGroup(e, u)
 		if e ~= "UNIT_FACTION" or u == "player" then
-			local fg = UnitFactionGroup("player", true)
+			local fg = UnitFactionGroup("player")
 			KR:SetStateConditionalValue("horde", fg == "Horde" and "*" or "")
 			KR:SetStateConditionalValue("alliance", fg == "Alliance" and "*" or "")
+			KR:SetStateConditionalValue("merc", MODERN and UnitIsMercenary("player") and "*" or "")
 		end
 	end
 	syncFactionGroup()
 	EV.PLAYER_ENTERING_WORLD, EV.UNIT_FACTION = syncFactionGroup, syncFactionGroup
+	KR:SetAliasConditional("mercenary", "merc")
 end
 do -- moving
 	KR:SetNonSecureConditional("moving", function()
