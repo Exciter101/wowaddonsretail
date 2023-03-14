@@ -235,25 +235,12 @@ function FL:UpdateFriendButton(button)
         return
     end
 
-    local gameCode,
-        gameName,
-        realID,
-        name,
-        server,
-        class,
-        area,
-        level,
-        note,
-        faction,
-        status,
-        isInCurrentRegion,
-        regionID,
-        wowID
+    local gameName, realID, name, server, class, area, level, note, faction, status, isInCurrentRegion, regionID, wowID
 
     if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
         -- WoW friends
-        gameCode = "WoW"
-        gameName = projectCodes["WOW"].name
+        wowID = WOW_PROJECT_MAINLINE
+        gameName = projectCodes["WOW"]
         local friendInfo = C_FriendList_GetFriendInfoByIndex(button.id)
         name, server = strsplit("-", friendInfo.name) -- server is nil if it's not a cross-realm friend
         level = friendInfo.level
@@ -281,7 +268,6 @@ function FL:UpdateFriendButton(button)
             note = friendAccountInfo.note
 
             local gameAccountInfo = friendAccountInfo.gameAccountInfo
-            gameCode = gameAccountInfo.clientProgram
             gameName = projectCodes[strupper(gameAccountInfo.clientProgram)]
 
             if gameAccountInfo.isOnline then

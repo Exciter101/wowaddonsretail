@@ -94,7 +94,7 @@ instancedifficulty:SetScript("OnEvent", function(_,event)
 			end
 		elseif DifficultyID == 5 then --10man heroic wrath
 			instancedifficulty.Text:SetText(E.db.ElvUI_EltreumUI.skins.instances.Raid10Heroic)
-			backuptext = (E.db.ElvUI_EltreumUI.skins.instances.DungeonHeroic)
+			backuptext = (E.db.ElvUI_EltreumUI.skins.instances.Raid10Heroic)
 			if E.db.ElvUI_EltreumUI.skins.instances.difficultycolors then
 				if E.db.ElvUI_EltreumUI.skins.instances.gradient then
 					textgradient = (E:TextGradient(" "..E.db.ElvUI_EltreumUI.skins.instances.Raid10Heroic, E.db.ElvUI_EltreumUI.skins.instances.Raid10HeroicColor.r, E.db.ElvUI_EltreumUI.skins.instances.Raid10HeroicColor.g, E.db.ElvUI_EltreumUI.skins.instances.Raid10HeroicColor.b, E.db.ElvUI_EltreumUI.skins.instances.Raid10HeroicColor.r + E.db.ElvUI_EltreumUI.skins.instances.redoffset, E.db.ElvUI_EltreumUI.skins.instances.Raid10HeroicColor.g + E.db.ElvUI_EltreumUI.skins.instances.greenoffset, E.db.ElvUI_EltreumUI.skins.instances.Raid10HeroicColor.b + E.db.ElvUI_EltreumUI.skins.instances.blueoffset))
@@ -243,8 +243,9 @@ instancedifficulty:SetScript("OnEvent", function(_,event)
 				end
 			elseif E.db.ElvUI_EltreumUI.skins.instances.classcolor then --class color
 				if E.db.ElvUI_EltreumUI.skins.instances.gradient then
-					textgradient = E:TextGradient(" "..backuptext, classcolors.r, classcolors.g, classcolors.b, classcolors.r + E.db.ElvUI_EltreumUI.skins.instances.redoffset, classcolors.g + E.db.ElvUI_EltreumUI.skins.instances.greenoffset, classcolors.b + E.db.ElvUI_EltreumUI.skins.instances.blueoffset)
-					instancedifficulty.Text:SetText(textgradient)
+					--textgradient = E:TextGradient(" "..backuptext, classcolors.r, classcolors.g, classcolors.b, classcolors.r + E.db.ElvUI_EltreumUI.skins.instances.redoffset, classcolors.g + E.db.ElvUI_EltreumUI.skins.instances.greenoffset, classcolors.b + E.db.ElvUI_EltreumUI.skins.instances.blueoffset)
+					--instancedifficulty.Text:SetText(textgradient)
+					instancedifficulty.Text:SetText(ElvUI_EltreumUI:GradientName(backuptext, E.myclass))
 				else
 					instancedifficulty.Text:SetTextColor(classcolors.r, classcolors.g, classcolors.b)
 				end

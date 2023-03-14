@@ -2,6 +2,7 @@ local W, F, E, L = unpack(select(2, ...))
 local CT = W:NewModule("ChatText")
 local CH = E:GetModule("Chat")
 local LSM = E.Libs.LSM
+local C = W.Utilities.Color
 
 local _G = _G
 
@@ -12,41 +13,54 @@ local next = next
 local pairs = pairs
 local select = select
 local strfind = strfind
+local strjoin = strjoin
 local strlen = strlen
 local strlower = strlower
 local strmatch = strmatch
+local strsplit = strsplit
 local strsub = strsub
 local strupper = strupper
 local time = time
+local tinsert = tinsert
 local tonumber = tonumber
 local tostring = tostring
 local type = type
+local unpack = unpack
 local utf8sub = string.utf8sub
 local wipe = wipe
 
-local BNGetNumFriendInvites = BNGetNumFriendInvites
-local BNet_GetClientEmbeddedTexture = BNet_GetClientEmbeddedTexture
+local Ambiguate = Ambiguate
 local BetterDate = BetterDate
+local BNet_GetClientEmbeddedTexture = BNet_GetClientEmbeddedTexture
+local BNGetNumFriendInvites = BNGetNumFriendInvites
+local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
+local ChatTypeInfo = ChatTypeInfo
 local FlashClientIcon = FlashClientIcon
-local GMChatFrame_IsGM = GMChatFrame_IsGM
-local GMError = GMError
 local GetAchievementInfo = GetAchievementInfo
 local GetAchievementInfoFromHyperlink = GetAchievementInfoFromHyperlink
+local GetAchievementLink = GetAchievementLink
 local GetBNPlayerCommunityLink = GetBNPlayerCommunityLink
 local GetBNPlayerLink = GetBNPlayerLink
+local GetChannelName = GetChannelName
 local GetCVar = GetCVar
 local GetCVarBool = GetCVarBool
-local GetChannelName = GetChannelName
+local GetGuildRosterInfo = GetGuildRosterInfo
 local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local GetNumGroupMembers = GetNumGroupMembers
+local GetNumGuildMembers = GetNumGuildMembers
 local GetPlayerCommunityLink = GetPlayerCommunityLink
 local GetPlayerLink = GetPlayerLink
+local GMChatFrame_IsGM = GMChatFrame_IsGM
+local GMError = GMError
 local InCombatLockdown = InCombatLockdown
+local InviteUnit = InviteUnit
 local IsInGroup = IsInGroup
+local IsInGuild = IsInGuild
 local IsInRaid = IsInRaid
 local PlaySoundFile = PlaySoundFile
 local RemoveExtraSpaces = RemoveExtraSpaces
 local RemoveNewlines = RemoveNewlines
+local SendMessage = SendMessage
 local StaticPopup_Visible = StaticPopup_Visiblelocal
 local UnitExists = UnitExists
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
@@ -61,8 +75,10 @@ local C_ChatInfo_GetChannelShortcutForChannelID = C_ChatInfo.GetChannelShortcutF
 local C_ChatInfo_IsChannelRegionalForChannelID = C_ChatInfo.IsChannelRegionalForChannelID
 local C_Club_GetClubInfo = C_Club.GetClubInfo
 local C_Club_GetInfoFromLastCommunityChatLine = C_Club.GetInfoFromLastCommunityChatLine
+local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
 local C_Social_GetLastItem = C_Social.GetLastItem
 local C_Social_IsSocialEnabled = C_Social.IsSocialEnabled
+local C_Timer_After = C_Timer.After
 
 local CHATCHANNELRULESET_MENTOR = Enum.ChatChannelRuleset.Mentor
 local NPEV2_CHAT_USER_TAG_GUIDE = gsub(NPEV2_CHAT_USER_TAG_GUIDE, "(|A.-|a).+", "%1")
@@ -73,6 +89,24 @@ local PLAYER_NAME = format("%s-%s", E.myname, PLAYER_REALM)
 CT.cache = {}
 local lfgRoles = {}
 local initRecord = {}
+
+local offlineMessageTemplate = "%s " .. _G.ERR_FRIEND_OFFLINE_S
+local offlineMessagePattern = gsub(_G.ERR_FRIEND_OFFLINE_S, "%%s", "(.+)")
+offlineMessagePattern = format("^%s$", offlineMessagePattern)
+
+local onlineMessageTemplate = gsub(_G.ERR_FRIEND_ONLINE_SS, "%[%%s%]", "%%s %%s")
+local onlineMessagePattern = gsub(_G.ERR_FRIEND_ONLINE_SS, "|Hplayer:%%s|h%[%%s%]|h", "|Hplayer:(.+)|h%%[(.+)%%]|h")
+onlineMessagePattern = format("^%s$", onlineMessagePattern)
+
+local achievementMessageTemplate = L["%player% has earned the achievement %achievement%!"]
+local achievementMessageTemplateMultiplePlayers = L["%players% have earned the achievement %achievement%!"]
+
+local guildPlayerCache = {}
+local blockedMessageCache = {}
+local achievementMessageCache = {
+    byAchievement = {},
+    byPlayer = {}
+}
 
 local elvuiAbbrStrings = {
     GUILD = L["G"],
@@ -246,6 +280,29 @@ local function ChatFrame_CheckAddChannel(chatFrame, eventType, channelID)
     end
 
     return _G.ChatFrame_AddChannel(chatFrame, C_ChatInfo_GetChannelShortcutForChannelID(channelID)) ~= nil
+end
+
+local function updateGuildPlayerCache(self, event)
+    if not (event == "PLAYER_ENTERING_WORLD" or event == "FORCE_UPDATE") then
+        return
+    end
+
+    if not IsInGuild() then
+        return
+    end
+
+    for i = 1, GetNumGuildMembers() do
+        local name, _, _, _, _, _, _, _, _, _, className = GetGuildRosterInfo(i)
+        name = Ambiguate(name, "none")
+        guildPlayerCache[name] = className
+    end
+end
+
+local function addSpaceForAsian(text, revert)
+    if W.Locale == "zhCN" or W.Locale == "zhTW" or W.Locale == "koKR" then
+        return revert and " " .. text or text .. " "
+    end
+    return text
 end
 
 function CT:UpdateRoleIcons()
@@ -1354,6 +1411,226 @@ function CT:ToggleReplacement()
     end
 end
 
+function CT.GuildMemberStatusMessageHandler(_, _, msg)
+    if not CT.db or not CT.db.enable or not CT.db.guildMemberStatus then
+        return
+    end
+
+    local name, class, link, resultText
+
+    if blockedMessageCache[msg] then
+        return true
+    end
+
+    name = strmatch(msg, offlineMessagePattern)
+    if not name then
+        link, name = strmatch(msg, onlineMessagePattern)
+    end
+
+    if name then
+        class = guildPlayerCache[name]
+        if not class then
+            updateGuildPlayerCache(nil, "FORCE_UPDATE")
+            class = guildPlayerCache[name]
+        end
+    end
+
+    if class then
+        blockedMessageCache[msg] = true
+
+        C_Timer_After(
+            0.1,
+            function()
+                blockedMessageCache[msg] = nil
+            end
+        )
+
+        local displayName = CT.db.removeRealm and Ambiguate(name, "short") or name
+        local coloredName =
+            F.CreateClassColorString(displayName, link and guildPlayerCache[link] or guildPlayerCache[name])
+
+        coloredName = addSpaceForAsian(coloredName)
+        local classIcon = F.GetClassIconStringWithStyle(class, CT.db.classIconStyle, 16, 16)
+
+        if coloredName and classIcon then
+            if link then
+                resultText = format(onlineMessageTemplate, link, classIcon, coloredName)
+                if CT.db.guildMemberStatusInviteLink then
+                    local windInviteLink =
+                        format("|Hwtinvite:%s|h%s|h", link, C.StringByTemplate(format("[%s]", L["Invite"]), "info"))
+                    resultText = resultText .. " " .. windInviteLink
+                end
+                _G.ChatFrame1:AddMessage(resultText, C.RGBFromTemplate("success"))
+            else
+                resultText = format(offlineMessageTemplate, classIcon, coloredName)
+                _G.ChatFrame1:AddMessage(resultText, C.RGBFromTemplate("danger"))
+            end
+
+            return true
+        end
+    end
+
+    return false
+end
+
+function CT.SendAchivementMessage()
+    if not CT.db or not CT.db.enable or not CT.db.mergeAchievement then
+        return
+    end
+
+    local channelData = {
+        {event = "CHAT_MSG_GUILD_ACHIEVEMENT", color = ChatTypeInfo.GUILD},
+        {event = "CHAT_MSG_ACHIEVEMENT", color = ChatTypeInfo.SYSTEM}
+    }
+
+    for _, data in ipairs(channelData) do
+        local event, color = data.event, data.color
+        if achievementMessageCache.byPlayer[event] then
+            for playerString, achievementTable in pairs(achievementMessageCache.byPlayer[event]) do
+                local players = {strsplit("=", playerString)}
+
+                local achievementLinks = {}
+                for achievementID in pairs(achievementTable) do
+                    tinsert(achievementLinks, GetAchievementLink(achievementID))
+                end
+
+                local message = nil
+
+                if #players == 1 then
+                    message = gsub(achievementMessageTemplate, "%%player%%", addSpaceForAsian(players[1]))
+                elseif #players > 1 then
+                    message =
+                        gsub(
+                        achievementMessageTemplateMultiplePlayers,
+                        "%%players%%",
+                        addSpaceForAsian(strjoin(", ", unpack(players)))
+                    )
+                end
+
+                if message then
+                    message =
+                        gsub(
+                        message,
+                        "%%achievement%%",
+                        addSpaceForAsian(strjoin(", ", unpack(achievementLinks)), true)
+                    )
+                    _G.ChatFrame1:AddMessage(message, color.r, color.g, color.b)
+                end
+            end
+            wipe(achievementMessageCache.byPlayer[event])
+        end
+    end
+end
+
+function CT.AchievementMessageHandler(_, event, ...)
+    if not CT.db or not CT.db.enable or not CT.db.mergeAchievement then
+        return
+    end
+
+    local achievementMessage = select(1, ...)
+    local guid = select(12, ...)
+
+    if not guid then
+        return
+    end
+
+    if not achievementMessageCache.byAchievement[event] then
+        achievementMessageCache.byAchievement[event] = {}
+    end
+
+    if not achievementMessageCache.byPlayer[event] then
+        achievementMessageCache.byPlayer[event] = {}
+    end
+
+    local cache = achievementMessageCache.byAchievement[event]
+    local cacheByPlayer = achievementMessageCache.byPlayer[event]
+
+    local achievementID = strmatch(achievementMessage, "|Hachievement:(%d+):")
+    if not achievementID then
+        return
+    end
+
+    if not cache[achievementID] then
+        cache[achievementID] = {}
+        C_Timer_After(
+            0.1,
+            function()
+                local players = {}
+                for k in pairs(cache[achievementID]) do
+                    tinsert(players, k)
+                end
+
+                if #players >= 1 then
+                    local playerString = strjoin("=", unpack(players))
+
+                    if not cacheByPlayer[playerString] then
+                        cacheByPlayer[playerString] = {}
+                    end
+
+                    cacheByPlayer[playerString][achievementID] = true
+
+                    if not CT.waitForAchievementMessage then
+                        CT.waitForAchievementMessage = true
+                        C_Timer_After(
+                            0.2,
+                            function()
+                                CT.SendAchivementMessage()
+                                CT.waitForAchievementMessage = false
+                            end
+                        )
+                    end
+                end
+
+                cache[achievementID] = nil
+            end
+        )
+    end
+
+    local playerInfo = CH:GetPlayerInfoByGUID(guid)
+    if not playerInfo or not playerInfo.englishClass or not playerInfo.name or not playerInfo.nameWithRealm then
+        return
+    end
+
+    local displayName = CT.db.removeRealm and playerInfo.name or playerInfo.nameWithRealm
+    local coloredName = F.CreateClassColorString(displayName, playerInfo.englishClass)
+    local classIcon = F.GetClassIconStringWithStyle(playerInfo.englishClass, CT.db.classIconStyle, 16, 16)
+
+    if coloredName and classIcon and cache[achievementID] then
+        local playerName = format("|Hplayer:%s|h%s %s|h", playerInfo.nameWithRealm, classIcon, coloredName)
+        cache[achievementID][playerName] = true
+        return true
+    end
+end
+
+function CT:BetterSystemMessage()
+    if not self.db then
+        return
+    end
+
+    if self.db.guildMemberStatus and not self.isSystemMessageHandled then
+        ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", self.GuildMemberStatusMessageHandler)
+
+        local setHyperlink = _G.ItemRefTooltip.SetHyperlink
+        function _G.ItemRefTooltip:SetHyperlink(data, ...)
+            if strsub(data, 1, 8) == "wtinvite" then
+                local player = strmatch(data, "wtinvite:(.+)")
+                if player then
+                    C_PartyInfo_InviteUnit(player)
+                    return
+                end
+            end
+            setHyperlink(self, data, ...)
+        end
+        self.isSystemMessageHandled = true
+    end
+
+    if self.db.mergeAchievement and not self.isAchievementHandled then
+        ChatFrame_AddMessageEventFilter("CHAT_MSG_ACHIEVEMENT", self.AchievementMessageHandler)
+        ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD_ACHIEVEMENT", self.AchievementMessageHandler)
+        self.isAchievementHandled = true
+    end
+end
+
 function CT:Initialize()
     self.db = E.db.WT.social.chatText
     if not self.db or not self.db.enable or not E.private.chat.enable then
@@ -1363,6 +1640,7 @@ function CT:Initialize()
     self:UpdateRoleIcons()
     self:ToggleReplacement()
     self:CheckLFGRoles()
+    self:BetterSystemMessage()
 end
 
 function CT:ProfileUpdate()
@@ -1374,6 +1652,7 @@ function CT:ProfileUpdate()
     self:UpdateRoleIcons()
     self:ToggleReplacement()
     self:CheckLFGRoles()
+    self:BetterSystemMessage()
 end
 
 W:RegisterModule(CT:GetName())
