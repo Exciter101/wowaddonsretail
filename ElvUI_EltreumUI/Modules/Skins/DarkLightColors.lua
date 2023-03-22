@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local hooksecurefunc = _G.hooksecurefunc
 local select = _G.select
@@ -85,7 +85,7 @@ function ElvUI_EltreumUI:DarkMode()
 			E.db["unitframe"]["units"]["player"]["customTexts"]["EltreumPower"]["text_format"] = "[powercolor][power:current:shortvalue]"
 		end
 		if E.db["unitframe"]["units"]["target"]["customTexts"] and E.db["unitframe"]["units"]["target"]["customTexts"]["EltreumTargetName"] then
-			E.db["unitframe"]["units"]["target"]["customTexts"]["EltreumTargetName"]["text_format"] = "[eltruism:raidmarker] [eltruism:class:player] [eltruism:difficulty][name:eltruism:abbreviate]"
+			E.db["unitframe"]["units"]["target"]["customTexts"]["EltreumTargetName"]["text_format"] = "[eltruism:raidmarker] [eltruism:class:player] [eltruism:difficulty][name:eltruism:gradientshort]"
 		end
 		if E.db["unitframe"]["units"]["target"]["customTexts"] and E.db["unitframe"]["units"]["target"]["customTexts"]["EltreumTargetPower"] then
 			E.db["unitframe"]["units"]["target"]["customTexts"]["EltreumTargetPower"]["text_format"] = "[powercolor][power:current:shortvalue]"
@@ -398,7 +398,6 @@ function ElvUI_EltreumUI:GradientMode()
 				E.db["unitframe"]["units"]["focus"]["name"]["text_format"] = "[name:eltruism:abbreviate] [eltruism:IconOutline:player] [eltruism:raidmarker]"
 			end
 		end
-		E.db["unitframe"]["units"]["pet"]["health"]["colorPetByUnitClass"] = true
 		E.db["unitframe"]["units"]["pet"]["health"]["colorPetByUnitClass"] = false
 
 		E.db.ElvUI_EltreumUI.unitframes.gradientmode.enable = true

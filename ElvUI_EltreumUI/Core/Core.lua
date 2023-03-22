@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local C_CVar = _G.C_CVar
 local S = E:GetModule('Skins')
@@ -24,15 +24,21 @@ local LoadAddOn = LoadAddOn
 local GameMenuFrame = _G.GameMenuFrame
 local UIErrorsFrame = _G.UIErrorsFrame
 local RaidWarningFrame = _G.RaidWarningFrame
+local tostring = _G.tostring
+local tremove = _G.tremove
+local math = _G.math
+local PlaySound = _G.PlaySound
 local W
 local EnhancedShadows = nil
 if IsAddOnLoaded("ProjectAzilroka") then
 	EnhancedShadows = _G.ProjectAzilroka:GetModule('EnhancedShadows')
 end
 
+
 -- Eltreum UI print
 function ElvUI_EltreumUI:Print(msg)
-	print('|cff82B4ffEltruism|r: '..msg)
+	--print('|cff82B4ffEltruism|r: '..msg)
+	print(E:TextGradient("Eltruism", 0.50, 0.70, 1, 0.67, 0.95, 1)..': '..msg)
 end
 
 --hide popups during install
@@ -48,64 +54,41 @@ function ElvUI_EltreumUI:HidePopups(delay)
 		DisableAddOn("Details_Streamer")
 	end
 	C_Timer.After(delay, function()
-		if _G["StreamOverlayWelcomeWindow"] then
-			_G["StreamOverlayWelcomeWindow"]:Hide()
+		if IsAddOnLoaded("Details") and _G['_detalhes'] then
+			_G['_detalhes'].is_first_run = false
+			_G['_detalhes']:DisablePlugin ("DETAILS_PLUGIN_STREAM_OVERLAY")
+			_G['_detalhes']:DisablePlugin ("Details_Streamer")
+			_G['_detalhes']:SetTutorialCVar ("STREAMER_PLUGIN_FIRSTRUN", true)
+			if _G["DetailsWelcomeWindow"] then
+				_G["DetailsWelcomeWindow"]:Hide()
+			end
+			if _G["DetailsNewsWindow"] then
+				_G["DetailsNewsWindow"]:Hide()
+			end
+			if _G["StreamOverlayWelcomeWindow"] then
+				_G["StreamOverlayWelcomeWindow"]:Hide()
+			end
+			if _G["DetailsBaseFrame1"] then
+				_G["DetailsBaseFrame1"]:Hide()
+			end
+			if _G["DetailsProfilerProfileConfirmButton"] then
+				local a = _G["DetailsProfilerProfileConfirmButton"]:GetParent()
+				a:Hide()
+			end
 		end
-		if _G["DetailsBaseFrame1"] then
-			_G["DetailsBaseFrame1"]:Hide()
+		for i = 1, 4 do
+			if _G["StaticPopup"..i] then
+				_G["StaticPopup"..i]:Hide()
+			end
+			if _G["ElvUI_StaticPopup"..i] then
+				_G["ElvUI_StaticPopup"..i]:Hide()
+			end
 		end
-		if _G["DetailsProfilerProfileConfirmButton"] then
-			local a = _G["DetailsProfilerProfileConfirmButton"]:GetParent()
-			a:Hide()
-		end
-		if _G["StaticPopup1"] then
-			_G["StaticPopup1"]:Hide()
-		end
-		if _G["StaticPopup2"] then
-			_G["StaticPopup2"]:Hide()
-		end
-		if _G["StaticPopup3"] then
-			_G["StaticPopup3"]:Hide()
-		end
-		if _G["StaticPopup4"] then
-			_G["StaticPopup4"]:Hide()
-		end
-		if _G["ElvUI_StaticPopup1"] then
-			_G["ElvUI_StaticPopup1"]:Hide()
-		end
-		if _G["ElvUI_StaticPopup2"] then
-			_G["ElvUI_StaticPopup2"]:Hide()
-		end
-		if _G["ElvUI_StaticPopup3"] then
-			_G["ElvUI_StaticPopup3"]:Hide()
-		end
-		if _G["ElvUI_StaticPopup4"] then
-			_G["ElvUI_StaticPopup4"]:Hide()
-		end
-		if _G["StreamOverlayWelcomeWindow"] then
-			_G["StreamOverlayWelcomeWindow"]:Hide()
-		end
-		if _G["DetailsWelcomeWindow"] then
-			_G["DetailsWelcomeWindow"]:Hide()
-		end
-		if _G["DetailsNewsWindow"] then
-			_G["DetailsNewsWindow"]:Hide()
-		end
-		--if IsAddOnLoaded("Details") then
-			--_detalhes:DisablePlugin ("DETAILS_PLUGIN_STREAM_OVERLAY")
-			--_detalhes:DisablePlugin ("Details_Streamer")
-		--end
 		if _G["CappingFrame"] then
 			_G["CappingFrame"]:Hide()
 		end
 		if IsAddOnLoaded("GladiusEx") then
 			GladiusEx:HideFrames()
-			--[[if _G["GladiusExPartyFrame"] then
-				_G["GladiusExPartyFrame"]:Hide()
-			end
-			if _G["GladiusExArenaFrame"] then
-				_G["GladiusExArenaFrame"]:Hide()
-			end]]
 		end
 		if IsAddOnLoaded("Gladius") then
 			if _G["GladiusButtonFramearena1"] then
@@ -295,91 +278,93 @@ function ElvUI_EltreumUI:Anchors()
 		--based in elvui, attempt at preventing taints
 		local editMode = _G.EditModeManagerFrame
 		local registered = editMode.registeredSystemFrames
-		for i = #registered, 1, -1 do
-			local name = registered[i]:GetName()
-			if name == "ObjectiveTrackerFrame" and E.db.ElvUI_EltreumUI.quests.anchor then
-				if (not IsAddOnLoaded('!KalielsTracker')) and (not IsAddOnLoaded('SorhaQuestLog')) and (not IsAddOnLoaded('ClassicQuestLog')) and (not IsAddOnLoaded('Who Framed Watcher Wabbit?')) then
-					tremove(editMode.registeredSystemFrames, i)
+		if not InCombatLockdown() then
+			for i = #registered, 1, -1 do
+				local name = registered[i]:GetName()
+				if name == "ObjectiveTrackerFrame" and E.db.ElvUI_EltreumUI.quests.anchor then
+					if (not IsAddOnLoaded('!KalielsTracker')) and (not IsAddOnLoaded('SorhaQuestLog')) and (not IsAddOnLoaded('ClassicQuestLog')) and (not IsAddOnLoaded('Who Framed Watcher Wabbit?')) then
+						tremove(editMode.registeredSystemFrames, i)
+					end
 				end
-			end
-			if E.private.actionbar.enable then
-				if name == "MainMenuBar" then
-					tremove(editMode.registeredSystemFrames, i)
-					_G.MainMenuBar.ApplySystemAnchor = nil
+				if E.private.actionbar.enable then
+					if name == "MainMenuBar" then
+						tremove(editMode.registeredSystemFrames, i)
+						_G.MainMenuBar.ApplySystemAnchor = nil
+					end
+					if name == "MultiBarBottomLeft" then
+						tremove(editMode.registeredSystemFrames, i)
+						--_G.MultiBarBottomLeft.SetPointBase = nil
+					end
+					if name == "MultiBarLeft" then
+						tremove(editMode.registeredSystemFrames, i)
+						--_G.MultiBarLeft.SetPointBase = nil
+					end
+					if name == "MultiBarBottomRight" then
+						tremove(editMode.registeredSystemFrames, i)
+						--_G.MultiBarBottomRight.SetPointBase = nil
+					end
+					if name == "MultiBarRight" then
+						tremove(editMode.registeredSystemFrames, i)
+						--_G.MultiBarRight.SetPointBase = nil
+					end
+					if name == "ExtraAbilityContainer" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "EncounterBar" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "StanceBar" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "PetActionBar" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "PossessActionBar" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "MainMenuBarVehicleLeaveButton" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "MultiBar5" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "MultiBar6" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "MultiBar7" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
 				end
-				if name == "MultiBarBottomLeft" then
-					tremove(editMode.registeredSystemFrames, i)
-					--_G.MultiBarBottomLeft.SetPointBase = nil
+				if E.private.skins.blizzard.enable and E.private.skins.blizzard.loot then
+					if name == "LootFrame" then
+						tremove(editMode.registeredSystemFrames, i)
+					end
 				end
-				if name == "MultiBarLeft" then
-					tremove(editMode.registeredSystemFrames, i)
-					--_G.MultiBarLeft.SetPointBase = nil
-				end
-				if name == "MultiBarBottomRight" then
-					tremove(editMode.registeredSystemFrames, i)
-					--_G.MultiBarBottomRight.SetPointBase = nil
-				end
-				if name == "MultiBarRight" then
-					tremove(editMode.registeredSystemFrames, i)
-					--_G.MultiBarRight.SetPointBase = nil
-				end
-				if name == "ExtraAbilityContainer" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "EncounterBar" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "StanceBar" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "PetActionBar" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "PossessActionBar" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "MainMenuBarVehicleLeaveButton" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "MultiBar5" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "MultiBar6" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "MultiBar7" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-			end
-			if E.private.skins.blizzard.enable and E.private.skins.blizzard.loot then
-				if name == "LootFrame" then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-			end
-			if E.private.unitframe.enable then
-				if name == "CompactRaidFrameContainer" and E.private.unitframe.disabledBlizzardFrames.raid then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "ArenaEnemyFramesContainer" and E.private.unitframe.disabledBlizzardFrames.arena then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "BossTargetFrameContainer" and E.private.unitframe.disabledBlizzardFrames.boss then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "PlayerFrame" and E.private.unitframe.disabledBlizzardFrames.player then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "TargetFrame" and E.private.unitframe.disabledBlizzardFrames.target then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "FocusFrame" and E.private.unitframe.disabledBlizzardFrames.focus then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "PartyFrame" and E.private.unitframe.disabledBlizzardFrames.party then
-					tremove(editMode.registeredSystemFrames, i)
-				end
-				if name == "PlayerCastingBarFrame" and E.private.unitframe.disabledBlizzardFrames.castbar then
-					tremove(editMode.registeredSystemFrames, i)
+				if E.private.unitframe.enable then
+					if name == "CompactRaidFrameContainer" and E.private.unitframe.disabledBlizzardFrames.raid then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "ArenaEnemyFramesContainer" and E.private.unitframe.disabledBlizzardFrames.arena then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "BossTargetFrameContainer" and E.private.unitframe.disabledBlizzardFrames.boss then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "PlayerFrame" and E.private.unitframe.disabledBlizzardFrames.player then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "TargetFrame" and E.private.unitframe.disabledBlizzardFrames.target then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "FocusFrame" and E.private.unitframe.disabledBlizzardFrames.focus then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "PartyFrame" and E.private.unitframe.disabledBlizzardFrames.party then
+						tremove(editMode.registeredSystemFrames, i)
+					end
+					if name == "PlayerCastingBarFrame" and E.private.unitframe.disabledBlizzardFrames.castbar then
+						tremove(editMode.registeredSystemFrames, i)
+					end
 				end
 			end
 		end
@@ -608,7 +593,7 @@ function ElvUI_EltreumUI:FixChatToggles()
 
 		--fix if the value changed since install
 		local buttonwidth = _G.RightChatToggleButton:GetWidth()
-		local width = GetScreenWidth()
+		local width = GetPhysicalScreenSize()
 		if E.global["datatexts"]["customPanels"]["EltruismDataText"]["width"] >= width then
 			E.global["datatexts"]["customPanels"]["EltruismDataText"]["width"] = 2 + math.ceil(width - (buttonwidth * 2))
 			E:UpdateDataTexts()
@@ -687,8 +672,9 @@ EltruismGameMenu:SetScript("OnEvent", function()
 	end
 
 	if E.db.ElvUI_EltreumUI.otherstuff.gamemenu and isMenuExpanded == false then
-		--EltruismMenuButton:SetText("|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\tinylogo.tga:14:14:0:0:64:64:5:59:5:59|t".. ElvUI_EltreumUI.Name)
-		EltruismMenuButton:SetText(ElvUI_EltreumUI.Name)
+		--EltruismMenuButton:SetText("|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\tinylogo.tga:12:12:0:0:64:64:5:59:5:59|t".. ElvUI_EltreumUI.Name) -- old 32x32 icon
+		EltruismMenuButton:SetText("|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\tinylogo.tga:12:12:0:0:64:64|t".. ElvUI_EltreumUI.Name) --new 64x64 icon
+		--EltruismMenuButton:SetText(ElvUI_EltreumUI.Name)
 		S:HandleButton(EltruismMenuButton)
 		local x, y = _G["GameMenuButtonLogout"]:GetSize()
 		EltruismMenuButton:SetSize(x,y)
@@ -789,6 +775,26 @@ if E.Retail then
 		_G["ClickBindingFrame"]:SetPoint("LEFT", _G["SpellBookFrame"], "RIGHT", 50, -37)
 	end)
 end
+
+--shadow and light compatibility check
+function ElvUI_EltreumUI:SLCheck(setting)
+	if not IsAddOnLoaded("ElvUI_SLE") or not setting then return false end
+	if setting == 'char' and E.db.sle.armory.character.enable then
+		return true
+	end
+	if setting == 'stats' and E.private.sle.armory.stats.enable then
+		return true
+	end
+	if setting == 'inspect' and E.db.sle.armory.inspect.enable then
+		return true
+	end
+	if setting == 'media' and E.private.sle.media.enable then
+		return true
+	end
+
+	return false
+end
+
 
 --for fps testing
 --[[

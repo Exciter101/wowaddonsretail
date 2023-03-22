@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local DT = E:GetModule("DataTexts")
 local GetCombatRatingBonus = _G.GetCombatRatingBonus
@@ -18,6 +18,9 @@ local GetSpellTexture = _G. GetSpellTexture
 local GetSpellInfo = _G.GetSpellInfo
 local IsSpellKnown = _G.IsSpellKnown
 local GetSpellCooldown = _G.GetSpellCooldown
+local tostring = _G.tostring
+local mod = _G.mod
+local IsUsableItem = _G.IsUsableItem
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------hearthstone/tp item datatext
 --based yet again on elvui config
 --most from https://www.wowhead.com/item=6948/hearthstone#comments
@@ -74,7 +77,6 @@ local TeleportsItems = {
 	63378, --hellscreams-reach-tabard
 	63379, --baradins-wardens-tabard
 	28585, --ruby-slippers
-	32757, --blessed-medallion-of-karabor
 	37863, --direbrews-remote
 	43824,--the-schools-of-arcane-magic-mastery
 	50287, --boots-of-the-bay
@@ -174,6 +176,14 @@ local TeleportsSpells = {
 	393766, --path-of-the-grand-magistrix
 	393267, --path-of-the-rotting-woods
 }
+--the maw to avoid cypher showing up everywhere
+local mawIDs = {
+	["11400"] = true,
+	["1543"] = true,
+	["1550"] = true,
+	["2456"] = true,
+	["2364"] = true,
+}
 local teleportupdate = CreateFrame("FRAME")
 local TimeSinceLastUpdate = 0
 local ONUPDATE_INTERVAL = 1
@@ -209,7 +219,16 @@ local function EltruismTeleportsOnEnter(self)
 		local texture = GetItemIcon(v)
 		local name = GetItemInfo(v)
 		local hasItem = GetItemCount(v)
-		if texture and name and (hasItem > 0 or (E.Retail and PlayerHasToy(v) and C_ToyBox.IsToyUsable(v)) ) then
+
+		if v == 180817 then --hide cypher if outside the maw
+			local mapID = not E.Retail and tostring(_G.WorldMapFrame:GetMapID()) or tostring(C_Map.GetBestMapForUnit("player"))
+			--print(mapID)
+			if not mawIDs[mapID] then
+				hasItem = 0
+			end
+		end
+
+		if texture and name and ((hasItem > 0 and IsUsableItem(v)) or (E.Retail and PlayerHasToy(v) and C_ToyBox.IsToyUsable(v))) then
 			local start, duration = GetItemCooldown(v)
 			local cooldown = start + duration - GetTime()
 			if cooldown >= 2 then
@@ -269,6 +288,14 @@ local function EltruismTeleportsOnEnter(self)
 				local texture = GetItemIcon(v)
 				local name = GetItemInfo(v)
 				local hasItem = GetItemCount(v)
+
+				if v == 180817 then --hide cypher if outside the maw
+					local mapID = not E.Retail and tostring(_G.WorldMapFrame:GetMapID()) or tostring(C_Map.GetBestMapForUnit("player"))
+					if not mawIDs[mapID] then
+						hasItem = 0
+					end
+				end
+
 				if texture and name and (hasItem > 0 or (E.Retail and PlayerHasToy(v) and C_ToyBox.IsToyUsable(v)) ) then
 					local start, duration = GetItemCooldown(v)
 					local cooldown = start + duration - GetTime()

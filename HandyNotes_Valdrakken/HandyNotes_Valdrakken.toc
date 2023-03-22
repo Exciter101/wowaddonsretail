@@ -1,8 +1,8 @@
-## Interface: 100005
+## Interface: 100007
 ## Title: HandyNotes_Valdrakken
 ## Notes: Valdrakken map locations.
 ## Author: Keyboardturn
-## Version: 0.0.2
+## Version: 0.0.4
 ## SavedVariables: HandyNotes_ValdrakkenDB
 ## RequiredDeps: HandyNotes
 

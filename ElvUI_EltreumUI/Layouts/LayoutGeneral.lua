@@ -1,9 +1,11 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local valuecolors = E:ClassColor(E.myclass, true)
 local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local tostring = _G.tostring
 local SetCVar = _G.SetCVar
+local math = _G.math
+local GetPhysicalScreenSize = _G.GetPhysicalScreenSize
 
 function ElvUI_EltreumUI:SetupGeneralLayout()
 	if not E.db.movers then E.db.movers = {} end
@@ -106,21 +108,16 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		--fix possible issue
 		E.db["unitframe"]["units"]["party"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["player"]["health"]["orientation"] = "HORIZONTAL"
-		E.db["unitframe"]["units"]["player"]["health"]["orientation"] = "HORIZONTAL"
-		E.db["unitframe"]["units"]["arena"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["focus"]["health"]["orientation"] = "HORIZONTAL"
-		E.db["unitframe"]["units"]["boss"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["raid1"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["raid2"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["raid3"]["health"]["orientation"] = "HORIZONTAL"
-		E.db["unitframe"]["units"]["party"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["tank"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["assist"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["target"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["pet"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["focustarget"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["arena"]["health"]["orientation"] = "HORIZONTAL"
-		E.db["unitframe"]["units"]["focus"]["health"]["orientation"] = "HORIZONTAL"
 		E.db["unitframe"]["units"]["boss"]["health"]["orientation"] = "HORIZONTAL"
 
 		-- unitframe colors
@@ -188,9 +185,6 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["unitframe"]["colors"]["classResources"]["comboPoints"][7]["g"] = 0.2549019753933
 		E.db["unitframe"]["colors"]["classResources"]["comboPoints"][7]["r"] = 1
 		E.db["unitframe"]["colors"]["classbackdrop"] = true
-		E.db["unitframe"]["colors"]["classpower_backdrop"]["b"] = 0
-		E.db["unitframe"]["colors"]["classpower_backdrop"]["g"] = 0
-		E.db["unitframe"]["colors"]["classpower_backdrop"]["r"] = 0
 		E.db["unitframe"]["colors"]["healthclass"] = false
 		E.db["unitframe"]["colors"]["customhealthbackdrop"] = false
 		E.db["unitframe"]["colors"]["health_backdrop"]["b"] = 0
@@ -394,7 +388,6 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["bags"]["vendorGrays"]["enable"] = true
 		if E.Retail then
 			E.db["bags"]["split"]["bag5"] = true
-			E.db["bags"]["split"]["bagSpacing"] = 7
 			E.db["bags"]["split"]["player"] = true
 		end
 
@@ -1349,7 +1342,7 @@ function ElvUI_EltreumUI:SetupDataText()
 	E.global["datatexts"]["customPanels"]["EltruismTime"]["width"] = 120
 
 	local buttonwidth = _G.RightChatToggleButton:GetWidth()
-	local width = GetScreenWidth()
+	local width = GetPhysicalScreenSize()
 	E.global["datatexts"]["customPanels"]["EltruismDataText"]["width"] = 2 + math.ceil(width - (buttonwidth * 2))
 
 	--scale stuff for 4k
@@ -1397,6 +1390,20 @@ function ElvUI_EltreumUI:SetupDataText()
 	E.db["datatexts"]["panels"]["EltruismTime"][1] = "Time"
 	E.db["datatexts"]["panels"]["EltruismTime"]["enable"] = true
 
+	E.db["datatexts"]["panels"]["EltruismDataText"]["battleground"] = true
+	E.db["datatexts"]["battlePanel"]["EltruismDataText"][1] = "PvP: Kills"
+	E.db["datatexts"]["battlePanel"]["EltruismDataText"][2] = "PvP: Deaths"
+	if E.Retail then
+		E.db["datatexts"]["battlePanel"]["EltruismDataText"][3] = "PvP: Objectives"
+	else
+		E.db["datatexts"]["battlePanel"]["EltruismDataText"][3] = "PvP: Damage Done"
+	end
+	E.db["datatexts"]["battlePanel"]["EltruismDataText"][4] = "Eltruism Stats 1"
+	E.db["datatexts"]["battlePanel"]["EltruismDataText"][5] = ""
+	E.db["datatexts"]["battlePanel"]["EltruismDataText"][6] = "Eltruism Stats 2"
+	E.db["datatexts"]["battlePanel"]["EltruismDataText"][7] = "System"
+	E.db["datatexts"]["battlePanel"]["EltruismDataText"][8] = "Combat"
+	E.db["datatexts"]["battlePanel"]["EltruismDataText"][9] = "PvP: Honor Gained"
 
 	--hide other panels since now its in one panel
 	E.db["datatexts"]["panels"]["LeftChatDataPanel"]["enable"] = false

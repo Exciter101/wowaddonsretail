@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local ReloadUI = _G.ReloadUI
 local math = _G.math
@@ -695,7 +695,7 @@ ElvUI_EltreumUI.InstallerData = {
 		[11] = L["Installation Complete"],
 	},
 	StepTitlesColor = {1, 1, 1},
-	StepTitlesColorSelected = {70/255, 130/255, 180/255},
+	StepTitlesColorSelected = {0.50, 0.70, 1},
 	StepTitleWidth = 200,
 	StepTitleButtonWidth = 180,
 	StepTitleTextJustification = 'RIGHT',

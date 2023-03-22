@@ -1,7 +1,8 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local CreateFrame = _G.CreateFrame
 local UIPanelWindows = _G.UIPanelWindows
+local IsAddOnLoaded = _G.IsAddOnLoaded
 local WardrobeFrame
 local WardrobeTransmogFrame
 local WardrobeOutfitDropDown

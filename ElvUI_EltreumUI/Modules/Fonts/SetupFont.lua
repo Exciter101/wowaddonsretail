@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local GetAddOnMetadata = _G.GetAddOnMetadata
@@ -68,9 +68,9 @@ function ElvUI_EltreumUI:SetupFont(fontvalue, custom)
 				E.db["sle"]["armory"]["character"]["ilvl"]["font"] = fontvalue
 				E.db["sle"]["armory"]["inspect"]["enchant"]["font"] = fontvalue
 				E.db["sle"]["armory"]["inspect"]["ilvl"]["font"] = fontvalue
-				E.db["sle"]["armory"]["stats"]["catFonts"]["font"] = fontvalue
+				E.db["sle"]["armory"]["stats"]["statLabels"]["font"] = fontvalue
 				E.db["sle"]["armory"]["stats"]["itemLevel"]["font"] = fontvalue
-				E.db["sle"]["armory"]["stats"]["statFonts"]["font"] = fontvalue
+				E.db["sle"]["armory"]["stats"]["statHeaders"]["font"] = fontvalue
 				E.db["sle"]["media"]["fonts"]["gossip"]["font"] = fontvalue
 				E.db["sle"]["media"]["fonts"]["mail"]["font"] = fontvalue
 				E.db["sle"]["media"]["fonts"]["objective"]["font"] = fontvalue
@@ -830,7 +830,7 @@ function ElvUI_EltreumUI:SetupFont(fontvalue, custom)
 			E.db["unitframe"]["units"]["pet"]["customTexts"]["EltreumPetName"]["text_format"] = "[name:eltruism:gradient]"
 		end
 			E.db["unitframe"]["units"]["player"]["customTexts"]["EltreumName"]["text_format"] = "[name:eltruism:gradient] [eltruism:class:player] [eltruism:raidmarker]"
-			E.db["unitframe"]["units"]["target"]["customTexts"]["EltreumTargetName"]["text_format"] = "[eltruism:raidmarker] [eltruism:class:player] [eltruism:difficulty][name:eltruism:gradient]"
+			E.db["unitframe"]["units"]["target"]["customTexts"]["EltreumTargetName"]["text_format"] = "[eltruism:raidmarker] [eltruism:class:player] [eltruism:difficulty][name:eltruism:gradientshort]"
 			E.db["unitframe"]["units"]["tank"]["name"]["text_format"] = "[name:eltruism:gradient]"
 			E.db["unitframe"]["units"]["targettarget"]["customTexts"]["EltreumTargetTargetName"]["text_format"] = "[name:eltruism:gradientshort]"
 		if E.Retail or E.Wrath then
@@ -846,7 +846,6 @@ function ElvUI_EltreumUI:SetupFont(fontvalue, custom)
 			E.db["unitframe"]["units"]["player"]["customTexts"]["EltreumName"]["text_format"] = "[name] [eltruism:IconOutline:player] [eltruism:raidmarker]"
 			E.db["unitframe"]["units"]["target"]["customTexts"]["EltreumTargetName"]["text_format"] = "[eltruism:raidmarker] [eltruism:IconOutline:player] [eltruism:difficulty][name:eltruism:abbreviate]"
 			E.db["unitframe"]["units"]["tank"]["name"]["text_format"] = "[name:long:status]"
-			E.db["unitframe"]["units"]["targettarget"]["customTexts"]["EltreumTargetTargetName"]["text_format"] = "[name:abbrev]"
 		if E.Retail or E.Wrath then
 			E.db["unitframe"]["units"]["focus"]["name"]["text_format"] = "[name:eltruism:gradientshort] [eltruism:IconOutline:player] [eltruism:raidmarker]"
 		end

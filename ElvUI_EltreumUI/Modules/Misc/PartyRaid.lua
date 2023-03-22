@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local S = E:GetModule('Skins')
 local _G = _G
 local select = _G.select
@@ -10,6 +10,7 @@ local PlaySoundFile = _G.PlaySoundFile
 local GetInstanceInfo = _G.GetInstanceInfo
 local GetSpellTexture = _G.GetSpellTexture
 local GetSpellCharges = _G.GetSpellCharges
+local InCombatLockdown = _G.InCombatLockdown
 local _, instanceType
 local DifficultyID
 local ingroup

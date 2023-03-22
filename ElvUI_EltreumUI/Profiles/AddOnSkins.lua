@@ -1,8 +1,9 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
+local _G  = _G
+local IsAddOnLoaded = _G.IsAddOnLoaded
 
 -- AddonSkins profile setup
 function ElvUI_EltreumUI:GetASProfile()
-	local width = GetPhysicalScreenSize()
 	local valuecolors = E:ClassColor(E.myclass, true)
 	if IsAddOnLoaded("AddOnSkins") then
 		local AS = unpack(AddOnSkins)
@@ -42,7 +43,6 @@ function ElvUI_EltreumUI:GetASProfile()
 		AS.db["DBMRadarTrans"] = true
 		AS.db["HideChatFrame"] = "ChatFrame4"
 		AS.db["TransparentEmbed"] = true
-		AS.db["EmbedSystemDual"] = true
 		AS.db["Immersion"] = true
 		AS.db["BugSack"] = true
 		if E.Retail then

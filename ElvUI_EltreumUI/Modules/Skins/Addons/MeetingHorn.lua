@@ -1,6 +1,8 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local S = E:GetModule('Skins')
 local _G = _G
+local IsAddOnLoaded = _G.IsAddOnLoaded
+local select = _G.select
 local EnhancedShadows = nil
 if IsAddOnLoaded("ProjectAzilroka") then
 	EnhancedShadows = _G.ProjectAzilroka:GetModule('EnhancedShadows')
@@ -24,9 +26,11 @@ function ElvUI_EltreumUI:EltruismMeetingHorn()
 		S:HandleFrame(f.MainPanel)
 		f.MainPanel:SetTemplate('Transparent', nil, true)
 
-		if not f.MainPanel.shadow then
-			f.MainPanel:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
-			if EnhancedShadows then EnhancedShadows:RegisterShadow(f.MainPanel.shadow) end
+		if E.db.ElvUI_EltreumUI.skins.shadow.enable then
+			if not f.MainPanel.shadow then
+				f.MainPanel:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+				if EnhancedShadows then EnhancedShadows:RegisterShadow(f.MainPanel.shadow) end
+			end
 		end
 
 		if f.MainPanel.PortraitFrame then
@@ -54,7 +58,6 @@ function ElvUI_EltreumUI:EltruismMeetingHorn()
 		--challenge
 		S:HandleFrame(f.MainPanel.Challenge)
 		S:HandleButton(f.MainPanel.Challenge.Body.Reward.Exchange)
-		S:HandleButton(f.MainPanel.Browser.Refresh)
 
 		--create
 		S:HandleFrame(f.MainPanel.Manage)
@@ -74,7 +77,6 @@ function ElvUI_EltreumUI:EltruismMeetingHorn()
 		f.MainPanel.Manage.Creator.CreateButton.RightSeparator:Hide()
 		f.MainPanel.Browser.RechargeBtn.RightSeparator:Hide()
 		f.MainPanel.Browser.RechargeBtn.LeftSeparator:Hide()
-		f.MainPanel.Manage.Creator.CreateButton.RightSeparator:Hide()
 		f.MainPanel.Manage.Creator.CloseButton.Texture:Hide()
 
 		--leader

@@ -1,4 +1,6 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
+local _G = _G
+local IsAddOnLoaded = _G.IsAddOnLoaded
 
 --Settings that would be true but became false by default per request,
 --now a function that can be used to set them while importing the profiles
@@ -39,13 +41,12 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.nameplates.friendlynameplatetoggle.friendlynames = false -- turns out blizzard fakes the nameplates and alphas the helthbar, causing huge performance costs
 	E.db.ElvUI_EltreumUI.nameplates.friendlynameplatetoggle.hidefriendly = false -- and this one is the same but with health so make this one off as well
 	E.db.ElvUI_EltreumUI.nameplates.friendlynameplatetoggle.disablefriendly = true --so hide it instead
-	E.db.ElvUI_EltreumUI.nameplates.widenameplate.enable = true
-	E.db.ElvUI_EltreumUI.nameplates.widenameplate.npglow = true
 	E.db.ElvUI_EltreumUI.nameplates.nptextureversion = "V2"
 	E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.enableHealthHeight = true
 	E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.useelvuinpheight = true
 	E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.targetmodel = true
 	E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.restedoverlap = true
+	E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.npglow = true
 	E.db.ElvUI_EltreumUI.nameplates.auras.enable = true
 
 	-- Unitframes
@@ -124,6 +125,14 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.skins.meetinghorn = true
 	E.db.ElvUI_EltreumUI.skins.pallypower = true
 	E.db.ElvUI_EltreumUI.skins.details = true
+	E.db.ElvUI_EltreumUI.skins.detailsembed = true
+	E.db.ElvUI_EltreumUI.skins.detailsembedooc = true
+	E.db.ElvUI_EltreumUI.skins.bugsack = true
+	E.db.ElvUI_EltreumUI.skins.clique = true
+	E.db.ElvUI_EltreumUI.skins.immersion = true
+	E.db.ElvUI_EltreumUI.skins.rarescanner = true
+	E.db.ElvUI_EltreumUI.skins.simulationcraft = true
+	E.db.ElvUI_EltreumUI.skins.warpdeplete = true
 
 	-- Borders
 	E.db.ElvUI_EltreumUI.borders.minimapborder = true
@@ -138,7 +147,6 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.borders.auraborder = true
 	E.db.ElvUI_EltreumUI.borders.stanceborders = true
 	E.db.ElvUI_EltreumUI.borders.petactionborders = true
-	E.db.ElvUI_EltreumUI.borders.totembar = true
 
 	-- Glow
 	E.db.ElvUI_EltreumUI.glow.enable = true
@@ -164,13 +172,12 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.waypoints.waytext.enable = true
 
 	-- Quests
+	E.db.ElvUI_EltreumUI.quests.arena = true
 	if E.Retail then
 		E.db.ElvUI_EltreumUI.quests.enable = true
-		E.db.ElvUI_EltreumUI.quests.arena = true
 		E.db.ElvUI_EltreumUI.quests.rogueopen = true
 	elseif E.Wrath or E.Classic then
 		E.db.ElvUI_EltreumUI.quests.enable = false
-		E.db.ElvUI_EltreumUI.quests.arena = true
 	end
 	if E.Retail then
 		E.db.ElvUI_EltreumUI.quests.questitems = false

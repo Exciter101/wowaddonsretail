@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local AB = E:GetModule('ActionBars')
 local LCG = E.Libs.CustomGlow
 --local LCG = LibStub('LibCustomGlow-1.0')
@@ -16,6 +16,7 @@ local UnitCanAttack = _G.UnitCanAttack
 local UnitCreatureType = _G.UnitCreatureType
 local InCombatLockdown = _G.InCombatLockdown
 local GetPetActionInfo = _G.GetPetActionInfo
+local pairs = _G.pairs
 --moving creteframes out of the function for some reason breaks it
 
 -- Skill Glow

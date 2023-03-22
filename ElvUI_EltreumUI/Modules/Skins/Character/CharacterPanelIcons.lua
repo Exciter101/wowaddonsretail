@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local classcolor = E:ClassColor(E.myclass, true)
 local CreateFrame = _G.CreateFrame
@@ -14,7 +14,6 @@ local ReputationFrame = _G.ReputationFrame
 local TokenFrame = _G.TokenFrame
 local string = _G.string
 local classsymbolonframe
-local CharacterFrameTitleText = _G.CharacterFrameTitleText
 local CharacterModelScene = _G.CharacterModelScene
 
 local classIcons = {
@@ -90,7 +89,6 @@ function ElvUI_EltreumUI:ClassIconsOnCharacterPanel()
 				end
 			end
 		elseif E.Retail and not self.ischarpanelHooked then
-
 			hooksecurefunc('PaperDollFrame_SetLevel', function()
 				CharacterFrameTitleText:ClearAllPoints()
 				CharacterFrameTitleText:SetPoint('TOP', CharacterModelScene, 0, 50)

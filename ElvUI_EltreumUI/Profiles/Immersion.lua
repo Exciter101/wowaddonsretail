@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 
 -- Immersion profile setup
 function ElvUI_EltreumUI:GetImmersionProfile()
@@ -12,7 +12,7 @@ function ElvUI_EltreumUI:GetImmersionProfile()
 		["enablenumbers"] = true,
 		["boxpoint"] = "Top",
 		["disableprogression"] = false,
-		["titleoffsetY"] = 267.253763880048,
+		["titleoffsetY"] = 113.8747863769531,
 		["hideui"] = false,
 		["titlescale"] = 1,
 		["delaydivisor"] = 40,

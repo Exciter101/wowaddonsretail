@@ -1,4 +1,4 @@
-## Interface: 100002
+## Interface: 100007
 #@non-debug@
 ## Title: HandyNotes - Legion Class Order Halls
 ## Title-deDE: HandyNotes - Legion Klassenordenshallen
@@ -11,7 +11,7 @@
 ## Notes-deDE: Zeigt die Positionen von NSCs und anderen interessanten Orten in Klassenordenshallen.
 ## Notes-frFR: Description
 ## Notes-koKR: 직업 조합 전당의 NPC 위치와 주요 관심 지점을 표시합니다
-## Notes-ruRU: Показывает расположение НИП и основные объекты в оплоте класса
+## Notes-ruRU: Показывает расположение НИПов и основных объектов в оплотах классов
 ## Notes-zhCN: 显示各职业大厅里 NPC 与主要的 POI 的位置
 ## Notes-zhTW: 顯示各職業大廳裡 NPC 與主要的 POI 的位置
 #@end-non-debug@
@@ -22,12 +22,12 @@
 # ## Notes-zhTW: 顯示各職業大廳裡 NPC 與主要的 POI 的位置
 #@end-debug@
 ## Author: arith
-## Version: v1.50
+## Version: v1.51
 ## RequiredDeps: HandyNotes
 ## OptionalDeps: LibBabble-SubZone-3.0, !LibUIDropDownMenu
 ## DefaultState: enabled
 ## SavedVariables: HandyNotes_LegionClassOrderHallsDB
-## X-Date: 2022-11-19T2:23:42Z
+## X-Date: 2023-03-20T15:19:16Z
 ## X-License: GPLv2
 ## X-Category: Map
 

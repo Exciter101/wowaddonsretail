@@ -1,5 +1,6 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
+local GetPhysicalScreenSize = _G.GetPhysicalScreenSize
 
 --sets action bars/powers to be similar to weakaura's layouts
 function ElvUI_EltreumUI:WeakAurasLikeActionBars(value)

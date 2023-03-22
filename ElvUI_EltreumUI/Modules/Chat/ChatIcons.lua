@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local CH = E:GetModule("Chat")
 
@@ -79,7 +79,6 @@ local MVPCharacters = {
 	["Shawøød-Antonidas"] = MVPIcon,
 	["Dewøød-Antonidas"] = MVPIcon,
 	["Farmwøød-Antonidas"] = MVPIcon,
-	["Evowøød-Antonidas"] = MVPIcon,
 }
 
 --Add Icons to chat messages

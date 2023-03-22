@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local S = E:GetModule('Skins')
 local _G = _G
 local CreateFrame = _G.CreateFrame
@@ -15,6 +15,7 @@ local dontexpandanymore = 0
 local skillbutton,skillTitle
 local vellumbutton,disenchantbutton,tradeskilloadmonitor
 local classcolor = E:ClassColor(E.myclass, true)
+local string = _G.string
 local EnhancedShadows = nil
 if IsAddOnLoaded("ProjectAzilroka") then
 	EnhancedShadows = _G.ProjectAzilroka:GetModule('EnhancedShadows')
@@ -625,7 +626,7 @@ end)
 
 function ElvUI_EltreumUI:SkinMailZone()
 	if E.db.ElvUI_EltreumUI.skins.zones then
-		if not IsAddOnLoaded("ElvUI_SLE") then
+		if not ElvUI_EltreumUI:SLCheck("media") then
 			--[[hooksecurefunc("SetZoneText", function()
 				ZoneTextString:SetFont(E.LSM:Fetch('font', E.db.general.font), 42, E.db.general.fontStyle)
 				SubZoneTextString:SetFont(E.LSM:Fetch('font', E.db.general.font), 28, E.db.general.fontStyle)
@@ -643,7 +644,7 @@ function ElvUI_EltreumUI:SkinMailZone()
 			_G.PVPInfoTextString:SetFont(E.LSM:Fetch('font', E.db.general.font), 20, E.db.general.fontStyle)
 			_G.PVPArenaTextString:SetFont(E.LSM:Fetch('font', E.db.general.font), 20, E.db.general.fontStyle)
 
-			if E.db.ElvUI_EltreumUI.unitframes.gradientmode.enable then
+			if E.db.ElvUI_EltreumUI.unitframes.gradientmode.enable and not self.ZoneSkinned then
 				_G.ZoneTextFrame:HookScript("OnUpdate", function()
 					if _G.ZoneTextString:GetText() ~= nil and not _G.ZoneTextString:GetText():match("|r|c") then
 						local r,g,b = _G.ZoneTextString:GetTextColor()
@@ -689,6 +690,8 @@ function ElvUI_EltreumUI:SkinMailZone()
 						_G.PVPArenaTextString:SetText(E:TextGradient(_G.PVPArenaTextString:GetText(), r, g, b, r2, g2, b2))
 					end
 				end)
+
+				self.ZoneSkinned = true
 			end
 
 			if _G.OpenMailBodyText then

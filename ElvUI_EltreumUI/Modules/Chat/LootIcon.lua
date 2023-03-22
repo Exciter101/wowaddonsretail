@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local ChatFrame_AddMessageEventFilter = _G.ChatFrame_AddMessageEventFilter
@@ -15,6 +15,7 @@ local itemLevel
 local tt
 local _, itemQuality, classID
 local hex
+local GetPlayerInfoByGUID = _G.GetPlayerInfoByGUID
 
 local classcolorsescape = {
 	["DEATHKNIGHT"]	= "C41E3A",

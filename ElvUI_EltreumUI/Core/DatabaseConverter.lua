@@ -1,4 +1,6 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
+local _G = _G
+local pairs = _G.pairs
 
 --Based on ElvUI's and SLE's db convert
 function ElvUI_EltreumUI:DatabaseConversions(forced)
@@ -86,6 +88,17 @@ function ElvUI_EltreumUI:DatabaseConversions(forced)
 							if data.ElvUI_EltreumUI.widenameplate then
 								E:CopyTable(E.db.ElvUI_EltreumUI.nameplates.widenameplate, data.ElvUI_EltreumUI.widenameplate)
 								data.ElvUI_EltreumUI.widenameplate = nil
+							end
+							if data.ElvUI_EltreumUI.nameplates.widenameplate then
+								if data.ElvUI_EltreumUI.nameplates.widenameplate.enable then
+									E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.timerposition = data.ElvUI_EltreumUI.nameplates.widenameplate.enable
+									E:CopyTable(E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.timerposition, data.ElvUI_EltreumUI.nameplates.widenameplate.enable)
+								end
+								if data.ElvUI_EltreumUI.nameplates.widenameplate.npglow then
+									E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.npglow = data.ElvUI_EltreumUI.nameplates.widenameplate.npglow
+									E:CopyTable(E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.npglow, data.ElvUI_EltreumUI.nameplates.widenameplate.npglow)
+								end
+								data.ElvUI_EltreumUI.nameplates.widenameplate = nil
 							end
 							if data.ElvUI_EltreumUI.glowcustomcolor then
 								E:CopyTable(E.db.ElvUI_EltreumUI.glow.glowcustomcolor, data.ElvUI_EltreumUI.glowcustomcolor)
@@ -457,6 +470,37 @@ function ElvUI_EltreumUI:DatabaseConversions(forced)
 					end
 				end
 			end
+		elseif E.private.ElvUI_EltreumUI.install_version < "3.7.5" then
+			--making sure it only runs on the current char's profile
+			local currentprofile
+			for character, charprofile in pairs (ElvDB.profileKeys) do
+				if character:match(E.myname) then
+					currentprofile = charprofile
+				end
+			end
+			local ProfileNames = NONE
+			local CharacterNames = NONE
+			for profile, data in pairs(ElvDB.profiles) do
+				if profile == currentprofile then
+					if data then
+						if data.ElvUI_EltreumUI then
+							if data.ElvUI_EltreumUI.nameplates then
+								if data.ElvUI_EltreumUI.nameplates.widenameplate then
+									if data.ElvUI_EltreumUI.nameplates.widenameplate.enable then
+										E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.timerposition = data.ElvUI_EltreumUI.nameplates.widenameplate.enable
+										E:CopyTable(E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.timerposition, data.ElvUI_EltreumUI.nameplates.widenameplate.enable)
+									end
+									if data.ElvUI_EltreumUI.nameplates.widenameplate.npglow then
+										E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.npglow = data.ElvUI_EltreumUI.nameplates.widenameplate.npglow
+										E:CopyTable(E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.npglow, data.ElvUI_EltreumUI.nameplates.widenameplate.npglow)
+									end
+									data.ElvUI_EltreumUI.nameplates.widenameplate = nil
+								end
+							end
+						end
+					end
+				end
+			end
 		elseif forced then
 			--making sure it only runs on the current char's profile
 			local currentprofile
@@ -530,6 +574,17 @@ function ElvUI_EltreumUI:DatabaseConversions(forced)
 							if data.ElvUI_EltreumUI.widenameplate then
 								E:CopyTable(E.db.ElvUI_EltreumUI.nameplates.widenameplate, data.ElvUI_EltreumUI.widenameplate)
 								data.ElvUI_EltreumUI.widenameplate = nil
+							end
+							if data.ElvUI_EltreumUI.nameplates.widenameplate then
+								if data.ElvUI_EltreumUI.nameplates.widenameplate.enable then
+									E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.timerposition = data.ElvUI_EltreumUI.nameplates.widenameplate.enable
+									E:CopyTable(E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.timerposition, data.ElvUI_EltreumUI.nameplates.widenameplate.enable)
+								end
+								if data.ElvUI_EltreumUI.nameplates.widenameplate.npglow then
+									E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.npglow = data.ElvUI_EltreumUI.nameplates.widenameplate.npglow
+									E:CopyTable(E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.npglow, data.ElvUI_EltreumUI.nameplates.widenameplate.npglow)
+								end
+								data.ElvUI_EltreumUI.nameplates.widenameplate = nil
 							end
 							if data.ElvUI_EltreumUI.glowcustomcolor then
 								E:CopyTable(E.db.ElvUI_EltreumUI.glow.glowcustomcolor, data.ElvUI_EltreumUI.glowcustomcolor)

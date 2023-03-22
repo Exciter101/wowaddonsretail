@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local NP = E:GetModule('NamePlates')
 local _G = _G
 local hooksecurefunc = _G.hooksecurefunc
@@ -12,11 +12,12 @@ local UnitPlayerControlled = _G.UnitPlayerControlled
 local UnitCanAttack = _G.UnitCanAttack
 local UnitGUID = _G.UnitGUID
 local UnitIsDead = _G.UnitIsDead
+local wipe = _G.wipe
 
 do
 
 	--gradient threat
-	function NP:ThreatIndicator_PostUpdate(unit, status)
+	function ElvUI_EltreumUI:ThreatIndicator_PostUpdate(unit, status)
 		nameplate, colors, db = self.__owner, NP.db.colors.threat, NP.db.threat
 		sf = NP:StyleFilterChanges(nameplate)
 		if not status and not sf.Scale then
@@ -180,6 +181,7 @@ do
 			end
 		end
 	end
+	hooksecurefunc(NP, "ThreatIndicator_PostUpdate", ElvUI_EltreumUI.ThreatIndicator_PostUpdate)
 
 	--gradient nameplates
 	local function GradientNameplates(unit)
@@ -253,7 +255,7 @@ do
 	local FallbackColor = {r=1, b=1, g=1}
 
 	--to fix stylefilter for gradient nameplates
-	function NP:StyleFilterClearChanges(frame, HealthColor, PowerColor, Borders, HealthFlash, HealthTexture, Scale, Alpha, NameTag, PowerTag, HealthTag, TitleTag, LevelTag, Portrait, NameOnly, Visibility)
+	function ElvUI_EltreumUI:StyleFilterClearChanges(frame, HealthColor, PowerColor, Borders, HealthFlash, HealthTexture, Scale, Alpha, NameTag, PowerTag, HealthTag, TitleTag, LevelTag, Portrait, NameOnly, Visibility)
 		db = NP:PlateDB(frame)
 
 		local c = frame.StyleFilterChanges
@@ -309,12 +311,14 @@ do
 		end
 		if HealthTexture then
 			local tx = E.LSM:Fetch('statusbar', NP.db.statusbar)
-			frame.Health:SetStatusBarTexture(tx)
+			--frame.Health:SetStatusBarTexture(tx)
+			frame.Health.barTexture:SetTexture(tx)
 		end
 	end
+	hooksecurefunc(NP, "StyleFilterClearChanges", ElvUI_EltreumUI.StyleFilterClearChanges)
 
 	--to set slight gradient to style filter
-	function NP:StyleFilterSetChanges(frame, actions, HealthColor, PowerColor, Borders, HealthFlash, HealthTexture, Scale, Alpha, NameTag, PowerTag, HealthTag, TitleTag, LevelTag, Portrait, NameOnly, Visibility)
+	function ElvUI_EltreumUI:StyleFilterSetChanges(frame, actions, HealthColor, PowerColor, Borders, HealthFlash, HealthTexture, Scale, Alpha, NameTag, PowerTag, HealthTag, TitleTag, LevelTag, Portrait, NameOnly, Visibility)
 		local c = frame.StyleFilterChanges
 		if not c then return end
 
@@ -441,16 +445,18 @@ do
 			local tx = E.LSM:Fetch('statusbar', actions.texture.texture)
 			c.HealthTexture = true
 
-			frame.Health:SetStatusBarTexture(tx)
+			--frame.Health:SetStatusBarTexture(tx)
+			frame.Health.barTexture:SetTexture(tx)
 
 			if HealthFlash then
 				frame.HealthFlashTexture:SetTexture(tx)
 			end
 		end
 	end
+	hooksecurefunc(NP, "StyleFilterSetChanges", ElvUI_EltreumUI.StyleFilterSetChanges)
 
 	--elvui castbar texture/gradient
-	function NP:Castbar_CheckInterrupt(unit)
+	function ElvUI_EltreumUI:Castbar_CheckInterrupt(unit)
 		if unit == 'vehicle' then
 			unit = 'player'
 		end
@@ -568,5 +574,6 @@ do
 			end
 		end
 	end
+	hooksecurefunc(NP, "Castbar_CheckInterrupt", ElvUI_EltreumUI.Castbar_CheckInterrupt)
 
 end

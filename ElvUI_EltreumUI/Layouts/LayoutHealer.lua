@@ -1,8 +1,8 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
-local classcolor = E:ClassColor(E.myclass, true)
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local C_CVar = _G.C_CVar
+local GetPhysicalScreenSize = _G.GetPhysicalScreenSize
 
 function ElvUI_EltreumUI:SetupLayoutHealer()
 	if not E.db.movers then E.db.movers = {} end
@@ -556,7 +556,6 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	E.db["unitframe"]["units"]["tank"]["rdebuffs"]["fontOutline"] = "OUTLINE"
 	E.db["unitframe"]["units"]["tank"]["rdebuffs"]["duration"]["yOffset"] = 3
 	E.db["unitframe"]["units"]["tank"]["rdebuffs"]["font"] = "Kimberley"
-	E.db["unitframe"]["units"]["tank"]["rdebuffs"]["fontOutline"] = "OUTLINE"
 	E.db["unitframe"]["units"]["tank"]["rdebuffs"]["fontSize"] = 14
 	E.db["unitframe"]["units"]["tank"]["rdebuffs"]["size"] = 20
 	E.db["unitframe"]["units"]["tank"]["rdebuffs"]["stack"]["xOffset"] = -3
@@ -673,7 +672,6 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	E.db["unitframe"]["units"]["party"]["debuffs"]["yOffset"] = 1
 	E.db["unitframe"]["units"]["party"]["groupBy"] = "ROLE"
 	E.db["unitframe"]["units"]["party"]["healPrediction"]["absorbStyle"] = "REVERSED"
-	E.db["unitframe"]["units"]["party"]["healPrediction"]["enable"] = true
 	E.db["unitframe"]["units"]["party"]["health"]["attachTextTo"] = "InfoPanel"
 	E.db["unitframe"]["units"]["party"]["health"]["position"] = "RIGHT"
 	E.db["unitframe"]["units"]["party"]["health"]["text_format"] = ""
@@ -829,7 +827,6 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	E.db["unitframe"]["units"]["player"]["aurabar"]["sortDirection"] = "ASCENDING"
 	E.db["unitframe"]["units"]["player"]["buffs"]["countFont"] = "Kimberley"
 	E.db["unitframe"]["units"]["player"]["buffs"]["attachTo"] = "FRAME"
-	E.db["unitframe"]["units"]["player"]["buffs"]["countFont"] = "Kimberley"
 	E.db["unitframe"]["units"]["player"]["buffs"]["countFontOutline"] = "OUTLINE"
 	E.db["unitframe"]["units"]["player"]["buffs"]["height"] = 25
 	E.db["unitframe"]["units"]["player"]["buffs"]["keepSizeRatio"] = false
@@ -936,9 +933,7 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	E.db["unitframe"]["units"]["raid1"]["debuffs"]["yOffset"] = 5
 	E.db["unitframe"]["units"]["raid1"]["fader"]["minAlpha"] = 0.3
 	E.db["unitframe"]["units"]["raid1"]["groupSpacing"] = 10
-	E.db["unitframe"]["units"]["raid1"]["growthDirection"] = "DOWN_RIGHT"
 	E.db["unitframe"]["units"]["raid1"]["healPrediction"]["absorbStyle"] = "REVERSED"
-	E.db["unitframe"]["units"]["raid1"]["healPrediction"]["enable"] = true
 	E.db["unitframe"]["units"]["raid1"]["health"]["text_format"] = ""
 	E.db["unitframe"]["units"]["raid1"]["height"] = 30
 	E.db["unitframe"]["units"]["raid1"]["horizontalSpacing"] = 0
@@ -986,9 +981,6 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	end
 	E.db["unitframe"]["units"]["raid1"]["width"] = 160
 	E.db["unitframe"]["units"]["raid1"]["power"]["enable"] = false
-	E.db["unitframe"]["units"]["raid1"]["power"]["height"] = 8
-	E.db["unitframe"]["units"]["raid1"]["power"]["powerPrediction"] = true
-	E.db["unitframe"]["units"]["raid1"]["power"]["yOffset"] = 4
 	E.db["unitframe"]["units"]["raid2"]["buffIndicator"]["size"] = 12
 	E.db["unitframe"]["units"]["raid2"]["buffs"]["countFont"] = "Kimberley"
 	E.db["unitframe"]["units"]["raid2"]["buffs"]["countFontSize"] = 8
@@ -998,7 +990,6 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	E.db["unitframe"]["units"]["raid2"]["buffs"]["height"] = 15
 	E.db["unitframe"]["units"]["raid2"]["buffs"]["keepSizeRatio"] = false
 	E.db["unitframe"]["units"]["raid2"]["buffs"]["sizeOverride"] = 20
-	E.db["unitframe"]["units"]["raid2"]["classbar"]["enable"] = false
 	E.db["unitframe"]["units"]["raid2"]["colorOverride"] = "FORCE_OFF"
 	E.db["unitframe"]["units"]["raid2"]["debuffs"]["attachTo"] = "HEALTH"
 	E.db["unitframe"]["units"]["raid2"]["debuffs"]["countFont"] = "Kimberley"
@@ -1016,9 +1007,7 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	E.db["unitframe"]["units"]["raid2"]["debuffs"]["xOffset"] = -75
 	E.db["unitframe"]["units"]["raid2"]["debuffs"]["yOffset"] = 5
 	E.db["unitframe"]["units"]["raid2"]["groupSpacing"] = 2
-	E.db["unitframe"]["units"]["raid2"]["growthDirection"] = "DOWN_RIGHT"
 	E.db["unitframe"]["units"]["raid2"]["healPrediction"]["absorbStyle"] = "REVERSED"
-	E.db["unitframe"]["units"]["raid2"]["healPrediction"]["enable"] = true
 	E.db["unitframe"]["units"]["raid2"]["health"]["text_format"] = ""
 	E.db["unitframe"]["units"]["raid2"]["height"] = 26
 	E.db["unitframe"]["units"]["raid2"]["horizontalSpacing"] = 6
@@ -1067,7 +1056,6 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 		E.db["unitframe"]["units"]["raid2"]["visibility"] = "[@raid11,noexists][@raid26,exists] hide;show"
 		E.db["unitframe"]["units"]["raid2"]["growthDirection"] = "RIGHT_DOWN"
 		E.db["unitframe"]["units"]["raid2"]["verticalSpacing"] = 2
-		E.db["unitframe"]["units"]["raid2"]["groupSpacing"] = 2
 		E.db["unitframe"]["units"]["raid2"]["numGroups"] = 5
 		E.db["unitframe"]["units"]["raid2"]["height"] = 30
 		E.db["unitframe"]["units"]["raid2"]["horizontalSpacing"] = 0
@@ -1076,7 +1064,6 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	E.db["unitframe"]["units"]["raid2"]["width"] = 130
 	E.db["unitframe"]["units"]["raid3"]["buffIndicator"]["size"] = 12
 	E.db["unitframe"]["units"]["raid3"]["buffs"]["sizeOverride"] = 17
-	E.db["unitframe"]["units"]["raid3"]["classbar"]["enable"] = false
 	E.db["unitframe"]["units"]["raid3"]["colorOverride"] = "FORCE_OFF"
 	E.db["unitframe"]["units"]["raid3"]["debuffs"]["attachTo"] = "HEALTH"
 	E.db["unitframe"]["units"]["raid3"]["debuffs"]["countFont"] = "Kimberley"
@@ -1092,9 +1079,7 @@ function ElvUI_EltreumUI:SetupLayoutHealer()
 	E.db["unitframe"]["units"]["raid3"]["debuffs"]["yOffset"] = 5
 	E.db["unitframe"]["units"]["raid3"]["fader"]["minAlpha"] = 0.3
 	E.db["unitframe"]["units"]["raid3"]["groupSpacing"] = 10
-	E.db["unitframe"]["units"]["raid3"]["growthDirection"] = "DOWN_RIGHT"
 	E.db["unitframe"]["units"]["raid3"]["healPrediction"]["absorbStyle"] = "REVERSED"
-	E.db["unitframe"]["units"]["raid3"]["healPrediction"]["enable"] = true
 	E.db["unitframe"]["units"]["raid3"]["health"]["attachTextTo"] = "InfoPanel"
 	E.db["unitframe"]["units"]["raid3"]["health"]["position"] = "RIGHT"
 	E.db["unitframe"]["units"]["raid3"]["health"]["text_format"] = ""

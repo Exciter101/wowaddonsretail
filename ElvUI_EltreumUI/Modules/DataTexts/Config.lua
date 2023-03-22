@@ -1,9 +1,10 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local DT = E:GetModule("DataTexts")
 local InCombatLockdown = _G.InCombatLockdown
 local UIErrorsFrame = _G.UIErrorsFrame
 local ERR_NOT_IN_COMBAT = _G.ERR_NOT_IN_COMBAT
+local strjoin = _G.strjoin
 
 local lastPanelEltruismConfig
 local displayStringEltruismconfig = ''

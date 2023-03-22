@@ -1,9 +1,13 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local CreateFrame = _G.CreateFrame
 local level, targetmodel, playermodel
 local UnitExists = _G.UnitExists
 local UnitIsDead = _G.UnitIsDead
+local hooksecurefunc = _G.hooksecurefunc
+local rad = _G.raid
+local unpack = _G.unpack
+local UnitClass = _G.UnitClass
 
 local druidfix = {
 	[1272625] = true, --""druidbear2_artifact1.m2",
@@ -667,7 +671,7 @@ if E.Retail or E.Wrath then
 	local CreateFrame = CreateFrame
 	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
 	local classIcon = [[Interface\WorldStateFrame\Icons-Classes]]
-	function UF:Configure_Portrait(frame)
+	function UF:Configure_Portrait(frame) --TODO recheck this
 		local last = frame.Portrait
 		if last then
 			last:Hide()

@@ -1,4 +1,4 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
 local UF = E:GetModule('UnitFrames')
 local _G = _G
 local hooksecurefunc = _G.hooksecurefunc
@@ -11,6 +11,7 @@ local reactiontarget,reactionfocus,reactionpet
 local _, targetclass, focusclass, petclass
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local headergroup,group,groupbutton
+local select = _G.select
 
 do
 
@@ -100,6 +101,12 @@ do
 			if E.db.ElvUI_EltreumUI.unitframes.UFmodifications then
 				--player
 				if UnitExists("player") and castbar then
+
+					--set latency texture to unitframe texture
+					if castbar.SafeZone then
+						castbar.SafeZone:SetTexture(E.LSM:Fetch("statusbar", E.db.unitframe.statusbar))
+					end
+
 					if E.db.ElvUI_EltreumUI.unitframes.gradientmode.enable then
 						if E.db.unitframe.colors.transparentCastbar then
 							castbar.bg:SetVertexColor(0,0,0,0)

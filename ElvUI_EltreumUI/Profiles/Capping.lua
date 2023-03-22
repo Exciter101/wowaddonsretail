@@ -1,4 +1,7 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
+local _G  = _G
+local IsAddOnLoaded = _G.IsAddOnLoaded
+local table = _G.table
 
 -- Capping profile setup
 function ElvUI_EltreumUI:GetCappingProfile()
@@ -9,7 +12,6 @@ function ElvUI_EltreumUI:GetCappingProfile()
 			table.insert(CappingSettings.profileKeys, E.mynameRealm)
 			CappingSettings["profileKeys"][E.mynameRealm] = "Eltreum"
 		else
-			CappingSettings["profileKeys"][E.mynameRealm] = "Eltreum"
 			CappingSettings["profiles"]["Eltreum"] = {}
 			CappingSettings["profiles"]["Eltreum"] = {
 				["colorBarBackground"] = {
@@ -35,6 +37,7 @@ function ElvUI_EltreumUI:GetCappingProfile()
 				},
 				["growUp"] = true,
 			}
+			CappingSettings["profileKeys"][E.mynameRealm] = "Eltreum"
 		end
 
 		ElvUI_EltreumUI:Print(L["Capping profile has been set."])

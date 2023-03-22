@@ -1,4 +1,7 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
+local _G  = _G
+local IsAddOnLoaded = _G.IsAddOnLoaded
+local table = _G.table
 
 -- Gladdy profile setup
 function ElvUI_EltreumUI:GetGladdyProfile()
@@ -9,7 +12,6 @@ function ElvUI_EltreumUI:GetGladdyProfile()
 			table.insert(GladdyXZ.profileKeys, E.mynameRealm)
 			GladdyXZ["profileKeys"][E.mynameRealm] = "Eltreum"
 		else
-			GladdyXZ["profileKeys"][E.mynameRealm] = "Eltreum"
 			GladdyXZ["profiles"]["Eltreum"] = {}
 			GladdyXZ["profiles"]["Eltreum"] = {
 				["healthBarBgColor"] = {
@@ -285,6 +287,7 @@ function ElvUI_EltreumUI:GetGladdyProfile()
 				["cooldown"] = false,
 				["drGrowDirection"] = "LEFT",
 			}
+			GladdyXZ["profileKeys"][E.mynameRealm] = "Eltreum"
 		end
 	end
 end

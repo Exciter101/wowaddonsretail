@@ -4,17 +4,9 @@ local E, _, V, P, G = unpack(ElvUI)
 local EP = LibStub('LibElvUIPlugin-1.0')
 local addon, Engine = ...
 local _G = _G
-local ElvUI_EltreumUI = E:NewModule(addon, 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0', 'AceConsole-3.0')
+ElvUI_EltreumUI = E:NewModule(addon, 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0', 'AceConsole-3.0')
 local L = E.Libs.ACL:GetLocale("ElvUI", E.global.general.locale)
 local GetAddOnMetadata = _G.GetAddOnMetadata
-
-Engine[1] = ElvUI_EltreumUI
-Engine[2] = E --ElvUI Engine
-Engine[3] = L --ElvUI Locales
-Engine[4] = V --ElvUI PrivateDB
-Engine[5] = P --ElvUI ProfileDB
-Engine[6] = G --ElvUI GlobalDB
-_G[addon] = Engine
 
 --Binding
 _G.BINDING_HEADER_ELTRUISM = GetAddOnMetadata(..., 'Title')
@@ -35,7 +27,8 @@ _G["BINDING_NAME_CLICK EltruismQuestItem12:LeftButton"] = "Quest Item 12"
 ElvUI_EltreumUI.Version = GetAddOnMetadata(addon, 'Version')
 ElvUI_EltreumUI.CreditsList = {}
 ElvUI_EltreumUI.Config = {}
-ElvUI_EltreumUI.Name = '|cff82B4ffEltruism|r'
+--ElvUI_EltreumUI.Name = '|cff82B4ffEltruism|r'
+ElvUI_EltreumUI.Name = E:TextGradient("Eltruism", 0.50, 0.70, 1, 0.67, 0.95, 1)
 
 function ElvUI_EltreumUI:PLAYER_ENTERING_WORLD(_, initLogin)
 	if not E.private.ElvUI_EltreumUI.install_version then

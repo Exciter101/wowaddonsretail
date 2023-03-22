@@ -1,4 +1,6 @@
-local ElvUI_EltreumUI, E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(ElvUI)
+local _G  = _G
+local IsAddOnLoaded = _G.IsAddOnLoaded
 
 --Setup Shadow & Light
 function ElvUI_EltreumUI:GetSLEProfile()
@@ -10,6 +12,7 @@ function ElvUI_EltreumUI:GetSLEProfile()
 		E.global["sle"]["advanced"]["optionsLimits"] = true
 		E.private["sle"]["install_complete"] = "4.41"
 		-- Private DB
+		E.private["sle"]["media"]["enable"] = false --disabling for testing
 		E.private["sle"]["module"]["blizzmove"]["enable"] = false
 		E.private["sle"]["module"]["screensaver"] = true
 		E.private["sle"]["professions"]["deconButton"]["enable"] = true
@@ -79,15 +82,15 @@ function ElvUI_EltreumUI:GetSLEProfile()
 		E.db["sle"]["armory"]["stats"]["List"]["MANAREGEN"] = true
 		E.db["sle"]["armory"]["stats"]["List"]["POWER"] = true
 		E.db["sle"]["armory"]["stats"]["List"]["RUNE_REGEN"] = true
-		E.db["sle"]["armory"]["stats"]["catFonts"]["font"] = E.db.general.font
-		E.db["sle"]["armory"]["stats"]["catFonts"]["outline"] = E.db.general.fontStyle
+		E.db["sle"]["armory"]["stats"]["statLabels"]["font"] = E.db.general.font
+		E.db["sle"]["armory"]["stats"]["statLabels"]["outline"] = E.db.general.fontStyle
 		E.db["sle"]["armory"]["stats"]["decimals"] = false
 		E.db["sle"]["armory"]["stats"]["itemLevel"]["font"] = E.db.general.font
 		E.db["sle"]["armory"]["stats"]["itemLevel"]["outline"] = E.db.general.fontStyle
 		E.db["sle"]["armory"]["stats"]["itemLevel"]["size"] = 20
-		E.db["sle"]["armory"]["stats"]["statFonts"]["font"] = E.db.general.font
-		E.db["sle"]["armory"]["stats"]["statFonts"]["outline"] = E.db.general.fontStyle
-		E.db["sle"]["armory"]["stats"]["statFonts"]["size"] = 10
+		E.db["sle"]["armory"]["stats"]["statHeaders"]["font"] = E.db.general.font
+		E.db["sle"]["armory"]["stats"]["statHeaders"]["outline"] = E.db.general.fontStyle
+		E.db["sle"]["armory"]["stats"]["statHeaders"]["size"] = 10
 
 		--bags
 		E.db["sle"]["bags"]["equipmentmanager"]["enable"] = true
@@ -116,6 +119,12 @@ function ElvUI_EltreumUI:GetSLEProfile()
 		E.db["sle"]["media"]["fonts"]["zone"]["font"] = E.db.general.font
 		E.db["sle"]["media"]["fonts"]["zone"]["fontOutline"] = E.db.general.fontStyle
 		E.db["sle"]["media"]["fonts"]["zone"]["fontSize"] = 48
+		E.db["sle"]["media"]["fonts"]["scenarioStage"]["HeaderText"]["font"] = E.db.general.font
+		E.db["sle"]["media"]["fonts"]["scenarioStage"]["HeaderText"]["fontSize"] = 16
+		E.db["sle"]["media"]["fonts"]["scenarioStage"]["HeaderText"]["fontOutline"] = E.db.general.fontStyle
+		E.db["sle"]["media"]["fonts"]["scenarioStage"]["TimerText"]["font"] = E.db.general.font
+		E.db["sle"]["media"]["fonts"]["scenarioStage"]["TimerText"]["fontSize"] = 22
+		E.db["sle"]["media"]["fonts"]["scenarioStage"]["TimerText"]["fontOutline"] = E.db.general.fontStyle
 		-- Minimap
 		E.db["sle"]["minimap"]["coords"]["enable"] = true
 		E.db["sle"]["minimap"]["coords"]["font"] = E.db.general.font

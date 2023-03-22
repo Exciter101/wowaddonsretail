@@ -1,12 +1,12 @@
-tag 1fdab8d8694c62905ba790788ff18fb3a4cae33b 3.1.1-retail
+tag 3e6bb516a307ea4bd1fc5ca439533ec0fa1c603f 3.1.2-retail
 Author:	Adam Koch <me@adamko.ch>
-Date:	Sat Mar 4 15:01:27 2023 -0500
+Date:	Tue Mar 21 19:08:24 2023 -0400
 
-3.1.1-retail Release
+3.1.2-retail Release
 
-commit 661a7745e6b407d2cc1d2351cd145c963ca53c45
+commit e1d040ec124185e85250b48062190100f96870e7
 Author: Adam Koch <me@adamko.ch>
-Date:   Sat Mar 4 15:00:59 2023 -0500
+Date:   Tue Mar 21 19:08:21 2023 -0400
 
-    Implemented LibAceConfigHelper, from ElvUI.
+    Update TOC for new patch.
 
