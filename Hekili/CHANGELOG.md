@@ -1,6 +1,9 @@
 # Hekili
 
-## [v10.0.7-1.0.0e](https://github.com/Hekili/hekili/tree/v10.0.7-1.0.0e) (2023-03-22)
-[Full Changelog](https://github.com/Hekili/hekili/compare/v10.0.7-1.0.0d...v10.0.7-1.0.0e) [Previous Releases](https://github.com/Hekili/hekili/releases)
+## [v10.0.7-1.0.1](https://github.com/Hekili/hekili/tree/v10.0.7-1.0.1) (2023-03-23)
+[Full Changelog](https://github.com/Hekili/hekili/compare/v10.0.7-1.0.0e...v10.0.7-1.0.1) [Previous Releases](https://github.com/Hekili/hekili/releases)
 
-- Frost DK: Fix Breath of Sindragosa.  
+- Elemental: Remove Totemic Recall from defensives toggle.  
+- When filtering by range, use enemy's minimum range rather than maximum range to exclude.  
+- Holy Paladin: Split Avenging Crusader/Wrath to prevent confused Abilities options.  
+    - Update priority.  
