@@ -284,6 +284,11 @@ local function IsNpcPOIFiltered(npcID, mapID, artID, zoneQuestID, questTitles, v
 				RSLogger:PrintDebugMessageEntityID(npcID, string.format("Saltado NPC [%s]: Hay un vignette del juego mostrándolo (Vignette onMinimap).", npcID))
 				return true
 			end
+			-- If Ancestral Spirit in Forbidden Reach, locate real NPC
+			if (tonumber(vignetteNPCID) == RSConstants.FORBIDDEN_REACH_ANCESTRAL_SPIRIT and RSNpcDB.GetNpcId(vignetteInfo.name, mapID)) then
+				RSLogger:PrintDebugMessageEntityID(npcID, string.format("Saltado NPC [%s]: Hay un vignette del juego mostrándolo (Espiritú ancestral).", npcID))
+				return true
+			end
 		end
 	end
 

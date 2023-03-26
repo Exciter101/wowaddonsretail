@@ -1201,6 +1201,39 @@ private.CONTAINER_GUIDE = {
 		[RSConstants.STEP2] = { x = 0.6703, y = 0.4372, comment = AL["NOTE_378010_2"] };
 		[RSConstants.STEP3] = { x = 0.6697, y = 0.5036, comment = AL["NOTE_378010_3"] };
 	}; --Forgotten Dragon Treasure
+	["3862142151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Frozenheart Cairn
+	["3861652151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Obsidian Coffer
+	["3861662151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Bone Pile
+	["3861672151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Irontide Stash
+	["3861682151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Farscale Cache
+	["3861722151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Morqut Provisions
+	["3861742151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Avian Trove
+	["3861792151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Spellsworn Reserves
+	["3862082151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Storm-Eater Cairn
+	["3862122151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Stonescaled Cairn
+	["3862132151"] = { 
+		[RSConstants.FLAG] = { x = 0.3420, y = 0.5980, comment = AL["NOTE_CATALOGER_DAELA"] };
+	}; --Blazing Cairn
 }
 
 ---============================================================================

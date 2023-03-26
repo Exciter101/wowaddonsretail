@@ -216,16 +216,23 @@ function ElvUI_EltreumUI:SkinQuests()
 					ObjectiveTrackerBonusBannerFrame.Icon3:SetVertexColor(classcolor.r, classcolor.g, classcolor.b) --bonusobjectives-title-icon
 				end
 
+				local questside
+				if _G.ObjectiveFrameMover then
+					questside = _G.ObjectiveFrameMover:GetPoint()
+				else
+					questside = "RIGHT"
+				end
+
 				--Interface/AddOns/Blizzard_ObjectiveTracker/Blizzard_ObjectiveTracker.lua
 				local questmodules = {
-					QUEST_TRACKER_MODULE,
-					ACHIEVEMENT_TRACKER_MODULE,
-					BONUS_OBJECTIVE_TRACKER_MODULE,
-					WORLD_QUEST_TRACKER_MODULE,
-					UI_WIDGET_TRACKER_MODULE,
-					CAMPAIGN_QUEST_TRACKER_MODULE,
-					PROFESSION_RECIPE_TRACKER_MODULE,
-					MONTHLY_ACTIVITIES_TRACKER_MODULE,
+					_G.QUEST_TRACKER_MODULE,
+					_G.ACHIEVEMENT_TRACKER_MODULE,
+					_G.BONUS_OBJECTIVE_TRACKER_MODULE,
+					_G.WORLD_QUEST_TRACKER_MODULE,
+					_G.UI_WIDGET_TRACKER_MODULE,
+					_G.CAMPAIGN_QUEST_TRACKER_MODULE,
+					_G.PROFESSION_RECIPE_TRACKER_MODULE,
+					_G.MONTHLY_ACTIVITIES_TRACKER_MODULE,
 				}
 				local mult = 0.85
 				for _, k in pairs(questmodules) do
@@ -266,9 +273,15 @@ function ElvUI_EltreumUI:SkinQuests()
 								block.currentLine.Text:SetWordWrap(true)
 							end
 						end
-						if block.itemButton and E.db.ElvUI_EltreumUI.skins.shadow.enable then
-							block.itemButton:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
-							if EnhancedShadows then EnhancedShadows:RegisterShadow(block.itemButton.shadow) end
+						if block.itemButton then
+							if E.db.ElvUI_EltreumUI.skins.shadow.enable then
+								block.itemButton:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+								if EnhancedShadows then EnhancedShadows:RegisterShadow(block.itemButton.shadow) end
+							end
+							if questside:match("RIGHT") then
+								block.itemButton:ClearAllPoints()
+								block.itemButton:SetPoint("TOPLEFT", block.HeaderText, "TOPLEFT", -60, -3)
+							end
 						end
 						if block.groupFinderButton and E.db.ElvUI_EltreumUI.skins.shadow.enable then
 							block.groupFinderButton:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
@@ -345,7 +358,7 @@ function ElvUI_EltreumUI:SkinQuests()
 
 					--add quest count
 					if _G.ObjectiveTrackerBlocksFrame and _G.ObjectiveTrackerBlocksFrame.QuestHeader and _G.ObjectiveTrackerBlocksFrame.QuestHeader.Text then
-						local NumQuests = select(2, C_QuestLog.GetNumQuestLogEntries())
+						local NumQuests = select(2, _G.C_QuestLog.GetNumQuestLogEntries())
 						--if (NumQuests >= (MAX_QUESTS - 5)) then --global still returning 25
 						if (NumQuests >= 30) then
 							--_G.ObjectiveTrackerBlocksFrame.QuestHeader.Text:SetText(format("|CFFFF0000%d/%d|r - %s", NumQuests, MAX_QUESTS, QUESTS_LABEL))
@@ -392,18 +405,18 @@ function ElvUI_EltreumUI:SkinQuests()
 						progressBar.EltruismSkin = true
 					end
 				end
-				hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
-				hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
-				hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
-				hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
-				hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
-				hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
+				hooksecurefunc(_G.QUEST_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
+				hooksecurefunc(_G.BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
+				hooksecurefunc(_G.WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
+				hooksecurefunc(_G.CAMPAIGN_QUEST_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
+				hooksecurefunc(_G.SCENARIO_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
+				hooksecurefunc(_G.DEFAULT_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", EltreumSkinProgressBars)
 				hooksecurefunc(_G.UI_WIDGET_TRACKER_MODULE,"AddProgressBar", EltreumSkinProgressBars)
 				hooksecurefunc(_G.MONTHLY_ACTIVITIES_TRACKER_MODULE,"AddProgressBar", EltreumSkinProgressBars)
 
-				hooksecurefunc(SCENARIO_CONTENT_TRACKER_MODULE, 'UpdateCriteria', function ()
-					if ScenarioObjectiveBlock then
-						local frames = {ScenarioObjectiveBlock:GetChildren()}
+				hooksecurefunc(_G.SCENARIO_CONTENT_TRACKER_MODULE, 'UpdateCriteria', function ()
+					if _G.ScenarioObjectiveBlock then
+						local frames = {_G.ScenarioObjectiveBlock:GetChildren()}
 						for _, frame in pairs(frames) do
 							if frame.Text then
 								frame.Text:SetFont(E.LSM:Fetch('font', E.db.general.font), E.db.ElvUI_EltreumUI.skins.questsettings.fontSize, E.db.general.fontStyle) --this is the objective like boss 1/1
@@ -566,51 +579,51 @@ function ElvUI_EltreumUI:SkinQuests()
 				end
 
 				--on mouse enter and leave
-				hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
+				hooksecurefunc(_G.DEFAULT_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
 					blockenter(block)
 				end)
 
-				hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
+				hooksecurefunc(_G.DEFAULT_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
 					blockexit(block)
 				end)
 
-				hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
+				hooksecurefunc(_G.WORLD_QUEST_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
 					blockenter(block)
 				end)
 
-				hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
+				hooksecurefunc(_G.WORLD_QUEST_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
 					blockexit(block)
 				end)
 
-				hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
+				hooksecurefunc(_G.ACHIEVEMENT_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
 					blockenter(block)
 				end)
 
-				hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
+				hooksecurefunc(_G.ACHIEVEMENT_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
 					blockexit(block)
 				end)
 
-				hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
+				hooksecurefunc(_G.BONUS_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
 					blockenter(block)
 				end)
 
-				hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
+				hooksecurefunc(_G.BONUS_OBJECTIVE_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
 					blockexit(block)
 				end)
 
-				hooksecurefunc(PROFESSION_RECIPE_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
+				hooksecurefunc(_G.PROFESSION_RECIPE_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
 					blockenter(block)
 				end)
 
-				hooksecurefunc(PROFESSION_RECIPE_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
+				hooksecurefunc(_G.PROFESSION_RECIPE_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
 					blockexit(block)
 				end)
 
-				hooksecurefunc(MONTHLY_ACTIVITIES_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
+				hooksecurefunc(_G.MONTHLY_ACTIVITIES_TRACKER_MODULE, "OnBlockHeaderEnter", function(_, block)
 					blockenter(block)
 				end)
 
-				hooksecurefunc(MONTHLY_ACTIVITIES_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
+				hooksecurefunc(_G.MONTHLY_ACTIVITIES_TRACKER_MODULE, "OnBlockHeaderLeave", function(_, block)
 					blockexit(block)
 				end)
 			end

@@ -41,12 +41,12 @@ function RSWaypoints.AddWaypoint(mapID, x, y)
 	end
 end
 
-function RSWaypoints.AddWaypointFromVignette(vignetteInfo, manuallyFired)
+function RSWaypoints.AddAutomaticWaypoint(mapID, x, y, manuallyFired)
 	-- If not automatic waypoints
 	if (not manuallyFired and not RSConfigDB.IsAddingWaypointsAutomatically()) then
 		return
 	end
 
 	-- Adds the waypoint
-	AddWaypoint(vignetteInfo.mapID, vignetteInfo.x, vignetteInfo.y)
+	AddWaypoint(mapID, x, y)
 end

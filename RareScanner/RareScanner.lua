@@ -370,8 +370,10 @@ function scanner_button:DetectedNewVignette(self, vignetteInfo, isNavigating)
 		return
 	end
 	
-	--RSLogger:PrintDebugMessage(string.format("Vignette ATLAS [%s]", vignetteInfo.atlasName))
+	RSLogger:PrintDebugMessage(string.format("Vignette ATLAS [%s]", vignetteInfo.atlasName))
 		
+	local mapID = C_Map.GetBestMapForUnit("player")
+	
 	-- Overrides name if Torghast vignette
 	if (vignetteInfo.type and vignetteInfo.type == Enum.VignetteType.Torghast) then
 		local npcName = RSNpcDB.GetNpcName(entityID)
@@ -383,6 +385,13 @@ function scanner_button:DetectedNewVignette(self, vignetteInfo, isNavigating)
 	-- Check if it is an event to summon another NPC. In that case display NPC information instead
 	if (RSConstants.NPCS_WITH_PRE_EVENT[entityID]) then
 		local rareNpcID = RSConstants.NPCS_WITH_PRE_EVENT[entityID]
+		RSGeneralDB.RemoveAlreadyFoundEntity(entityID)
+		vignetteInfo.name = RSNpcDB.GetNpcName(rareNpcID)
+		vignetteInfo.atlasName = RSConstants.NPC_VIGNETTE
+		entityID = rareNpcID
+		vignetteInfo.preEvent = true
+	elseif (mapID and entityID == RSConstants.FORBIDDEN_REACH_ANCESTRAL_SPIRIT and RSNpcDB.GetNpcId(vignetteInfo.name, mapID)) then
+		local rareNpcID = RSNpcDB.GetNpcId(vignetteInfo.name, mapID)
 		RSGeneralDB.RemoveAlreadyFoundEntity(entityID)
 		vignetteInfo.name = RSNpcDB.GetNpcName(rareNpcID)
 		vignetteInfo.atlasName = RSConstants.NPC_VIGNETTE
@@ -415,8 +424,6 @@ function scanner_button:DetectedNewVignette(self, vignetteInfo, isNavigating)
 		--RSLogger:PrintDebugMessage(string.format("La entidad [%s] se ignora porque se ha avisado de esta hace menos de %s minutos", entityID, RSConfigDB.GetRescanTimer()))
 		return
 	end
-
-	local mapID = C_Map.GetBestMapForUnit("player")
 	
 	-- In Dragonflight there are icons in the continent map, ignore them
 	if (mapID and mapID == RSConstants.DRAGON_ISLES) then
@@ -599,12 +606,8 @@ function scanner_button:DetectedNewVignette(self, vignetteInfo, isNavigating)
 		-- disable button alert for containers
 		if (not RSConfigDB.IsButtonDisplayingForContainers()) then
 			RSRecentlySeenTracker.AddRecentlySeen(entityID, vignetteInfo.atlasName, false)
-
-			-- If navigation disabled, control Tomtom waypoint externally
-			if (not RSConfigDB.IsDisplayingNavigationArrows()) then
-				RSTomtom.AddTomtomWaypointFromVignette(vignetteInfo)
-				RSWaypoints.AddWaypointFromVignette(vignetteInfo)
-			end
+			RSTomtom.AddTomtomAutomaticWaypoint(mapID, vignettePosition.x, vignettePosition.y, vignetteInfo.name)
+			RSWaypoints.AddAutomaticWaypoint(mapID, vignettePosition.x, vignettePosition.y)
 
 			if (RSNotificationTracker.IsAlreadyNotificated(vignetteInfo.id, false, entityID)) then
 				RSLogger:PrintDebugMessage(string.format("El contenedor [%s] se ignora porque se ha avisado de esta hace menos de 2 minutos", entityID))
@@ -697,8 +700,8 @@ function scanner_button:DetectedNewVignette(self, vignetteInfo, isNavigating)
 
 	-- If navigation disabled, control Tomtom waypoint externally
 	if (not RSConfigDB.IsButtonDisplaying() or not RSConfigDB.IsDisplayingNavigationArrows()) then
-		RSTomtom.AddTomtomWaypointFromVignette(vignetteInfo)
-		RSWaypoints.AddWaypointFromVignette(vignetteInfo)
+		RSTomtom.AddTomtomAutomaticWaypoint(mapID, vignettePosition.x, vignettePosition.y, vignetteInfo.name)
+		RSWaypoints.AddAutomaticWaypoint(mapID, vignettePosition.x, vignettePosition.y)
 	end
 
 	-- Add recently seen
@@ -1348,6 +1351,9 @@ local function UpdateRareNamesDB(currentDbVersion)
 			for preEntityID, _ in pairs (RSConstants.CONTAINERS_WITH_PRE_EVENT) do
 				RSGeneralDB.RemoveAlreadyFoundEntity(preEntityID)
 			end
+			
+			-- Remove ancestral spirit
+			RSGeneralDB.RemoveAlreadyFoundEntity(RSConstants.FORBIDDEN_REACH_ANCESTRAL_SPIRIT)
 			
 			-- Remove ignored entities
 			for _, entityID in ipairs (RSConstants.IGNORED_VIGNETTES) do

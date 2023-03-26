@@ -250,10 +250,6 @@ local function Update(self)
 		element:PreUpdate()
 	end
 
-	if E.db.ElvUI_EltreumUI.dev then
-		ElvUI_EltreumUI:Print("npcID: "..self.npcID)
-	end
-
 	local classification = self.classification
 	local frameType = self.frameType
 	if frameType and frameType == 'ENEMY_NPC' then
@@ -298,6 +294,10 @@ local function Update(self)
 		end
 	else
 		element:Hide()
+	end
+
+	if E.db.ElvUI_EltreumUI.dev then
+		ElvUI_EltreumUI:Print("npcID: "..self.npcID,classification,frameType)
 	end
 
 	if element.PostUpdate then
@@ -355,6 +355,7 @@ local function Update_ClassificationIndicator(_, nameplate)
 			nameplate:EnableElement('EltruismClassificationIndicator')
 		end
 		if nameplate.EltruismClassificationIndicator and nameplate:IsElementEnabled('ClassificationIndicator') then
+			nameplate.EltruismClassificationIndicator:Show()
 			nameplate.EltruismClassificationIndicator:ClearAllPoints()
 			nameplate.EltruismClassificationIndicator:Size(db.size, db.size)
 			nameplate.EltruismClassificationIndicator:Point(E.InversePoints[db.position], nameplate, db.position, db.xOffset, db.yOffset)
@@ -368,6 +369,9 @@ local function Update_ClassificationIndicator(_, nameplate)
 
 	elseif nameplate:IsElementEnabled('EltruismClassificationIndicator') then
 		nameplate:DisableElement('EltruismClassificationIndicator')
+		if nameplate.EltruismClassificationIndicator then
+			nameplate.EltruismClassificationIndicator:Hide()
+		end
 	end
 end
 
@@ -447,4 +451,4 @@ E:AddTag('eltruism:classification', 'UNIT_NAME_UPDATE', function(unit)
 		end
 	end
 end)
-E:AddTagInfo('eltruism:classification', ElvUI_EltreumUI.Name, L["Shows an Icon for the classification of the unit"])
+E:AddTagInfo('eltruism:classification', ElvUI_EltreumUI.Name.." "..L["Miscellaneous"], L["Shows an Icon for the classification of the unit"])
