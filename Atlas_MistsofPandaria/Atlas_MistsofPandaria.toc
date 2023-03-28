@@ -1,4 +1,4 @@
-## Interface: 100002
+## Interface: 100007
 #@non-debug@
 ## Title: Atlas |r|cFF0099FF[Mists of Pandaria]|r
 ## Title-deDE: Atlas |r|cFF0099FF[Mists of Pandaria]|r
@@ -15,9 +15,9 @@
 # ## Notes: Mists of Pandaria Dungeon Maps
 # ## Notes-zhTW: 潘達利亞之謎副本地圖模組
 #@end-debug@
-## Version: v1.52.01
+## Version: v1.52.02
 ## Author: arith, Dynaletik, dubcat
-## X-Date: 2022-11-19T7:39:25Z
+## X-Date: 2023-03-28T12:45:55Z
 ## X-Credits: Dan Gilbert, Lothaer
 ## X-Email: atlas.addon at gmail dot com
 ## X-Website: http://www.atlasmod.com

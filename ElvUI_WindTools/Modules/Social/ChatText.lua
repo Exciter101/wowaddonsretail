@@ -1,5 +1,5 @@
 local W, F, E, L = unpack((select(2, ...)))
-local CT = W:NewModule("ChatText")
+local CT = W:NewModule("ChatText", "AceEvent-3.0")
 local CH = E:GetModule("Chat")
 local LSM = E.Libs.LSM
 local C = W.Utilities.Color
@@ -31,9 +31,10 @@ local wipe = wipe
 
 local Ambiguate = Ambiguate
 local BetterDate = BetterDate
+local BNet_GetClientEmbeddedTexture = BNet_GetClientEmbeddedTexture
+local BNGetNumFriends = BNGetNumFriends
 local BNGetNumFriendInvites = BNGetNumFriendInvites
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-local ChatTypeInfo = ChatTypeInfo
 local FlashClientIcon = FlashClientIcon
 local GetAchievementLink = GetAchievementLink
 local GetBNPlayerCommunityLink = GetBNPlayerCommunityLink
@@ -63,6 +64,9 @@ local UnitIsGroupLeader = UnitIsGroupLeader
 local UnitIsUnit = UnitIsUnit
 local UnitName = UnitName
 
+local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
+local C_BattleNet_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
+local C_BattleNet_GetFriendNumGameAccounts = C_BattleNet.GetFriendNumGameAccounts
 local C_ChatInfo_GetChannelRuleset = C_ChatInfo.GetChannelRuleset
 local C_ChatInfo_GetChannelRulesetForChannelID = C_ChatInfo.GetChannelRulesetForChannelID
 local C_ChatInfo_GetChannelShortcutForChannelID = C_ChatInfo.GetChannelShortcutForChannelID
@@ -73,30 +77,40 @@ local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
 local C_Texture_GetTitleIconTexture = C_Texture.GetTitleIconTexture
 local C_Timer_After = C_Timer.After
 
-local TitleIconVersion_Small = Enum.TitleIconVersion.Small
 local CHATCHANNELRULESET_MENTOR = Enum.ChatChannelRuleset.Mentor
 local NPEV2_CHAT_USER_TAG_GUIDE = gsub(NPEV2_CHAT_USER_TAG_GUIDE, "(|A.-|a).+", "%1")
-local PLAYERMENTORSHIPSTATUS_NEWCOMER = Enum.PlayerMentorshipStatus.Newcomer
+local NUM_CHAT_WINDOWS = NUM_CHAT_WINDOWS
 local PLAYER_REALM = E:ShortenRealm(E.myrealm)
 local PLAYER_NAME = format("%s-%s", E.myname, PLAYER_REALM)
+local PLAYERMENTORSHIPSTATUS_NEWCOMER = Enum.PlayerMentorshipStatus.Newcomer
+local TitleIconVersion_Small = Enum.TitleIconVersion.Small
+local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 
 CT.cache = {}
 local lfgRoles = {}
 local initRecord = {}
 
-local offlineMessageTemplate = "%s " .. _G.ERR_FRIEND_OFFLINE_S
+local factionTextures = {
+    ["Neutral"] = [[Interface\Addons\ElvUI_WindTools\Media\FriendList\GameIcons\Classic]],
+    ["Alliance"] = [[Interface\Addons\ElvUI_WindTools\Media\FriendList\GameIcons\Alliance]],
+    ["Horde"] = [[Interface\Addons\ElvUI_WindTools\Media\FriendList\GameIcons\Horde]]
+}
+
+local offlineMessageTemplate = "%s" .. _G.ERR_FRIEND_OFFLINE_S
 local offlineMessagePattern = gsub(_G.ERR_FRIEND_OFFLINE_S, "%%s", "(.+)")
 offlineMessagePattern = format("^%s$", offlineMessagePattern)
 
-local onlineMessageTemplate = gsub(_G.ERR_FRIEND_ONLINE_SS, "%[%%s%]", "%%s %%s")
+local onlineMessageTemplate = gsub(_G.ERR_FRIEND_ONLINE_SS, "%[%%s%]", "%%s%%s")
 local onlineMessagePattern = gsub(_G.ERR_FRIEND_ONLINE_SS, "|Hplayer:%%s|h%[%%s%]|h", "|Hplayer:(.+)|h%%[(.+)%%]|h")
 onlineMessagePattern = format("^%s$", onlineMessagePattern)
 
 local achievementMessageTemplate = L["%player% has earned the achievement %achievement%!"]
 local achievementMessageTemplateMultiplePlayers = L["%players% have earned the achievement %achievement%!"]
 
+local bnetFriendOnlineMessageTemplate = L["%players% (%bnet%) has come online."]
+local bnetFriendOfflineMessageTemplate = L["%players% (%bnet%) has gone offline."]
+
 local guildPlayerCache = {}
-local blockedMessageCache = {}
 local achievementMessageCache = {
     byAchievement = {},
     byPlayer = {}
@@ -843,7 +857,9 @@ function CT:ChatFrame_MessageEventHandler(
                 chatType == "TARGETICONS" or
                 chatType == "BN_WHISPER_PLAYER_OFFLINE")
          then
-            frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+            if chatType ~= "SYSTEM" or not CT:ElvUIChat_GuildMemberStatusMessageHandler(frame, arg1) then
+                frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+            end
         elseif chatType == "LOOT" then
             frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
         elseif strsub(chatType, 1, 7) == "COMBAT_" then
@@ -854,20 +870,24 @@ function CT:ChatFrame_MessageEventHandler(
             frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
         elseif strsub(chatType, 1, 11) == "ACHIEVEMENT" then
             -- Append [Share] hyperlink
-            frame:AddMessage(
-                format(arg1, GetPlayerLink(arg2, format(noBrackets and "%s" or "[%s]", CT:HandleName(coloredName)))),
-                info.r,
-                info.g,
-                info.b,
-                info.id,
-                nil,
-                nil,
-                isHistory,
-                historyTime
-            )
+            if not CT:ElvUIChat_AchievementMessageHandler(event, frame, arg1, data) then
+                frame:AddMessage(
+                    format(arg1, GetPlayerLink(arg2, format(noBrackets and "%s" or "[%s]", CT:HandleName(coloredName)))),
+                    info.r,
+                    info.g,
+                    info.b,
+                    info.id,
+                    nil,
+                    nil,
+                    isHistory,
+                    historyTime
+                )
+            end
         elseif strsub(chatType, 1, 18) == "GUILD_ACHIEVEMENT" then
-            local message = format(arg1, GetPlayerLink(arg2, format(noBrackets and "%s" or "[%s]", coloredName)))
-            frame:AddMessage(message, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+            if not CT:ElvUIChat_AchievementMessageHandler(event, frame, arg1, data) then
+                local message = format(arg1, GetPlayerLink(arg2, format(noBrackets and "%s" or "[%s]", coloredName)))
+                frame:AddMessage(message, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+            end
         elseif chatType == "IGNORED" then
             frame:AddMessage(
                 format(_G.CHAT_IGNORED, arg2),
@@ -1413,139 +1433,86 @@ function CT:ToggleReplacement()
     end
 end
 
-function CT.GuildMemberStatusMessageHandler(_, _, msg)
-    if not CT.db or not CT.db.enable or not CT.db.guildMemberStatus then
-        return
-    end
-
-    local name, class, link, resultText
-
-    if blockedMessageCache[msg] then
-        return true
-    end
-
-    name = strmatch(msg, offlineMessagePattern)
-    if not name then
-        link, name = strmatch(msg, onlineMessagePattern)
-    end
-
-    if name then
-        class = guildPlayerCache[name]
-        if not class then
-            updateGuildPlayerCache(nil, "FORCE_UPDATE")
-            class = guildPlayerCache[name]
-        end
-    end
-
-    if class then
-        blockedMessageCache[msg] = true
-
-        C_Timer_After(
-            0.1,
-            function()
-                blockedMessageCache[msg] = nil
-            end
-        )
-
-        local displayName = CT.db.removeRealm and Ambiguate(name, "short") or name
-        local coloredName =
-            F.CreateClassColorString(displayName, link and guildPlayerCache[link] or guildPlayerCache[name])
-
-        coloredName = addSpaceForAsian(coloredName)
-        local classIcon = F.GetClassIconStringWithStyle(class, CT.db.classIconStyle, 16, 16)
-
-        if coloredName and classIcon then
-            if link then
-                resultText = format(onlineMessageTemplate, link, classIcon, coloredName)
-                if CT.db.guildMemberStatusInviteLink then
-                    local windInviteLink =
-                        format("|Hwtinvite:%s|h%s|h", link, C.StringByTemplate(format("[%s]", L["Invite"]), "info"))
-                    resultText = resultText .. " " .. windInviteLink
-                end
-                _G.ChatFrame1:AddMessage(resultText, C.RGBFromTemplate("success"))
-            else
-                resultText = format(offlineMessageTemplate, classIcon, coloredName)
-                _G.ChatFrame1:AddMessage(resultText, C.RGBFromTemplate("danger"))
-            end
-
-            return true
-        end
-    end
-
-    return false
-end
-
-function CT.SendAchivementMessage()
-    if not CT.db or not CT.db.enable or not CT.db.mergeAchievement then
+function CT:SendAchivementMessage()
+    if not self.db or not self.db.enable or not self.db.mergeAchievement then
         return
     end
 
     local channelData = {
-        {event = "CHAT_MSG_GUILD_ACHIEVEMENT", color = ChatTypeInfo.GUILD},
-        {event = "CHAT_MSG_ACHIEVEMENT", color = ChatTypeInfo.SYSTEM}
+        {event = "CHAT_MSG_GUILD_ACHIEVEMENT", color = _G.ChatTypeInfo.GUILD},
+        {event = "CHAT_MSG_ACHIEVEMENT", color = _G.ChatTypeInfo.SYSTEM}
     }
 
     for _, data in ipairs(channelData) do
         local event, color = data.event, data.color
-        if achievementMessageCache.byPlayer[event] then
-            for playerString, achievementTable in pairs(achievementMessageCache.byPlayer[event]) do
-                local players = {strsplit("=", playerString)}
+        for frame, cache in pairs(achievementMessageCache.byPlayer) do
+            if cache and cache[event] then
+                for playerString, achievementTable in pairs(cache[event]) do
+                    local players = {strsplit("=", playerString)}
 
-                local achievementLinks = {}
-                for achievementID in pairs(achievementTable) do
-                    tinsert(achievementLinks, GetAchievementLink(achievementID))
-                end
+                    local achievementLinks = {}
+                    for achievementID in pairs(achievementTable) do
+                        tinsert(achievementLinks, GetAchievementLink(achievementID))
+                    end
 
-                local message = nil
+                    local message = nil
 
-                if #players == 1 then
-                    message = gsub(achievementMessageTemplate, "%%player%%", addSpaceForAsian(players[1]))
-                elseif #players > 1 then
-                    message =
-                        gsub(
-                        achievementMessageTemplateMultiplePlayers,
-                        "%%players%%",
-                        addSpaceForAsian(strjoin(", ", unpack(players)))
-                    )
-                end
+                    if #players == 1 then
+                        message = gsub(achievementMessageTemplate, "%%player%%", addSpaceForAsian(players[1]))
+                    elseif #players > 1 then
+                        message =
+                            gsub(
+                            achievementMessageTemplateMultiplePlayers,
+                            "%%players%%",
+                            addSpaceForAsian(strjoin(", ", unpack(players)))
+                        )
+                    end
 
-                if message then
-                    message =
-                        gsub(
-                        message,
-                        "%%achievement%%",
-                        addSpaceForAsian(strjoin(", ", unpack(achievementLinks)), true)
-                    )
-                    _G.ChatFrame1:AddMessage(message, color.r, color.g, color.b)
+                    if message then
+                        message =
+                            gsub(
+                            message,
+                            "%%achievement%%",
+                            addSpaceForAsian(strjoin(", ", unpack(achievementLinks)), true)
+                        )
+
+                        message = select(2, W:GetModule("ChatLink"):Filter("", message))
+                        frame:AddMessage(message, color.r, color.g, color.b)
+                    end
                 end
             end
-            wipe(achievementMessageCache.byPlayer[event])
+            wipe(cache)
         end
     end
 end
 
-function CT.AchievementMessageHandler(_, event, ...)
-    if not CT.db or not CT.db.enable or not CT.db.mergeAchievement then
+function CT:ElvUIChat_AchievementMessageHandler(event, frame, achievementMessage, playerInfo)
+    if not frame or not event or not achievementMessage or not playerInfo then
         return
     end
 
-    local achievementMessage = select(1, ...)
-    local guid = select(12, ...)
-
-    if not guid then
+    if not self.db or not self.db.enable or not self.db.mergeAchievement then
         return
     end
 
-    if not achievementMessageCache.byAchievement[event] then
-        achievementMessageCache.byAchievement[event] = {}
+    if not achievementMessageCache.byAchievement[frame] then
+        achievementMessageCache.byAchievement[frame] = {}
     end
 
-    if not achievementMessageCache.byPlayer[event] then
-        achievementMessageCache.byPlayer[event] = {}
+    if not achievementMessageCache.byAchievement[frame][event] then
+        achievementMessageCache.byAchievement[frame][event] = {}
     end
 
-    local cache = achievementMessageCache.byAchievement[event]
-    local cacheByPlayer = achievementMessageCache.byPlayer[event]
+    if not achievementMessageCache.byPlayer[frame] then
+        achievementMessageCache.byPlayer[frame] = {}
+    end
+
+    if not achievementMessageCache.byPlayer[frame][event] then
+        achievementMessageCache.byPlayer[frame][event] = {}
+    end
+
+    local cache = achievementMessageCache.byAchievement[frame][event]
+    local cacheByPlayer = achievementMessageCache.byPlayer[frame][event]
 
     local achievementID = strmatch(achievementMessage, "|Hachievement:(%d+):")
     if not achievementID then
@@ -1571,13 +1538,13 @@ function CT.AchievementMessageHandler(_, event, ...)
 
                     cacheByPlayer[playerString][achievementID] = true
 
-                    if not CT.waitForAchievementMessage then
-                        CT.waitForAchievementMessage = true
+                    if not self.waitForAchievementMessage then
+                        self.waitForAchievementMessage = true
                         C_Timer_After(
                             0.2,
                             function()
-                                CT.SendAchivementMessage()
-                                CT.waitForAchievementMessage = false
+                                self:SendAchivementMessage()
+                                self.waitForAchievementMessage = false
                             end
                         )
                     end
@@ -1588,14 +1555,16 @@ function CT.AchievementMessageHandler(_, event, ...)
         )
     end
 
-    local playerInfo = CH:GetPlayerInfoByGUID(guid)
     if not playerInfo or not playerInfo.englishClass or not playerInfo.name or not playerInfo.nameWithRealm then
         return
     end
 
-    local displayName = CT.db.removeRealm and playerInfo.name or playerInfo.nameWithRealm
+    local displayName = self.db.removeRealm and playerInfo.name or playerInfo.nameWithRealm
     local coloredName = F.CreateClassColorString(displayName, playerInfo.englishClass)
-    local classIcon = F.GetClassIconStringWithStyle(playerInfo.englishClass, CT.db.classIconStyle, 16, 16)
+    local classIcon =
+        self.db.classIcon and
+        F.GetClassIconStringWithStyle(playerInfo.englishClass, self.db.classIconStyle, 16, 16) .. " " or
+        ""
 
     if coloredName and classIcon and cache[achievementID] then
         local playerName = format("|Hplayer:%s|h%s %s|h", playerInfo.nameWithRealm, classIcon, coloredName)
@@ -1604,14 +1573,60 @@ function CT.AchievementMessageHandler(_, event, ...)
     end
 end
 
-function CT:BetterSystemMessage()
-    if not self.db then
+function CT:ElvUIChat_GuildMemberStatusMessageHandler(frame, msg)
+    if not frame or not msg then
         return
     end
 
-    if self.db.guildMemberStatus and not self.isSystemMessageHandled then
-        ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", self.GuildMemberStatusMessageHandler)
+    if not CT.db or not CT.db.enable or not CT.db.guildMemberStatus then
+        return
+    end
 
+    local name, class, link, resultText
+
+    name = strmatch(msg, offlineMessagePattern)
+    if not name then
+        link, name = strmatch(msg, onlineMessagePattern)
+    end
+
+    if name then
+        class = guildPlayerCache[name]
+        if not class then
+            updateGuildPlayerCache(nil, "FORCE_UPDATE")
+            class = guildPlayerCache[name]
+        end
+    end
+
+    if class then
+        local displayName = CT.db.removeRealm and Ambiguate(name, "short") or name
+        local coloredName =
+            F.CreateClassColorString(displayName, link and guildPlayerCache[link] or guildPlayerCache[name])
+
+        coloredName = addSpaceForAsian(coloredName)
+        local classIcon =
+            self.db.classIcon and F.GetClassIconStringWithStyle(class, CT.db.classIconStyle, 16, 16) .. " " or ""
+
+        if coloredName and classIcon then
+            if link then
+                resultText = format(onlineMessageTemplate, link, classIcon, coloredName)
+                if CT.db.guildMemberStatusInviteLink then
+                    local windInviteLink =
+                        format("|Hwtinvite:%s|h%s|h", link, C.StringByTemplate(format("[%s]", L["Invite"]), "info"))
+                    resultText = resultText .. " " .. windInviteLink
+                end
+                frame:AddMessage(resultText, C.RGBFromTemplate("success"))
+            else
+                resultText = format(offlineMessageTemplate, classIcon, coloredName)
+                frame:AddMessage(resultText, C.RGBFromTemplate("danger"))
+            end
+
+            return true
+        end
+    end
+end
+
+function CT:BetterSystemMessage()
+    if self.db and self.db.guildMemberStatus and not self.isSystemMessageHandled then
         local setHyperlink = _G.ItemRefTooltip.SetHyperlink
         function _G.ItemRefTooltip:SetHyperlink(data, ...)
             if strsub(data, 1, 8) == "wtinvite" then
@@ -1625,11 +1640,194 @@ function CT:BetterSystemMessage()
         end
         self.isSystemMessageHandled = true
     end
+end
 
-    if self.db.mergeAchievement and not self.isAchievementHandled then
-        ChatFrame_AddMessageEventFilter("CHAT_MSG_ACHIEVEMENT", self.AchievementMessageHandler)
-        ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD_ACHIEVEMENT", self.AchievementMessageHandler)
-        self.isAchievementHandled = true
+local battleNetFriendsCharacters = {}
+local battleNetFriendStatusUpdateTime = {}
+
+local function getElementNumberOfTable(t)
+    if not t then
+        return 0
+    end
+
+    local count = 0
+    for _ in pairs(t) do
+        count = count + 1
+    end
+    return count
+end
+
+local function UpdateBattleNetFriendStatus(friendIndex)
+    local friendInfo = friendIndex and C_BattleNet_GetFriendAccountInfo(friendIndex)
+    if not friendInfo then
+        return
+    end
+
+    local savedCharacters = battleNetFriendsCharacters[friendInfo.bnetAccountID]
+    local numberOfSavedCharacters = getElementNumberOfTable(savedCharacters)
+    local characters = {}
+    local numberOfCharacters = 0
+
+    if battleNetFriendStatusUpdateTime[friendInfo.bnetAccountID] then
+        local timeSinceLastUpdate = time() - battleNetFriendStatusUpdateTime[friendInfo.bnetAccountID]
+        if timeSinceLastUpdate < 2 then
+            return
+        end
+    end
+
+    local numGameAccounts = C_BattleNet_GetFriendNumGameAccounts(friendIndex)
+    if numGameAccounts and numGameAccounts > 0 then
+        for accountIndex = 1, numGameAccounts do
+            local gameAccountInfo = C_BattleNet_GetFriendGameAccountInfo(friendIndex, accountIndex)
+            if gameAccountInfo.wowProjectID == WOW_PROJECT_MAINLINE and gameAccountInfo.characterName then
+                numberOfCharacters = numberOfCharacters + 1
+                characters[gameAccountInfo.characterName] = {
+                    faction = gameAccountInfo.factionName,
+                    realm = gameAccountInfo.realmDisplayName,
+                    class = E:UnlocalizedClassName(gameAccountInfo.className)
+                }
+            end
+        end
+    end
+
+    local changed, changedCharacters
+
+    if numberOfSavedCharacters == 0 then
+        if numberOfCharacters > 0 then
+            changed = true
+            changedCharacters = {}
+
+            for character, data in pairs(characters) do
+                changedCharacters[character] = {
+                    type = "online",
+                    data = data
+                }
+            end
+        end
+    else
+        if numberOfCharacters ~= numberOfSavedCharacters then
+            changed = true
+            changedCharacters = {}
+
+            for character, data in pairs(characters) do
+                changedCharacters[character] = {
+                    type = "online",
+                    data = data
+                }
+            end
+
+            for character, data in pairs(savedCharacters) do
+                if not changedCharacters[character] then
+                    changedCharacters[character] = {
+                        type = "offline",
+                        data = data
+                    }
+                else
+                    changedCharacters[character] = nil
+                end
+            end
+        end
+    end
+
+    battleNetFriendsCharacters[friendInfo.bnetAccountID] = characters
+    battleNetFriendStatusUpdateTime[friendInfo.bnetAccountID] = time()
+    return changed, friendInfo.accountName, friendInfo.bnetAccountID, changedCharacters
+end
+
+function CT:PLAYER_ENTERING_WORLD(event)
+    updateGuildPlayerCache(nil, event)
+    for friendIndex = 1, BNGetNumFriends() do
+        UpdateBattleNetFriendStatus(friendIndex)
+    end
+
+    self.bnetFriendDataCached = true
+    self:UnregisterEvent(event)
+end
+
+function CT:BN_FRIEND_INFO_CHANGED(_, friendIndex, appTexture)
+    if not appTexture then
+        C_Texture_GetTitleIconTexture(
+            "App",
+            TitleIconVersion_Small,
+            function(success, texture)
+                if success then
+                    self:BN_FRIEND_INFO_CHANGED(_, friendIndex, texture)
+                end
+            end
+        )
+
+        return
+    end
+
+    if not self.bnetFriendDataCached or not (self.db.bnetFriendOnline or self.db.bnetFriendOffline) then
+        return
+    end
+
+    local changed, accountName, accountID, characters = UpdateBattleNetFriendStatus(friendIndex)
+    if not changed then
+        return
+    end
+
+    local displayAccountName = format("%s |cff82c5ff%s|r", BNet_GetClientEmbeddedTexture(appTexture, 32, 32, 12), accountName)
+    local bnetLink = GetBNPlayerLink(accountName, displayAccountName, accountID, 0, 0, 0)
+
+    local onlineCharacters = {}
+    local offlineCharacters = {}
+
+    for character, characterData in pairs(characters) do
+        local fullName = characterData.data.realm and format("%s-%s", character, characterData.data.realm) or character
+
+        -- to avoid duplicate message
+        if not guildPlayerCache[Ambiguate(fullName, "none")] then
+            local classIcon =
+                self.db.classIcon and
+                F.GetClassIconStringWithStyle(characterData.data.class, CT.db.classIconStyle, 16, 16) .. " " or
+                ""
+            local coloredName = F.CreateClassColorString(character, characterData.data.class)
+
+            local playerName = format("|Hplayer:%s|h%s%s|h", fullName, classIcon, coloredName)
+
+            if self.db.factionIcon then
+                local factionIcon =
+                    F.GetIconString(factionTextures[characterData.data.faction] or factionTextures["Neutral"], 18)
+                playerName = factionIcon and format("%s %s", factionIcon, playerName) or playerName
+            end
+
+            tinsert(
+                characterData.type == "online" and onlineCharacters or offlineCharacters,
+                addSpaceForAsian(playerName)
+            )
+        end
+    end
+
+    local function sendMessage(template, players, bnetLink, ...)
+        local message = gsub(template, "%%players%%", players)
+        message = gsub(message, "%%bnet%%", bnetLink)
+
+        for i = 1, NUM_CHAT_WINDOWS do
+            local chatFrame = _G["ChatFrame" .. i]
+            if chatFrame and chatFrame:IsEventRegistered("CHAT_MSG_BN_INLINE_TOAST_ALERT") then
+                chatFrame:AddMessage(message, ...)
+            end
+        end
+    end
+
+    if #onlineCharacters > 0 and self.db.bnetFriendOnline then
+        sendMessage(
+            bnetFriendOnlineMessageTemplate,
+            strjoin(", ", unpack(onlineCharacters)),
+            bnetLink,
+            C.RGBFromTemplate("success")
+        )
+    end
+
+    if #offlineCharacters > 0 and self.db.bnetFriendOffline then
+        sendMessage(
+            bnetFriendOfflineMessageTemplate,
+            strjoin(", ", unpack(offlineCharacters)),
+            bnetLink,
+            C.RGBFromTemplate("danger")
+        )
     end
 end
 
@@ -1643,6 +1841,9 @@ function CT:Initialize()
     self:ToggleReplacement()
     self:CheckLFGRoles()
     self:BetterSystemMessage()
+
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    self:RegisterEvent("BN_FRIEND_INFO_CHANGED")
 end
 
 function CT:ProfileUpdate()

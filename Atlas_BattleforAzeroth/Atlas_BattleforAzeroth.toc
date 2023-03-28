@@ -1,4 +1,4 @@
-## Interface: 100002
+## Interface: 100007
 #@non-debug@
 ## Title: Atlas |r|cFF0099FF[Battle for Azeroth]|r
 ## Title-deDE: Atlas |r|cFF0099FF[Battle for Azeroth]|r
@@ -19,9 +19,9 @@
 # ## Notes: Battle for Azeroth Instances' Maps
 # ## Notes-zhTW: 決戰艾澤拉斯副本地圖模組
 #@end-debug@
-## Version: v1.52.01
+## Version: v1.52.03
 ## Author: arith
-## X-Date: 2022-11-19T7:33:43Z
+## X-Date: 2023-03-28T12:37:25Z
 ## X-Email: atlas.addon at gmail dot com
 ## X-Website: http://www.atlasmod.com
 ## X-Category: Map
