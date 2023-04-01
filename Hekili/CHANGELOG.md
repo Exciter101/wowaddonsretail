@@ -1,12 +1,11 @@
 # Hekili
 
-## [v10.0.7-1.0.4](https://github.com/Hekili/hekili/tree/v10.0.7-1.0.4) (2023-03-28)
-[Full Changelog](https://github.com/Hekili/hekili/compare/v10.0.7-1.0.3...v10.0.7-1.0.4) [Previous Releases](https://github.com/Hekili/hekili/releases)
+## [v10.0.7-1.0.5](https://github.com/Hekili/hekili/tree/v10.0.7-1.0.5) (2023-03-28)
+[Full Changelog](https://github.com/Hekili/hekili/compare/v10.0.7-1.0.4...v10.0.7-1.0.5) [Previous Releases](https://github.com/Hekili/hekili/releases)
 
-- Feral update from SimC.  
-- Fire: Remove bad Scorch > Pyroblast.  
-- Retribution: Tweak Crusading Strikes forecasting and Judgment HoPo generation.  
-- Frost DK: Minor priority update.  
-- Tweak Improved Garrote.  
-- Paladins: Retire Holy Avenger and re-enable Avenging Crusader for Holy.  
-- Don't let TTD calculations purge tracked debuffs.  
+- Frost Mage: Experimental reduced Ice Lance option.  
+- Retribution: End of fight potion use should be boss fights only.  
+- More Subtlety tweaks.  
+- Subtlety: Split actual/virtual Danse Macabre tracking.  
+- Bestial Wrath: Update from SimC.  
+- Feral: Another SimC update.  

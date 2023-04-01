@@ -1,4 +1,4 @@
--- $Id: Atlas.lua 431 2023-03-20 14:46:49Z arithmandar $
+-- $Id: Atlas.lua 434 2023-03-28 14:39:00Z arithmandar $
 --[[
 
 	Atlas, a World of Warcraft instance map browser
@@ -1995,10 +1995,18 @@ local function initialization()
 	end
 	
 	check_Modules()
-	if (profile.options.worldMapButton) then
-		addon.WorldMap.Button:Show()
+	if (WoWClassicEra) then
+		if (profile.options.worldMapButton) then
+			AtlasToggleFromWorldMap:Show()
+		else
+			AtlasToggleFromWorldMap:Hide()
+		end
 	else
-		addon.WorldMap.Button:Hide()
+		if (profile.options.worldMapButton) then
+			addon.WorldMap.Button:Show()
+		else
+			addon.WorldMap.Button:Hide()
+		end
 	end
 end
 
@@ -2040,9 +2048,17 @@ function addon:Refresh()
 	AtlasFrame:SetClampedToScreen(profile.options.frames.clamp)
 	AtlasFrameLarge:SetClampedToScreen(profile.options.frames.clamp)
 	AtlasFrameSmall:SetClampedToScreen(profile.options.frames.clamp)
-	if (profile.options.worldMapButton) then
-		addon.WorldMap.Button:Show()
+	if (WoWClassicEra) then
+		if (profile.options.worldMapButton) then
+			AtlasToggleFromWorldMap:Show()
+		else
+			AtlasToggleFromWorldMap:Hide()
+		end
 	else
-		addon.WorldMap.Button:Hide()
+		if (profile.options.worldMapButton) then
+			addon.WorldMap.Button:Show()
+		else
+			addon.WorldMap.Button:Hide()
+		end
 	end
 end

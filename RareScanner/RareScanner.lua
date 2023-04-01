@@ -370,7 +370,7 @@ function scanner_button:DetectedNewVignette(self, vignetteInfo, isNavigating)
 		return
 	end
 	
-	RSLogger:PrintDebugMessage(string.format("Vignette ATLAS [%s]", vignetteInfo.atlasName))
+	--RSLogger:PrintDebugMessage(string.format("Vignette ATLAS [%s]", vignetteInfo.atlasName))
 		
 	local mapID = C_Map.GetBestMapForUnit("player")
 	

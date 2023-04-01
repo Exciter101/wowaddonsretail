@@ -24,9 +24,9 @@
 # ## Notes: Transportation Maps
 # ## Notes-zhTW: Atlas 交通網路圖插件，顯示各大陸的海陸空交通節點
 #@end-debug@
-## Version: v1.52.01
+## Version: v1.52.03
 ## Author: arith, Dynaletik, dubcat
-## X-Date: 2022-11-20T3:50:16Z
+## X-Date: 2023-03-30T13:59:52Z
 ## X-Credits: Dan Gilbert, Lothaer
 ## X-Email: atlas.addon at gmail dot com
 ## X-Website: http://www.atlasmod.com

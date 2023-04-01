@@ -3216,47 +3216,47 @@ private.NPC_INFO = {
 	[200911] = { zoneID = {
 				[2100] = { x = 5369, y = 3825, artID = { 1773 }, overlay = { "5894-3812","5369-3825" } };
 				[2151] = { x = 7820, y = 5065, artID = { 1781 }, overlay = { "7820-5065" } };
-			  }, displayID = 111284, questID = { 74351 } }; --Volcanakk
+			  }, displayID = 111284, questID = { 74351 }, reset = true }; --Volcanakk
 	[200610] = { zoneID = {
 				[2101] = { x = 3732, y = 4743, artID = { 1772 }, overlay = { "3677-4366","3419-3352","3732-4743" } };
 				[2151] = { x = 3284, y = 2931, artID = { 1781 }, overlay = { "3284-2931" } };
-			  }, displayID = 111229, questID = { 74340 } }; --Duzalgor <Guardian of the Noxious Brood>
+			  }, displayID = 111229, questID = { 74340 }, reset = true }; --Duzalgor <Guardian of the Noxious Brood>
 	[200960] = { zoneID = {
 				[2102] = { x = 4002, y = 8369, artID = { 1771 }, overlay = { "4284-8475","4114-8454","4002-8369" } };
 				[2151] = { x = 4591, y = 7966, artID = { 1781 }, overlay = { "5174-7276","4591-7966" } };
-			  }, displayID = 111296, questID = { 74348 } }; --Warden Entrix <Hand of Lapisagos>
+			  }, displayID = 111296, questID = { 74348 }, reset = true }; --Warden Entrix <Hand of Lapisagos>
 	[200978] = { zoneID = {
 				[2102] = { x = 6692, y = 5647, artID = { 1771 }, overlay = { "6739-5574" } };
 				[2151] = { x = 5174, y = 7276, artID = { 1781 }, overlay = { "5174-7276" } };
-			  }, displayID = 111367, questID = { 74350 } }; --Pyrachniss
-	[200537] = { zoneID = 2151, artID = { 1781 }, x = 2829, y = 3793, overlay = { "2829-3793" }, displayID = 103886, questID = { 74337 } }; --Gahz'raxes <Spawn of Gahz'ragon>
-	[200579] = { zoneID = 2151, artID = { 1781 }, x = 4101, y = 1435, overlay = { "4101-1435" }, displayID = 111219, questID = { 74338 } }; --Ishyra <Maiden of Discernment>
-	[200584] = { zoneID = 2151, artID = { 1781 }, x = 5816, y = 4826, overlay = { "5816-4826" }, displayID = 111222, questID = { 74336 } }; --Vraken the Hunter
-	[200600] = { zoneID = 2151, artID = { 1781 }, x = 4771, y = 2070, overlay = { "4771-2070" }, displayID = 111228, questID = { 74339 } }; --Reisa the Drowned
-	[200619] = { zoneID = 2151, artID = { 1781 }, x = 4320, y = 4914, overlay = { "4326-4887" }, displayID = 108258, questID = { 74300 } }; --Tectonus
-	[200620] = { zoneID = 2151, artID = { 1781 }, x = 2325, y = 6688, overlay = { "2307-6701" }, displayID = 111312, questID = { 74305 } }; --Sir Pinchalot
-	[200621] = { zoneID = 2151, artID = { 1781 }, x = 5535, y = 3666, overlay = { "5563-3611" }, displayID = 111250, questID = { 74306 } }; --Manathema
-	[200622] = { zoneID = 2151, artID = { 1781 }, x = 3713, y = 4711, overlay = { "3713-4711" }, displayID = 104705, questID = { 74307 } }; --Snarfang
-	[200681] = { zoneID = 2151, artID = { 1781 }, x = 4374, y = 6114, overlay = { "4365-6090" }, displayID = 111361, questID = { 74341 } }; --Bonesifter Marwak
-	[200717] = { zoneID = 2151, artID = { 1781 }, x = 4472, y = 7943, overlay = { "4472-7943" }, displayID = 112071, questID = { 74342 } }; --Galakhad
-	[200721] = { zoneID = 2151, artID = { 1781 }, x = 4393, y = 9051, overlay = { "4393-9051","4340-8920" }, displayID = 111246, questID = { 74343 } }; --Grugoth the Hullcrusher <Scourge of the Coast>
-	[200722] = { zoneID = 2151, artID = { 1781 }, x = 3118, y = 5342, overlay = { "3118-5342" }, displayID = 112095, questID = { 74321 } }; --Gareed
-	[200725] = { zoneID = 2151, artID = { 1781 }, x = 4501, y = 3659, overlay = { "4501-3659" }, displayID = 104135, questID = { 74322 } }; --Faunos <Lord of Fleece>
-	[200730] = { zoneID = 2151, artID = { 1781 }, x = 8014, y = 5898, overlay = { "8003-5881" }, displayID = 91623, questID = { 74325 } }; --Tidesmith Zarviss
-	[200737] = { zoneID = 2151, artID = { 1781 }, x = 4926, y = 4174, overlay = { "4926-4174" }, displayID = 108194, questID = { 74328 } }; --Arcantrix
-	[200738] = { zoneID = 2151, artID = { 1781 }, x = 5643, y = 5914, overlay = { "5643-5914" }, displayID = 103762, questID = { 74329 } }; --Kangalo
-	[200739] = { zoneID = 2151, artID = { 1781 }, x = 6117, y = 2683, overlay = { "6117-2683" }, displayID = 103247, questID = { 74330 } }; --Fimbol
-	[200740] = { zoneID = 2151, artID = { 1781 }, x = 5639, y = 3902, overlay = { "5639-3902" }, displayID = 105750, questID = { 74331 } }; --Agni Blazehoof
-	[200742] = { zoneID = 2151, artID = { 1781 }, x = 5589, y = 5148, overlay = { "5569-5153" }, displayID = 103766, questID = { 74332 } }; --Luttrok
-	[200743] = { zoneID = 2151, artID = { 1781 }, x = 2892, y = 5706, overlay = { "2892-5706" }, displayID = 64607, questID = { 74333 } }; --Amephyst
-	[200885] = { zoneID = 2151, artID = { 1781 }, x = 5969, y = 5883, overlay = { "5969-5883" }, displayID = 111282, questID = { 74344 } }; --Lady Shaz'ra
-	[200904] = { zoneID = 2151, artID = { 1781 }, x = 7297, y = 6738, overlay = { "7297-6738" }, displayID = 106472, questID = { 74345 } }; --Veltrax
-	[200956] = { zoneID = 2151, artID = { 1781 }, x = 3673, y = 1223, overlay = { "3673-1223" }, displayID = 111362, questID = { 74349 } }; --Ookbeard <Irontide "Captain">
-	[201013] = { zoneID = 2151, artID = { 1781 }, x = 6272, y = 3251, overlay = { "6171-3400","6237-3232","6320-3120","6360-3260" }, displayID = 111313, questID = { 74347 } }; --Wyrmslayer Angvardi
-	[201181] = { zoneID = 2151, artID = { 1781 }, x = 6792, y = 4531, overlay = { "6792-4531" }, displayID = 111355, questID = { 74346 } }; --Mad-Eye Carrey <Irontide Captain>
+			  }, displayID = 111367, questID = { 74350 }, reset = true }; --Pyrachniss
+	[200537] = { zoneID = 2151, artID = { 1781 }, x = 2829, y = 3793, overlay = { "2829-3793" }, displayID = 103886, questID = { 74337 }, reset = true }; --Gahz'raxes <Spawn of Gahz'ragon>
+	[200579] = { zoneID = 2151, artID = { 1781 }, x = 4101, y = 1435, overlay = { "4101-1435" }, displayID = 111219, questID = { 74338 }, reset = true }; --Ishyra <Maiden of Discernment>
+	[200584] = { zoneID = 2151, artID = { 1781 }, x = 5816, y = 4826, overlay = { "5816-4826" }, displayID = 111222, questID = { 74336 }, reset = true }; --Vraken the Hunter
+	[200600] = { zoneID = 2151, artID = { 1781 }, x = 4771, y = 2070, overlay = { "4771-2070" }, displayID = 111228, questID = { 74339 }, reset = true }; --Reisa the Drowned
+	[200619] = { zoneID = 2151, artID = { 1781 }, x = 4320, y = 4914, overlay = { "4326-4887" }, displayID = 108258, questID = { 74300 }, reset = true }; --Tectonus
+	[200620] = { zoneID = 2151, artID = { 1781 }, x = 2325, y = 6688, overlay = { "2307-6701" }, displayID = 111312, questID = { 74305 }, reset = true }; --Sir Pinchalot
+	[200621] = { zoneID = 2151, artID = { 1781 }, x = 5535, y = 3666, overlay = { "5563-3611" }, displayID = 111250, questID = { 74306 }, reset = true }; --Manathema
+	[200622] = { zoneID = 2151, artID = { 1781 }, x = 3713, y = 4711, overlay = { "3713-4711" }, displayID = 104705, questID = { 74307 }, reset = true }; --Snarfang
+	[200681] = { zoneID = 2151, artID = { 1781 }, x = 4374, y = 6114, overlay = { "4365-6090" }, displayID = 111361, questID = { 74341 }, reset = true }; --Bonesifter Marwak
+	[200717] = { zoneID = 2151, artID = { 1781 }, x = 4472, y = 7943, overlay = { "4472-7943" }, displayID = 112071, questID = { 74342 }, reset = true }; --Galakhad
+	[200721] = { zoneID = 2151, artID = { 1781 }, x = 4393, y = 9051, overlay = { "4393-9051","4340-8920" }, displayID = 111246, questID = { 74343 }, reset = true }; --Grugoth the Hullcrusher <Scourge of the Coast>
+	[200722] = { zoneID = 2151, artID = { 1781 }, x = 3118, y = 5342, overlay = { "3118-5342" }, displayID = 112095, questID = { 74321 }, reset = true }; --Gareed
+	[200725] = { zoneID = 2151, artID = { 1781 }, x = 4501, y = 3659, overlay = { "4501-3659" }, displayID = 104135, questID = { 74322 }, reset = true }; --Faunos <Lord of Fleece>
+	[200730] = { zoneID = 2151, artID = { 1781 }, x = 8014, y = 5898, overlay = { "8003-5881" }, displayID = 91623, questID = { 74325 }, reset = true }; --Tidesmith Zarviss
+	[200737] = { zoneID = 2151, artID = { 1781 }, x = 4926, y = 4174, overlay = { "4926-4174" }, displayID = 108194, questID = { 74328 }, reset = true }; --Arcantrix
+	[200738] = { zoneID = 2151, artID = { 1781 }, x = 5643, y = 5914, overlay = { "5643-5914" }, displayID = 103762, questID = { 74329 }, reset = true }; --Kangalo
+	[200739] = { zoneID = 2151, artID = { 1781 }, x = 6117, y = 2683, overlay = { "6117-2683" }, displayID = 103247, questID = { 74330 }, reset = true }; --Fimbol
+	[200740] = { zoneID = 2151, artID = { 1781 }, x = 5639, y = 3902, overlay = { "5639-3902" }, displayID = 105750, questID = { 74331 }, reset = true }; --Agni Blazehoof
+	[200742] = { zoneID = 2151, artID = { 1781 }, x = 5589, y = 5148, overlay = { "5569-5153" }, displayID = 103766, questID = { 74332 }, reset = true }; --Luttrok
+	[200743] = { zoneID = 2151, artID = { 1781 }, x = 2892, y = 5706, overlay = { "2892-5706" }, displayID = 64607, questID = { 74333 }, reset = true }; --Amephyst
+	[200885] = { zoneID = 2151, artID = { 1781 }, x = 5969, y = 5883, overlay = { "5969-5883" }, displayID = 111282, questID = { 74344 }, reset = true }; --Lady Shaz'ra
+	[200904] = { zoneID = 2151, artID = { 1781 }, x = 7297, y = 6738, overlay = { "7297-6738" }, displayID = 106472, questID = { 74345 }, reset = true }; --Veltrax
+	[200956] = { zoneID = 2151, artID = { 1781 }, x = 3673, y = 1223, overlay = { "3673-1223" }, displayID = 111362, questID = { 74349 }, reset = true }; --Ookbeard <Irontide "Captain">
+	[201013] = { zoneID = 2151, artID = { 1781 }, x = 6272, y = 3251, overlay = { "6171-3400","6237-3232","6320-3120","6360-3260" }, displayID = 111313, questID = { 74347 }, reset = true }; --Wyrmslayer Angvardi
+	[201181] = { zoneID = 2151, artID = { 1781 }, x = 6792, y = 4531, overlay = { "6792-4531" }, displayID = 111355, questID = { 74346 }, reset = true }; --Mad-Eye Carrey <Irontide Captain>
 	[201186] = { zoneID = 2151, artID = { 1781 }, x = 6897, y = 4601, overlay = { "6897-4601" }, friendly = { "A","H" }, displayID = 102561 }; --Shimmermaw Jr.
-	[201310] = { zoneID = 2151, artID = { 1781 }, x = 6123, y = 3375, overlay = { "6242-3144","6123-3375" }, displayID = 111383, questID = { 74347 }, worldmap = true }; --Nidharr <Wyrmslayer Angvardi's Companion>
+	[201310] = { zoneID = 2151, artID = { 1781 }, x = 6123, y = 3375, overlay = { "6242-3144","6123-3375" }, displayID = 111383, questID = { 74347 }, worldmap = true, reset = true }; --Nidharr <Wyrmslayer Angvardi's Companion>
 	[203280] = { zoneID = 2151, artID = { 1781 }, x = 2975, y = 4745, overlay = { "2980-4740","3540-4080","3740-2300","4140-3820","5440-4660","5440-5540","6260-6140","6380-5060","7400-3740" }, displayID = 104919 }; --To'no <"The Greatest Explorer Ever">
 	[203286] = { zoneID = 2151, artID = { 1781 }, x = 2980, y = 4768, overlay = { "2980-4768","3540-4100","3740-2320","4140-3820","5440-4680","5440-5540","6260-6140","6380-5060","7400-3720" }, friendly = { "H","A" }, displayID = 102852 }; --Little Ko
-	[203353] = { zoneID = 2151, artID = { 1781 }, x = 7924, y = 5213, overlay = { "1984-1177","4307-4515","4580-7040","4780-1460","6040-6360","7320-4620","3776-7116","1240-1520","1300-5220","1360-5420","1500-1460","1620-1540","2020-1300","2840-5680","2940-6020","3080-5520","3120-4900","3240-6500","3380-4520","3400-3860","3580-4440","3640-1800","3800-3660","3800-6340","4000-2420","4000-3640","4020-3060","4080-2700","4280-9020","4380-4080","4420-1900","4420-7620","4440-3640","4460-6160","4480-4560","4500-3900","4520-4760","4560-4200","4560-5680","4620-5080","4720-4240","4820-5360","4860-6940","4900-2440","5000-5260","5060-5560","5060-5680","5080-5420","5120-4740","5160-5780","5180-5120","5220-2460","5260-7740","5320-4760","5320-5160","5340-5500","5440-5740","5460-4160","5480-3580","5500-5880","5520-7080","5580-4860","5680-5420","5760-6620","5800-5720","5820-6180","5840-4120","6140-3940","6280-3160","6420-2700","6640-5800","6640-6220","6680-6080","6820-1040","6900-0920","6900-1240","6940-5900","6960-4560","6960-6340","7100-6720","7120-5600","7140-6100","7180-6920","7280-5460","7420-5760","8100-6160","8800-6340","7924-5213" }, displayID = 111910 }; --Loot Specialist <Venture Co. Acquisitions>
+	[203353] = { zoneID = 2151, artID = { 1781 }, x = 7924, y = 5213, overlay = { "1984-1177","4307-4515","4580-7040","4780-1460","6040-6360","7320-4620","3776-7116","1240-1520","1300-5220","1360-5420","1500-1460","1620-1540","2020-1300","2840-5680","2940-6020","3080-5520","3120-4900","3240-6500","3380-4520","3400-3860","3580-4440","3640-1800","3800-3660","3800-6340","4000-2420","4000-3640","4020-3060","4080-2700","4280-9020","4380-4080","4420-1900","4420-7620","4440-3640","4460-6160","4480-4560","4500-3900","4520-4760","4560-4200","4560-5680","4620-5080","4720-4240","4820-5360","4860-6940","4900-2440","5000-5260","5060-5560","5060-5680","5080-5420","5120-4740","5160-5780","5180-5120","5220-2460","5260-7740","5320-4760","5320-5160","5340-5500","5440-5740","5460-4160","5480-3580","5500-5880","5520-7080","5580-4860","5680-5420","5760-6620","5800-5720","5820-6180","5840-4120","6140-3940","6280-3160","6420-2700","6640-5800","6640-6220","6680-6080","6820-1040","6900-0920","6900-1240","6940-5900","6960-4560","6960-6340","7100-6720","7120-5600","7140-6100","7180-6920","7280-5460","7420-5760","8100-6160","8800-6340","7924-5213" }, displayID = 111910, reset = true }; --Loot Specialist <Venture Co. Acquisitions>
 }

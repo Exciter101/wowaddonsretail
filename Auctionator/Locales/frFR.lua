@@ -229,8 +229,7 @@ L["ENCHANT_TOOLTIP_TOOLTIP_TEXT"] = "Au passage de la souris, afficher les infor
 L["ENGAGE_HEADER"] = "Communauté d'Auctionator"
 L["ERROR_REOPEN_AUCTION_HOUSE"] = "Impossible de compléter l'action, veuillez fermez et rouvrir l'hôtel des ventes."
 L["EXACT_SEARCH"] = "Recherche exacte"
---[[Translation missing --]]
-L["EXPANSION"] = "Expansion"
+L["EXPANSION"] = "Extension"
 L["EXPORT"] = "Exporter"
 L["EXPORT_AS"] = "Exporter en tant que :"
 L["EXPORT_RESULTS"] = "Exporter les résultats"

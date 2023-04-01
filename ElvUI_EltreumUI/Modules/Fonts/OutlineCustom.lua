@@ -8,9 +8,6 @@ function ElvUI_EltreumUI:SetupFontsOutlineCustom(fontStyle)
 		fontStyle = ""
 	end
 
-	if IsAddOnLoaded('ProjectAzilroka') then
-		_G.ProjectAzilroka.db["stAddonManager"]["FontFlag"] = fontStyle
-	end
 	if IsAddOnLoaded("ElvUI_SLE") then
 		E.db["sle"]["armory"]["stats"]["statLabels"]["outline"] = fontStyle
 		E.db["sle"]["armory"]["stats"]["itemLevel"]["outline"] = fontStyle
@@ -281,6 +278,18 @@ function ElvUI_EltreumUI:SetupFontsOutlineCustom(fontStyle)
 		if E.db["unitframe"]["units"]["raid3"]["customTexts"]["EltreumStatus"] then
 			E.db["unitframe"]["units"]["raid3"]["customTexts"]["EltreumStatus"]["fontOutline"] = fontStyle
 		end
+	end
+
+	if IsAddOnLoaded('NameplateSCT') then
+		NameplateSCTDB["global"]["fontFlag"] = fontStyle
+	end
+
+	if IsAddOnLoaded('ProjectAzilroka') then
+		_G.ProjectAzilroka.db["stAddonManager"]["FontFlag"] = fontStyle
+	end
+
+	if IsAddOnLoaded("Questie") then
+		QuestieConfig["global"]["trackerFontOutline"] = fontStyle
 	end
 
 	if E.db["datatexts"]["panels"]["EltruismTime"] and E.db["datatexts"]["panels"]["EltruismTime"]["enable"] then

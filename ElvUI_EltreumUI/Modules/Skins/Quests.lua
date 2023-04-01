@@ -311,7 +311,7 @@ function ElvUI_EltreumUI:SkinQuests()
 					for i = 1, #modules do
 						local module = modules[i]
 						if module and module.Header and module.Header.Text then --the big type of quest
-							if not IsAddOnLoaded("ElvUI_SLE") then
+							if not ElvUI_EltreumUI:SLCheck('quest') then
 								module.Header.Text:SetFont(E.LSM:Fetch('font', E.db.general.font), E.db.ElvUI_EltreumUI.skins.questsettings.fontSize*1.5, E.db.general.fontStyle)
 							end
 							if E.db.ElvUI_EltreumUI.skins.questsettings.customcolor then
@@ -323,12 +323,7 @@ function ElvUI_EltreumUI:SkinQuests()
 							module.Header.Text:SetShadowOffset(2, -1)
 
 							--create the lines
-							if not module.Header.EltruismStatusLine then
-								if IsAddOnLoaded("ElvUI_SLE") then
-									if E.private["sle"]["skins"]["objectiveTracker"]["enable"] then
-										return
-									end
-								end
+							if not module.Header.EltruismStatusLine and not ElvUI_EltreumUI:SLCheck('quest') then
 								if module.Header.Text and module.Header.Text:GetText() ~= nil then
 									module.Header.EltruismStatusLine = CreateFrame("StatusBar", "Eltruism"..module.Header.Text:GetText().."Line", module.Header)
 								else
@@ -373,9 +368,8 @@ function ElvUI_EltreumUI:SkinQuests()
 				local function EltreumSkinProgressBars(_, _, line)
 					local progressBar = line and line.ProgressBar
 					local bar = progressBar and progressBar.Bar
-					if not bar or progressBar.EltruismSkin then
-						return
-					else
+					if not bar then return end
+					if not progressBar.EltruismSkin then
 						if E.db.ElvUI_EltreumUI.skins.questsettings.lineshadow then
 							bar:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
 							if EnhancedShadows then EnhancedShadows:RegisterShadow(bar.shadow) end
@@ -402,6 +396,9 @@ function ElvUI_EltreumUI:SkinQuests()
 						--progressBar:SetBackdropColor(0, 0, 0, 1)
 						--progressBar.Bar.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 						progressBar.Bar:SetStatusBarTexture(E.LSM:Fetch("statusbar", E.db.ElvUI_EltreumUI.skins.queststatusbartexture))
+						hooksecurefunc(progressBar.Bar, "SetStatusBarColor", function(_, r, g, b)
+							progressBar.Bar:GetStatusBarTexture():SetGradient("HORIZONTAL", {r=r - 0.4,g= g - 0.4,b= b - 0.4,a= E.db.general.backdropfadecolor.a}, {r=r + 0.2,g= g + 0.2,b= b + 0.2,a= E.db.general.backdropfadecolor.a})
+						end)
 						progressBar.EltruismSkin = true
 					end
 				end
@@ -686,10 +683,14 @@ function ElvUI_EltreumUI:SkinQuests()
 			_G.QuestWatchFrame.HeaderBar:SetPoint("TOP", _G.QuestWatchFrameMover, "TOP", 40, 0)
 			_G.QuestWatchFrame.HeaderBar:SetStatusBarTexture(E.LSM:Fetch("statusbar", E.db.ElvUI_EltreumUI.skins.questsettings.texture))
 			--_G.QuestWatchFrame.HeaderBar:SetStatusBarColor(classcolor.r, classcolor.g, classcolor.b)
-			if E.db.ElvUI_EltreumUI.unitframes.gradientmode.customcolor or E.db.ElvUI_EltreumUI.unitframes.gradientmode.npcustomcolor then
-				_G.QuestWatchFrame.HeaderBar:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColorsCustom(E.myclass))
+			if not E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor then
+				if E.db.ElvUI_EltreumUI.unitframes.gradientmode.customcolor or E.db.ElvUI_EltreumUI.unitframes.gradientmode.npcustomcolor then
+					_G.QuestWatchFrame.HeaderBar:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColorsCustom(E.myclass))
+				else
+					_G.QuestWatchFrame.HeaderBar:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColors(E.myclass))
+				end
 			else
-				_G.QuestWatchFrame.HeaderBar:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColors(E.myclass))
+				_G.QuestWatchFrame.HeaderBar:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1r,E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1g,E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1b,E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2r,E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2g,E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2b)
 			end
 			if E.db.ElvUI_EltreumUI.skins.questsettings.lineshadow and not _G["EltruismQuestLine"].shadow then
 				_G.QuestWatchFrame.HeaderBar:CreateBackdrop('Transparent')
@@ -897,7 +898,7 @@ function ElvUI_EltreumUI:SkinQuests()
 						WatchFrame.HeaderBar:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColors(E.myclass))
 					end
 				else
-					WatchFrame.HeaderBar:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1r, E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1g, E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1b, E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2r, E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2g, E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2b)
+					WatchFrame.HeaderBar:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, {r = E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1r,g = E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1g, b = E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor1b},{r= E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2r,g= E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2g,b= E.db.ElvUI_EltreumUI.skins.questsettings.linecustomcolor2b})
 				end
 
 				if E.db.ElvUI_EltreumUI.skins.questsettings.lineshadow and not _G["EltruismQuestLine"].shadow then

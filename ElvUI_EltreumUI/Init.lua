@@ -6,7 +6,7 @@ local addon, Engine = ...
 local _G = _G
 ElvUI_EltreumUI = E:NewModule(addon, 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0', 'AceConsole-3.0')
 local L = E.Libs.ACL:GetLocale("ElvUI", E.global.general.locale)
-local GetAddOnMetadata = _G.GetAddOnMetadata
+local GetAddOnMetadata = _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata or _G.GetAddOnMetadata
 
 --Binding
 _G.BINDING_HEADER_ELTRUISM = GetAddOnMetadata(..., 'Title')
@@ -86,6 +86,7 @@ function ElvUI_EltreumUI:PLAYER_ENTERING_WORLD(_, initLogin)
 	ElvUI_EltreumUI:FixChatToggles() --attach left/right chat toggle to the new datatext
 	ElvUI_EltreumUI:ArenaQuest() --hides quests when in arena/bgs
 	ElvUI_EltreumUI:SkinLevelUp() --skins level up toast
+	ElvUI_EltreumUI:ExpandedTalents() --makes talents fit in one window without scroll in classic, scale in retail
 	if E.Retail then
 		ElvUI_EltreumUI:WaypointTimeToArrive() --adds an ETA below waypoints
 		ElvUI_EltreumUI:EltruismHideTalkingHead() --hides talking head from world quests
@@ -97,7 +98,6 @@ function ElvUI_EltreumUI:PLAYER_ENTERING_WORLD(_, initLogin)
 	elseif E.Wrath or E.Classic then
 		ElvUI_EltreumUI:ClassicSockets() --adds sockets and enchants into the character panel, based on Kibs Item Level by Kibsgaard
 		ElvUI_EltreumUI:DynamicClassicDatatext() --toggles datatext for warlocks/hunters to show soulshards/ammo
-		ElvUI_EltreumUI:ExpandedTalents() --makes talents fit in one window without scroll
 		ElvUI_EltreumUI:UpdateAvgIlvl() --updates the ilvl of the character at login so its not 0
 		ElvUI_EltreumUI:SkinProfessions() --makes professions wider
 	end
@@ -117,6 +117,9 @@ function ElvUI_EltreumUI:PLAYER_ENTERING_WORLD(_, initLogin)
 	ElvUI_EltreumUI:AutoCombatLog() -- automatic combat logging inside instances + advanced log for warcraftlogs
 	ElvUI_EltreumUI:FrameScales() --misc frames scales
 	ElvUI_EltreumUI:NPClassificatioNIcon() -- add different elite/rare icons to np
+	if not E.private.unitframe.disabledBlizzardFrames.raid then -- blizzard raid textures/gradient
+		ElvUI_EltreumUI:BlizzardTexturesGradient()
+	end
 end
 
 function ElvUI_EltreumUI:Initialize()
@@ -205,6 +208,9 @@ function ElvUI_EltreumUI:GROUP_ROSTER_UPDATE()
 	end
 	if E.db.ElvUI_EltreumUI.borders.borders then
 		ElvUI_EltreumUI:GroupBorderColorUpdate()
+	end
+	if not E.private.unitframe.disabledBlizzardFrames.raid then -- blizzard raid textures/gradient
+		ElvUI_EltreumUI:BlizzardTexturesGradient()
 	end
 end
 

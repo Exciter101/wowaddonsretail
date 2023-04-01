@@ -1,9 +1,12 @@
 # Auctionator
 
-## [10.0.43](https://github.com/Auctionator/Auctionator/tree/10.0.43) (2023-03-24)
-[Full Changelog](https://github.com/Auctionator/Auctionator/compare/10.0.42...10.0.43) 
+## [10.0.44](https://github.com/Auctionator/Auctionator/tree/10.0.44) (2023-03-28)
+[Full Changelog](https://github.com/Auctionator/Auctionator/compare/10.0.42...10.0.44) 
 
-- Mainline: CraftingInfo: Reposition for Blizz layout change of crafting screen  
+- [Fixes #1284] Classic: CraftingInfo: Show profit for enchants  
+- Remove unused frame name from list export and csv export dialog  
+- Shopping: Fix "Sort" button not working  
+- Mainline: CraftingInfo: Reposition for Blizz layout change on craft panel  
 - Update toc for 10.0.7  
 - [Fixes #1293] Mainline: Add expansion filter for shopping searches  
 - Shopping refactor (#1367)  
