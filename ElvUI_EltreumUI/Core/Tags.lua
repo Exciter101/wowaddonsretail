@@ -829,6 +829,8 @@ E:AddTag("eltruism:dead", "UNIT_HEALTH", function(unit,_,args)
 			return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Unitframes\\dead5.tga:0:0:0:0|t"
 		elseif texture == '6' then
 			return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Unitframes\\dead6.tga:0:0:0:0|t"
+		elseif texture == '7' then
+			return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Unitframes\\dead7.tga:0:0:0:0|t"
 		else
 			return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Unitframes\\dead5.tga:0:0:0:0|t"
 		end
@@ -926,6 +928,14 @@ E:AddTag("eltruism:leader", "GROUP_ROSTER_UPDATE", function(unit)
 	end
 end)
 E:AddTagInfo("eltruism:leader", ElvUI_EltreumUI.Name.." "..L["Icons"], L["Shows the Leader Icon or Assist icon if the unit is Leader or Assist"])
+
+E:AddTag("eltruism:leader:emoji", "GROUP_ROSTER_UPDATE", function(unit)
+	local leader = UnitIsGroupLeader(unit)
+	if leader then
+		return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Unitframes\\Emoji\\Leader.tga:0:0:0:0|t"
+	end
+end)
+E:AddTagInfo("eltruism:leader:emoji", ElvUI_EltreumUI.Name.." "..L["Icons"], L["Shows the Leader Icon as an Emoji Crown"])
 
 --combat icon idea for other units
 E:AddTag("eltruism:combatindicator", 'UNIT_HEALTH', function(unit)

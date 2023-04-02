@@ -17,7 +17,7 @@ local UnitCreatureType = _G.UnitCreatureType
 local InCombatLockdown = _G.InCombatLockdown
 local GetPetActionInfo = _G.GetPetActionInfo
 local pairs = _G.pairs
---moving creteframes out of the function for some reason breaks it
+--moving createframes out of the function for some reason breaks it
 
 -- Skill Glow
 function ElvUI_EltreumUI:SkillGlow()
@@ -511,6 +511,7 @@ function ElvUI_EltreumUI:PreviewGlow()
 
 	if not EltruismGlowPreview.shadow then
 		EltruismGlowPreview:CreateShadow()
+		ElvUI_EltreumUI:ShadowColor(EltruismGlowPreview.shadow)
 	end
 
 	if EltruismGlowPreview:IsShown() then

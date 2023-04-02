@@ -1332,3 +1332,7 @@ L["MAP_SEARCHER_TOOLTIP_TITLE"] = "RareScanner searcher" -- from rarescanner loc
 L["Add Shadows to the Unitframes"] = true
 L["Add Shadows to Tooltips"] = true
 L["Add Shadows to general Blizzard/ElvUI frames"] = true
+L["Nameplate Occluded Alpha"] = true
+L["Alpha of Nameplates out of Sight"] = true
+L["Force ElvUI Chat Toggles"] = true
+L["Enable Always Forcing ElvUI Chat Toggles On"] = true

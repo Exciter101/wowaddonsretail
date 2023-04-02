@@ -23,11 +23,13 @@ P.ElvUI_EltreumUI = {
 		rollsound = false,
 		looticons = false,
 		itemlevels = false,
+		chattoggles = true,
 	},
 
 	cvars = {
 		nameplateOtherBottomInset = 0.02,
 		nameplateOtherTopInset = 0.1,
+		nameplateOccludedAlphaMult = 0,
 		cameraFOV = 90,
 		cameraDistanceMaxZoomFactor = 2.6,
 		nameplateTargetRadialPosition = 1,
@@ -131,6 +133,11 @@ P.ElvUI_EltreumUI = {
 		shadow = {
 			enable = false,
 			length = 3,
+			customcolor = false,
+			classcolor = false,
+			r = 0.27,
+			g = 0.50,
+			b = 0.70,
 			raid = true,
 			aura = false,
 			ufaura = false,
