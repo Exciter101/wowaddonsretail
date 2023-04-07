@@ -33,7 +33,7 @@ function RSTomtom.AddWorldMapTomtomWaypoint(mapID, x, y, name)
 end
 
 function RSTomtom.AddTomtomWaypoint(mapID, x, y, name)
-	if (TomTom and RSConfigDB.IsTomtomSupportEnabled() and mapID and x and y and name) then
+	if (TomTom and RSConfigDB.IsTomtomSupportEnabled() and mapID and mapID ~= "" and x and y and name) then
 		RSTomtom.RemoveCurrentTomtomWaypoint()
 		
 		tomtom_waypoint = TomTom:AddWaypoint(tonumber(mapID), RSUtils.FixCoord(x), RSUtils.FixCoord(y), {

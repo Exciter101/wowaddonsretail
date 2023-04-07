@@ -3415,6 +3415,26 @@ local function GetMapOptions()
 							disabled = function() return not RSConfigDB.IsShowingAnimationForNpcs() and not RSConfigDB.IsShowingAnimationForContainers() and not RSConfigDB.IsShowingAnimationForEvents() end,
 						},
 					}
+				},
+				reputation = {
+					type = "group",
+					order = 1,
+					name = AL["MAP_REPUTATION"],
+					handler = RareScanner,
+					desc = AL["MAP_REPUTATION_DESC"],
+					args = {
+						support = {
+							order = 1,
+							type = "toggle",
+							name = AL["MAP_REPUTATION_HIGHLIGHT"],
+							desc = AL["MAP_REPUTATION_HIGHLIGHT_DESC"],
+							get = function() return RSConfigDB.IsHighlightingReputation() end,
+							set = function(_, value)
+								RSConfigDB.SetHighlightingReputation(value)
+							end,
+							width = "full",
+						},
+					}
 				}
 			}
 		}

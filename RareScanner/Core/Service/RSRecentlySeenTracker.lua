@@ -242,8 +242,13 @@ function RSRecentlySeenTracker.AddPendingAnimation(entityID, mapID, x, y, refres
 	
 	--RSLogger:PrintDebugMessage(string.format("AddPendingAnimation[%s][%s][%s][%s]", entityID, mapID and mapID or "mapID", x and x or "x", y and y or "y"))
 	
-	if (mapID and x and y) then
-		local xy = x.."_"..y
+	if (mapID and mapID ~= "" and x and y) then
+		-- In case it couldn't get the map and coordinates the first time
+		if (ping_animations[entityID] == true) then
+			ping_animations[entityID] = {}
+		end
+		
+		local xy = x.."_"..y		
 		ping_animations[entityID][xy] = {}
 		ping_animations[entityID][xy].x = RSUtils.tostring(x)
 		ping_animations[entityID][xy].y = RSUtils.tostring(y)

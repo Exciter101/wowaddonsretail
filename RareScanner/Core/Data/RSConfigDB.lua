@@ -1546,3 +1546,15 @@ end
 function RSConfigDB.SetShowingAnimationForVignettes(value)
 	private.db.map.animationVignettes = value
 end
+
+---============================================================================
+-- Worldmap reputation
+---============================================================================
+
+function RSConfigDB.IsHighlightingReputation()
+	return private.db.map.highlightReputation
+end
+
+function RSConfigDB.SetHighlightingReputation(value)
+	private.db.map.highlightReputation = value
+end

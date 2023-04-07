@@ -116,11 +116,13 @@ end
 
 
 function RSGroupPinMixin:GetHighlightType() -- override
-	local _, bountyFactionID, bountyFrameType = self.dataProvider:GetBountyInfo();
-	if (bountyFrameType == BountyFrameType.ActivityTracker) then
-		for _, childPOI in pairs (self.POI.POIs) do
-			if (childPOI.factionID and RSUtils.Contains(childPOI.factionID, bountyFactionID)) then
-				return MapPinHighlightType.SupertrackedHighlight;
+	if (RSConfigDB.IsHighlightingReputation()) then
+		local _, bountyFactionID, bountyFrameType = self.dataProvider:GetBountyInfo();
+		if (bountyFrameType == BountyFrameType.ActivityTracker) then
+			for _, childPOI in pairs (self.POI.POIs) do
+				if (childPOI.factionID and RSUtils.Contains(childPOI.factionID, bountyFactionID)) then
+					return MapPinHighlightType.SupertrackedHighlight;
+				end
 			end
 		end
 	end

@@ -25,7 +25,7 @@ RSConstants.LOOT_ITEM_ID = nil
 ---============================================================================
 
 RSConstants.CURRENT_DB_VERSION = 93
-RSConstants.CURRENT_LOOT_DB_VERSION = 102
+RSConstants.CURRENT_LOOT_DB_VERSION = 103
 
 ---============================================================================
 -- Current maps (newer)
@@ -233,7 +233,8 @@ RSConstants.PROFILE_DEFAULTS = {
 			animationContainersType = RSConstants.MAP_ANIMATIONS_ON_CLICK,
 			animationEvents = true,
 			animationEventsType = RSConstants.MAP_ANIMATIONS_ON_CLICK,
-			animationVignettes = true
+			animationVignettes = true,
+			highlightReputation = true
 		},
 		loot = {
 			filteredLootCategories = {},
