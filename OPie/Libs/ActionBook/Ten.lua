@@ -1,6 +1,6 @@
-local _, T = ...
+local COMPAT, _, T = select(4, GetBuildInfo()), ...
 
-if select(4, GetBuildInfo()) >= 10e4 then
+if COMPAT >= 10e4 then
 	local pv = {}
 	local function SetCVarQuietly(k, v)
 		CVarCallbackRegistry:UnregisterEvent("CVAR_UPDATE")

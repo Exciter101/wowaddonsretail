@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(ElvUI)
 local _G = _G
 local CreateFrame = _G.CreateFrame
 local Screenshot = _G.Screenshot
-local C_Timer = _G.C_Timer
 
 local EltruismScreenShot = CreateFrame("Frame", "EltruismScreenShot")
 function ElvUI_EltreumUI:AutoScreenshot()
@@ -15,7 +14,11 @@ function ElvUI_EltreumUI:AutoScreenshot()
 		end
 		EltruismScreenShot:RegisterEvent("PLAYER_LEVEL_UP")
 		EltruismScreenShot:SetScript("OnEvent", function(_,event)
-			C_Timer.After(1, function() Screenshot() end)
+			if event == "PLAYER_LEVEL_UP" then
+				E:Delay(2, function() Screenshot() end)
+			else
+				E:Delay(1, function() Screenshot() end)
+			end
 		end)
 	end
 end

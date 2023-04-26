@@ -21,6 +21,9 @@ local GetSpellCooldown = _G.GetSpellCooldown
 local tostring = _G.tostring
 local mod = _G.mod
 local IsUsableItem = _G.IsUsableItem
+local hsIsReady = true
+local USE = _G.USE or "Use"
+local HearthstoneString = GetItemInfo(6948) or "Hearthstone"
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------hearthstone/tp item datatext
 --based yet again on elvui config
 --most from https://www.wowhead.com/item=6948/hearthstone#comments
@@ -196,23 +199,15 @@ local function EltruismTeleportsOnEvent(self)
 	local cooldown = start + duration - GetTime()
 	if cooldown >= 2 then
 		displayStringEltruismTeleports = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Warcraft3Hearthstone.tga:18:18:0:0:64:64:2:62:2:62|t |cffED7474"..GetBindLocation().."|r"
+		hsIsReady = false
 	elseif cooldown <= 0 then
 		displayStringEltruismTeleports = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Warcraft3Hearthstone.tga:18:18:0:0:64:64:2:62:2:62|t "..GetBindLocation()
+		hsIsReady = true
 	end
 	self.text:SetText(displayStringEltruismTeleports)
 end
 
 local function EltruismTeleportsOnEnter(self)
-	--[[_G["EltruismHearthStoneTest"] = _G["EltruismHearthStoneTest"] or CreateFrame('Button', "EltruismHearthStoneTest", self, 'SecureActionButtonTemplate')
-	_G["EltruismHearthStoneTest"]:SetAttribute('type', 'item')
-	local name = GetItemInfo(6948)
-	_G["EltruismHearthStoneTest"]:SetAttribute('item', name)
-	_G["EltruismHearthStoneTest"]:RegisterForClicks("AnyUp")
-	--_G["EltruismHearthStoneTest"]:SetAllPoints()
-
-	_G["EltruismHearthStoneTest"]:SetPoint("TOPLEFT", self ,"TOPLEFT", 0, 0)
-	_G["EltruismHearthStoneTest"]:SetPoint("BOTTOMRIGHT", self,"BOTTOMRIGHT", -(self:GetWidth()/4)*3, 0)]]
-
 	DT.tooltip:ClearLines()
 	local sizeString = "\":"..E.db["chat"]["fontSize"]..":"..E.db["chat"]["fontSize"].."\""
 	for i,v in pairs(TeleportsItems) do
@@ -272,9 +267,12 @@ local function EltruismTeleportsOnEnter(self)
 	local cooldown = start + duration - GetTime()
 	if cooldown >= 2 then
 		displayStringEltruismTeleports = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Warcraft3Hearthstone.tga:18:18:0:0:64:64:2:62:2:62|t |cffdb3030"..GetBindLocation().."|r"
+		hsIsReady = false
 	else
 		displayStringEltruismTeleports = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Warcraft3Hearthstone.tga:18:18:0:0:64:64:2:62:2:62|t "..GetBindLocation()
+		hsIsReady = true
 	end
+	DT.tooltip:AddDoubleLine(L["Double Click:"], USE.." "..HearthstoneString)
 	DT.tooltip:Show()
 
 	teleportupdate:SetScript("OnUpdate", function(self, elapsed)
@@ -340,9 +338,12 @@ local function EltruismTeleportsOnEnter(self)
 			local cooldown = start + duration - GetTime()
 			if cooldown >= 2 then
 				displayStringEltruismTeleports = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Warcraft3Hearthstone.tga:18:18:0:0:64:64:2:62:2:62|t |cffdb3030"..GetBindLocation().."|r"
+				hsIsReady = false
 			else
 				displayStringEltruismTeleports = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Warcraft3Hearthstone.tga:18:18:0:0:64:64:2:62:2:62|t "..GetBindLocation()
+				hsIsReady = true
 			end
+			DT.tooltip:AddDoubleLine(L["Double Click:"], USE.." "..HearthstoneString)
 			DT.tooltip:Show()
 		end
 	end)
@@ -350,6 +351,29 @@ end
 
 local function EltruismTeleportsOnLeave()
 	teleportupdate:SetScript("OnUpdate", nil)
+	if not InCombatLockdown() then
+		E:Delay(1, function()_G["EltruismHearthStoneSecureButton"]:Hide() end) --delay because showing leaves the datatext so this would trigger early
+	end
 end
 
-DT:RegisterDatatext('EltruismTeleports', nil, { 'SPELL_UPDATE_COOLDOWN', 'BAG_UPDATE_COOLDOWN', "HEARTHSTONE_BOUND"}, EltruismTeleportsOnEvent, nil, nil, EltruismTeleportsOnEnter, EltruismTeleportsOnLeave, L["Eltruism Hearthstones/Teleports"], nil, nil)
+_G["EltruismHearthStoneSecureButton"] = _G["EltruismHearthStoneSecureButton"] or CreateFrame('Button', "EltruismHearthStoneSecureButton", nil, 'SecureActionButtonTemplate')
+_G["EltruismHearthStoneSecureButton"]:SetAttribute('type', 'item')
+local name = GetItemInfo(6948)
+_G["EltruismHearthStoneSecureButton"]:SetAttribute('item', name)
+_G["EltruismHearthStoneSecureButton"]:RegisterForClicks("AnyUp", "AnyDown")
+local function EltruismTeleportsOnClick(self, button)
+	if InCombatLockdown() then return end
+	if not hsIsReady and E.myclass == "SHAMAN" then
+		_G["EltruismHearthStoneSecureButton"]:SetAttribute('type', 'spell')
+		local name = GetSpellInfo(556)
+		_G["EltruismHearthStoneSecureButton"]:SetAttribute('spell', name)
+	else
+		_G["EltruismHearthStoneSecureButton"]:SetAttribute('type', 'item')
+		local name = GetItemInfo(6948)
+		_G["EltruismHearthStoneSecureButton"]:SetAttribute('item', name)
+	end
+	_G["EltruismHearthStoneSecureButton"]:RegisterForClicks("AnyUp", "AnyDown")
+	_G["EltruismHearthStoneSecureButton"]:Show()
+	_G["EltruismHearthStoneSecureButton"]:SetAllPoints(self)
+end
+DT:RegisterDatatext('EltruismTeleports', nil, { 'SPELL_UPDATE_COOLDOWN', 'BAG_UPDATE_COOLDOWN', "HEARTHSTONE_BOUND"}, EltruismTeleportsOnEvent, nil, EltruismTeleportsOnClick, EltruismTeleportsOnEnter, EltruismTeleportsOnLeave, L["Eltruism Hearthstones/Teleports"], nil, nil)

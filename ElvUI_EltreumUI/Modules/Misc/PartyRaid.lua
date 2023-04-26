@@ -18,6 +18,7 @@ local difficultyok
 local instanceok
 local currentCharges, cooldownStart, cooldownDuration
 local cooldown
+local GetPartyAssignment = _G.GetPartyAssignment
 
 --PlaySound(61850)
 --PlaySound(61851)
@@ -344,23 +345,44 @@ function ElvUI_EltreumUI:GetRoleIcon(role)
 	end
 end
 
---other combat icons
-E.Media.CombatIcons.Eltruism01 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight1.tga]]
-E.Media.CombatIcons.Eltruism02 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight2.tga]]
-E.Media.CombatIcons.Eltruism03 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight3.tga]]
-E.Media.CombatIcons.Eltruism04 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight4.tga]]
-E.Media.CombatIcons.Eltruism05 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight5.tga]]
-E.Media.CombatIcons.Eltruism06 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight6.tga]]
-E.Media.CombatIcons.Eltruism07 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight7.tga]]
-E.Media.CombatIcons.Eltruism08 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight8.tga]]
-E.Media.CombatIcons.Eltruism09 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight9.tga]]
-E.Media.CombatIcons.Eltruism10 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight10.tga]]
-E.Media.CombatIcons.Eltruism11 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight11.tga]]
-E.Media.CombatIcons.Eltruism12 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight12.tga]]
-E.Media.CombatIcons.Eltruism13 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight13.tga]]
-E.Media.CombatIcons.Eltruism14 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight14.tga]]
-E.Media.CombatIcons.Eltruism15 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\fight15.tga]]
-
---other rest icons
-E.Media.RestIcons.Eltruism01 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\rest1.tga]]
-E.Media.RestIcons.Eltruism02 = [[Interface\Addons\ElvUI_EltreumUI\Media\Textures\Unitframes\rest2.tga]]
+--replace the leader/assist/master looter icons in frames
+local UF = E:GetModule('UnitFrames')
+function ElvUI_EltreumUI:LeaderIcon()
+	if not E.db.ElvUI_EltreumUI.otherstuff.eltruismleadericons and not E.db.ElvUI_EltreumUI.otherstuff.eltruismassisticons and not E.db.ElvUI_EltreumUI.otherstuff.eltruismlootericons then return end
+	local anchor = self:GetParent()
+	local frame = anchor and anchor:GetParent():GetParent()
+	if not frame then return end
+	if E.db.ElvUI_EltreumUI.otherstuff.eltruismleadericons and frame.LeaderIndicator then
+		frame.LeaderIndicator:SetTexCoord(0,1,0,1)
+		if E.db.ElvUI_EltreumUI.otherstuff.leadericonstype ~= "CUSTOM" then
+			frame.LeaderIndicator:SetTexture('Interface\\addons\\ElvUI_EltreumUI\\Media\\Textures\\Leader\\Leader'..E.db.ElvUI_EltreumUI.otherstuff.leadericonstype..'.tga')
+		else
+			frame.LeaderIndicator:SetTexture([[Interface\AddOns\]]..E.db.ElvUI_EltreumUI.otherstuff.eltruismleadericonscustom)
+		end
+	end
+	if E.db.ElvUI_EltreumUI.otherstuff.eltruismassisticons and frame.AssistantIndicator then
+		frame.AssistantIndicator:SetTexCoord(0,1,0,1)
+		if E.db.ElvUI_EltreumUI.otherstuff.assisticonstype ~= "CUSTOM" then
+			frame.AssistantIndicator:SetTexture('Interface\\addons\\ElvUI_EltreumUI\\Media\\Textures\\Assist\\Assist'..E.db.ElvUI_EltreumUI.otherstuff.assisticonstype..'.tga')
+		else
+			frame.AssistantIndicator:SetTexture([[Interface\AddOns\]]..E.db.ElvUI_EltreumUI.otherstuff.eltruismassisticonscustom)
+		end
+	end
+	if E.db.ElvUI_EltreumUI.otherstuff.eltruismlootericons and frame.MasterLooterIndicator then
+		frame.MasterLooterIndicator:SetTexCoord(0,1,0,1)
+		if E.db.ElvUI_EltreumUI.otherstuff.lootericonstype ~= "CUSTOM" then
+			frame.MasterLooterIndicator:SetTexture('Interface\\addons\\ElvUI_EltreumUI\\Media\\Textures\\MasterLooter\\Looter'..E.db.ElvUI_EltreumUI.otherstuff.lootericonstype..'.tga')
+		else
+			frame.MasterLooterIndicator:SetTexture([[Interface\AddOns\]]..E.db.ElvUI_EltreumUI.otherstuff.eltruismlootericonscustom)
+		end
+	end
+	if frame.RaidRoleIndicator then
+		frame.RaidRoleIndicator:SetTexCoord(0,1,0,1)
+		if(GetPartyAssignment('MAINTANK', frame.unit)) then
+			frame.RaidRoleIndicator:SetTexture(ElvUI_EltreumUI:GetRoleIcon("TANK"))
+		elseif(GetPartyAssignment('MAINASSIST', frame.unit)) then
+			frame.RaidRoleIndicator:SetTexture('Interface\\addons\\ElvUI_EltreumUI\\Media\\Textures\\Assist\\MainAssist1.tga')
+		end
+	end
+end
+hooksecurefunc(UF,"RaidRoleUpdate", ElvUI_EltreumUI.LeaderIcon)

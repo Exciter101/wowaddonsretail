@@ -14,12 +14,11 @@ local GetQuestLogTitle = _G.GetQuestLogTitle
 local UIParent_ManageFramePositions = _G.UIParent_ManageFramePositions
 local select = _G.select
 local ScenarioObjectiveBlockBackground
-local ScenarioObjectiveBlockBackgroundTexture
 local wowheadbutton = CreateFrame("Button", nil)
 local dontexpandanymorequests = 0
 if E.Retail then
 	ScenarioObjectiveBlockBackground = CreateFrame("Frame", "EltruismScenarioBlockBg")
-	ScenarioObjectiveBlockBackgroundTexture = ScenarioObjectiveBlockBackground:CreateTexture()
+	S:HandleFrame(ScenarioObjectiveBlockBackground)
 end
 local format = _G.format
 
@@ -187,6 +186,17 @@ function ElvUI_EltreumUI:SkinQuests()
 		end
 
 		if E.Retail then
+			if _G["QuestNPCModelTextFrame"] then
+				if not _G["QuestNPCModelTextFrame"].Eltruismbg then
+					local QuestNPCModelTemplate = CreateFrame("Frame", "EltruismQuestNPCModelTemplate")
+					QuestNPCModelTemplate:SetPoint("TOPLEFT", _G["QuestModelScene"], "TOPLEFT", 0,0)
+					QuestNPCModelTemplate:SetPoint("BOTTOMRIGHT", _G["QuestNPCModelTextFrame"], "BOTTOMRIGHT", 0,0)
+					S:HandleFrame(QuestNPCModelTemplate)
+					QuestNPCModelTemplate:SetParent(_G["QuestNPCModelTextFrame"])
+					_G["QuestNPCModelTextFrame"].Eltruismbg = _G["QuestNPCModelTextFrame"]:CreateTexture() --used as a check
+				end
+			end
+
 			-- and (not IsAddOnLoaded("ElvUI_WindTools"))
 			if (not IsAddOnLoaded('!KalielsTracker')) and (not IsAddOnLoaded('SorhaQuestLog')) and (not IsAddOnLoaded('ClassicQuestLog')) and (not IsAddOnLoaded('Who Framed Watcher Wabbit?')) then
 				--WQs banner
@@ -194,6 +204,7 @@ function ElvUI_EltreumUI:SkinQuests()
 				if ObjectiveTrackerBonusBannerFrame then
 					--textcoords from https://www.townlong-yak.com/framexml/39229/Helix/AtlasInfo.lua
 					ObjectiveTrackerBonusBannerFrame.Title:SetTextColor(classcolor.r, classcolor.g, classcolor.b)
+					ObjectiveTrackerBonusBannerFrame.Title:SetShadowOffset(2,-2)
 					ObjectiveTrackerBonusBannerFrame.Title:SetText("") --so that the text doesn't show up when it shouldnt
 					ObjectiveTrackerBonusBannerFrame.Icon:SetTexture("Interface\\AddOns\\ElvUI_EltreumUI\\Media\\Textures\\bonusobjectives")
 					ObjectiveTrackerBonusBannerFrame.Icon:SetTexCoord(0.482422, 0.785156, 0.00195312, 0.294922)
@@ -456,11 +467,7 @@ function ElvUI_EltreumUI:SkinQuests()
 					end
 					ScenarioObjectiveBlockBackground:SetSize(243, 80)
 					ScenarioObjectiveBlockBackground:SetFrameLevel(3)
-					ScenarioObjectiveBlockBackgroundTexture:SetTexture("Interface\\Addons\\ElvUI\\Code\\Media\\Textures\\White8x8.tga")
-					ScenarioObjectiveBlockBackgroundTexture:SetColorTexture(0, 0, 0, 0.5)
-					ScenarioObjectiveBlockBackgroundTexture:SetAllPoints(ScenarioObjectiveBlockBackground)
 					ScenarioObjectiveBlockBackground:Show()
-					ScenarioObjectiveBlockBackgroundTexture:Show()
 					if E.db.ElvUI_EltreumUI.skins.questsettings.lineshadow and not ScenarioObjectiveBlockBackground.shadow then
 						ScenarioObjectiveBlockBackground:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
 						ElvUI_EltreumUI:ShadowColor(ScenarioObjectiveBlockBackground.shadow.shadow)

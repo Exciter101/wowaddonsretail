@@ -646,6 +646,9 @@ private.NPC_GUIDE = {
 	["2006192151"] = { 
 		[RSConstants.ENTRANCE] = { x = 0.4289, y = 0.5098 };
 	}; --Tectonus
+	["122899407"] = { 
+		[RSConstants.ENTRANCE] = { x = 0.6545, y = 0.6811 };
+	}; --Death Metal Knight
 }
 
 ---============================================================================

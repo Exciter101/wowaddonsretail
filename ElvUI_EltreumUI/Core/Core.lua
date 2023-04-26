@@ -9,7 +9,6 @@ local unpack = unpack
 local hooksecurefunc = _G.hooksecurefunc
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local DisableAddOn = _G.DisableAddOn
-local C_Timer = C_Timer
 local GetPhysicalScreenSize = GetPhysicalScreenSize
 local SetCVar = SetCVar
 local UIParentLoadAddOn = _G.UIParentLoadAddOn
@@ -48,7 +47,7 @@ function ElvUI_EltreumUI:HidePopups(delay)
 	if IsAddOnLoaded("Details_Streamer") then
 		DisableAddOn("Details_Streamer")
 	end
-	C_Timer.After(delay, function()
+	E:Delay(delay, function()
 		if IsAddOnLoaded("Details") and _G['_detalhes'] then
 			_G['_detalhes'].is_first_run = false
 			_G['_detalhes']:DisablePlugin ("DETAILS_PLUGIN_STREAM_OVERLAY")
@@ -611,6 +610,9 @@ do
 		if not itemLink then return end
 
 		local lootName, _, _, _, _, _, _, _, _, lootTexture = GetItemInfo(itemLink)
+		if itemLink:match("|Hbattlepet:") then
+			lootName, _, _, _, _, _, _, _, _, lootTexture = GetItemInfo(82800)
+		end
 		if not (lootName and lootTexture) then return end
 
 		local text = _G.StaticPopup1Text:GetText()
@@ -619,20 +621,31 @@ do
 			_G.StaticPopup1Text:SetText(deletetext)
 		end
 
-		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING) --from line 2028
+		_G.StaticPopup1.editBox:SetText(DELETE_ITEM_CONFIRM_STRING) --from line 2028
 
 		if throttle == 0 then
 			throttle = 1
 			ElvUI_EltreumUI:Print("DELETE automatically typed")
-			C_Timer.After(1, ClearThrottle)
+			E:Delay(1, ClearThrottle)
 		end
 	end
 
 	local isDeleteHooked = false
+	local petdetect = CreateFrame("FRAME")
 	function ElvUI_EltreumUI:DeleteItem()
-		if not isDeleteHooked and E.db.ElvUI_EltreumUI.otherstuff.delete then
+		if not isDeleteHooked and E.db.ElvUI_EltreumUI.otherstuff.delete and not IsAddOnLoaded("ConsolePort") then
 			hooksecurefunc(StaticPopupDialogs.DELETE_GOOD_ITEM,"OnShow",TypeDelete) --Interface/FrameXML/StaticPopup.lua line 1965/2074
 			hooksecurefunc(StaticPopupDialogs.DELETE_GOOD_QUEST_ITEM,"OnShow",TypeDelete) --Interface/FrameXML/StaticPopup.lua line 2125
+
+			if E.Retail then
+				petdetect:RegisterEvent("DELETE_ITEM_CONFIRM")
+				petdetect:SetScript("OnEvent", function(_,_,deletetype)
+					if deletetype == "Pet Cage" then
+						TypeDelete()
+					end
+				end)
+			end
+
 			isDeleteHooked = true
 		end
 	end
@@ -676,9 +689,9 @@ EltruismGameMenu:SetScript("OnEvent", function()
 
 		hooksecurefunc('GameMenuFrame_UpdateVisibleButtons', function ()
 			EltruismMenuButton:Point("TOP", GameMenuFrame.ElvUI, "BOTTOM", 0, -1)
-			if _G["GameMenu_SLEConfig"] and not _G["GameMenuReloadUI"] and not  _G.TXUI_GAME_BUTTON then
+			if _G["GameMenu_SLEConfig"] and not _G["GameMenuReloadUI"] and not _G.TXUI_GAME_BUTTON then
 				EltruismMenuButton:Point("TOP", _G["GameMenu_SLEConfig"], "BOTTOM", 0, -1)
-			elseif _G["GameMenuReloadUI"] and not  _G.TXUI_GAME_BUTTON then
+			elseif _G["GameMenuReloadUI"] and not _G.TXUI_GAME_BUTTON then
 				EltruismMenuButton:Point("TOP", _G["GameMenuReloadUI"], "BOTTOM", 0, -1)
 			elseif _G.TXUI_GAME_BUTTON then
 				EltruismMenuButton:Point("TOP", _G.TXUI_GAME_BUTTON, "BOTTOM", 0, -1)

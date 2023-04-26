@@ -50,15 +50,32 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		-- AB Conversion
 		E.db["convertPages"] = true
 
-		--smoothbars
-		E.db["general"]["altPowerBar"]["smoothbars"] = true
-		E.db["nameplates"]["smoothbars"] = true
-		E.db["unitframe"]["smoothbars"] = true
-
-		--new tooltip things
-		E.db["tooltip"]["inspectDataEnable"] = true
-		E.db["tooltip"]["mythicDataEnable"] = true
-		E.db["tooltip"]["role"] = true
+		--luckyone based optimizations
+		E.db["auras"]["buffs"]["seperateOwn"] = 0 -- do not sort auras
+		E.db["auras"]["debuffs"]["seperateOwn"] = 0 -- do not sort auras
+		E.db["chat"]["fade"] = false -- do not fade chat
+		E.db["unitframe"]["units"]["assist"]["enable"] = false --disable assist/tank frames
+		E.db["unitframe"]["units"]["tank"]["enable"] = false --disable assist/tank frames
+		E.db["unitframe"]["units"]["boss"]["fader"]["smooth"] = 0 --used to be 0.25
+		E.db["unitframe"]["units"]["player"]["fader"]["smooth"] = 0 --used to be 0.25
+		E.db["unitframe"]["units"]["target"]["fader"]["smooth"] = 0 --used to be 0.25
+		E.db["unitframe"]["units"]["targettarget"]["fader"]["smooth"] = 0
+		E.db["unitframe"]["units"]["focus"]["fader"]["smooth"] = 0 --used to be 0.25
+		E.db["unitframe"]["units"]["pet"]["fader"]["smooth"] = 0 --used to be 0.25
+		E.db["unitframe"]["units"]["arena"]["fader"]["smooth"] = 0
+		E.db["unitframe"]["units"]["boss"]["fader"]["smooth"] = 0
+		E.db["unitframe"]["units"]["party"]["fader"]["smooth"] = 0
+		E.db["unitframe"]["units"]["raid1"]["fader"]["smooth"] = 0
+		E.db["unitframe"]["units"]["raid2"]["fader"]["smooth"] = 0
+		E.db["unitframe"]["units"]["raid3"]["fader"]["smooth"] = 0
+		E.db["general"]["altPowerBar"]["smoothbars"] = false --was true
+		E.db["nameplates"]["smoothbars"] = false --was true
+		E.db["unitframe"]["smoothbars"] = false --was true
+		E.db["tooltip"]["inspectDataEnable"] = false --was true
+		E.db["tooltip"]["mythicDataEnable"] = false --was true
+		E.db["tooltip"]["role"] = false --was true
+		E.db["tooltip"]["targetInfo"] = false --was true
+		E.db["tooltip"]["showMount"] = false --was true
 
 		--to make sure its correct height
 		E.db["unitframe"]["units"]["player"]["height"] = 54
@@ -70,12 +87,6 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["unitframe"]["units"]["player"]["power"]["height"] = 15
 		E.db["unitframe"]["units"]["target"]["power"]["height"] = 15
 
-		--and combat indicator
-		E.db["unitframe"]["units"]["party"]["CombatIcon"]["color"]["r"] = 1
-		E.db["unitframe"]["units"]["party"]["CombatIcon"]["color"]["b"] = 1
-		E.db["unitframe"]["units"]["party"]["CombatIcon"]["color"]["g"] = 1
-		E.db["unitframe"]["units"]["party"]["CombatIcon"]["defaultColor"] = false
-
 		--reverse target
 		E.db["unitframe"]["units"]["target"]["health"]["reverseFill"] = false
 		E.db["unitframe"]["units"]["target"]["power"]["reverseFill"] = false
@@ -83,6 +94,12 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		--general pixel perfect things
 		E.private["general"]["pixelPerfect"] = true
 		E.db["unitframe"]["thinBorders"] = true
+
+		--transparent things
+		E.db["unitframe"]["colors"]["transparentAurabars"] = true
+		E.db["unitframe"]["colors"]["transparentCastbar"] = true
+		E.db["unitframe"]["colors"]["transparentHealth"] = true
+		E.db["unitframe"]["colors"]["transparentPower"] = true
 
 		--combat icon
 		E.db["unitframe"]["units"]["focus"]["CombatIcon"]["xOffset"] = -87
@@ -92,7 +109,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["unitframe"]["units"]["party"]["CombatIcon"]["color"]["g"] = 1
 		E.db["unitframe"]["units"]["party"]["CombatIcon"]["defaultColor"] = true
 		E.db["unitframe"]["units"]["party"]["CombatIcon"]["enable"] = false
-		E.db["unitframe"]["units"]["party"]["CombatIcon"]["texture"] = "Eltruism05"
+		E.db["unitframe"]["units"]["party"]["CombatIcon"]["texture"] = "Eltruism16"
 		E.db["unitframe"]["units"]["player"]["CombatIcon"]["anchorPoint"] = "TOPRIGHT"
 		E.db["unitframe"]["units"]["player"]["CombatIcon"]["color"]["a"] = 0.80000001192093
 		E.db["unitframe"]["units"]["player"]["CombatIcon"]["color"]["b"] = 1
@@ -123,10 +140,10 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			E.db["actionbar"]["bar4"]["paging"]["MONK"] = "[vehicleui] 16; [overridebar] 18; [possessbar] 16;[bonusbar:5] 11;"
 			E.db["actionbar"]["bar4"]["paging"]["PALADIN"] = "[vehicleui] 16; [overridebar] 18; [possessbar] 16;[bonusbar:5] 11;"
 			E.db["actionbar"]["bar4"]["paging"]["PRIEST"] = "[vehicleui] 16; [overridebar] 18; [possessbar] 16;[bonusbar:5] 11;"
-			E.db["actionbar"]["bar4"]["paging"]["ROGUE"] = "[bonusbar:1] 7;[bonusbar:1,nostealth] 4; [bonusbar:1,stealth] 7; [vehicleui] 16; [overridebar] 18; [possessbar] 12;[bonusbar:2] 8;[bonusbar:5] 11;" --other other besides this was causing problems with shadow dance
+			E.db["actionbar"]["bar4"]["paging"]["ROGUE"] = "[bonusbar:1] 7;[bonusbar:1,nostealth] 4; [bonusbar:1,stealth] 7; [vehicleui] 16; [overridebar] 18; [possessbar] 16;[bonusbar:2] 8;[bonusbar:5] 11;" --other other besides this was causing problems with shadow dance
 			E.db["actionbar"]["bar4"]["paging"]["SHAMAN"] = "[vehicleui] 16; [overridebar] 18; [possessbar] 16;[bonusbar:5] 11;"
 			E.db["actionbar"]["bar4"]["paging"]["WARLOCK"] = "[vehicleui] 16; [overridebar] 18;[possessbar] 16;[bonusbar:5] 11;"
-			E.db["actionbar"]["bar4"]["paging"]["WARRIOR"] = "[vehicleui] 16; [overridebar] 18;[possessbar] 16;[bonusbar:5] 11;"
+			E.db["actionbar"]["bar4"]["paging"]["WARRIOR"] = "[vehicleui] 16; [overridebar] 18;[possessbar] 16;[bonusbar:5] 11;[stance:1] 7; [stance:2] 8; [stance:3] 9;"
 			E.db["actionbar"]["bar4"]["paging"]["EVOKER"] = "[vehicleui] 16; [overridebar] 18; [possessbar] 16;[bonusbar:5] 11;[bonusbar:1] 7;"
 		else
 			E.db["actionbar"]["bar4"]["paging"]["DEATHKNIGHT"] = "[vehicleui] 12; [overridebar] 14;[possessbar] 12;[bonusbar:5] 11;"
@@ -318,7 +335,6 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["unitframe"]["colors"]["transparentCastbar"] = true
 		E.db["unitframe"]["colors"]["transparentHealth"] = true
 		E.db["unitframe"]["colors"]["transparentPower"] = false
-
 
 		--movers
 		E.db["movers"]["MoverEltruismInstanceDifficulty"] = "TOPRIGHT,UIParent,TOPRIGHT,-146,-21"
@@ -767,7 +783,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "RIGHT",
 			["size"] = 16,
-			["text_format"] = "[eltruism:raidmarker] [eltruism:hpstatusnopc{5,3}]",
+			["text_format"] = "[eltruism:raidmarker] [eltruism:hpstatusnopc]",
 			["xOffset"] = 0,
 			["yOffset"] = 0
 		}
@@ -811,7 +827,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "CENTER",
 			["size"] = 40,
-			["text_format"] = "[eltruism:dead{5}][eltruism:dc{2}]",
+			["text_format"] = "[eltruism:dead][eltruism:dc]",
 			["xOffset"] = 0,
 			["yOffset"] = 0
 		}
@@ -826,7 +842,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 				["fontOutline"] = "OUTLINE",
 				["justifyH"] = "LEFT",
 				["size"] = 16,
-				["text_format"] = "[eltruism:hpstatusnopc{5,3}]",
+				["text_format"] = "[eltruism:hpstatusnopc]",
 				["xOffset"] = 0,
 				["yOffset"] = 0
 			}
@@ -859,7 +875,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 				["fontOutline"] = "THICKOUTLINE",
 				["justifyH"] = "CENTER",
 				["size"] = 40,
-				["text_format"] = "[eltruism:dead{5}][eltruism:dc{2}]",
+				["text_format"] = "[eltruism:dead][eltruism:dc]",
 				["xOffset"] = -50,
 				["yOffset"] = 0
 			}
@@ -871,7 +887,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 				["fontOutline"] = "OUTLINE",
 				["justifyH"] = "LEFT",
 				["size"] = 16,
-				["text_format"] = "[eltruism:hpstatusnopc{5,3}]",
+				["text_format"] = "[eltruism:hpstatusnopc]",
 				["xOffset"] = 0,
 				["yOffset"] = 0
 			}
@@ -946,7 +962,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "RIGHT",
 			["size"] = 14,
-			["text_format"] = "[eltruism:hpstatus{5,3}]",
+			["text_format"] = "[eltruism:hpstatus]",
 			["xOffset"] = 0,
 			["yOffset"] = 0
 		}
@@ -990,9 +1006,20 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "CENTER",
 			["size"] = 27,
-			["text_format"] = "[eltruism:dead{5}][eltruism:dc{2}]",
+			["text_format"] = "[eltruism:dead][eltruism:dc]",
 			["xOffset"] = 50,
 			["yOffset"] = 0
+		}
+		E.db["unitframe"]["units"]["player"]["customTexts"]["EltreumStance"] = {
+			["attachTextTo"] = "Health",
+			["enable"] = true,
+			["font"] = "Kimberley",
+			["fontOutline"] = "OUTLINE",
+			["justifyH"] = "LEFT",
+			["size"] = 10,
+			["text_format"] = "[eltruism:stance]",
+			["xOffset"] = 4,
+			["yOffset"] = -15,
 		}
 
 		-- Custom Text: Raid1
@@ -1026,7 +1053,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "OUTLINE",
 			["justifyH"] = "RIGHT",
 			["size"] = 10,
-			["text_format"] = "[eltruism:hpstatusnopc{5,3}]",
+			["text_format"] = "[eltruism:hpstatusnopc]",
 			["xOffset"] = 0,
 			["yOffset"] = -1
 		}
@@ -1048,7 +1075,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "CENTER",
 			["size"] = 25,
-			["text_format"] = "[eltruism:dead{5}][eltruism:dc{2}]",
+			["text_format"] = "[eltruism:dead][eltruism:dc]",
 			["xOffset"] = 0,
 			["yOffset"] = 0
 		}
@@ -1084,7 +1111,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "OUTLINE",
 			["justifyH"] = "RIGHT",
 			["size"] = 10,
-			["text_format"] = "[eltruism:hpstatusnopc{5,3}]",
+			["text_format"] = "[eltruism:hpstatusnopc]",
 			["xOffset"] = 0,
 			["yOffset"] = -1
 		}
@@ -1106,7 +1133,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "CENTER",
 			["size"] = 25,
-			["text_format"] = "[eltruism:dead{5}][eltruism:dc{2}]",
+			["text_format"] = "[eltruism:dead][eltruism:dc]",
 			["xOffset"] = 0,
 			["yOffset"] = 0
 		}
@@ -1142,7 +1169,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "OUTLINE",
 			["justifyH"] = "RIGHT",
 			["size"] = 10,
-			["text_format"] = "[eltruism:hpstatusnopc{5,3}]",
+			["text_format"] = "[eltruism:hpstatusnopc]",
 			["xOffset"] = 0,
 			["yOffset"] = 0
 		}
@@ -1164,7 +1191,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "CENTER",
 			["size"] = 20,
-			["text_format"] = "[eltruism:dead{5}][eltruism:dc{2}]",
+			["text_format"] = "[eltruism:dead][eltruism:dc]",
 			["xOffset"] = 0,
 			["yOffset"] = 0
 		}
@@ -1189,7 +1216,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "LEFT",
 			["size"] = 14,
-			["text_format"] = "[eltruism:hpstatus{5,3}]",
+			["text_format"] = "[eltruism:hpstatus]",
 			["xOffset"] = 2,
 			["yOffset"] = 0
 		}
@@ -1200,7 +1227,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "CENTER",
 			["size"] = 27,
-			["text_format"] = "[eltruism:dead{5}][eltruism:dc{2}]",
+			["text_format"] = "[eltruism:dead][eltruism:dc]",
 			["xOffset"] = -50,
 			["yOffset"] = 0
 		}
@@ -1261,7 +1288,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "LEFT",
 			["size"] = 11,
-			["text_format"] = "[eltruism:hpstatusnopc{5,3}]",
+			["text_format"] = "[eltruism:hpstatusnopc]",
 			["xOffset"] = 2,
 			["yOffset"] = 3
 		}
@@ -1294,7 +1321,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 			["fontOutline"] = "THICKOUTLINE",
 			["justifyH"] = "CENTER",
 			["size"] = 15,
-			["text_format"] = "[eltruism:dead{5}][eltruism:dc{2}]",
+			["text_format"] = "[eltruism:dead][eltruism:dc]",
 			["xOffset"] = 0,
 			["yOffset"] = 22
 		}
@@ -1420,16 +1447,16 @@ function ElvUI_EltreumUI:SetupDataText()
 		E.global["datatexts"]["customPanels"]["EltruismDataText"]["width"] = 1912
 	end]]
 
+	E.db["datatexts"]["panels"]["EltruismDataText"][2] = "Durability"
+	E.db["datatexts"]["panels"]["EltruismDataText"][3] = "EltruismTeleports"
+	E.db["datatexts"]["panels"]["EltruismDataText"][4] = "Eltruism Stats 1"
+	E.db["datatexts"]["panels"]["EltruismDataText"][5] = ""
+	E.db["datatexts"]["panels"]["EltruismDataText"][6] = "Eltruism Stats 2"
+	E.db["datatexts"]["panels"]["EltruismDataText"][7] = "System"
+	E.db["datatexts"]["panels"]["EltruismDataText"][8] = "Combat"
+	E.db["datatexts"]["panels"]["EltruismDataText"][9] = "Gold"
 	if E.Retail then
 		E.db["datatexts"]["panels"]["EltruismDataText"][1] = "Talent/Loot Specialization"
-		E.db["datatexts"]["panels"]["EltruismDataText"][2] = "Durability"
-		E.db["datatexts"]["panels"]["EltruismDataText"][3] = "EltruismTeleports"
-		E.db["datatexts"]["panels"]["EltruismDataText"][4] = "Eltruism Stats 1"
-		E.db["datatexts"]["panels"]["EltruismDataText"][5] = ""
-		E.db["datatexts"]["panels"]["EltruismDataText"][6] = "Eltruism Stats 2"
-		E.db["datatexts"]["panels"]["EltruismDataText"][7] = "System"
-		E.db["datatexts"]["panels"]["EltruismDataText"][8] = "Combat"
-		E.db["datatexts"]["panels"]["EltruismDataText"][9] = "Gold"
 	else
 		if E.myclass == 'HUNTER' or E.myclass == 'WARLOCK' then
 			E.db["datatexts"]["panels"]["EltruismDataText"][1] = "Ammo"
@@ -1439,14 +1466,6 @@ function ElvUI_EltreumUI:SetupDataText()
 				E.db["datatexts"]["panels"]["EltruismDataText"][1] = "DualSpecialization"
 			end
 		end
-		E.db["datatexts"]["panels"]["EltruismDataText"][2] = "Durability"
-		E.db["datatexts"]["panels"]["EltruismDataText"][3] = "EltruismTeleports"
-		E.db["datatexts"]["panels"]["EltruismDataText"][4] = "Eltruism Stats 1"
-		E.db["datatexts"]["panels"]["EltruismDataText"][5] = ""
-		E.db["datatexts"]["panels"]["EltruismDataText"][6] = "Eltruism Stats 2"
-		E.db["datatexts"]["panels"]["EltruismDataText"][7] = "System"
-		E.db["datatexts"]["panels"]["EltruismDataText"][8] = "Combat"
-		E.db["datatexts"]["panels"]["EltruismDataText"][9] = "Gold"
 	end
 	E.db["datatexts"]["panels"]["EltruismDataText"]["enable"] = true
 
@@ -1511,6 +1530,11 @@ function ElvUI_EltreumUI:SetupCVars()
 	SetCVar('UberTooltips', 1)
 	SetCVar('alwaysShowActionBars', 1)
 	SetCVar('lockActionBars', 1)
+	SetCVar('ActionButtonUseKeyDown', 1)
+	SetCVar('fstack_preferParentKeys', 0) --Add back the frame names via fstack!
+	SetCVar('threatWarning', 3)
+	SetCVar('showNPETutorials', 0)
+	SetCVar('showQuestTrackingTooltips', 1)
 	--SetCVar('Sound_EnableErrorSpeech', 1)
 	SetCVar('alwaysCompareItems', 0) --dont always compare
 	SetCVar('allowCompareWithToggle', 1) --compare using shift
@@ -1537,13 +1561,8 @@ function ElvUI_EltreumUI:SetupCVars()
 	end
 
 	if E.Retail then
-		SetCVar('showNPETutorials', 0)
-		SetCVar('threatWarning', 3)
-		SetCVar('showQuestTrackingTooltips', 1)
-		SetCVar('fstack_preferParentKeys', 0) --Add back the frame names via fstack!
-
 		--this makes it so that the non nameplate names are hidden
-		SetCVar('UnitNameHostleNPC', 0) --Display names for hostile NPCs
+		SetCVar('UnitNameHostleNPC', 0) --Display names for hostile NPCs, even when they are dead
 		SetCVar('UnitNameInteractiveNPC', 0) --Display names for interactive NPCs
 		SetCVar('UnitNameNPC', 0)
 
@@ -1556,11 +1575,11 @@ function ElvUI_EltreumUI:SetupCVars()
 		SetCVar('WorldTextMinSize', 6)
 
 		--new softtarget (only function if player enables interact with target option, which these cvars do not enable)
-		SetCVar('SoftTargetInteractArc', 2)
-		SetCVar('SoftTargetInteractRange', 30)
+		SetCVar('SoftTargetInteractRange', 5)
 		SetCVar('SoftTargetIconGameObject', 1)
 		SetCVar('SoftTargetIconInteract', 1)
 		SetCVar('SoftTargetInteract', 3) --3 enables, 0 disables
+		SetCVar('SoftTargetInteractArc', 2)
 		SetCVar('SoftTargetNameplateInteract', 1)
 
 		--[[

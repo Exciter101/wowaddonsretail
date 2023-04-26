@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(ElvUI)
 local S = E:GetModule('Skins')
 local _G = _G
 local hooksecurefunc = _G.hooksecurefunc
-local next = _G.next
 local tabSkinned = false
 
 --simple tab skin
@@ -55,13 +54,25 @@ S:AddCallbackForAddon('Blizzard_AuctionHouseUI', "EltruismAuctionator", ElvUI_El
 S:AddCallbackForAddon('Blizzard_AuctionUI', "EltruismAuctionator", ElvUI_EltreumUI.EltruismAuction)
 
 function ElvUI_EltreumUI:EltruismScrap()
-	if _G["MerchantFrameSecureTab0"] then
-		S:HandleTab(_G["MerchantFrameSecureTab0"])
-		if E.db.ElvUI_EltreumUI.skins.shadow.enable and _G["MerchantFrameSecureTab0"].backdrop and not _G["MerchantFrameSecureTab0"].backdrop.shadow then
-			_G["MerchantFrameSecureTab0"].backdrop:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
-			ElvUI_EltreumUI:ShadowColor(_G["MerchantFrameSecureTab0"].backdrop.shadow)
+	E:Delay(0, function()
+		if _G["MerchantFrameSecureTab0"] then
+			S:HandleTab(_G["MerchantFrameSecureTab0"])
+			if E.db.ElvUI_EltreumUI.skins.shadow.enable and _G["MerchantFrameSecureTab0"].backdrop and not _G["MerchantFrameSecureTab0"].backdrop.shadow then
+				_G["MerchantFrameSecureTab0"].backdrop:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+				ElvUI_EltreumUI:ShadowColor(_G["MerchantFrameSecureTab0"].backdrop.shadow)
+			end
 		end
-	end
+	end)
 end
 S:AddCallbackForAddon('Scrap_Merchant', "EltruismScrap", ElvUI_EltreumUI.EltruismScrap)
 S:AddCallbackForAddon('Scrap', "EltruismScrap", ElvUI_EltreumUI.EltruismScrap)
+
+--secret
+function ElvUI_EltreumUI:EltruismHardcore()
+	local HardcoreMonitor = CreateFrame("Frame")
+	HardcoreMonitor:RegisterEvent("PLAYER_DEAD")
+	HardcoreMonitor:SetScript("OnEvent", function()
+		PlaySoundFile("Interface\\AddOns\\ElvUI_EltreumUI\\Media\\sound\\overconfidence.ogg" , "Master")
+	end)
+end
+S:AddCallbackForAddon('Hardcore', "EltruismHardcore", ElvUI_EltreumUI.EltruismHardcore)

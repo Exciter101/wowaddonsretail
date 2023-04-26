@@ -60,7 +60,7 @@ function ElvUI_EltreumUI:RunCommands(message)
 				CombatText_AddMessage("|T ".. aImage ..":22:22:0:0:64:64:5:59:5:59|t ".."214.748 Gold |T ".. aSilver ..":22:22:0:0:64:64:5:59:5:59|t ".."36 Silver |T ".. aCopper ..":22:22:0:0:64:64:5:59:5:59|t ".."47 Copper", CombatText_StandardScroll, 255, 255, 255)
 			end
 		else
-			CombatText_AddMessage("|T ".. 136176 ..":22:22:-11:-11:64:64:5:59:5:59|t|t  ".."Eltruism Loot is currently disabled!", CombatText_StandardScroll, 255, 255, 255)
+			CombatText_AddMessage("|T ".. 136176 ..":22:22:-11:-11:64:64:5:59:5:59|t ".."Eltruism Loot is currently disabled!", CombatText_StandardScroll, 255, 255, 255)
 		end
 	elseif message == 'config' or message == 'options' or message == '' then
 		E:ToggleOptions()
@@ -230,9 +230,10 @@ local AddOns = {
 	["ElvUI_Libraries"] = true,
 	["ElvUI_Options"] = true,
 	["ElvUI_EltreumUI"] = true,
-	--["AddOnSkins"] = true,
 	["!BugGrabber"] = true,
 	["BugSack"] = true,
+	["!CPUThieves"] = true,
+	["ElvUI_CPU"] = true,
 }
 function ElvUI_EltreumUI:DebugMode(message)
 	local switch = strlower(message)

@@ -248,9 +248,6 @@ function ElvUI_EltreumUI:SetupNamePlates()
 		E.db["nameplates"]["units"]["ENEMY_NPC"]["castbar"]["iconOffsetY"] = -1
 		E.db["nameplates"]["units"]["ENEMY_NPC"]["castbar"]["iconPosition"] = "LEFT"
 		E.db["nameplates"]["units"]["ENEMY_NPC"]["castbar"]["iconSize"] = 32
-		if width == 1920 then
-			E.db["nameplates"]["units"]["ENEMY_NPC"]["castbar"]["iconSize"] = 32
-		end
 		E.db["nameplates"]["units"]["ENEMY_NPC"]["castbar"]["showIcon"] = true
 		E.db["nameplates"]["units"]["ENEMY_NPC"]["castbar"]["textPosition"] = "ONBAR"
 		E.db["nameplates"]["units"]["ENEMY_NPC"]["castbar"]["timeToHold"] = 0.6
@@ -345,9 +342,6 @@ function ElvUI_EltreumUI:SetupNamePlates()
 		E.db["nameplates"]["units"]["ENEMY_PLAYER"]["castbar"]["height"] = 12
 		E.db["nameplates"]["units"]["ENEMY_PLAYER"]["castbar"]["iconPosition"] = "LEFT"
 		E.db["nameplates"]["units"]["ENEMY_PLAYER"]["castbar"]["iconSize"] = 32
-		if width == 1920 then
-			E.db["nameplates"]["units"]["ENEMY_PLAYER"]["castbar"]["iconSize"] = 32
-		end
 		E.db["nameplates"]["units"]["ENEMY_PLAYER"]["castbar"]["iconOffsetX"] = -4
 		E.db["nameplates"]["units"]["ENEMY_PLAYER"]["castbar"]["iconOffsetY"] = -1
 		E.db["nameplates"]["units"]["ENEMY_PLAYER"]["castbar"]["showIcon"] = true
@@ -557,7 +551,7 @@ function ElvUI_EltreumUI:SetupNamePlates()
 		E.db["nameplates"]["units"]["PLAYER"]["health"]["text"]["font"] = "Kimberley"
 		E.db["nameplates"]["units"]["PLAYER"]["health"]["text"]["fontOutline"] = "THICKOUTLINE"
 		E.db["nameplates"]["units"]["PLAYER"]["health"]["text"]["fontSize"] = 12
-		E.db["nameplates"]["units"]["PLAYER"]["health"]["text"]["format"] = "[health:current-percent:shortvalue]"
+		E.db["nameplates"]["units"]["PLAYER"]["health"]["text"]["format"] = "[eltruism:hpstatusnopc]"
 		E.db["nameplates"]["units"]["PLAYER"]["health"]["text"]["parent"] = "Health"
 		E.db["nameplates"]["units"]["PLAYER"]["health"]["text"]["xOffset"] = 0
 		E.db["nameplates"]["units"]["PLAYER"]["health"]["text"]["yOffset"] = -1
@@ -571,8 +565,8 @@ function ElvUI_EltreumUI:SetupNamePlates()
 		E.db["nameplates"]["units"]["PLAYER"]["smartAuraPosition"] = "BUFFS_ON_DEBUFFS"
 		E.db["nameplates"]["units"]["PLAYER"]["title"]["enable"] = false
 
-		E.db["nameplates"]["units"]["TARGET"]["arrow"] = "Arrow21"
-		E.db["nameplates"]["units"]["TARGET"]["arrowScale"] = 0.4
+		E.db["nameplates"]["units"]["TARGET"]["arrow"] = "Eltruism01"
+		E.db["nameplates"]["units"]["TARGET"]["arrowScale"] = 0.3
 		E.db["nameplates"]["units"]["TARGET"]["arrowSpacing"] = 0
 		E.db["nameplates"]["units"]["TARGET"]["classpower"]["classColor"] = false --no this would set the classbar to have class color as opposed to being nicely colored
 		E.db["nameplates"]["units"]["TARGET"]["classpower"]["enable"] = true
@@ -580,11 +574,12 @@ function ElvUI_EltreumUI:SetupNamePlates()
 		E.db["nameplates"]["units"]["TARGET"]["classpower"]["width"] = 150
 		E.db["nameplates"]["units"]["TARGET"]["classpower"]["yOffset"] = 26
 		--E.db["nameplates"]["units"]["TARGET"]["glowStyle"] = "style1" --border glow
-		E.db["nameplates"]["units"]["TARGET"]["glowStyle"] = "style2" --background glow
+		--E.db["nameplates"]["units"]["TARGET"]["glowStyle"] = "style2" --background glow
 		--E.db["nameplates"]["units"]["TARGET"]["glowStyle"] = "style8" --background glow + side arrow
-		--E.db["nameplates"]["units"]["TARGET"]["arrow"] = "Arrow21" --the arrow
+		E.db["nameplates"]["units"]["TARGET"]["glowStyle"] = "style4" --arrow
+		--E.db["nameplates"]["units"]["TARGET"]["glowStyle"] = "none" --no target glow
+
 		if E.Classic then
-			--E.db["nameplates"]["units"]["TARGET"]["glowStyle"] = "style2"
 			E.db["v11NamePlateReset"] = true
 			E.db["nameplates"]["motionType"] = "OVERLAP"
 		end
@@ -626,7 +621,7 @@ function ElvUI_EltreumUI:SetupStyleFilters()
 		E.global["nameplates"]["filters"]["ElvUI_Target"]["actions"]["alpha"] = 100
 
 		-- Non targeted enemies
-		E.global["nameplates"]["filters"]["ElvUI_NonTarget"]["actions"]["alpha"] = 20
+		E.global["nameplates"]["filters"]["ElvUI_NonTarget"]["actions"]["alpha"] = 100 --20 --test 100% alpha
 		E.global["nameplates"]["filters"]["ElvUI_NonTarget"]["actions"]["scale"] = 0.75
 		--E.global["nameplates"]["filters"]["ElvUI_NonTarget"]["triggers"]["requireTarget"] = true
 		E.global["nameplates"]["filters"]["ElvUI_NonTarget"]["triggers"]["notTarget"] = true
@@ -678,8 +673,21 @@ function ElvUI_EltreumUI:SetupStyleFilters()
 		E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["flash"]["color"]["b"] = 0
 		E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["flash"]["color"]["g"] = 0
 		E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["flash"]["color"]["r"] = 0
-		E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["flash"]["enable"] = true
 		E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["flash"]["speed"] = 7
+		if E.version > 13.29 then
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["flash"]["enable"] = false
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["color"][1] = 1
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["color"][2] = 0
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["color"][3] = 0.078431375324726
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["color"][4] = 0.90000000596046
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["enable"] = true
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["size"] = 2
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["speed"] = 0.75
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["lines"] = 8
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["glow"]["style"] = "Pixel Glow"
+		else
+			E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["flash"]["enable"] = true
+		end
 		E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["scale"] = 1.2
 		E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["texture"]["enable"] = true
 		E.global["nameplates"]["filters"]["EltreumInterrupt"]["actions"]["texture"]["texture"] = "Eltreum-Stripes"
@@ -785,6 +793,7 @@ function ElvUI_EltreumUI:SetupStyleFilters()
 		--hide np of dead targets
 		--E.global["nameplates"]["filters"]["EltreumDeadNP"]["actions"]["hide"] = true
 		E.global["nameplates"]["filters"]["EltreumDeadNP"]["actions"]["nameOnly"] = true
+		E.global["nameplates"]["filters"]["EltreumDeadNP"]["actions"]["tags"]["name"] = "[name]"
 		E.global["nameplates"]["filters"]["EltreumDeadNP"]["triggers"]["isDeadOrGhost"] = true
 		--E.global["nameplates"]["filters"]["EltreumDeadNP"]["triggers"]["nameplateType"]["enable"] = true
 		--E.global["nameplates"]["filters"]["EltreumDeadNP"]["triggers"]["nameplateType"]["enemyNPC"] = true

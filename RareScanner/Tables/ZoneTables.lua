@@ -78,7 +78,7 @@ private.SUBZONES_IDS = {
 	[1970] = {2027,2028,2029,2030,2066}; --Zereth Mortis
 	[2047] = {2048,2049,2050,2051,2052,2055,2061}; --Sepulcher of the First Ones
 	[2024] = {2132}; -- The Azure Span minimaps
-	[2151] = {2100,2101,2102}; --The Forbidden Reach (10.0.7) (Dragonflight)
+	[2151] = {2100,2101,2102,2154}; --The Forbidden Reach (10.0.7) (Dragonflight)
 }
 
 private.ZONES_WITHOUT_VIGNETTE = {

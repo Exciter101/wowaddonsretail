@@ -4,6 +4,7 @@ local unpack = _G.unpack
 local WT = E.Libs.AceAddon:GetAddon("ElvUI_WindTools", true)
 local CH = E:GetModule('Chat')
 local ChatFrame_AddMessageEventFilter = _G.ChatFrame_AddMessageEventFilter
+local ChatFrame_RemoveMessageEventFilter = _G.ChatFrame_RemoveMessageEventFilter
 local CreateFrame = _G.CreateFrame
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local hooksecurefunc = _G.hooksecurefunc
@@ -39,7 +40,6 @@ local joinsstring2
 local joinsstring3
 local leavestring
 local leavestring2
-local ChatSysRoleSet = false
 
 local function ColorSysMsgs(_, event, message, ...)
 	if not IsAddOnLoaded("ElvUI_EltreumUI") then
@@ -142,48 +142,60 @@ local function ColorSysMsgs(_, event, message, ...)
 			leavestring2 = "leaves the"
 		end
 		if message:find(rollstring) then
-			local msg = (string.format("|cff"..classcolorsescape[E.myclass]..message.."|r"))
-			if msg:find(rollstring.." 1 ") then
-				if E.db.ElvUI_EltreumUI.chat.rollsound then
-					PlaySoundFile("Interface\\AddOns\\ElvUI_EltreumUI\\Media\\sound\\oof.ogg", "Master")
+			--from this deleted user on the addons discord (ty whoever you are) https://discord.com/channels/168296152670797824/168296152670797824/558463766828679188
+			local _rollMessageTailRegex = RANDOM_ROLL_RESULT:gsub("%(", "%%("):gsub("%)", "%%)"):gsub("%%d", "(%%d+)"):gsub("%%%d+%$d", "(%%d+)"):gsub("%%s", ""):gsub("%%%d+%$s", "").. "$"
+			local name = message:gsub("%s*" .. _rollMessageTailRegex, "")
+			local _, unitClass = UnitClass(name)
+			if unitClass then
+				local msg = (string.format("|cff"..classcolorsescape[unitClass]..message.."|r"))
+				if msg:find(rollstring.." 1 ") then
+					if E.db.ElvUI_EltreumUI.chat.rollsound then
+						PlaySoundFile("Interface\\AddOns\\ElvUI_EltreumUI\\Media\\sound\\oof.ogg", "Master")
+					end
+					return false, gsub(msg, rollstring.." 1", rollstring.." |cffFF00001|r"), ...
+				elseif msg:find(rollstring.." 100 ") then
+					if E.db.ElvUI_EltreumUI.chat.rollsound then
+						PlaySoundFile("Interface\\AddOns\\ElvUI_EltreumUI\\Media\\sound\\WillSmith-Ahaha.ogg", "Master")
+					end
+					return false, gsub(msg, rollstring.." 100", rollstring.." |cffFFFF00100|r"), ...
+				else
+					return false, msg, ...
 				end
-				return false, gsub(msg, rollstring.." 1", rollstring.." |cffFF00001|r"), ...
-			elseif msg:find(rollstring.." 100 ") then
-				if E.db.ElvUI_EltreumUI.chat.rollsound then
-					PlaySoundFile("Interface\\AddOns\\ElvUI_EltreumUI\\Media\\sound\\WillSmith-Ahaha.ogg", "Master")
-				end
-				return false, gsub(msg, rollstring.." 100", rollstring.." |cffFFFF00100|r"), ...
-			else
-				return false, msg, ...
 			end
-		end
-		if message:find(joinsstring) then
+		elseif message:find(joinsstring) then
 			return false, gsub(message, joinsstring, "|cff82B4ff"..joinsstring.."|r"), ...
-		end
-		if message:find(joinsstring2) then
+		elseif message:find(joinsstring2) then
 			return false, gsub(message, joinsstring2, "|cff82B4ff"..joinsstring2.."|r"), ...
-		end
-		if message:find(joinsstring3) then
+		elseif message:find(joinsstring3) then
 			return false, gsub(message, joinsstring3, "|cff82B4ff"..joinsstring3.."|r"), ...
-		end
-		if message:find(leavestring) then
+		elseif message:find(leavestring) then
 			return false, gsub(message, leavestring, "|cffB50909"..leavestring.."|r"), ...
-		end
-		if message:find(leavestring2) then
+		elseif message:find(leavestring2) then
 			return false, gsub(message, leavestring2, "|cffB50909"..leavestring2.."|r"), ...
-		end
-		if message:find("leave the") then
+		elseif message:find("leave the") then
 			return false, gsub(message, "leave", "|cffB50909leave|r"), ...
-		end
-		if message:find(onlinestring) then --german, english, italian all use the same online/offline
+		elseif message:find(onlinestring) then --german, english, italian all use the same online/offline
 			return false, gsub(message, onlinestring, "|cff00FF00"..onlinestring.."|r"), ...
-		end
-		if message:find(offlinestring) then
+		elseif message:find(offlinestring) then
 			return false, gsub(message, offlinestring, "|cffFF0000"..offlinestring.."|r"), ...
 		end
+	else
+		ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SYSTEM", ColorSysMsgs)
+		ChatFrame_RemoveMessageEventFilter("CHAT_MSG_BN_INLINE_TOAST_ALERT", ColorSysMsgs)
 	end
+end
+ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", ColorSysMsgs)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_INLINE_TOAST_ALERT", ColorSysMsgs)
 
-	if E.db.ElvUI_EltreumUI.otherstuff.eltruismroleicons and not ChatSysRoleSet then
+local function RoleIconMsg()
+	if not IsAddOnLoaded("ElvUI_EltreumUI") then
+		return
+	elseif not E.db.ElvUI_EltreumUI then
+		return
+	elseif not E.db.ElvUI_EltreumUI.otherstuff then
+		return
+	end
+	if E.db.ElvUI_EltreumUI.otherstuff.eltruismroleicons then
 		local sizeString = "\":"..E.db["chat"]["fontSize"]..":"..E.db["chat"]["fontSize"].."\""
 		if E.db.ElvUI_EltreumUI.otherstuff.roleiconstype == "ELTRUISM" or E.db.ElvUI_EltreumUI.otherstuff.roleiconstype == nil then
 			CH.RoleIcons = {
@@ -285,13 +297,15 @@ local function ColorSysMsgs(_, event, message, ...)
 			_G.INLINE_HEALER_ICON = CH.RoleIcons.HEALER
 			_G.INLINE_DAMAGER_ICON = CH.RoleIcons.DAMAGER
 		end
-		ChatSysRoleSet = true
+		ChatFrame_RemoveMessageEventFilter("ROLE_CHANGED_INFORM", RoleIconMsg)
+		ChatFrame_RemoveMessageEventFilter("PLAYER_ROLES_ASSIGNED", RoleIconMsg)
+	else
+		ChatFrame_RemoveMessageEventFilter("ROLE_CHANGED_INFORM", RoleIconMsg)
+		ChatFrame_RemoveMessageEventFilter("PLAYER_ROLES_ASSIGNED", RoleIconMsg)
 	end
 end
-ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", ColorSysMsgs)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_INLINE_TOAST_ALERT", ColorSysMsgs)
-ChatFrame_AddMessageEventFilter("ROLE_CHANGED_INFORM", ColorSysMsgs)
-ChatFrame_AddMessageEventFilter("PLAYER_ROLES_ASSIGNED", ColorSysMsgs)
+ChatFrame_AddMessageEventFilter("ROLE_CHANGED_INFORM", RoleIconMsg)
+ChatFrame_AddMessageEventFilter("PLAYER_ROLES_ASSIGNED", RoleIconMsg)
 --ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", ColorSysMsgs) --this is for testing purposes
 
 --icons in chat/UF when party member swaps roles

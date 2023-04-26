@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(ElvUI)
-local _G  = _G
+local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
 
 -- AddonSkins profile setup
@@ -43,10 +43,19 @@ function ElvUI_EltreumUI:GetASProfile()
 		AS.db["DBMRadarTrans"] = true
 		AS.db["HideChatFrame"] = "ChatFrame4"
 		AS.db["TransparentEmbed"] = true
-		AS.db["Immersion"] = true
-		AS.db["BugSack"] = true
+		AS.db["BagSync"] = false
+		AS.db["RareScanner"] = false
+		AS.db["Auctionator"] = false --currently causing errors
+		AS.db["Hekili"] = false
+		AS.db["Simulationcraft"] = false
+		AS.db["BugSack"] = false
+		AS.db["Clique"] = false
+		AS.db["BigWigs"] = false
+		AS.db["Immersion"] = false
 		if E.Retail then
 			AS.db["Blizzard_AchievementUI"] = false
 		end
 	end
 end
+
+

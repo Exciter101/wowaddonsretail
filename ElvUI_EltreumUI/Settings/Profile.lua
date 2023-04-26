@@ -24,6 +24,10 @@ P.ElvUI_EltreumUI = {
 		looticons = false,
 		itemlevels = false,
 		chattoggles = true,
+		chaticonenable = true,
+		chatgradient = false,
+		chaticontype = "OUTLINE",
+		AuthorMVPDonatorIcons = true,
 	},
 
 	cvars = {
@@ -42,6 +46,20 @@ P.ElvUI_EltreumUI = {
 	},
 
 	skins = {
+		elvui = {
+			SetTemplate = false,
+			unitframes = true,
+			nameplates = true,
+			button = true,
+			color = {
+				classcolor = false,
+				r = 0.12,
+				g = 0.12,
+				b = 0.12,
+				a = 1,
+			},
+			texture = "Eltreum-Tile01",
+		},
 		levelbossinstance = false,
 		widertransmog = false,
 		expandedstable = false,
@@ -183,6 +201,9 @@ P.ElvUI_EltreumUI = {
 		rarescanner = false,
 		simulationcraft = false,
 		warpdeplete = false,
+		bagsync = false,
+		hekili = false,
+		omnicd = false,
 
 		hideABkeypress = false,
 		tbctalents = false,
@@ -323,6 +344,7 @@ P.ElvUI_EltreumUI = {
 			ttsvolume = 100,
 		},
 		ilvltooltip = true,
+		gradienttooltip = true,
 		professionscale = 1,
 	},
 
@@ -413,7 +435,7 @@ P.ElvUI_EltreumUI = {
 			r = 0,
 			g = 0,
 			b = 0,
-			a = 1,
+			a = 0.7,
 		},
 		friendlynameplatetoggle = {
 			disablefriendly = false,
@@ -566,6 +588,7 @@ P.ElvUI_EltreumUI = {
 			enable = false,
 			honor = true,
 			currency = true,
+			skill = false,
 			pet = true,
 			scale = 0.65,
 			strata = "BACKGROUND",
@@ -577,6 +600,21 @@ P.ElvUI_EltreumUI = {
 			fontLSM = "Kimberley",
 			fontsize = 24,
 			combatindicator = false,
+			combatindicatorcustom = {
+				enable = false,
+				enter = "+COMBAT",
+				entercolor = {
+					r = 1,
+					g = 0,
+					b = 0,
+				},
+				leave = "-COMBAT",
+				leavecolor = {
+					r = 1,
+					g = 1,
+					b = 1,
+				},
+			},
 		},
 		fastloot = false,
 		fastlootfilter = false,
@@ -1239,6 +1277,7 @@ P.ElvUI_EltreumUI = {
 		},
 		sparkcustomcolor ={
 			enable = false,
+			enableaurabars = false,
 			texture = 'Eltreum-Blank',
 			--texture = 'Eltreum-Fade',
 			r = 0.80,
@@ -1282,6 +1321,24 @@ P.ElvUI_EltreumUI = {
 		eltruismroleiconscustomhealer = "",
 		eltruismroleiconscustomdps = "",
 		roleiconstype = 'ELTRUISM',
+
+		eltruismleadericons = false,
+		leadericonstype = "1",
+		eltruismleadericonscustom = "",
+
+		eltruismassisticons = false,
+		assisticonstype = "1",
+		eltruismassisticonscustom = "",
+
+		eltruismlootericons = false,
+		lootericonstype = "1",
+		eltruismlootericonscustom = "",
+
+		hpstatusdeadicon = "5",
+		hpstatusdcicon = "2",
+		deadtagicon = "5",
+		dctagicon = "2",
+
 		gamemenu = false,
 		afklogo = true,
 		mailsoundenable = false,

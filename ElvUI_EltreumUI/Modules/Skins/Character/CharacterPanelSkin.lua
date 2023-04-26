@@ -424,7 +424,6 @@ function ElvUI_EltreumUI:ExpandedCharacterStats()
 				_G.PaperDollFrame.TitleManagerPane.ScrollBox:SetPoint("RIGHT", CharacterFrame, "RIGHT", -40, -20)
 			end
 
-			-- if not slecheckattribute and (not IsAddOnLoaded('DejaCharacterStats')) then
 			if not ElvUI_EltreumUI:SLCheck("stats") and (not IsAddOnLoaded('DejaCharacterStats')) then
 				CharacterStatsPane.ItemLevelCategory.backdrop:Hide()
 				CharacterStatsPane.ItemLevelCategory.Title:SetFont(E.LSM:Fetch("font", E.db.general.font), E.db.ElvUI_EltreumUI.skins.armoryfontsize + 6, E.db.general.fontStyle)
@@ -441,6 +440,9 @@ function ElvUI_EltreumUI:ExpandedCharacterStats()
 			CharacterFrame.EltruismExtraStatsFont:SetParent(CharacterStatsPane)
 
 			if ElvUI_EltreumUI:SLCheck("stats") and not IsAddOnLoaded('DejaCharacterStats') then
+
+				--item level
+				CharacterStatsPane.ItemLevelCategory.backdrop:Hide()
 
 				--offense
 				CharacterStatsPane.OffenseCategory.backdrop:Hide()
@@ -1354,7 +1356,6 @@ function ElvUI_EltreumUI:ExpandedCharacterStats()
 		end
 
 		if _G.CompanionModelFrame then
-			--print(_G.CompanionModelFrame:GetPosition())
 			--_G.CompanionModelFrame:SetPosition(0, 0, 0)
 			_G.CompanionModelFrame:ClearAllPoints()
 			_G.CompanionModelFrame:SetPoint("CENTER", _G.PetPaperDollFrame, "CENTER", 0, 90)
@@ -2035,8 +2036,7 @@ function ElvUI_EltreumUI:PlayerItemQuality(unit)
 		E:Delay(0, function()
 			for InvSlotId, InvSlotName in pairs(InvSlotIdTable) do
 				qualityAnchor = _G["Character"..InvSlotIdTable[InvSlotId]]
-				if qualityAnchor == nil then return end
-
+				if not qualityAnchor then return end
 				if _G["EltruismItemQuality"..InvSlotName] then
 					qualityAnchor.Frame = _G["EltruismItemQuality"..InvSlotName]
 				else
@@ -2077,7 +2077,6 @@ function ElvUI_EltreumUI:PlayerItemQuality(unit)
 							if isSetItem then
 								if E.db.ElvUI_EltreumUI.skins.itemsetcustomcolor then
 									r,g,b = E.db.ElvUI_EltreumUI.skins.itemsetcolor.r, E.db.ElvUI_EltreumUI.skins.itemsetcolor.g, E.db.ElvUI_EltreumUI.skins.itemsetcolor.b
-
 								else
 									r,g,b = P.ElvUI_EltreumUI.skins.itemsetcolor.r, P.ElvUI_EltreumUI.skins.itemsetcolor.g, P.ElvUI_EltreumUI.skins.itemsetcolor.b
 								end
@@ -2092,7 +2091,16 @@ function ElvUI_EltreumUI:PlayerItemQuality(unit)
 						if E.Retail then
 							local borderfix = _G["Character"..InvSlotName]
 							if borderfix.IconBorder then
-								borderfix.IconBorder:SetVertexColor(r, g, b)
+								--borderfix.IconBorder:SetVertexColor(r, g, b)
+								borderfix.IconBorder.SetVertexColor = nil
+								_G["Character"..InvSlotName].BottomEdge:SetVertexColor(r, g, b)
+								_G["Character"..InvSlotName].TopEdge:SetVertexColor(r, g, b)
+								_G["Character"..InvSlotName].RightEdge:SetVertexColor(r, g, b)
+								_G["Character"..InvSlotName].LeftEdge:SetVertexColor(r, g, b)
+								_G["Character"..InvSlotName].BottomLeftCorner:SetVertexColor(r, g, b)
+								_G["Character"..InvSlotName].BottomRightCorner:SetVertexColor(r, g, b)
+								_G["Character"..InvSlotName].TopLeftCorner:SetVertexColor(r, g, b)
+								_G["Character"..InvSlotName].TopRightCorner:SetVertexColor(r, g, b)
 							end
 						else
 							if _G["Character"..InvSlotName] then

@@ -15,6 +15,7 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.chat.looticons = true
 	E.db.ElvUI_EltreumUI.chat.itemlevels = true
 	E.db.ElvUI_EltreumUI.chat.rollsound = true
+	E.db.ElvUI_EltreumUI.chat.chattoggles = true
 
 	-- Nameplates
 	E.db.ElvUI_EltreumUI.nameplates.nameplatepower.autoadjustposition = true
@@ -73,6 +74,7 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.unitframes.ufcustomtexture.backdroptexture = "Asphyxia-Norm"
 	E.db.ElvUI_EltreumUI.unitframes.ufcustomtexture.backdropalpha = 0.7
 	E.db.ElvUI_EltreumUI.unitframes.sparkcustomcolor.enable = true
+	E.db.ElvUI_EltreumUI.unitframes.sparkcustomcolor.enableaurabars = true
 	E.db.ElvUI_EltreumUI.unitframes.sparkcustomcolor.texture = 'Eltreum-Fade'
 	E.db.ElvUI_EltreumUI.unitframes.sparkcustomcolor.width = 20
 	E.db.ElvUI_EltreumUI.unitframes.darkpowercolor = true
@@ -137,6 +139,10 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.skins.rarescanner = true
 	E.db.ElvUI_EltreumUI.skins.simulationcraft = true
 	E.db.ElvUI_EltreumUI.skins.warpdeplete = true
+	E.db.ElvUI_EltreumUI.skins.bagsync = true
+	E.db.ElvUI_EltreumUI.skins.hekili = true
+	E.db.ElvUI_EltreumUI.skins.omnicd = true
+	E.db.ElvUI_EltreumUI.skins.elvui.SetTemplate = true --elvui skin
 
 	-- Borders
 	E.db.ElvUI_EltreumUI.borders.minimapborder = true
@@ -183,14 +189,10 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	elseif E.Wrath or E.Classic then
 		E.db.ElvUI_EltreumUI.quests.enable = false
 	end
-	if E.Retail then
-		E.db.ElvUI_EltreumUI.quests.questitems = false
-	else
-		E.db.ElvUI_EltreumUI.quests.questitems = true
-	end
+	E.db.ElvUI_EltreumUI.quests.questitems = true
 	E.db.ElvUI_EltreumUI.quests.questitemsbar1 = true
 	E.db.ElvUI_EltreumUI.quests.questitemsfade = false
-	--E.db.ElvUI_EltreumUI.quests.autoaccept = true --maybe in the future?
+	E.db.ElvUI_EltreumUI.quests.autoaccept = true
 
 	-- Loot
 	E.db.ElvUI_EltreumUI.loot.loottext.enable = true
@@ -219,6 +221,12 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.otherstuff.dynamicxpbar = true
 	E.db.ElvUI_EltreumUI.otherstuff.mpluskeys = true
 	E.db.ElvUI_EltreumUI.otherstuff.eltruismroleicons = true
+	E.db.ElvUI_EltreumUI.otherstuff.eltruismleadericons = true
+	E.db.ElvUI_EltreumUI.otherstuff.eltruismassisticons = true
+	E.db.ElvUI_EltreumUI.otherstuff.eltruismlootericons = true
+
+	E.db.ElvUI_EltreumUI.otherstuff.roleiconstype = "EMOJI"
+
 	E.db.ElvUI_EltreumUI.otherstuff.delete = true
 	E.db.ElvUI_EltreumUI.otherstuff.gamemenu = true
 

@@ -47,6 +47,8 @@ function ElvUI_EltreumUI:PLAYER_ENTERING_WORLD(_, initLogin)
 	ElvUI_EltreumUI:CheckCompatibility() -- check for other stuff that might conflict
 	ElvUI_EltreumUI:VersionCheckInit() --checks for old versions
 	ElvUI_EltreumUI:LoadCommands() --loads chat commands
+	ElvUI_EltreumUI:AuthorMVPDonatorIcons() -- add author/donator/mvp icons
+	ElvUI_EltreumUI:SetTemplateSkin() -- hook settemplate elvui skin
 	ElvUI_EltreumUI:BorderAdjust() --auto adjust actionbar/border if option is enabled
 	ElvUI_EltreumUI:Borders() --creates borders if option is enabled
 	ElvUI_EltreumUI:GroupBorderColorUpdate()
@@ -264,7 +266,7 @@ function ElvUI_EltreumUI:ZONE_CHANGED_INDOORS()
 end
 
 function ElvUI_EltreumUI:ZONE_CHANGED_NEW_AREA()
-	C_Timer.After(5, function() ElvUI_EltreumUI:FriendlyNameplates() end)
+	E:Delay(5,function() ElvUI_EltreumUI:FriendlyNameplates() end)
 	ElvUI_EltreumUI:QuestItem()
 end
 
@@ -352,7 +354,9 @@ function ElvUI_EltreumUI:PLAYER_AVG_ITEM_LEVEL_UPDATE()
 end
 
 function ElvUI_EltreumUI:INSPECT_READY(_,unit)
-	ElvUI_EltreumUI:InspectBg(unit)
+	if _G.InspectFrame and _G.InspectFrame:IsVisible() then
+		ElvUI_EltreumUI:InspectBg(unit)
+	end
 end
 
 function ElvUI_EltreumUI:PLAYER_LEAVING_WORLD()

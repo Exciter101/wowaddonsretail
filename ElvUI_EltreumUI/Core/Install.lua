@@ -4,6 +4,14 @@ local ReloadUI = _G.ReloadUI
 local math = _G.math
 local PlaySound = _G.PlaySound
 local IsAddOnLoaded = _G.IsAddOnLoaded
+local ElvUI_EltreumUI  = _G.ElvUI_EltreumUI
+local UIFrameFadeIn = _G.UIFrameFadeIn
+local UIFrameFadeOut = _G.UIFrameFadeOut
+local hooksecurefunc = _G.hooksecurefunc
+local CopyTable = _G.CopyTable
+local Enum = _G.Enum
+local tinsert = _G.table.insert
+local CHAT_LABEL = _G.CHAT_LABEL
 
 -- Set version & reload on "Finished"
 local function InstallComplete()
@@ -52,12 +60,9 @@ local function ImproveInstall(installtype,mode,null)
 		end
 		if not _G.PluginInstallFrame.installpreview then
 			_G.PluginInstallFrame.installpreview = _G.PluginInstallFrame:CreateTexture("InstallTexturePreview")
-			_G.PluginInstallFrame.installpreview:SetAllPoints(_G.PluginInstallFrame)
-			_G.PluginInstallFrame.installpreview:SetTexCoord(0,0.72,0,1)
-		else
-			_G.PluginInstallFrame.installpreview:SetAllPoints(_G.PluginInstallFrame)
-			_G.PluginInstallFrame.installpreview:SetTexCoord(0,0.72,0,1)
 		end
+		_G.PluginInstallFrame.installpreview:SetAllPoints(_G.PluginInstallFrame)
+		_G.PluginInstallFrame.installpreview:SetTexCoord(0,0.72,0,1)
 	else
 		if installtype == "dps" then
 			_G.PluginInstallFrame.installpreview:SetTexture("Interface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Install\\DPS.jpg")
@@ -105,6 +110,14 @@ local function ImproveInstall(installtype,mode,null)
 			_G.PluginInstallFrame.installpreview:SetTexture("Interface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Install\\ElvUIFCT.jpg")
 		elseif installtype == "Immersion" then
 			_G.PluginInstallFrame.installpreview:SetTexture("Interface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Install\\Immersion.jpg")
+		elseif installtype == "OmniCD" then
+			if ElvDB.profileKeys[E.mynameRealm]:match("Eltreum DPS") then
+				_G.PluginInstallFrame.installpreview:SetTexture("Interface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Install\\OmniCD.jpg")
+			elseif ElvDB.profileKeys[E.mynameRealm]:match("Eltreum Healer") then
+				_G.PluginInstallFrame.installpreview:SetTexture("Interface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Install\\OmniCD2.jpg")
+			else
+				_G.PluginInstallFrame.installpreview:SetTexture("Interface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Install\\OmniCD.jpg")
+			end
 		end
 
 		if mode == "ENTERING" then
@@ -132,12 +145,6 @@ local function ImproveInstall(installtype,mode,null)
 			if _G.PluginInstallFrame.StepTitles and _G["PluginInstallFrame"].Title:GetText() ~= nil and _G["PluginInstallFrame"].Title:GetText() == ElvUI_EltreumUI.Name then
 				for i = 1, #_G.PluginInstallFrame.side.Lines do
 					local line, color = _G.PluginInstallFrame.side.Lines[i]
-					if i == _G.PluginInstallFrame.CurrentPage then
-						color = _G.PluginInstallFrame.StepTitlesColorSelected
-					else
-						color = _G.PluginInstallFrame.StepTitlesColor
-					end
-
 					local StepTitleText
 					if type(_G.PluginInstallFrame.StepTitles[i]) == 'function' then
 						StepTitleText = _G.PluginInstallFrame.StepTitles[i]()
@@ -146,8 +153,10 @@ local function ImproveInstall(installtype,mode,null)
 					end
 
 					if i == _G.PluginInstallFrame.CurrentPage then
+						color = _G.PluginInstallFrame.StepTitlesColorSelected
 						line.text:SetText(E:TextGradient(StepTitleText, 0.50, 0.70, 1, 0.67, 0.95, 1))
 					else
+						color = _G.PluginInstallFrame.StepTitlesColor
 						line.text:SetText(StepTitleText)
 						line.text:SetTextColor(color[1] or color.r, color[2] or color.g, color[3] or color.b)
 					end
@@ -166,6 +175,21 @@ local function ImproveInstall(installtype,mode,null)
 			end)
 		end
 		PIHook = true
+	end
+end
+
+--create new edit mode layout and switch to it to prevent possible issues with movers/taints
+local function NewRetailEditModeLayout()
+	local layoutstable = C_EditMode.GetLayouts()
+	if layoutstable.layouts and layoutstable.layouts[1] then
+		local taintpreventlayout = E:CopyTable(layoutstable.layouts[1])
+		taintpreventlayout.layoutType = Enum.EditModeLayoutType.Character
+		taintpreventlayout.layoutName = "EltruismTaintPreventer"
+		local numlayouts = Enum.EditModePresetLayoutsMeta.NumValues
+		tinsert(layoutstable.layouts, numlayouts + 1, taintpreventlayout)
+		layoutstable.activeLayout = numlayouts + 1
+		C_EditMode.SaveLayouts(layoutstable) --if not called then layout wont apply because its not saved
+		C_EditMode.SetActiveLayout(layoutstable.activeLayout)
 	end
 end
 
@@ -250,7 +274,10 @@ ElvUI_EltreumUI.InstallerData = {
 			_G.PluginInstallFrame.Option1:Show()
 			_G.PluginInstallFrame.Option1:SetScript('OnClick', function()
 				E:SetupChat()
-				if not E.Retail then --remove lfg spam from general and creat tab for it
+				if E.Retail then
+					ChatFrame_RemoveChannel(_G.ChatFrame1, "services") --get rid of the gold seller chat
+					NewRetailEditModeLayout()
+				else --remove lfg spam from general and creat tab for it
 					if lfg then
 						ChatFrame_RemoveChannel(_G.ChatFrame1, lfg)
 						FCF_OpenNewWindow()
@@ -283,7 +310,9 @@ ElvUI_EltreumUI.InstallerData = {
 			_G.PluginInstallFrame.Option2:Show()
 			_G.PluginInstallFrame.Option2:SetScript('OnClick', function()
 				E:SetupChat()
-				if not E.Retail then --remove lfg spam from general and creat tab for it
+				if E.Retail then
+					ChatFrame_RemoveChannel(_G.ChatFrame1, "services") --get rid of the gold seller chat
+				else --remove lfg spam from general and creat tab for it
 					if lfg then
 						ChatFrame_RemoveChannel(_G.ChatFrame1, lfg)
 						FCF_OpenNewWindow()
@@ -454,7 +483,7 @@ ElvUI_EltreumUI.InstallerData = {
 
 			_G.PluginInstallFrame.Option1:Enable()
 			_G.PluginInstallFrame.Option1:Show()
-			_G.PluginInstallFrame.Option1:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupDT() ElvUI_EltreumUI:GetASProfile() end)
+			_G.PluginInstallFrame.Option1:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupDT("spec") ElvUI_EltreumUI:GetASProfile() end)
 			_G.PluginInstallFrame.Option1:SetScript('OnEnter', function() ImproveInstall("detailsspec","ENTERING") end)
 			_G.PluginInstallFrame.Option1:SetScript('OnLeave', function() ImproveInstall(nil,"LEAVING") end)
 			if E.Retail then
@@ -465,14 +494,14 @@ ElvUI_EltreumUI.InstallerData = {
 
 			_G.PluginInstallFrame.Option2:Enable()
 			_G.PluginInstallFrame.Option2:Show()
-			_G.PluginInstallFrame.Option2:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupDTReleaf() ElvUI_EltreumUI:GetASProfile() end)
+			_G.PluginInstallFrame.Option2:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupDT("releafalpha") ElvUI_EltreumUI:GetASProfile() end)
 			_G.PluginInstallFrame.Option2:SetScript('OnEnter', function() ImproveInstall("detailsreleafalpha","ENTERING") end)
 			_G.PluginInstallFrame.Option2:SetScript('OnLeave', function() ImproveInstall(nil,"LEAVING") end)
 			_G.PluginInstallFrame.Option2:SetText('Releaf Alpha')
 
 			_G.PluginInstallFrame.Option3:Enable()
 			_G.PluginInstallFrame.Option3:Show()
-			_G.PluginInstallFrame.Option3:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupDTReleafv3() ElvUI_EltreumUI:GetASProfile() end)
+			_G.PluginInstallFrame.Option3:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupDT("releafsolid") ElvUI_EltreumUI:GetASProfile() end)
 			_G.PluginInstallFrame.Option3:SetScript('OnEnter', function() ImproveInstall("detailsreleafsolid","ENTERING") end)
 			_G.PluginInstallFrame.Option3:SetScript('OnLeave', function() ImproveInstall(nil,"LEAVING") end)
 			_G.PluginInstallFrame.Option3:SetText('Releaf Solid')
@@ -647,8 +676,31 @@ ElvUI_EltreumUI.InstallerData = {
 					_G.PluginInstallFrame.Option3:Show()
 					_G.PluginInstallFrame.Option3:SetText(L["WarpDeplete"])
 				end
+
+				if IsAddOnLoaded("OmniCD") then
+					_G.PluginInstallFrame.Desc3:SetText(L["Import OmniCD profile"])
+					_G.PluginInstallFrame.Option3:Enable()
+					_G.PluginInstallFrame.Option3:Show()
+					_G.PluginInstallFrame.Option3:SetScript('OnClick', function()
+						if ElvDB.profileKeys[E.mynameRealm]:match("Eltreum DPS") then
+							ElvUI_EltreumUI:GetOmniCDProfile("dps")
+						elseif ElvDB.profileKeys[E.mynameRealm]:match("Eltreum Healer") then
+							ElvUI_EltreumUI:GetOmniCDProfile("healer")
+						else
+							ElvUI_EltreumUI:GetOmniCDProfile("dps")
+						end
+					end)
+					_G.PluginInstallFrame.Option3:SetScript('OnEnter', function() ImproveInstall("OmniCD","ENTERING") end)
+					_G.PluginInstallFrame.Option3:SetScript('OnLeave', function() ImproveInstall(nil,"LEAVING") end)
+					_G.PluginInstallFrame.Option3:SetText(L["OmniCD"])
+				else
+					_G.PluginInstallFrame.Desc3:SetText(L["OmniCD is not installed or enabled"])
+					_G.PluginInstallFrame.Option3:Disable()
+					_G.PluginInstallFrame.Option3:Show()
+					_G.PluginInstallFrame.Option3:SetText(L["OmniCD"])
+				end
 			end
-			if not ( IsAddOnLoaded("WarpDeplete") or IsAddOnLoaded("Capping") or IsAddOnLoaded("BattleGroundEnemies") ) then
+			if not ( IsAddOnLoaded("WarpDeplete") or IsAddOnLoaded("Capping") or IsAddOnLoaded("BattleGroundEnemies") or IsAddOnLoaded("OmniCD") ) then
 				_G.PluginInstallFrame.Desc4:SetText('|cffff0000'..L["You have none of these addons installed or enabled"]..'|r')
 			else
 				_G.PluginInstallFrame.Desc4:SetText('|cffff0000'..L["Your current settings will be lost, please back them up"]..'|r')
@@ -664,14 +716,14 @@ ElvUI_EltreumUI.InstallerData = {
 			_G.PluginInstallFrame.Desc4:SetText('|cffff0000'..L["Your current settings will be lost, please back them up"]..'|r')
 			_G.PluginInstallFrame.Option1:Enable()
 			_G.PluginInstallFrame.Option1:Show()
-			_G.PluginInstallFrame.Option1:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupNameplateSCT() end)
+			_G.PluginInstallFrame.Option1:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupCombatText("NameplateSCT") end)
 			_G.PluginInstallFrame.Option1:SetScript('OnEnter', function() ImproveInstall("NameplateSCT","ENTERING") end)
 			_G.PluginInstallFrame.Option1:SetScript('OnLeave', function() ImproveInstall(nil,"LEAVING") end)
 			_G.PluginInstallFrame.Option1:SetText('NameplateSCT')
 
 			_G.PluginInstallFrame.Option2:Enable()
 			_G.PluginInstallFrame.Option2:Show()
-			_G.PluginInstallFrame.Option2:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupFCT() end)
+			_G.PluginInstallFrame.Option2:SetScript('OnClick', function() ElvUI_EltreumUI:AddonSetupCombatText("ElvUI_FCT") end)
 			_G.PluginInstallFrame.Option2:SetScript('OnEnter', function() ImproveInstall("ElvUIFCT","ENTERING") end)
 			_G.PluginInstallFrame.Option2:SetScript('OnLeave', function() ImproveInstall(nil,"LEAVING") end)
 			_G.PluginInstallFrame.Option2:SetText('ElvUI FCT')
@@ -727,7 +779,7 @@ ElvUI_EltreumUI.InstallerData = {
 			_G.PluginInstallFrame.Desc1:SetText(L["Join the Discord if you have any questions or issues (English Support)"])
 			_G.PluginInstallFrame.Option1:Enable()
 			_G.PluginInstallFrame.Option1:Show()
-			_G.PluginInstallFrame.Option1:SetScript('OnClick', function() E:StaticPopup_Show('ELVUI_EDITBOX', nil, nil, 'https://discord.gg/rBXNxUY6pk')  end)
+			_G.PluginInstallFrame.Option1:SetScript('OnClick', function() E:StaticPopup_Show('ELVUI_EDITBOX', nil, nil, 'https://discord.gg/rBXNxUY6pk') end)
 			_G.PluginInstallFrame.Option1:SetScript('OnEnter', nil)
 			_G.PluginInstallFrame.Option1:SetScript('OnLeave', nil)
 			_G.PluginInstallFrame.Option1:SetText('Discord')

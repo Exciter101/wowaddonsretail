@@ -306,6 +306,9 @@ function ElvUI_EltreumUI:CheckCompatibility()
 	CheckWindTools(L["Immersion"], L["Immersion"], "db.ElvUI_EltreumUI.skins.immersion", "private.WT.skins.addons.immersion")
 	CheckWindTools(L["RareScanner"], L["RareScanner"], "db.ElvUI_EltreumUI.skins.rarescanner", "private.WT.skins.addons.rareScanner")
 	CheckWindTools(L["SimulationCraft"], L["SimulationCraft"], "db.ElvUI_EltreumUI.skins.simulationcraft", "private.WT.skins.addons.simulationcraft")
+	CheckWindTools(L["WarpDeplete"], L["WarpDeplete"], "db.ElvUI_EltreumUI.skins.warpdeplete", "private.WT.skins.addons.warpDeplete")
+	CheckWindTools(L["Hekili"], L["Hekili"], "db.ElvUI_EltreumUI.skins.hekili", "private.WT.skins.addons.hekili")
+	CheckWindTools(L["OmniCD"], L["OmniCD"], "db.ElvUI_EltreumUI.skins.omnicd", "private.WT.skins.addons.omniCD")
 
 	--other
 	CheckMerathilisUI(L["Combat Alert"], L["Combat Alert"], "db.ElvUI_EltreumUI.loot.loottext.combatindicator", "db.mui.CombatAlert.enable")
@@ -316,6 +319,7 @@ function ElvUI_EltreumUI:CheckCompatibility()
 	CheckWindTools(L["Keystone\n!key command/Autoinsert"], L["Keystone Autoinsert"], "db.ElvUI_EltreumUI.otherstuff.mpluskeys", "db.WT.combat.quickKeystone.enable")
 	CheckWindTools(L["Fast Loot"], L["Fast Loot"], "db.ElvUI_EltreumUI.loot.fastloot", "db.WT.item.fastLoot.enable")
 	CheckWindTools(L["Auto Type Delete"], L["Auto Type Delete"], "db.ElvUI_EltreumUI.otherstuff.delete", "db.WT.item.delete.enable")
+	CheckMerathilisUI(L["Tooltip\nGradient Name and Health"], L["Tooltip\nGradient Name"], "db.ElvUI_EltreumUI.skins.gradienttooltip", "db.mui.tooltip.gradientName")
 
 	if _G["EltruismCompatibilityFrame"].numModules > 0 then
 		_G["EltruismCompatibilityFrame"]:Show()

@@ -379,6 +379,8 @@ local modelsRotate = {
 	[4218362] = true, --Alexstrasza the Life-Binder
 	[4218967] = true, --Nozdormu
 	[797415] = true,
+	[2205511] = true, --kul tiran moonkin
+	[4518803] = true, --Subterrax
 }
 
 --set portrait rotation based on target being npc or not
@@ -448,7 +450,7 @@ function ElvUI_EltreumUI:DynamicUFPortraitRotationPlayer()
 					--fix camera rotation by get the model id
 					if _G["ElvUF_Player"].Portrait3D then
 						playermodel = _G["ElvUF_Player"].Portrait3D:GetModelFileID()
-						if playermodel  then
+						if playermodel then
 							if modelsRotate[playermodel]then
 								newrotation = 0
 							elseif playermodel == 926251 then
@@ -519,6 +521,33 @@ if E.Retail or E.Wrath then
 	pewcheck:SetScript("OnEvent",function()
 		if _G["ElvUF_Player"] and E.db.unitframe.units.player.fader.enable and E.db.unitframe.units.player.fader.minAlpha == 0 then
 			E:Delay(0, function()
+				if not _G["ElvUF_Player"].EltruismAlphaCheck then --another hook to fix when not using elvui fader smoothing
+					hooksecurefunc(_G["ElvUF_Player"], "SetAlpha", function(_,alpha)
+						if alpha == 0 then
+							if _G["ElvUF_Player"].Portrait3D then
+								_G["ElvUF_Player"].Portrait3D:Hide()
+							end
+							if _G["EltruismPlayerEffect"] then
+								_G["EltruismPlayerEffect"]:SetAlpha(0)
+							end
+							if _G["EltruismPlayerPowerBarEffect"] then
+								_G["EltruismPlayerPowerBarEffect"]:SetAlpha(0)
+							end
+						else
+							if _G["EltruismPlayerEffect"] then
+								_G["EltruismPlayerEffect"]:SetAlpha(E.db.ElvUI_EltreumUI.unitframes.models.ufalpha)
+							end
+							if _G["EltruismPlayerPowerBarEffect"] then
+								_G["EltruismPlayerPowerBarEffect"]:SetAlpha(0.4)
+							end
+							if _G["ElvUF_Player"].Portrait3D then
+								_G["ElvUF_Player"].Portrait3D:Show()
+							end
+						end
+					end)
+					_G["ElvUF_Player"].EltruismAlphaCheck = true
+				end
+
 				if _G["ElvUF_Player"].Portrait3D then
 					_G["ElvUF_Player"].Portrait3D:Hide()
 				end
