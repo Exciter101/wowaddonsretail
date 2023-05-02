@@ -1,5 +1,5 @@
-## v4.12 Changes
+## v4.12.1 Changes
 
-* Accompanying release for TSM v4.12
+* [Retail] Updated for 10.0.7
 
 [Known Issues](http://support.tradeskillmaster.com/display/KB/TSM4+Currently+Known+Issues)
