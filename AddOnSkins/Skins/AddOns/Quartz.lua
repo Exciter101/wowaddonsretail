@@ -1,8 +1,6 @@
-local AS = unpack(AddOnSkins)
+local AS, L, S, R = unpack(AddOnSkins)
 
-if not AS:CheckAddOn('Quartz') then return end
-
-function AS:Quartz()
+function R:Quartz()
 	local Quartz3 = LibStub("AceAddon-3.0"):GetAddon("Quartz3")
 	local GCD = Quartz3:GetModule("GCD")
 	local CastBar = Quartz3.CastBarTemplate.template
@@ -10,10 +8,10 @@ function AS:Quartz()
 	local function SkinQuartzBar(self)
 		if not self.isSkinned then
 			self.IconBorder = CreateFrame("Frame", nil, self)
-			AS:SkinFrame(self.IconBorder)
+			S:HandleFrame(self.IconBorder)
 			self.IconBorder:SetFrameLevel(0)
-			AS:SetOutside(self.IconBorder, self.Icon)
-			AS:SkinBackdropFrame(self.Bar, nil, true)
+			S:SetOutside(self.IconBorder, self.Icon)
+			S:HandleFrame(self.Bar, true)
 			self.isSkinned = true
 		end
 		if self.config.hideicon then
@@ -21,11 +19,11 @@ function AS:Quartz()
 		else
 			self.IconBorder:Show()
 		end
-		if Quartz3GCDBar and not Quartz3GCDBar.isSkinned then AS:SkinBackdropFrame(Quartz3GCDBar, nil, true) Quartz3GCDBar.isSkinned = true end
+		if Quartz3GCDBar and not Quartz3GCDBar.isSkinned then S:HandleFrame(Quartz3GCDBar, true) Quartz3GCDBar.isSkinned = true end
 	end
 
 	hooksecurefunc(CastBar, 'UNIT_SPELLCAST_START', SkinQuartzBar)
 	hooksecurefunc(CastBar, 'UNIT_SPELLCAST_CHANNEL_START', SkinQuartzBar)
 end
 
-AS:RegisterSkin('Quartz', AS.Quartz)
+AS:RegisterSkin('Quartz')

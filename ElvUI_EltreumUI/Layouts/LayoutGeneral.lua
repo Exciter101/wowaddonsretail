@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local valuecolors = E:ClassColor(E.myclass, true)
 local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
@@ -129,6 +129,13 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["unitframe"]["units"]["target"]["CombatIcon"]["texture"] = "Eltruism09"
 		E.db["unitframe"]["units"]["target"]["CombatIcon"]["size"] = 14
 		E.db["unitframe"]["units"]["target"]["CombatIcon"]["enable"] = true
+
+		--private auras
+		E.db["movers"]["PrivateAurasMover"] = "TOPRIGHT,ElvUIParent,TOPRIGHT,-287,-150"
+		E.db["unitframe"]["units"]["party"]["privateAuras"]["parent"]["offsetY"] = 12
+		E.db["unitframe"]["units"]["raid1"]["privateAuras"]["parent"]["offsetY"] = 5
+		E.db["unitframe"]["units"]["raid2"]["privateAuras"]["parent"]["offsetY"] = 5
+		E.db["unitframe"]["units"]["raid3"]["privateAuras"]["parent"]["offsetY"] = 5
 
 		--paging
 		if E.Retail or E.Wrath then
@@ -331,10 +338,6 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["unitframe"]["colors"]["power_backdrop"]["b"] = 0
 		E.db["unitframe"]["colors"]["power_backdrop"]["g"] = 0
 		E.db["unitframe"]["colors"]["power_backdrop"]["r"] = 0
-		E.db["unitframe"]["colors"]["transparentAurabars"] = true
-		E.db["unitframe"]["colors"]["transparentCastbar"] = true
-		E.db["unitframe"]["colors"]["transparentHealth"] = true
-		E.db["unitframe"]["colors"]["transparentPower"] = false
 
 		--movers
 		E.db["movers"]["MoverEltruismInstanceDifficulty"] = "TOPRIGHT,UIParent,TOPRIGHT,-146,-21"
@@ -388,7 +391,7 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["general"]["loginmessage"] = false
 		E.db["general"]["lootRoll"]["leftButtons"] = true
 		E.db["general"]["lootRoll"]["nameFont"] = "Kimberley"
-		E.db["general"]["lootRoll"]["statusBarTexture"] = "Asphyxia-Norm"
+		E.db["general"]["lootRoll"]["statusBarTexture"] = "ElvUI Norm1"
 		E.db["general"]["minimap"]["icons"]["calendar"]["position"] = "TOPLEFT"
 		E.db["general"]["minimap"]["icons"]["calendar"]["xOffset"] = 3
 		E.db["general"]["minimap"]["icons"]["calendar"]["yOffset"] = -38
@@ -403,13 +406,11 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 
 		E.db["general"]["minimap"]["icons"]["mail"]["yOffset"] = 0
 		if E.db["datatexts"]["panels"]["EltruismDataText"] and E.db["datatexts"]["panels"]["EltruismDataText"]["enable"] then
-			E.db["general"]["minimap"]["icons"]["queueStatus"]["yOffset"] = 13
 			E.db["movers"]["DTPanelEltruismDataTextMover"] = "BOTTOM,ElvUIParent,BOTTOM,0,0"
 			if not E.Retail then
 				E.db["general"]["minimap"]["icons"]["mail"]["yOffset"] = -10
 			end
 		else
-			E.db["general"]["minimap"]["icons"]["queueStatus"]["yOffset"] = 3
 			if not E.Retail then
 				E.db["general"]["minimap"]["icons"]["mail"]["yOffset"] = -27
 			end
@@ -422,10 +423,15 @@ function ElvUI_EltreumUI:SetupGeneralLayout()
 		E.db["general"]["minimap"]["resetZoom"]["enable"] = true
 		E.db["general"]["minimap"]["resetZoom"]["time"] = 10
 		E.db["general"]["minimap"]["size"] = 200
-		E.db["general"]["minimap"]["icons"]["queueStatus"]["font"] = "Kimberley"
-		E.db["general"]["minimap"]["icons"]["queueStatus"]["fontOutline"] = "OUTLINE"
-		E.db["general"]["minimap"]["icons"]["queueStatus"]["fontSize"] = 20
-		E.db["general"]["minimap"]["icons"]["queueStatus"]["xOffset"] = -24
+		E.db["general"]["queueStatus"]["font"] = "Kimberley"
+		E.db["general"]["queueStatus"]["fontOutline"] = "OUTLINE"
+		E.db["general"]["queueStatus"]["fontSize"] = 18
+		E.db["general"]["queueStatus"]["position"] = "LEFT"
+		E.db["general"]["queueStatus"]["xOffset"] = -30
+		E.db["general"]["queueStatus"]["yOffset"] = 0
+		E.db["general"]["minimap"]["timeFont"] = "Kimberley"
+		E.db["general"]["addonCompartment"]["fontOutline"] = "OUTLINE"
+		E.db["general"]["addonCompartment"]["font"] = "Kimberley"
 
 		E.db["general"]["objectiveFrameAutoHideInKeystone"] = false
 		E.db["general"]["objectiveFrameHeight"] = 550
@@ -1337,9 +1343,9 @@ function ElvUI_EltreumUI:SetupPrivate()
 	E.private["general"]["chatBubbleFontSize"] = 10
 	E.private["general"]["chatBubbleName"] = true
 	E.private["general"]["dmgfont"] = "Kimberley"
-	E.private["general"]["glossTex"] = "Asphyxia-Norm"
+	E.private["general"]["glossTex"] = "ElvUI Norm1"
 	E.private["general"]["namefont"] = "Kimberley"
-	E.private["general"]["normTex"] = "Asphyxia-Norm"
+	E.private["general"]["normTex"] = "ElvUI Norm1"
 	E.private["theme"] = "class"
 	E.private["skins"]["parchmentRemoverEnable"] = true
 	E.private["skins"]["blizzard"]["enable"] = true
@@ -1539,6 +1545,7 @@ function ElvUI_EltreumUI:SetupCVars()
 	SetCVar('alwaysCompareItems', 0) --dont always compare
 	SetCVar('allowCompareWithToggle', 1) --compare using shift
 	SetCVar('instantQuestText', 1) -- makes quest text show fast instead of per line
+	SetCVar('maxFPSLoading', 30) --smoother loading bar
 
 	-- fast loot
 	SetCVar("autoLootRate", 1)
@@ -1581,6 +1588,8 @@ function ElvUI_EltreumUI:SetupCVars()
 		SetCVar('SoftTargetInteract', 3) --3 enables, 0 disables
 		SetCVar('SoftTargetInteractArc', 2)
 		SetCVar('SoftTargetNameplateInteract', 1)
+
+		SetCVar('missingTransmogSourceInItemTooltips', 1)
 
 		--[[
 		SetCVar('findYourselfAnywhere', 0) --"Always Highlight your character"

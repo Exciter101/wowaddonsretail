@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, _, _, P = unpack(ElvUI)
 local NP = E:GetModule('NamePlates')
 local _G = _G
 local hooksecurefunc = _G.hooksecurefunc
@@ -32,9 +32,9 @@ function ElvUI_EltreumUI:NameplateCustomOptions(unit)
 	if (E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.enableHealthHeight) and unit and unit.unit and unit.unit:match("nameplate") then
 
 		--check if its not explosive
-		if (unit.unitGUID and unit.unitGUID:match("-120651-")) or UnitIsUnit(unit.unit,"player") then
+		--[[if (unit.unitGUID and unit.unitGUID:match("-120651-")) or UnitIsUnit(unit.unit,"player") then
 			return
-		end
+		end]]
 
 		if UnitIsUnit(unit.unit, "target") then
 			if E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.useelvuinpheight then
@@ -43,7 +43,7 @@ function ElvUI_EltreumUI:NameplateCustomOptions(unit)
 				unit.Health:SetHeight(E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.incombatHeight)
 			end
 		else
-			if UnitAffectingCombat(unit.unit) or UnitThreatSituation("player", unit.unit) ~= nil or UnitIsUnit(unit.unit.."target","player") then
+			if UnitAffectingCombat(unit.unit) or UnitThreatSituation("player", unit.unit) ~= nil or UnitIsUnit(unit.unit.."target","player") or UnitCastingInfo(unit.unit) then
 				if E.db.ElvUI_EltreumUI.nameplates.nameplateOptions.useelvuinpheight then
 					unit.Health:SetHeight(heighttable[unit.frameType])
 				else

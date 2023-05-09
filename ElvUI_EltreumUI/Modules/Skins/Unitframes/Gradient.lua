@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local UF = E:GetModule('UnitFrames')
 local _G = _G
 local hooksecurefunc = _G.hooksecurefunc
@@ -6,16 +6,13 @@ local UnitExists = _G.UnitExists
 local UnitClass = _G.UnitClass
 local UnitReaction = _G.UnitReaction
 local UnitIsPlayer = _G.UnitIsPlayer
-local select = _G.select
 local UnitIsTapDenied = _G.UnitIsTapDenied
 local UnitPlayerControlled = _G.UnitPlayerControlled
 local _, buttonclass, classunit, unitframe, reaction
 local IsInGroup = _G.IsInGroup
-local classcolor = E:ClassColor(E.myclass, true)
-local skillglowcolor = {classcolor.r, classcolor.g, classcolor.b, 1}
 local UnitIsCharmed = _G.UnitIsCharmed
 local pairs = _G.pairs
-local forced
+local ElvUI_EltreumUI = _G.ElvUI_EltreumUI
 
 --set the textures or gradients for single units
 function ElvUI_EltreumUI:ApplyUnitGradient(unit,name,unittexture)
@@ -33,9 +30,16 @@ function ElvUI_EltreumUI:ApplyUnitGradient(unit,name,unittexture)
 			if UnitIsPlayer(unit) and not UnitIsCharmed(unit) then
 				if E.db.ElvUI_EltreumUI.unitframes.lightmode then
 					if E.db.ElvUI_EltreumUI.unitframes.gradientmode.enable and E.db["ElvUI_EltreumUI"]["unitframes"]["gradientmode"]["enable"..unittexture] then
+						if not E.db.ElvUI_EltreumUI.unitframes.ufcustomtexture.enable then
+							if E.db.ElvUI_EltreumUI.unitframes.gradientmode.useUFtexture then
+								unitframe.Health:GetStatusBarTexture():SetTexture(E.LSM:Fetch("statusbar", E.db.unitframe.statusbar))
+							else
+								unitframe.Health:GetStatusBarTexture():SetTexture(E.LSM:Fetch("statusbar", E.db.ElvUI_EltreumUI.unitframes.gradientmode.texture))
+							end
+						end
 						if E.db.ElvUI_EltreumUI.unitframes.gradientmode.customcolor then
 							if E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation == "HORIZONTAL" then
-								if unit == "target" then
+								if unit == "target" and E.db.ElvUI_EltreumUI.unitframes.gradientmode.reversetarget then
 									unitframe.Health:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColorsCustom(classunit, true, false))
 								else
 									unitframe.Health:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColorsCustom(classunit, false, false))
@@ -45,7 +49,7 @@ function ElvUI_EltreumUI:ApplyUnitGradient(unit,name,unittexture)
 							end
 						else
 							if E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation == "HORIZONTAL" then
-								if unit == "target" then
+								if unit == "target" and E.db.ElvUI_EltreumUI.unitframes.gradientmode.reversetarget then
 									unitframe.Health:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColors(classunit, true, false))
 								else
 									unitframe.Health:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColors(classunit, false, false))
@@ -75,7 +79,7 @@ function ElvUI_EltreumUI:ApplyUnitGradient(unit,name,unittexture)
 						end
 						if E.db.ElvUI_EltreumUI.unitframes.gradientmode.customcolor then
 							if E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation == "HORIZONTAL" then
-								if unit == "target" then
+								if unit == "target" and E.db.ElvUI_EltreumUI.unitframes.gradientmode.reversetarget then
 									if E.Retail or E.Wrath then
 										unitframe.Health.backdropTex:SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColorsCustom(classunit, true, true))
 									else
@@ -97,7 +101,7 @@ function ElvUI_EltreumUI:ApplyUnitGradient(unit,name,unittexture)
 							end
 						else
 							if E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation == "HORIZONTAL" then
-								if unit == "target" then
+								if unit == "target" and E.db.ElvUI_EltreumUI.unitframes.gradientmode.reversetarget then
 									if E.Retail or E.Wrath then
 										unitframe.Health.backdropTex:SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColors(classunit, true, true))
 									else
@@ -123,8 +127,15 @@ function ElvUI_EltreumUI:ApplyUnitGradient(unit,name,unittexture)
 			else
 				if E.db.ElvUI_EltreumUI.unitframes.lightmode then
 					if E.db.ElvUI_EltreumUI.unitframes.gradientmode.enable and E.db["ElvUI_EltreumUI"]["unitframes"]["gradientmode"]["enable"..unittexture] then
+						if not E.db.ElvUI_EltreumUI.unitframes.ufcustomtexture.enable then
+							if E.db.ElvUI_EltreumUI.unitframes.gradientmode.useUFtexture then
+								unitframe.Health:GetStatusBarTexture():SetTexture(E.LSM:Fetch("statusbar", E.db.unitframe.statusbar))
+							else
+								unitframe.Health:GetStatusBarTexture():SetTexture(E.LSM:Fetch("statusbar", E.db.ElvUI_EltreumUI.unitframes.gradientmode.texture))
+							end
+						end
 						if E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation == "HORIZONTAL" then
-							if unit == "target" then
+							if unit == "target" and E.db.ElvUI_EltreumUI.unitframes.gradientmode.reversetarget then
 								if E.db.ElvUI_EltreumUI.unitframes.gradientmode.customcolor then
 									if UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
 										unitframe.Health:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColorsCustom("TAPPED", true, false))
@@ -248,7 +259,7 @@ function ElvUI_EltreumUI:ApplyUnitGradient(unit,name,unittexture)
 							end
 						end
 						if E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation == "HORIZONTAL" then
-							if unit == "target" then
+							if unit == "target" and E.db.ElvUI_EltreumUI.unitframes.gradientmode.reversetarget then
 								if E.db.ElvUI_EltreumUI.unitframes.gradientmode.customcolor then
 									if UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
 										if E.Retail or E.Wrath then
@@ -490,6 +501,13 @@ function ElvUI_EltreumUI:ApplyGroupGradient(button)
 		button.Health:SetOrientation(E.db.ElvUI_EltreumUI.unitframes.UForientation)
 		if E.db.ElvUI_EltreumUI.unitframes.lightmode then
 			if E.db.ElvUI_EltreumUI.unitframes.gradientmode.enable and E.db.ElvUI_EltreumUI.unitframes.gradientmode.enablegroupunits then
+				if not E.db.ElvUI_EltreumUI.unitframes.ufcustomtexture.enable then
+					if E.db.ElvUI_EltreumUI.unitframes.gradientmode.useUFtexture then
+						button.Health:GetStatusBarTexture():SetTexture(E.LSM:Fetch("statusbar", E.db.unitframe.statusbar))
+					else
+						button.Health:GetStatusBarTexture():SetTexture(E.LSM:Fetch("statusbar", E.db.ElvUI_EltreumUI.unitframes.gradientmode.texture))
+					end
+				end
 				if E.db.ElvUI_EltreumUI.unitframes.gradientmode.customcolor then
 					button.Health:GetStatusBarTexture():SetGradient(E.db.ElvUI_EltreumUI.unitframes.gradientmode.orientation, ElvUI_EltreumUI:GradientColorsCustom(buttonclass, false, false))
 				else
@@ -534,7 +552,7 @@ end
 
 local forced = false
 function ElvUI_EltreumUI:GradientUF(unit)
-	if E.private.unitframe.enable and E.db.ElvUI_EltreumUI.unitframes.UFmodifications then
+	if E.private.unitframe.enable and E.db.ElvUI_EltreumUI.unitframes.UFmodifications and E.db.ElvUI_EltreumUI.unitframes.gradientmode.enable then
 
 		--main issue = the toggle for some units like boss and arena wont work bc it checks for boss1,boss2... instead of just boss
 		ElvUI_EltreumUI:ApplyUnitGradient("player", "Player", "player")

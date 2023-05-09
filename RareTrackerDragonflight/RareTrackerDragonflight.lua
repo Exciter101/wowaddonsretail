@@ -200,6 +200,33 @@ if RareTracker.db.global.window.force_display_in_english then
     L[200739] = "Fimbol"
     L[200742] = "Luttrok"
     L[203353] = "Loot Specialist"
+    
+    -- Zaralek Cavern
+    L[203515] = "Alcanon"
+    L[203621] = "Brullo the Strong"
+    L[203664] = "Emberdusk"
+    L[203592] = "General Zskorro"
+    L[203611] = "Hadexia"
+    L[203646] = "Dinn" -- Jrumm
+    L[203466] = "Kaprachu"
+    L[203462] = "Kob'rok"
+    L[203630] = "Lavermix"
+    L[203521] = "Professor Gastrinax"
+    L[203643] = "Skornak"
+    L[203662] = "Subterrax"
+    L[201029] = "Veridian King"
+    L[203468] = "Aquifon"
+    L[204093] = "Colossian"
+    L[203660] = "Flowfy"
+    L[203477] = "Goopal"
+    L[203627] = "Invoq" -- Invohq
+    L[203625] = "Karokta" -- Kairoktra
+    L[203618] = "Klakatak"
+    L[203642] = "Kronkapace"
+    L[200111] = "Magtembo" -- Magmanesha
+    L[204096] = "Shadowforge Mole Machine"
+    L[203480] = "Spinmarrow"
+    L[203593] = "Underlight Queen"
 end
 
 -- Special category for elemental storms
@@ -511,4 +538,73 @@ RareTracker.RegisterRaresForModule({
         [200742] = {L[200742], 74332, nil}, --"Luttrok"
         [203353] = {L[203353], nil, nil}, --"Loot Specialist" 
     }
+})
+
+local zaralek_rare_announcements = {
+    [L["The great war beast bathes in the burning fires."]] = 200111,
+    [L["A Champion emerges on the ancient battlefield."]] = 203627,
+    [L["An eerie yet soothing light flickers in the darkness from underneath large wings."]] = 203593,
+    [L["Barked orders can be heard from within the Brimstone Garrison."]] = 203592,
+    [L["A flash of teeth and wings darts across the cavern ceiling."]] = 203625,
+    [L[203462]] = 203462,
+    [L[204093]] = 204093,
+    [L["The drone of ancient drums echoes throughout the cavern."]] = 203646,
+    [L["The earth trembles in the caldera."]] = 203662,
+    [L["Maniacal laughter and explosions can be heard echoing in the cavern."]] = 203521,
+    [L["The crystalline structures begin to stir."]] = 201029,
+    [L[203477]] = 203477,
+    [L[203466]] = 203466,
+    [L["The strong are gathering in Glimmerogg to test their mettle."]] = 203621,
+    [L["You feel the temperature within the cavern rise significantly."]] = 203643,
+    [L[203664]] = 203664,
+    [L["The snapping of great claws can be heard from the waters."]] = 203618,
+    [L["A pair of terrifying howls pierce the air."]] = 203660,
+    [L[203515]] = 203515,
+    [L[203468]] = 203468,
+    [L[203480]] = 203480,
+}
+
+RareTracker.RegisterRaresForModule({
+    -- Define the zone(s) in which the rares are present.
+    ["target_zones"] = {2133, 2184},
+    ["zone_name"] = "Zaralek Cavern",
+    ["plugin_name"] = "Zaralek Cavern",
+    ["plugin_name_abbreviation"] = "Dragonflight",
+    ["entities"] = {
+        --npc_id = {name, quest_id, coordinates}
+        [203515] = {L[203515], 75284, {56.90, 73.14}}, --"Alcanon"
+        [203621] = {L[203621], 75326, {41.46, 86.12}}, --"Brullo the Strong"
+        [203664] = {L[203664], 75361, {31.79, 50.58}}, --"Emberdusk"
+        [203592] = {L[203592], 75295, {42.63, 18.88}}, --"General Zskorro"
+        [203611] = {L[203611], nil, nil}, --"Hadexia"
+        [203646] = {L[203646], 75352, {28.51, 51.11}}, --"Jrumm"
+        [203466] = {L[203466], 75268, {59.58, 39.45}}, --"Kaprachu"
+        [203462] = {L[203462], 75266, {64.73, 55.46}}, --"Kob'rok"
+        [203630] = {L[203630], nil, nil}, --"Lavermix"
+        [203521] = {L[203521], 75291, {52.83, 18.87}}, --"Professor Gastrinax"
+        [203643] = {L[203643], 75348, {36.40, 52.74}}, --"Skornak"
+        [203662] = {L[203662], 75359, {38.45, 46.56}}, --"Subterrax"
+        [201029] = {L[201029], 75365, {38.91, 71.58}}, --"Veridian King"
+        [203468] = {L[203468], 75270, {48.33, 75.09}}, --"Aquifon"
+        [204093] = {L[204093], 75475, {48.38, 23.86}}, --"Colossian"
+        [203660] = {L[203660], 75357, {35.86, 43.83}}, --"Flowfy"
+        [203477] = {L[203477], 75273, {68.80, 45.84}}, --"Goopal"
+        [203627] = {L[203627], 75335, {45.65, 33.30}}, --"Invoq"
+        [203625] = {L[203625], 75333, {42.20, 65.17}}, --"Kairoktra"
+        [203618] = {L[203618], 75321, {54.19, 41.77}}, --"Klakatak"
+        [203642] = {L[203642], nil, nil}, --"Kronkapace"
+        [200111] = {L[200111], 75339, {40.79, 38.29}}, --"Magmanesha"
+        [204096] = {L[204096], 75576, nil}, --"Shadowforge Mole Machine"
+        [203480] = {L[203480], 75275, {54.77, 65.89}}, --"Spinmarrow"
+        [203593] = {L[203593], 75297, {57.78, 69.10}}, --"Underlight Queen"
+    },
+    ["FindMatchForText"] = function(self, text)
+        -- Check if any of the drill rig designations is contained in the broadcast text.
+        for designation, npc_id in pairs(zaralek_rare_announcements) do
+            if text:find(designation) then
+                self:ProcessEntityAlive(npc_id, npc_id, nil, nil, false)
+                return
+            end
+        end
+    end
 })

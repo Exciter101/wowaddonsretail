@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local _G = _G
 local DT = E:GetModule("DataTexts")
 local InCombatLockdown = _G.InCombatLockdown
@@ -24,15 +24,15 @@ local function EltruismConfigOnClick(_, button)
 	if InCombatLockdown() then UIErrorsFrame:AddMessage("|cffFF0000"..ERR_NOT_IN_COMBAT.."|r") end
 	if not InCombatLockdown() then
 		if button == 'LeftButton' then
-			E:ToggleOptions()
-			E.Libs.AceConfigDialog:SelectGroup('ElvUI', 'ElvUI_EltreumUI')
+			E:ToggleOptions('ElvUI_EltreumUI')
+			--E.Libs.AceConfigDialog:SelectGroup('ElvUI', 'ElvUI_EltreumUI')
 		elseif button == 'RightButton' then
 			E:GetModule('PluginInstaller'):Queue(ElvUI_EltreumUI.InstallerData)
 		end
 	end
 end
 
-local function EltruismConfigValueColorUpdate(self,hex)
+local function EltruismConfigValueColorUpdate(_,hex)
 	displayStringEltruismconfig = strjoin('', hex, '%s|r')
 	if lastPanelEltruismConfig then EltruismConfigOnEvent(lastPanelEltruismConfig) end
 end

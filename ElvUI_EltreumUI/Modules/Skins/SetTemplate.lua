@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local _G = _G
 local CreateFrame = _G.CreateFrame
 local hooksecurefunc = _G.hooksecurefunc
@@ -8,7 +8,7 @@ local valuecolors = E:ClassColor(E.myclass, true)
 --based on elvui toolkit
 function ElvUI_EltreumUI:SetTemplateSkin()
 	if E.db.ElvUI_EltreumUI.skins.elvui.SetTemplate then
-		local frame = CreateFrame("Frame")
+		local loopframe = CreateFrame("Frame")
 		local frametypes = {
 			["Region"] = true,
 			["Texture"] = true,
@@ -17,9 +17,10 @@ function ElvUI_EltreumUI:SetTemplateSkin()
 			["ScrollFrame"] = true,
 			["ModelScene"] = true,
 		}
-		local function SkinFrame(frame)
-			if frame:GetObjectType() == "Texture" then frame = frame:GetParent() end
-			local mt = getmetatable(frame).__index
+		local function SkinFrame(object)
+			if object:GetObjectType() == "Texture" then object = object:GetParent() end
+			local mt = getmetatable(object).__index
+			if type(mt) == 'function' then return end
 			if mt.SetTemplate then
 				hooksecurefunc(mt, "SetTemplate", function(frame, template, _, _, _, isUnitFrameElement, isNamePlateElement)
 					if isUnitFrameElement and not E.db.ElvUI_EltreumUI.skins.elvui.unitframes then return end
@@ -46,8 +47,11 @@ function ElvUI_EltreumUI:SetTemplateSkin()
 									frame.eltruismbgtexture:SetDrawLayer("BACKGROUND")
 								end
 								if frame:GetParent().TransmogStateTexture then --transmog stuff
-									frame.eltruismbgtexture:SetVertexColor(1,0,0,0)
+									frame.eltruismbgtexture:Hide()
 								end
+							end
+							if (frame.SelectedTexture or frame.glossTex) and not E.db.ElvUI_EltreumUI.skins.elvui.button then --fix some more buttons
+								frame.eltruismbgtexture:Hide()
 							end
 							if isUnitFrameElement and (frame:GetParent() and frame:GetParent().isTransparent == false) then --only on health
 								frame.eltruismbgtexture:SetDrawLayer("ARTWORK")
@@ -57,6 +61,16 @@ function ElvUI_EltreumUI:SetTemplateSkin()
 								frame.eltruismbgtexture:SetVertexColor(valuecolors.r,valuecolors.g,valuecolors.b,0.15)
 							else
 								frame.eltruismbgtexture:SetVertexColor(E.db.ElvUI_EltreumUI.skins.elvui.color.r,E.db.ElvUI_EltreumUI.skins.elvui.color.g,E.db.ElvUI_EltreumUI.skins.elvui.color.b,E.db.ElvUI_EltreumUI.skins.elvui.color.a)
+							end
+							--possible widget shadows
+							if E.db.ElvUI_EltreumUI.skins.shadow.enable then
+								if frame:GetParent() and frame:GetParent():GetParent() and frame:GetParent():GetParent().widgetContainer then
+									if not frame.shadow then
+										frame:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+										ElvUI_EltreumUI:ShadowColor(frame.shadow)
+
+									end
+								end
 							end
 							frame.EltruismBackground = true
 						else
@@ -95,14 +109,14 @@ function ElvUI_EltreumUI:SetTemplateSkin()
 				end)
 			end
 		end
-		SkinFrame(frame)
-		frame = EnumerateFrames()
-		while frame do
-			if (not frame:IsForbidden()) and not frametypes[frame:GetObjectType()] then
-				SkinFrame(frame)
-				frametypes[frame:GetObjectType()] = true
+		SkinFrame(loopframe)
+		loopframe = EnumerateFrames()
+		while loopframe do
+			if (not loopframe:IsForbidden()) and not frametypes[loopframe:GetObjectType()] then
+				SkinFrame(loopframe)
+				frametypes[loopframe:GetObjectType()] = true
 			end
-			frame = EnumerateFrames(frame)
+			loopframe = EnumerateFrames(loopframe)
 		end
 		E:StaggeredUpdateAll()
 		E:Delay(10, function()

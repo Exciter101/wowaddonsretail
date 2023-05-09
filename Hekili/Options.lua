@@ -216,7 +216,8 @@ local displayTemplate = {
 
     border = {
         enabled = true,
-        width = 1,
+        thickness = 1,
+        fit = false,
         coloring = 'custom',
         color = { 0, 0, 0, 1 },
     },
@@ -332,6 +333,8 @@ local displayTemplate = {
         fontStyle = "OUTLINE",
 
         lowercase = false,
+
+        separateQueueStyle = false,
 
         queuedFont = ElvUI and "PT Sans Narrow" or "Arial Narrow",
         queuedFontSize = 12,
@@ -3995,7 +3998,8 @@ do
                 desc = "If set above zero, the addon will only allow " .. k .. " to be recommended, if there are at least this many detected enemies.  All other action list conditions must also be met.\nSet to zero to ignore.",
                 width = 1.5,
                 min = 0,
-                max = 15,
+                softMax = 15,
+                max = 100,
                 step = 1,
                 order = 3.1,
             },

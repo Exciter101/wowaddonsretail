@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local S = E:GetModule('Skins')
 local _G = _G
 local CreateFrame = _G.CreateFrame
@@ -13,7 +13,7 @@ WideTradeSkillEnchant:RegisterEvent("PLAYER_ENTERING_WORLD")
 local dontexpandanymoreEnchant = 0
 local dontexpandanymore = 0
 local skillbutton,skillTitle
-local vellumbutton,disenchantbutton,tradeskilloadmonitor
+local vellumbutton,disenchantbutton
 local classcolor = E:ClassColor(E.myclass, true)
 local string = _G.string
 
@@ -42,6 +42,12 @@ function ElvUI_EltreumUI:FrameScales()
 	if _G["ElvUI_BankContainerFrame"] then
 		_G["ElvUI_BankContainerFrame"]:HookScript("OnShow", function()
 			_G["ElvUI_BankContainerFrame"]:SetScale(E.db.ElvUI_EltreumUI.otherstuff.bankscale)
+		end)
+	end
+
+	if _G["ElvLootFrame"] then
+		_G["ElvLootFrame"]:HookScript("OnShow", function()
+			_G["ElvLootFrame"]:SetScale(E.db.ElvUI_EltreumUI.otherstuff.lootscale)
 		end)
 	end
 end
@@ -691,6 +697,9 @@ if _G["MainMenuBarVehicleLeaveButton"] then
 	S:HandleButton(_G["MainMenuBarVehicleLeaveButton"])
 	if _G["MainMenuBarVehicleLeaveButton"].hover then
 		_G["MainMenuBarVehicleLeaveButton"].hover:Hide()
+	end
+	if _G["MainMenuBarVehicleLeaveButton"].Highlight then
+		_G["MainMenuBarVehicleLeaveButton"].Highlight:SetTexture(nil)
 	end
 	_G["MainMenuBarVehicleLeaveButton"]:GetNormalTexture():SetTexture("Interface\\AddOns\\ElvUI\\Core\\Media\\Textures\\ExitVehicle")
 	_G["MainMenuBarVehicleLeaveButton"]:GetPushedTexture():SetTexture("Interface\\AddOns\\ElvUI\\Core\\Media\\Textures\\ExitVehicle")

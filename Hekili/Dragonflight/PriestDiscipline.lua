@@ -79,7 +79,7 @@ spec:RegisterTalents( {
     divine_aegis               = { 82602, 47515 , 2 }, -- Critical heals create a protective shield on the target, absorbing 3% of the amount healed. Lasts 15 sec. Critical heals with Power Word: Shield absorb 5% additional damage.
     divine_star                = { 82682, 110744, 1 }, -- Throw a Divine Star forward 27 yds, healing allies in its path for 1,151 and dealing 1,211 Holy damage to enemies. After reaching its destination, the Divine Star returns to you, healing allies and damaging enemies in its path again. Healing reduced beyond 6 targets.
     embrace_shadow             = { 82582, 372985, 1 }, -- Shadow Covenant lasts an additional 8 sec.
-    enduring_luminescence      = { 82591, 390685, 1 }, -- Power Word: Radiance applies Atonement at an additional 10% of its normal duration.
+    enduring_luminescence      = { 82591, 390685, 1 }, -- Reduces the cast time of Power Word: Radiance by 30% and causes it to apply Atonement at an additional 10% of its normal duration.
     evangelism                 = { 82567, 246287, 1 }, -- Extends the duration of all of your active Atonements by 6 sec.
     exaltation                 = { 82576, 373042, 1 }, -- Increases the duration of Rapture by 5 sec.
     expiation                  = { 82585, 390832, 2 }, -- Increases the damage of Mind Blast and Shadow Word: Death by 10%. Mind Blast and Shadow Word: Death consume 3 sec of Shadow Word: Pain or Purge the Wicked, instantly dealing that damage.
@@ -335,9 +335,24 @@ spec:RegisterAuras( {
         duration = 15,
         max_stack = 1
     },
+    surge_of_light = {
+        id = 114255,
+        duration = 20,
+        max_stack = 2
+    },
     tools_of_the_cloth = {
         id = 390933,
         duration = 12,
+        max_stack = 1
+    },
+    twilight_equilibrium_holy_amp = {
+        id = 390706,
+        duration = 6,
+        max_stack = 1
+    },
+    twilight_equilibrium_shadow_amp = {
+        id = 390707,
+        duration = 6,
         max_stack = 1
     },
     vampiric_embrace = {
@@ -364,6 +379,40 @@ spec:RegisterAuras( {
 } )
 
 
+spec:RegisterGear( "tier30", 202543, 202542, 202541, 202545, 202540 )
+spec:RegisterAuras( {
+    radiant_providence = {
+        id = 410638,
+        duration = 3600,
+        max_stack = 2
+    }
+} )
+
+
+local holy_schools = {
+    holy = true,
+    holyfire = true
+}
+
+spec:RegisterHook( "runHandler", function( action )
+    if talent.twilight_equilibrium.enabled then
+        local ability = class.abilities[ action ]
+        if not ability then return end
+        local school = ability.school
+
+        if school and ability.damage then
+            if holy_schools[ school ] and ( buff.twilight_equilibrium_holy_amp.up or buff.twilight_equilibrium_shadow_amp.down ) then
+                removeBuff( "twilight_equilibrium_holy_amp" )
+                applyBuff( "twilight_equilibrium_shadow_amp" )
+            elseif school == "shadow" and ( buff.twilight_equilibrium_shadow_amp.up or buff.twilight_equilibrium_holy_amp.down )  then
+                removeBuff( "twilight_equilibrium_shadow_amp" )
+                applyBuff( "twilight_equilibrium_holy_amp" )
+            end
+        end
+    end
+end )
+
+
 -- Abilities
 spec:RegisterAbilities( {
     archangel = {
@@ -371,6 +420,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 60,
         gcd = "spell",
+        school = "holy",
 
         pvptalent = "archangel",
         startsCombat = false,
@@ -389,6 +439,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 60,
         gcd = "spell",
+        school = "shadow",
 
         pvptalent = "dark_archangel",
         startsCombat = false,
@@ -402,11 +453,13 @@ spec:RegisterAbilities( {
     },
 
     -- Throw a Divine Star forward 27 yds, healing allies in its path for 1,151 and dealing 1,211 Holy damage to enemies. After reaching its destination, the Divine Star returns to you, healing allies and damaging enemies in its path again. Healing reduced beyond 6 targets.
-        divine_star = {
+    divine_star = {
         id = 110744,
         cast = 0,
         cooldown = 15,
         gcd = "spell",
+        school = "holy",
+        damage = 1,
 
         spend = 0.02,
         spendType = "mana",
@@ -425,6 +478,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 90,
         gcd = "spell",
+        school = "holy",
 
         talent = "evangelism",
         startsCombat = false,
@@ -442,8 +496,9 @@ spec:RegisterAbilities( {
         cast = 1.5,
         cooldown = 0,
         gcd = "spell",
+        school = "holy",
 
-        spend = 0.04,
+        spend = function() return buff.surge_of_light.up and 0 or 0.04 end,
         spendType = "mana",
 
         startsCombat = false,
@@ -451,6 +506,7 @@ spec:RegisterAbilities( {
 
         handler = function ()
             removeBuff( "from_darkness_comes_light" )
+            removeStack( "surge_of_light" )
             if talent.protective_light.enabled then applyBuff( "protective_light" ) end
         end,
     },
@@ -458,15 +514,18 @@ spec:RegisterAbilities( {
     -- Creates a ring of Holy energy around you that quickly expands to a 30 yd radius, healing allies for 2,647 and dealing 3,119 Holy damage to enemies. Healing reduced beyond 6 targets.
     halo = {
         id = function() return buff.shadow_covenant.up and 120644 or 120517 end,
+        known = 120517,
         cast = 1.5,
         cooldown = 40,
         gcd = "spell",
+        school = function() return buff.shadow_covenant.up and "shadow" or "holy" end,
 
         spend = 0.03,
         spendType = "mana",
 
         talent = "halo",
         startsCombat = false,
+        texture = function() return buff.shadow_covenant.up and 632353 or 632352 end,
 
         handler = function ()
         end,
@@ -480,6 +539,8 @@ spec:RegisterAbilities( {
         cast = 2.5,
         cooldown = 90,
         gcd = "spell",
+        school = "holyfire",
+        damage = 1,
 
         talent = "lights_wrath",
         startsCombat = false,
@@ -503,6 +564,8 @@ spec:RegisterAbilities( {
             if talent.dark_indulgence.enabled then return 9 end
         end,
         gcd = "spell",
+        school = "shadow",
+        damage = 1,
 
         spend = 0,
         spendType = "mana",
@@ -519,23 +582,10 @@ spec:RegisterAbilities( {
                     addStack( "harsh_discipline" )
                 end
             end
-        end,
-    },
 
+            if talent.inescapable_torment.enabled and pet.fiend.active then pet.fiend.expires = pet.fiend.expires + 1 end
 
-    mindbender = {
-        id = 123040,
-        cast = 0,
-        cooldown = 60,
-        gcd = "spell",
-
-        talent = "mindbender",
-        startsCombat = false,
-        texture = 136214,
-
-        handler = function ()
-            summonPet( "mindbender", 15 )
-            applyBuff( "mindbender" )
+            if talent.void_summoner.enabled then reduceCooldown( "mindbender", 2 ) end
         end,
     },
 
@@ -545,6 +595,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 180,
         gcd = "off",
+        school = "holy",
 
         spend = 0.02,
         spendType = "mana",
@@ -563,20 +614,26 @@ spec:RegisterAbilities( {
 
     penance = {
         id = function() return buff.shadow_covenant.up and 400169 or 47540 end,
+        known = 47540,
         cast = 2,
         channeled = true,
         cooldown = 9,
         gcd = "spell",
+        school = function() return buff.shadow_covenant.up and "shadow" or "holy" end,
+        damage = 1,
 
         spend = function() return buff.harsh_discipline_ready.up and 0 or 0.02 end,
         spendType = "mana",
 
         startsCombat = true,
+        texture = function() return buff.shadow_covenant.up and 1394892 or 237545 end,
 
         start = function ()
             removeBuff( "power_of_the_dark_side" )
             removeBuff( "harsh_discipline_ready" )
             if debuff.purge_the_wicked.up then active_dot.purge_the_wicked = min( active_dot.purge_the_wicked + 1, true_active_enemies ) end
+
+            if talent.void_summoner.enabled then reduceCooldown( "mindbender", 2 ) end
         end,
 
         copy = { 186720, 400169, "dark_reprimand" }
@@ -588,6 +645,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 180,
         gcd = "spell",
+        school = "holy",
 
         spend = 0.04,
         spendType = "mana",
@@ -605,13 +663,14 @@ spec:RegisterAbilities( {
 
     power_word_radiance = {
         id = 194509,
-        cast = 2,
+        cast = function() return buff.radiant_providence.up and 0 or ( 2 * ( talent.enduring_luminescence.enabled and 0.7 or 1 ) ) end,
         charges = function() if talent.lights_promise.enabled then return 2 end end,
         cooldown = 20,
         recharge = function() if talent.lights_promise.enabled then return 20 end end,
         gcd = "spell",
+        school = "radiant",
 
-        spend = 0.06,
+        spend = function() return buff.radiant_providence.up and 0.03 or 0.06 end,
         spendType = "mana",
 
         talent = "power_word_radiance",
@@ -620,7 +679,7 @@ spec:RegisterAbilities( {
 
         handler = function ()
             if buff.atonement.down then
-                applyBuff( "atonement" )
+                applyBuff( "atonement", ( ( talent.enduring_luminescence.enabled and 0.7 or 0.6 ) * class.auras.atonement.duration ) + ( buff.radiant_providence.up and 3 or 0 ) )
                 active_dot.atonement = min( active_dot.atonement + 3, group_members )
             else
                 active_dot.atonement = min( active_dot.atonement + 4, group_members )
@@ -634,6 +693,8 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 15,
         gcd = "spell",
+        school = "holy",
+        damage = 1,
 
         talent = "power_word_solace",
         startsCombat = false,
@@ -650,6 +711,8 @@ spec:RegisterAbilities( {
                     addStack( "harsh_discipline" )
                 end
             end
+
+            if talent.void_summoner.enabled then reduceCooldown( "mindbender", 2 ) end
         end,
     },
 
@@ -659,6 +722,8 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 0,
         gcd = "spell",
+        school = "holyfire",
+        damage = 1,
 
         spend = 0.02,
         spendType = "mana",
@@ -679,6 +744,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 90,
         gcd = "spell",
+        school = "holy",
 
         spend = 0.03,
         spendType = "mana",
@@ -702,6 +768,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 0,
         gcd = "spell",
+        school = "holy",
 
         spend = 0.02,
         spendType = "mana",
@@ -721,6 +788,8 @@ spec:RegisterAbilities( {
         cast = 1.5,
         cooldown = 24,
         gcd = "spell",
+        school = "shadow",
+        damage = 1,
 
         spend = 1250,
         spendType = "mana",
@@ -740,6 +809,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 30,
         gcd = "spell",
+        school = "shadow",
 
         spend = 0.04,
         spendType = "mana",
@@ -759,6 +829,8 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 0,
         gcd = "spell",
+        school = "shadow",
+        damage = 1,
 
         spend = 0,
         spendType = "mana",
@@ -773,32 +845,14 @@ spec:RegisterAbilities( {
         end,
     },
 
-
-    shadowfiend = {
-        id = 34433,
-        cast = 0,
-        cooldown = 180,
-        gcd = "spell",
-
-        talent = "shadowfiend",
-        notalent = "mindbender",
-        startsCombat = true,
-        texture = 136199,
-
-        toggle = "cooldowns",
-
-        handler = function ()
-            summonPet( "shadowfiend", 15 )
-            applyBuff( "shadowfiend" )
-        end,
-    },
-
     -- Smites an enemy for 1,315 Holy damage.
     smite = {
         id = 585,
         cast = 1.5,
         cooldown = 0,
         gcd = "spell",
+        school = "holy",
+        damage = 1,
 
         spend = 0.004,
         spendType = "mana",
@@ -815,6 +869,8 @@ spec:RegisterAbilities( {
                     addStack( "harsh_discipline" )
                 end
             end
+
+            if talent.void_summoner.enabled then reduceCooldown( "mindbender", 2 ) end
         end,
     },
 
@@ -824,6 +880,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 90,
         gcd = "spell",
+        school = "shadow",
 
         spend = 0.01,
         spendType = "mana",
@@ -844,6 +901,7 @@ spec:RegisterAbilities( {
         cast = 0,
         cooldown = 120,
         gcd = "spell",
+        school = "shadow",
 
         talent = "vampiric_embrace",
         startsCombat = false,
@@ -886,4 +944,4 @@ spec:RegisterOptions( {
 
 
 
-spec:RegisterPack( "Discipline", 20230205, [[Hekili:1A12UnUnq0VLGcK(qxO6lXzJlS3h2np0KceuaT9vjrjrBryksbsQyyad(T3zOSSPyKtwu0fbo2IZHZCM7kzAY3tIljgAYlZMmB(KztwenD587Mplj2COHMe3qk2r2c)qqQH))itxWA4mHt0bUKuIQqlBvfWrjX5TmU5jrs(46DkGTHwahV4(K4kwzjTdlvxKe)9kM2MHFi2Stw2Mj3apxyysHnJZ0gq8gPYM9N0Dmolkj2DisdfPGr44pFX5zubjNtlt(AsCHIzOkgjjUMiirnfgB2Q12SLlsI7uo8TQGiOPgPsrfMe8pGyBiTCZyQe5SI10D3h7WbuJW55a1prYwnIhCkdTw)h2S)rJEe4jfsjVuUh(fd(ivLuaD(bBMrXe7OGM0CPj6c7A10uNwaA9YSaU0dQr299aUfFquaXtzxieyegv3Zmv2SVYLYsER2GuWM93Y9inEsSPvdGJ8JB5TB2eL3Jpsrjym84rG1OKg8QPS(B22CsMud5RBHObBBLjvrRjmHUl2F3e0vMFfxPacKPDpKIz4U8CAxDyFMgU)DVxAXfUd8kGuui3acIRiqkWM9n5RGceG7yK2SAYoqMUfrSh(ukf)kiIlXKQSfdvTG6(2Jr(XDFVhP1cKw9IlzVcTmPAdr5Zva29(WQiCzG8p7lVbzj2NnaYddG4iYEOEkvl5K3aEPpyTZ)tlo5(bqNoza2cO5SoeYuFi1mr5wi9Odrnlevova17HWcReUu7DdKzyf7yITEEARAl0Swrt3dIGBGQiSyymv4khXhjCOnpkupr9xpmm5cQnq5RZsdYVCS4wNUxrmvHE19JeXDQQKoc6phgQsZ5e9BsnpCv)ur3OOGzajFqSA5pIo(FjynBYv6X11GjhRLngf0nOeNKGTLZqsaw3OhmwcwNaZj6Luj5hsfYxH9hRSzZDg)6RcU6D)YA8Yx6l7L403SRLqDU7GefK3Au0czDo5YkKrAvHXrgMPTmSBDOP6cwd1pyH9eLakRHUUNQBafrlbYhSYmY(msf5g2LYcD0zU9BR)9XyJ95Xq64H9z7Z)In7N1AVZwgS35fFol(FFzMVo7U)NyBwp2ATJhhFLgCoSo72bRYwT(UjyWOpsDAZeyJHVobAR(x9y16Ll8UdGnCz3NW1CRpPlNF)ZDt2WyJVB7lXBnM)X4ARbkOBn1B1P3AjFHbRHgiYT1X)KZlzcpSBNYaJgmSctb30Ve4T2)CpSpUBV5dM85Ri)1axZaUP(HCVBi)hXD)XYFa99G(d4b9LxV)u3b2erIg6kJqxnFqbs)XVZn(Y65VNtbdTAnvs4Dg(lstlNiyUHFj)7p]] )
+spec:RegisterPack( "Discipline", 20230506, [[Hekili:T3ZAVTnss(BjyW5iLyRXs(zMl2a3LS7oj3mZgSolgG7dwIwK2IBKi1ssfhFWq)2VU63VzZhYjz3byF4i2S6QQU66zZQVE81F86RIJQsU(3MC4KJo8KdpD0KXNC6HJV(QQhwNC9vRJM)PO7q)rw0k0)7BtlNNUEzAg(rpSmpkgarz(MI5OF66RUzt6YQ3LD9nwHlAKRtMJ(r4pxKghNqgzs58RVcg5bhEYbhE6pTD2VMMLxSD2M1auk3oRizj6pI3oRkF7SFoQOCX2zcKz023V9983)i07VD2FN9Q3wKVA7SRsx9MTZgK8LQKSY0pNGGDj6)j)2TZ(CurA0nltk)p3oBv0dBNTicEE02zRtkUnVyvu2C0)ErA1WrxF1Y0YQsmrpp)ZtxxKSg9p(nmNmjdat81)3xFv08Q08metAtXDjtRwKm9(05Fc9mmXwKUM84pGE9OIeczLKvLGO5YfrX53VDgc8iaMvD9vOXJEsA01x9m0irWjn7UTZ2droO)zeAcQgvLUcnn5tJtra7s8toC0rBN9ITZIZRgPJgJI3uebOW2zdr)NRRqRjAuGYKYyrJwaSE0SW48tlsIIFaJm8XmpkB6Q0S4P3SmQSsWlK(n08DuhMpj(B(9jftVpViEAz(YiKqic0h3lGUCf6TaWDItW1B8F3YlaV6QvrPz2KYuWeq2iAjsiAercAktaAe9n2o7Xh1wMwddaeULrbYVrM5L5z3nfK0Tn9kIY)soiuEfv49nCHxo7ufP4IC8NpFrA5kz47viHqWCIPCr(MLXtRsie5a7pswkTkzkBN2q8)b9qK2PLlNswslrcilr7kV8ITZosGMWp6xg7jaZIt)miWwI(3giO0ZQv4TZ45I8LpiHLuPqMgkaofj3wKGih0linQD)UMF7uNeoDYxKeTSAXO1ZR2o71BNn5qmYr3cL8L1P4PsS5HtFDJLjV0AS7aRilojQAbqcNTtx7mKXUzZT36qR4OnRTPG43o)PfdDT)CI5(Zx91eZm2FoX5(ZXh2o50(MkQruCSBtpFL2XO6nXy3UVimkwH(LKyKrpKZQyRwLpH46DihOlXOQBJApPSsh6IrYztbzSlPke0DMOib8gPmarMNotKU407wJFbjx62m0Udfy6ah)0zaXT(TNyte7sb6DRnfHVuc8yz6DlQkNEFbffM42AXUcfSgH1K6IeP)XdE4yt0v1RegY)ytjYozkYfX5rqa(3J(VfBq)Z8nvKW9zImyt2OL97tRwGeAwGgy0n5qK)ZZZItX2hS60ZKJKJBrOXrn0LjhRpkw8WQd7eLGGmK70g9PYJwERM24otECy9bAd4C5byUgRn6xPGK4vcLrajPipFjc3ZkTfPOmB4MKS4KcTLT3MN98kAozwJCHcfaWMcCqe6PdbwWYq)s5(O)cXpXd6V8M3wQNNeITuXmQym9zougG8Z1BUqAnuTXcSeGR6ksA2TBkjl1Yml02d089H3rsBeMNreIn5vP3s2cqsPvQrYKciHbdQFye9UmjalKpbso4nB55Gs3Jbb3OYKlu(q2CKWc(rmgWhENmbINpvojDbw3Xa2eH4LtrV9QsRZvfsI8tyHZWNncLZznApNB7bcsGGetzJLSTcPKSOkSmWCfmuZuWajd93bre8FZLyqlOPfjGEwDfIWqYrWCv6)xcO3SacPFvIIMsGynuB1x52PxsdtaaPHPk5FjZRrn(8OyhHzduDD0TdE9s46baKUhsDDE(18OFDgqqT2w8gOQRiDAFmL7mVLn8)XMxsJpPghvgFAqUrn(SWCmYF4i7mEHI)tko1R5O1HnYTSX17w26IK55RUjQIB(Wc0Vfz4iTAtS5RhNCB0MLv(8PBEeA)j12fuCmsjYMskyOWRqlUvLJClQmrQgbSyaG)A5MeSlkyoF19PyU20K)5g0FDtr6Mv4OeMgTAn2kRK3xwhmDDHmC8mrXqu4gz5zj2Sivp(f48Pv5f2uQA((JuWSD2FsahKpBLeYsXz44Ov4QYQqgKhAZQyxiefUCprgK47SseWJSzmUEsiaNuz6cxDtbA3eLHjuT6PEwsEuxc(orFdbQlkuMfB09cY)SMH)uVbTesGDcqYrZkZspupfCO28tlsVOscqqiGqqscYphKQzWHgKtVzXeuIwi5BZTuc8rGpS)Vjf50xSKoUSCBe42z)5nlxQn0sc7a5ZgsDwjjdb5as9ZVfI4Kwg0bhdU)IyZdnbZl3oBmIZ9LQIin4uDFUcCq)8GtyasMhViEkbAtlGTyfep60njr51P3ANB7byswZKZYcBDLSunnzzj61pHVYDSnhWQFb3A5IgHrjmZAGJkknAv0xMsh2l8x1j6OCWdNVPOiHeTHHlF1J(ITtgiiFxNEgRmMBIROwEoBjrh5TFMdS5Iz9uqDHClNunxNBJHEJmxBl9FJ8ovKTH21USgTjxrmfoMb4t2cx3IHlW1tQhQQPcJNKWvNYIDAksSYQRWa0JIJ9aDYdgrIsf5PCY8nilrGxG2CpNokBAq9Ix2mk7hVMOX)5XFf8CAZkAq8cHJ2A8JGNAB2a72uBSuehv8PPOrVz5Dji(slwtSzMliK0Wn)6WvlVqJXwBgkEIXwz3OWpykYaocbJZskl1gKRqTdMETztki6LhTzD0P0aB6QHrPycg7KIoTo8tzOngdTzsjimeIdVouJmMgJt209F7Y88c)g6SAGsK2SdukRKleaBU7h3o7U5XGtiAAxha2NW1DqauM9nwQrzpKaN)YBEll1OiVaskr)zeunlOktKqC41ykb7b6giV9zjSZXkopSS6CGtRAgY9s0iXicPmhGFOKqri)AYxqXITm5NqoMm(emooEcbBgp6emEmHuoeQDAKnJyWtxDmccTHeGGoypZkup4iibMba4bqmHko9a(7jfz3KMhMTESfVjFtgPWpSHUpJbUz1nWHOfwcqiYb3wqaA0sWNDiDnsbGohzJbHXrFokDjB(yinFWkOEZTHZflL5c1opoI(fcjWyJikEK0SP53oTcjGHc82r8GF8V(2)6pjKGNM8L1jZXhPAsO53D3dKLtQxg)iyDfyARlqI1zX7dYRyMxe29VQ05WtJ3mNSBbITJ8KS4dGOIOrODVm1YMu2bpDkhaozH0WvoKZrNG5qnpeBdHOOLZ3SeVHDbSpB1M5liYe86DG2GSWrrJ51uJgjaipXfKgrQ4cE)TD1rKnrXjOLYv4yJvluhz(HHCFcPYDaho7b9nBWiwxKd1MIN2fPK3mQEfZyMzJCdQg4jjGkIoH4ZmldskbUqEepvQVoGCTQMNdATLQ3x(kwzV3HukvUwMuLPw2J5uJSHl3BoWgUAmN5dIWfK240iNQAbhq4sLTLBXtPOTKEOgtG)QOOcb5)hKI3g51wliFtpNTk1BmQ2Vba00eT8(Ohqpd5Xn1q4TPfGISR(9F6Tg7n8hnaWLAKNJHZL8Zc6DgLzHzTuBuygDu3NxhgImmOGI0vBLaNYiYcey3f0QF)ci1OeaXZnkb3qk(XOoXsaD9cz)nk7UKwS(AZl8Ey91mc(5la0VKKNSXA8G)R4yQvT7rM1aBPSrdMCbOGwIjf7Zzkc4VYlyhGcNjqai8gLCOWjCIAENy3uz3qXCcSityJ)1yx65sYK)ZySPJGNZdWVbzdHvgvrc51Ms88iiZn8Sh2eQ)1mmXKAcda9mf4uKuEonKlXtjOPncFE0wIJUGmkAjbOjllKeBbYLnkWIWLl5QVKtKGn9SYpVbAy1pfFyOGuQHl8EGz9ai)gLNYwq(4KvyJUXpO9e8pJpWc1L8eGcDeVI9i6SuhwhMrERRiisYGGbzH3t2tifaSEOfocGGSr7ZKdoY2zVJofXKtRjzM(4FsyZAFHRi3gHIBd9o)DsqJ4tNWZlz2UsZZKJYbIYmPexqLiCCxLvhqo)ULZreErAUwOm0toC4rn6khsw9e3vmBdXNfeMzwGImxODu50aQMh8TeBKTTq(IvTtXortScu7L1su2Qd8x2l8X18ihvU0tq4olyfFD4LQtmNPGFIQhoIYKRqDsJZwfDu2)8NjUjtZeelfDmz4BsO11fHehCjB6o4scCp4s4zAPjrEnfYMhpyoUasRcaZeu2Q1RrYKWYR6j(4DEuuWK1HnYytHY5kR28nWxMzzyfrVhBT0SBUXJqIUFI)nio4e6rrDUrU)K5twtN2XDR2QSG2TNU56JANpullIFwPoPsFKbh38IK6EEW7j0RMi7OT87O4e(PTZElePaoVW4isWjfmboiIy3CGtlbkUYcrQNyMBWTVaLGsWLaEKH0B59X8nbh3k)WvbZ3nBaSEASEA3a0k)RCYUhi)rbyucn5OHl9)rxou)lmWoWKo5tMNI1HIaWncXhFoH1x9PtbiQdY3GyaAtaUNHa6XZEo8)JLLPNyPm4hI(m8VWed69y0c8KC4nGhtXnDdWUtg1XnQg51USekd4xfbwBBFoD)Vy7n2xpPD42iqhX1CCRYSCZPqLmW46ubyn)lsrZPM(LMqLTkRYEOsx1(1VCED7v8eSgnxtKtxpwJEdLjOaqjWaocOZk9fk4XnY9OUu06UYm9yE7KMFC08KOrlLSZWRcHCKQhfOFhJqn3dOg6nXVk2hH7EtXo1V42pctHkJttggzeBffC8wLrtRq77f)koXAD0Fs9R4KwL2Q646Up5qMPQtwX0ZT7jQUEI6tp(jT3DjVKvNo1uwstjs2sPkcQzakM4qpwVmDQAbRO9UOupROXE7zJlWbI5h76w9APeM5j3oSDINK7mV(QGywga7NrJpUa0Ac)x0s8Y0QkO2i3a0tz6Q1Wxxt689bFvHK1G3XEtoSu7mn15KuzWpFcO)e(zOoHRYxHtOJCrdzjYgoPsLIxFtzs8iKSgv9e9teLgsml1jWaxNxwMcQn1TgjyjovszlXDwlUaCEA4e8UVwiQMdTzbQ5jdRfMyPs6etSmXEIGcZkBonYKMBTTM9ig7UXZVGb0ip38bSVxSaF6x)uBDARQuFnmD)flFGVOX3tRpe6n6F9qYCK4jzn8gw3rRMW5mlFtvzACcr1N6iec9kI2CKd3MpzyhuLGkyK1ALOEBNN2nFsB6AtZpdcpzErCA7t3Nporqojut2oC6(Gx3dCKiGt7M)WnJo)6MZJtB(hOPLdbwiH2QZzmDPG)zWFAZpvOn0gSEfUvwdLYRHGp1(mGzaUVBSlA1vONw7IT3zeFS96ogzbPrY0o3MSLi9Q1yfJSvLdCceqmgh7DRxR8zT6Sq2bE03WwOoR9(r5NxeKeHHnkrbObbKgOw(S27Zra0XtVzMZAVNdbqpgjGWDexHTQypTbN18(XG1dMLOa0ggjnjwvZKATiNZC3RJQ7tkEGA)9Z1hwSLM9h9Zqx6O)rxgm6hsYE4yTHjjFITanlIcj(SWHQSwH1iWzdQd3Q1sMk2K5SzNiUraawS7g1KlMc)31(MPdBYv7FdUB9N8zH3Yk6(KR09loZDp2jKLgXP1geKBFB0ssAvPZDnqR5DTNUCte0E2woD9MS0YfRW6VzONA8V(gjbQ1k8A7CM0MpoKH2LwT1aXoZDV2kWnpbVczSd7BZviVkc2XRq6ZnScDU7gywT9Srjit(WOa4vx3A1pi1A7p0Yk65yxeslv7CDhvyJwT7yPEy9Gm982pCfksLFbpkKJffrKgFP5b3dsxTMl10pSwSZipKVbq(pLWbc4fEu5c2xNlkygAlq04llfFMkljLyaovPLWzJnd7PkY8hCyWJsJbVwRGWw2Noz47wgrxyKeEfacEY4Vj5U0mYb0fMMiggp)H5W(a8xujY5hCVPfMgGPJg9ilQyX00uojXfpawV3RELgllylP(s)gmH11jWB1CsDmByWN3iv0JN0GZRTVp2uStz3HNK3yQhvQJZHvLEcwvAaNnaFQve75QRzK3yk1yDiWK)6APWTxl1IDcqY6PKNxxRhVXKRY96G7EE(5kT7V66IFVQUE6DJrtj5VNArSxvFlje(AUskWT1y2Td2XxF19rfGIpuO7Fe0eMUAnU7eGv59CU7LpNv1tGUlZHK0fTPkFf5UbB(c4ZHdPm(9)cojDWfj2BYZqZg(XpxFZ4ZjkIn(DgRf98bJ)Yqo8gpUVb4e7a06EhnG7D)LXeDuVH5BFVLfiABISzlpN4K4LLZnjBB7c0jyhWwTZ5Pt0wBRE6q2HqvVG1Uey7owp(q7Gwp8DnG7Q1OfQ8fXhuDMHsh0YauoycA5EsdMoYmLbWpZ7QNqxM91pZ(HKXeC(xPjWiJQ6mixzC1ycEL9jGBOwdWg5qthGtCi6jz0uhxnp5Rga1HQyW2VHmS4mFAagnfW5iDPy9E0An)8bEB8qhiLjh8iS00Hg(FqRmcdT6bq(Jmqkiehk80BomA8gx9ogD(0roy39Mu3ro21B7tHuNg881sQpnh7Gn1AHBxaS3TG)KH5TWLakaDOBTxuCFSl1EDrjIlG2EwGdDNnuRKlW0A86ehR19223tCS9T1sNUayRzbN23(U7cG9(o)tDeKqVT4DA)fCafGh)ebWEr1YP99UTZC5WtFTGDwFllFMlrS(G)EMdXRwRB4mhAZ0RzHgCDvsJNAW7WOZUg8gvcrFcCwQKVgtHJ9K9ftYf4FcOG(Bko3HEMEjveN728wpaCh6B0kAHgWDusddG7kxe9cM7Ws0Ug49RlfNVlt9MlG3ARtNVlt5MhG3Z8C)PEQJuH)0o1nG)QDJEgRjswCkwEEJYLCFhUWFKQFxRqWjFOzRn7gljBF)7W4faYZyFgxWNlxzfm1WnFv(TPl5NpVYr8RcRxEXpA7YVcGjDSOrOFTwTpCsNUGFFwjpuwk7idPICTiTF(6lktQ2hFG(U4zbDblTNNHrzi0BIP3)dBNfYnTe5Ty31sErAYqvr7arNhFKN1sk1hmckFvq5f9GbgkYjXsDGAbC7o5gB4LJufFSl5UhBFMsDAWirixrtUXcHQYGqJN5gp(JRQjkGCYRn7qAQ88dBXRME7(8lA6lSCKqPG(49fFxSxCsiZdTjTzzZI9BRPxoOM7PPxu7D0KpwN1xtt7iv2uFSp(4aXbnwN(U8clpJXJhIfSd(clYn6REAyvr7bEoR07vZjKE4Jp64sxY3oE8yTurOGLg9dIO4ykiiVVTgO3(P3YvXGFkMtZ2w25jEs3bbf3D8vfSRHVe)rlbz92mthUJpNf5fi9b(nakWShAKTZ9mojPVEs)jjB)RZqcrfhLT(AkD1MJKLqKoqz910A0hKKMpCdEc2V(hx2n94LDJ7LoPl9fyTcFrhXmE09Jba7KfGxr3r3joUPnJV7YGncz9nfYXCsxI7rIN4R1vyJBsjX5H(3MxE0DH6N6cMPpzp9oKSO(Vb3rnnvXNHygejf1tKMdPqD5X8USb5CQJBXMx7Rttt8m9dTZFjnFLuqmXvpdcZg46BwrOyXTO7WaiGFTTMlBO1zR3RmYSEXVtXpUAHaOIAV7u6fQRENL8EROOiOz88WL56XRCKNi2Ip6Ux4ld3BGnVoF8rRhA(xx)0n0P7T4LGGVXt6fgSuek055f1h7IZ39YlgRrdD)kYOVjtdbObojhPEcgIY2lKX96ji5LbdgFqqq9GXdhAHFR0DXQrt7qqtEiZ1RhtXSqgCNXkSyGs7JTpwg9fUKJ7XeznawUbtcqN4pJdiQhWERrDPF)JiJVY38ibGO)7Zf9H3mEtU2p85BTL6b4nIld)ISVOp8sMvlJ7tdn32DH9YxMf2iGNvtgd1mEAGgVWwUsz5d9alpJgvWqZWo69Bfd3CfJ2UKQ791DFH8sz6IZEFPQhgIIikXU4JX0FFmpy31YKAiZqOQHgUpOzHt2gXsF5H0uF7Tbk1WGZl3Cdfhg7pv5uK3vEY1VknclAe(Gm7rxKYOrI7DhDrwuZYfRZBRsYUr5xo5RR4Lm((nNO1paRa4W52zxpdTI9i5WK9WuhmqpnY757WBao2z8cpt)ezmCOzoXV8IjhYdaVl3IdDLp4S0hUq4ABlupLy0EUkrJUNT70lgHUqXnR6c2fKmf56cgvxHh6ooq)4297IGLpDDrkHu1lZih(gkQCzFFdgudxvi8(DLLelO93Iguc9EcOluRQ)MERkQTACYZQY2M2PdFIq6gvXwg1iQOAB7m)9a1fEDFTPisu0P)LPN87x7QGLAlevtJTwtMgZTFlPUsQR93NzrtvjPUCHr8TFn7K(bitJXMV7mfOI1FlAj4B7gmFhyXnqtUTIDmqxXhxvO9Gx2XgS2juP)6Y05MeF3jlVrWyXUuxdNQFrjNXtvNXgmk4WHEHT76CKxLyAq9jS28C)ErRRn8(7d9U9rdpVtmNoPlbkpSLDK7gnI7q6OH6evB)19bA3afm9IoVEcPSL0iVTk8(cTclqg)kDLMmhQDT1YX103QJXYtPwFIMmZ8wJTTt7I8XMFqDLbt(Bcq8XsShpbS6Fd475RhmJ2eaPI9z(Ex59wYDhy4DhoCy9KU4l6qwvSeUZ)n1p2GAHS47qsgW8Fne4QtXsYtgmJbAhkM40KlhC4OJEH3MXnCgBEgT9oJy1sn259e89i9V5DHtPMpBVbExs72rFBO(AQ(YpWHCkV4LfziiTRzroLC7BweUeQYmgTn2U4Nydp4YN44fL(69O5(1sjrK)mbgbKbixtRdz4WM(gKGB(JonTJonT8kPCN6wsVHwBAq(nKYUKBHfT1fX7OdjsOdHVcZFNHERnxplSQfNKUgcYjleusCYlcOsgQB86ixWBu(YZdu9Ma3El7Er4iL0BPqGg9o5EDXPxxlW7uHpHCK6JpGC0bxSqy3h2W7wZV8qUklUVroShZmn0AdW2NkTnJ1421E1TPuLm0x3czkSdkmFT9VUngA75J0ZBc(BjIDStEJ0xZmCEYf6DXFBfOL)0Ie8heb9fK)WiOjSNf6n2x6z3Ncgji6Pr68LimUpJcXFlYtkJs9lJq9HS91ymAkHRuIRv7LxCKJ3rBdEtEvRRfchFK87XCVz4Rr(ywQ6k8ftSzM90OfI7cTGXoP9mwxVAWuNJ3xvvqGCafJpbzjjiKom7L1CGz9JWEw0QLbv)Ixti3EK6K9gZLmRtRPAOQKPm1gLXBmu2WJ20NgjLbPPqs(zSTnsjbGFMF1I7N8JcRsvSoAbkyQA0jjpJgUR0JtSeSDo)2vj2gKas(QAGK9S(ulR01RWXIdWTI6ySyhCr5O96c43ZxNUqQ1m8uj1o5RSuRJ5p8L)UHA2ND)wR2ztzq262jZEGwk70m3rdTozwDdRcrayxmd9Zw6NGnVnqGPBtupkFON3O2Hye7DoShyl8Z(FA4HM2nqJ8Y6FSPKEeIiFmuqbdl2KHtQOJpUFrmIr3KJ)i)zhtRsVgjRzpBD74cuGRwrF377cCj1Zsc211Fa8wL3S(Gdea5W5GdkFDcKs3yA3iHXB5oUsBhjL7drZxsQfoUBGWNtEFaKt83MMKrtxJOEC3G(Te(9paT9(PVBr2Vcz4kaGK((gb1FaFAdI3o7dVtkJeerhtI24qAAfRileqbhGRWlzcwhdO4NOofogWE(6JwoBtw0DoLpKnhoDJaIYine16a1ROOmgMQucJHrayfsY4tyHe)GeXqNIK4wv6gQp(OOAlQpJQM8sEbrV(QOnvOiXU(Q)NO1BwgLLIVV0U()p]] )

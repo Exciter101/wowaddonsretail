@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
 
@@ -41,8 +41,9 @@ function ElvUI_EltreumUI:SetupFontsOutlineCustom(fontStyle)
 	E.db["nameplates"]["units"]["FRIENDLY_NPC"]["questIcon"]["fontOutline"] = fontStyle
 	E.db["general"]["fontStyle"] = fontStyle
 	E.db["general"]["minimap"]["locationFontOutline"] = fontStyle
+	E.db["general"]["addonCompartment"]["fontOutline"] = fontStyle
 	if E.Retail then
-		E.db["general"]["minimap"]["icons"]["queueStatus"]["fontOutline"] = fontStyle
+		E.db["general"]["queueStatus"]["fontOutline"] = fontStyle
 	end
 	if E.Wrath then
 		E.db["general"]["totems"]["fontOutline"] = fontStyle

@@ -1,8 +1,7 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local _G = _G
 local pairs = _G.pairs
 local SetCVar = _G.SetCVar
-local valuecolors = E:ClassColor(E.myclass, true)
 local GetPhysicalScreenSize = _G.GetPhysicalScreenSize
 
 -- for rare nameplates
@@ -176,7 +175,6 @@ function ElvUI_EltreumUI:SetupNamePlates()
 		if E.Retail then
 			E.db["nameplates"]["filters"]["EltreumLevel"]["triggers"]["enable"] = false
 		elseif E.Classic or E.Wrath then
-			E.db["nameplates"]["filters"]["ElvUI_Explosives"]["triggers"]["enable"] = false
 			E.db["nameplates"]["filters"]["EltreumLevel"]["triggers"]["enable"] = true
 		end
 		--enable general style filters on all versions
@@ -602,18 +600,6 @@ function ElvUI_EltreumUI:SetupStyleFilters()
 			E.db["nameplates"]["filters"][filterName] = { triggers = { enable = true } }
 		end
 
-		--fix explosive alpha/priority
-		if E.Retail then
-			E.global["nameplates"]["filters"]["ElvUI_Explosives"]["triggers"]["priority"] = 1
-			E.global["nameplates"]["filters"]["ElvUI_Explosives"]["triggers"]["names"]["120651"] = true
-			E.global["nameplates"]["filters"]["ElvUI_Explosives"]["actions"]["alpha"] = 100
-			E.global["nameplates"]["filters"]["ElvUI_Explosives"]["actions"]["scale"] = 1.25
-			E.global["nameplates"]["filters"]["ElvUI_Explosives"]["actions"]["color"]["healthColor"]["r"] = 0
-			E.global["nameplates"]["filters"]["ElvUI_Explosives"]["actions"]["color"]["healthColor"]["g"] = 1
-			E.global["nameplates"]["filters"]["ElvUI_Explosives"]["actions"]["color"]["healthColor"]["b"] = 1
-			E.global["nameplates"]["filters"]["ElvUI_Explosives"]["actions"]["usePortrait"] = true
-		end
-
 		--actually set the scale since 10.0 seems to break it
 		E.global["nameplates"]["filters"]["ElvUI_Target"]["actions"]["scale"] = 1.25
 		E.global["nameplates"]["filters"]["ElvUI_Target"]["triggers"]["isTarget"] = true
@@ -722,7 +708,7 @@ function ElvUI_EltreumUI:SetupStyleFilters()
 		E.global["nameplates"]["filters"]["EltreumExecute"]["actions"]["flash"]["speed"] = 7
 		E.global["nameplates"]["filters"]["EltreumExecute"]["actions"]["scale"] = 1.25
 		E.global["nameplates"]["filters"]["EltreumExecute"]["actions"]["texture"]["enable"] = true
-		E.global["nameplates"]["filters"]["EltreumExecute"]["actions"]["texture"]["texture"] = "Asphyxia-Norm"
+		E.global["nameplates"]["filters"]["EltreumExecute"]["actions"]["texture"]["texture"] = "ElvUI Norm1"
 		E.global["nameplates"]["filters"]["EltreumExecute"]["triggers"]["healthThreshold"] = true
 		E.global["nameplates"]["filters"]["EltreumExecute"]["triggers"]["isTarget"] = false
 		E.global["nameplates"]["filters"]["EltreumExecute"]["triggers"]["isNotTapDenied"] = true

@@ -1,11 +1,10 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local _G = _G
 local CreateFrame = _G.CreateFrame
 local UIParent = _G.UIParent
 local IsInInstance = _G.IsInInstance
 local C_Map = _G.C_Map
 local C_SuperTrack = _G.C_SuperTrack
-local SuperTrackedFrameMixin = _G.SuperTrackedFrameMixin
 local GetUnitSpeed = _G.GetUnitSpeed
 local C_Navigation = _G.C_Navigation
 local math = _G.math
@@ -27,7 +26,7 @@ local EltruismTimeToArrive = CreateFrame("Frame", "EltruismTimeToArrive", UIPare
 EltruismTimeToArrive.TimeText = EltruismTimeToArrive:CreateFontString(nil, "BACKGROUND", "GameFontNormal")
 EltruismTimeToArrive.TimeText:SetJustifyV("TOP")
 EltruismTimeToArrive.TimeText:SetSize(0, 26)
-EltruismTimeToArrive.TimeText:SetPoint("TOP", "SuperTrackedFrame", "BOTTOM", 0, -40)
+EltruismTimeToArrive.TimeText:SetPoint("TOP", "SuperTrackedFrame", "BOTTOM", 0, 7)
 EltruismTimeToArrive.TimeText:SetFont(E.LSM:Fetch("font", E.db.general.font), E.db.general.fontSize, E.db.general.fontStyle)
 EltruismTimeToArrive.TimeText:SetParent(_G["SuperTrackedFrame"])
 EltruismTimeToArrive:SetParent(_G["SuperTrackedFrame"])
@@ -62,7 +61,7 @@ function ElvUI_EltreumUI:WaypointTimeToArrive()
 		end
 
 		--remove max distance
-		do
+		if not SuperTrackedFrame.EltruismHook then
 			function SuperTrackedFrame:GetTargetAlphaBaseValue()
 				local d = C_Navigation.GetDistance()
 				if (d >= 10 ) then
@@ -80,6 +79,7 @@ function ElvUI_EltreumUI:WaypointTimeToArrive()
 					return 0
 				end
 			end
+			SuperTrackedFrame.EltruismHook = true
 		end
 
 		SuperTrackedFrame.DistanceText:SetFont(E.LSM:Fetch("font", E.db.general.font), E.db.general.fontSize, E.db.general.fontStyle)
@@ -96,7 +96,7 @@ function ElvUI_EltreumUI:WaypointTimeToArrive()
 			--print(instanceType,event,"waypoint")
 			if (C_Map.HasUserWaypoint() == true or C_SuperTrack.IsSuperTrackingAnything() == true) and (instanceType == "none") then
 				--use throttled onupdate to udpate the text (once per second)
-				EltruismTimeToArrive:SetScript("OnUpdate", function(self, elapsed)
+				EltruismTimeToArrive:SetScript("OnUpdate", function(_, elapsed)
 					--print("onupdate spam"..math.random(1,99))
 					TimeSinceLastUpdate = TimeSinceLastUpdate + elapsed
 					if TimeSinceLastUpdate >= ONUPDATE_INTERVAL then
@@ -110,7 +110,7 @@ function ElvUI_EltreumUI:WaypointTimeToArrive()
 						if not speed or speed == 0 then --might be dragonflying, calculate based on delta distance
 							E:Delay(1, function()
 								local previousdistance = C_Navigation.GetDistance()
-								local speed = math.abs(distance - previousdistance)
+								speed = math.abs(distance - previousdistance)
 								--print(distance,previousdistance, speed)
 								if speed and speed > 0 then
 									local eta= math.abs(distance / speed)

@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
 
@@ -39,12 +39,12 @@ function ElvUI_EltreumUI:SetupFontsOutlineDefault()
 	E.db["general"]["fontStyle"] = "OUTLINE"
 	E.db["general"]["minimap"]["locationFontOutline"] = "THICKOUTLINE"
 	if E.Retail then
-		E.db["general"]["minimap"]["icons"]["queueStatus"]["fontOutline"] = "OUTLINE"
+		E.db["general"]["queueStatus"]["fontOutline"] = "OUTLINE"
 	end
 	if E.Wrath then
 		E.db["general"]["totems"]["fontOutline"] = "OUTLINE"
 	end
-	--E.db["general"]["minimap"]["locationFontOutline"] = "THICKOUTLINE" --test
+	E.db["general"]["addonCompartment"]["fontOutline"] = "OUTLINE"
 	E.db["bags"]["countFontOutline"] = "OUTLINE"
 	E.db["bags"]["itemInfoFontOutline"] = "OUTLINE"
 	E.db["bags"]["itemLevelFontOutline"] = "OUTLINE"

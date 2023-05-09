@@ -1,25 +1,24 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local _G = _G
 local C_CVar = _G.C_CVar
 local S = E:GetModule('Skins')
 local CreateFrame = _G.CreateFrame
 local UIParent = _G.UIParent
-local print = print
-local unpack = unpack
+local print = _G.print
+local unpack = _G.unpack
 local hooksecurefunc = _G.hooksecurefunc
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local DisableAddOn = _G.DisableAddOn
-local GetPhysicalScreenSize = GetPhysicalScreenSize
-local SetCVar = SetCVar
+local GetPhysicalScreenSize = _G.GetPhysicalScreenSize
+local SetCVar = _G.SetCVar
 local UIParentLoadAddOn = _G.UIParentLoadAddOn
-local select = select
-local GetCursorInfo = GetCursorInfo
-local GetItemInfo = GetItemInfo
-local string = string
+local GetCursorInfo = _G.GetCursorInfo
+local GetItemInfo = _G.GetItemInfo
+local string = _G.string
 local DELETE_ITEM_CONFIRM_STRING = _G.DELETE_ITEM_CONFIRM_STRING
 local InCombatLockdown = _G.InCombatLockdown
 local HideUIPanel = _G.HideUIPanel
-local LoadAddOn = LoadAddOn
+local LoadAddOn = _G.LoadAddOn
 local GameMenuFrame = _G.GameMenuFrame
 local UIErrorsFrame = _G.UIErrorsFrame
 local RaidWarningFrame = _G.RaidWarningFrame
@@ -40,7 +39,7 @@ function ElvUI_EltreumUI:HidePopups(delay)
 	if E:IsAddOnEnabled("ElvUI_WindTools") then
 		W = unpack(WindTools)
 		local function WindtoolsCompatHideWhileInstall()
-			WTCompatibilityFrame:Kill()
+			_G["WTCompatibilityFrame"]:Kill()
 		end
 		hooksecurefunc(W, "ConstructCompatibilityFrame", WindtoolsCompatHideWhileInstall)
 	end
@@ -220,10 +219,18 @@ function ElvUI_EltreumUI:Anchors()
 	else
 		E:CreateMover(UIErrorsFrame, "MoverUIERRORS", "UI Error Frame", nil, nil, nil, "ALL,SOLO,ELTREUMUI")
 		if E.db.ElvUI_EltreumUI.skins.blizzframes.errorframe then
-			if (E.Retail or E.Wrath) and E.db.general.fontStyle == "NONE" then
-				UIErrorsFrame:SetFont(E.LSM:Fetch("font", E.db.general.font), E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefontsize, "")
+			if E.db.ElvUI_EltreumUI.skins.blizzframes.errorframecustomfont then
+				if (E.Retail or E.Wrath) and E.db.general.fontStyle == "NONE" then
+					UIErrorsFrame:SetFont(E.LSM:Fetch("font", E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefont), E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefontsize, "")
+				else
+					UIErrorsFrame:SetFont(E.LSM:Fetch("font", E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefont), E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefontsize, E.db.general.fontStyle)
+				end
 			else
-				UIErrorsFrame:SetFont(E.LSM:Fetch("font", E.db.general.font), E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefontsize, E.db.general.fontStyle)
+				if (E.Retail or E.Wrath) and E.db.general.fontStyle == "NONE" then
+					UIErrorsFrame:SetFont(E.LSM:Fetch("font", E.db.general.font), E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefontsize, "")
+				else
+					UIErrorsFrame:SetFont(E.LSM:Fetch("font", E.db.general.font), E.db.ElvUI_EltreumUI.skins.blizzframes.errorframefontsize, E.db.general.fontStyle)
+				end
 			end
 		end
 	end
@@ -442,11 +449,15 @@ end
 
 --Set some CVars when entering world
 function ElvUI_EltreumUI:EnteringWorldCVars()
+	if E.Retail then
+		SetCVar("nameplatePlayerMaxDistance", 60)
+	end
 	SetCVar('nameplateOtherBottomInset', E.db.ElvUI_EltreumUI.cvars.nameplateOtherBottomInset)
 	SetCVar('nameplateOtherTopInset', E.db.ElvUI_EltreumUI.cvars.nameplateOtherTopInset)
 	SetCVar('cameraDistanceMaxZoomFactor', E.db.ElvUI_EltreumUI.cvars.cameraDistanceMaxZoomFactor)
 	SetCVar('nameplateTargetRadialPosition', E.db.ElvUI_EltreumUI.cvars.nameplateTargetRadialPosition)
 	SetCVar('nameplateOccludedAlphaMult', E.db.ElvUI_EltreumUI.cvars.nameplateOccludedAlphaMult)
+	SetCVar('DynamicRenderScaleMin', E.db.ElvUI_EltreumUI.cvars.dynamicrenderscalemin)
 	if E.Retail and E.db.ElvUI_EltreumUI.waypoints.waypointetasetting.enable then
 		SetCVar('showInGameNavigation', E.db.ElvUI_EltreumUI.cvars.showInGameNavigation)
 	elseif E.Classic or E.Wrath then
@@ -535,13 +546,13 @@ function ElvUI_EltreumUI:DevTools()
 		--addon specific cpu/memory usage
 		--/run UpdateAddOnCPUUsage() UpdateAddOnMemoryUsage() print("cpu: "..((math.floor(GetAddOnCPUUsage("ElvUI_EltreumUI")))).."ms | memory: "..((math.floor(GetAddOnMemoryUsage("ElvUI_EltreumUI")/10))/100).."mb")
 
-		local function LogEvent(self, event, ...)
+		local function LogEvent(frame, event, ...)
 			if event == "COMBAT_LOG_EVENT_UNFILTERED" or event == "COMBAT_LOG_EVENT" then
-				self:LogEvent_Original(event, CombatLogGetCurrentEventInfo())
+				frame:LogEvent_Original(event, CombatLogGetCurrentEventInfo())
 			elseif event == "COMBAT_TEXT_UPDATE" then
-				self:LogEvent_Original(event, (...), GetCurrentCombatTextEventInfo())
+				frame:LogEvent_Original(event, (...), GetCurrentCombatTextEventInfo())
 			else
-				self:LogEvent_Original(event, ...)
+				frame:LogEvent_Original(event, ...)
 			end
 		end
 
@@ -555,7 +566,7 @@ function ElvUI_EltreumUI:DevTools()
 		else
 			local frame = CreateFrame("Frame")
 			frame:RegisterEvent("ADDON_LOADED")
-			frame:SetScript("OnEvent", function(self, event, ...)
+			frame:SetScript("OnEvent", function(_, event, ...)
 				if event == "ADDON_LOADED" and (...) == "Blizzard_EventTrace" then
 					OnEventTraceLoaded()
 					if not IsAddOnLoaded("Blizzard_DebugTools") then
@@ -605,7 +616,7 @@ do
 		throttle = 0
 	end
 
-	local function TypeDelete(self)
+	local function TypeDelete()
 		local _, _, itemLink = GetCursorInfo()
 		if not itemLink then return end
 
@@ -661,7 +672,7 @@ EltruismGameMenu:SetScript("OnEvent", function()
 	--use elvui moveui instead of blizzard edit mode
 	if _G.GameMenuButtonEditMode and E.db.ElvUI_EltreumUI.otherstuff.gamemenu then
 		_G.GameMenuButtonEditMode:RegisterForClicks("AnyUp")
-		_G.GameMenuButtonEditMode:SetScript("OnClick", function(self, button)
+		_G.GameMenuButtonEditMode:SetScript("OnClick", function(_, button)
 			if not InCombatLockdown() then
 				if button == "LeftButton" then
 					E:ToggleMoveMode()
@@ -681,8 +692,8 @@ EltruismGameMenu:SetScript("OnEvent", function()
 		EltruismMenuButton:SetSize(x,y)
 		EltruismMenuButton:SetScript("OnClick", function()
 			if not InCombatLockdown() then
-				E:ToggleOptions()
-				E.Libs.AceConfigDialog:SelectGroup('ElvUI', 'ElvUI_EltreumUI')
+				E:ToggleOptions("ElvUI_EltreumUI")
+				--E.Libs.AceConfigDialog:SelectGroup('ElvUI', 'ElvUI_EltreumUI')
 				HideUIPanel(_G["GameMenuFrame"])
 			end
 		end)
@@ -802,12 +813,21 @@ end
 --check for blinkii's kick on cd function
 function ElvUI_EltreumUI:CheckmMediaTagInterrupt()
 	if IsAddOnLoaded("ElvUI_mMediaTag") then
-		if E.db.mMediaTag.mCastbar.enable then
-			return _G.mMediaTag_interruptOnCD
+		if (E.db.mMT and E.db.mMT.interruptoncd and E.db.mMT.interruptoncd.enable) then
+			local mMT = E:GetModule("ElvUI_mMediaTag", true)
+			return mMT:mMediaTag_interruptOnCD() or false
+		else
+			return false
 		end
 	else
 		return false
 	end
+end
+
+--10.1 addon compartment
+function ElvUI_EltreumUI_OnAddonCompartmentClick()
+	E:ToggleOptions("ElvUI_EltreumUI") --has msg arg which can be used
+	--E.Libs.AceConfigDialog:SelectGroup('ElvUI', 'ElvUI_EltreumUI')
 end
 
 --for fps testing

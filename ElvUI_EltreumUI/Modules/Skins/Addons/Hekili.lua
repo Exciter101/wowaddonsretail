@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local S = E:GetModule('Skins')
 local _G = _G
 
@@ -16,6 +16,9 @@ function ElvUI_EltreumUI:EltruismHekili()
 					if _G["Hekili_Primary_B"..i].Highlight then
 						_G["Hekili_Primary_B"..i].Highlight:SetAlpha(0)
 					end
+					if _G["Hekili_Primary_B"..i].Empowerment then
+						_G["Hekili_Primary_B"..i].Empowerment:SetAlpha(0)
+					end
 				end
 				if _G["Hekili_Defensives_B"..i] then
 					S:HandleButton(_G["Hekili_Defensives_B"..i])
@@ -25,6 +28,48 @@ function ElvUI_EltreumUI:EltruismHekili()
 					end
 					if _G["Hekili_Defensives_B"..i].Highlight then
 						_G["Hekili_Defensives_B"..i].Highlight:SetAlpha(0)
+					end
+					if _G["Hekili_Defensives_B"..i].Empowerment then
+						_G["Hekili_Defensives_B"..i].Empowerment:SetAlpha(0)
+					end
+				end
+				if _G["Hekili_Cooldowns_B"..i] then
+					S:HandleButton(_G["Hekili_Cooldowns_B"..i])
+					if E.db.ElvUI_EltreumUI.skins.shadow.enable and not _G["Hekili_Cooldowns_B"..i].shadow then
+						_G["Hekili_Cooldowns_B"..i]:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+						ElvUI_EltreumUI:ShadowColor(_G["Hekili_Cooldowns_B"..i].shadow)
+					end
+					if _G["Hekili_Cooldowns_B"..i].Highlight then
+						_G["Hekili_Cooldowns_B"..i].Highlight:SetAlpha(0)
+					end
+					if _G["Hekili_Cooldowns_B"..i].Empowerment then
+						_G["Hekili_Cooldowns_B"..i].Empowerment:SetAlpha(0)
+					end
+				end
+				if _G["Hekili_AOE_B"..i] then
+					S:HandleButton(_G["Hekili_AOE_B"..i])
+					if E.db.ElvUI_EltreumUI.skins.shadow.enable and not _G["Hekili_AOE_B"..i].shadow then
+						_G["Hekili_AOE_B"..i]:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+						ElvUI_EltreumUI:ShadowColor(_G["Hekili_AOE_B"..i].shadow)
+					end
+					if _G["Hekili_AOE_B"..i].Highlight then
+						_G["Hekili_AOE_B"..i].Highlight:SetAlpha(0)
+					end
+					if _G["Hekili_AOE_B"..i].Empowerment then
+						_G["Hekili_AOE_B"..i].Empowerment:SetAlpha(0)
+					end
+				end
+				if _G["Hekili_Interrupts_B"..i] then
+					S:HandleButton(_G["Hekili_Interrupts_B"..i])
+					if E.db.ElvUI_EltreumUI.skins.shadow.enable and not _G["Hekili_Interrupts_B"..i].shadow then
+						_G["Hekili_Interrupts_B"..i]:CreateShadow(E.db.ElvUI_EltreumUI.skins.shadow.length)
+						ElvUI_EltreumUI:ShadowColor(_G["Hekili_Interrupts_B"..i].shadow)
+					end
+					if _G["Hekili_Interrupts_B"..i].Highlight then
+						_G["Hekili_Interrupts_B"..i].Highlight:SetAlpha(0)
+					end
+					if _G["Hekili_Interrupts_B"..i].Empowerment then
+						_G["Hekili_Interrupts_B"..i].Empowerment:SetAlpha(0)
 					end
 				end
 			end

@@ -26,7 +26,7 @@ P.ElvUI_EltreumUI = {
 		chattoggles = true,
 		chaticonenable = true,
 		chatgradient = false,
-		chaticontype = "OUTLINE",
+		chaticontype = "GRADIENT",
 		AuthorMVPDonatorIcons = true,
 	},
 
@@ -37,6 +37,7 @@ P.ElvUI_EltreumUI = {
 		cameraFOV = 90,
 		cameraDistanceMaxZoomFactor = 2.6,
 		nameplateTargetRadialPosition = 1,
+		dynamicrenderscalemin = 0.33, --default value
 		--for retail
 		showInGameNavigation = 1,
 		--for tbc/classic
@@ -121,7 +122,7 @@ P.ElvUI_EltreumUI = {
 		statcolors = false,
 		bossemote = false,
 		quests = false,
-		queststatusbartexture = "Asphyxia-Norm",
+		queststatusbartexture = "ElvUI Norm1",
 		questswowhead = false,
 		questsettings = {
 			texture = "Eltreum-Blank",
@@ -190,6 +191,7 @@ P.ElvUI_EltreumUI = {
 		bigwigscustomemphasizedg2 = 0.23,
 		bigwigscustomemphasizedb2 = 0.23,
 		details = false,
+		detailsgradientname = true,
 		detailstextureoverwrite = true,
 		detailsembed = false,
 		detailsembedooc = false,
@@ -204,6 +206,8 @@ P.ElvUI_EltreumUI = {
 		bagsync = false,
 		hekili = false,
 		omnicd = false,
+		cell = false,
+		cellhealthloss = false,
 
 		hideABkeypress = false,
 		tbctalents = false,
@@ -212,6 +216,8 @@ P.ElvUI_EltreumUI = {
 		blizzframes = {
 			errorframe = true,
 			errorframefontsize = 14,
+			errorframecustomfont = false,
+			errorframefont = "Kimberley",
 			hideerrorframe = false,
 			raidbossframe = true,
 			raidbossframefontsize = 14,
@@ -345,6 +351,8 @@ P.ElvUI_EltreumUI = {
 		},
 		ilvltooltip = true,
 		gradienttooltip = true,
+		gradienttooltipoffset1 = -0.2,
+		gradienttooltipoffset2 = 0.2,
 		professionscale = 1,
 	},
 
@@ -482,6 +490,7 @@ P.ElvUI_EltreumUI = {
 		blizzard = false,
 		pixel = false,
 		autocast = false,
+		gradient = false,
 
 		totemtypecolor = true,
 		totem1 = true,
@@ -850,6 +859,7 @@ P.ElvUI_EltreumUI = {
 
 			enableplayer = true,
 			enabletarget = true,
+			reversetarget = true,
 			enabletargettarget = true,
 			enabletargettargettarget = true,
 			enablefocus = true,
@@ -883,7 +893,7 @@ P.ElvUI_EltreumUI = {
 			playercastbarB1noninterruptiblecustom = 0,
 			playercastbarB2noninterruptiblecustom = 0.29019607843137,
 			playercastbarG1noninterruptiblecustom = 0.34901960784314,
-			playercastbarG2noninterruptiblecustom = 0,
+			playercastbarG2noninterruptiblecustom = 0.19607843137255,
 
 			playercastbarR1interrupted = 0.6,
 			playercastbarR2interrupted = 0.2,
@@ -920,8 +930,8 @@ P.ElvUI_EltreumUI = {
 			targetcastbarR1noninterruptible = 1,
 			targetcastbarR2noninterruptible = 1,
 			targetcastbarB1noninterruptible = 0,
-			targetcastbarB2noninterruptible = 0,
-			targetcastbarG1noninterruptible = 0,
+			targetcastbarB2noninterruptible = 0.29019607843137,
+			targetcastbarG1noninterruptible = 0.34901960784314,
 			targetcastbarG2noninterruptible = 0.19607843137255,
 
 			targetcastbarR1noninterruptiblecustom = 1,
@@ -929,7 +939,7 @@ P.ElvUI_EltreumUI = {
 			targetcastbarB1noninterruptiblecustom = 0,
 			targetcastbarB2noninterruptiblecustom = 0.29019607843137,
 			targetcastbarG1noninterruptiblecustom = 0.34901960784314,
-			targetcastbarG2noninterruptiblecustom = 0,
+			targetcastbarG2noninterruptiblecustom = 0.19607843137255,
 
 			targetcastbarR1interrupted = 0.6,
 			targetcastbarR2interrupted = 0.2,
@@ -1337,6 +1347,7 @@ P.ElvUI_EltreumUI = {
 		hpstatusdeadicon = "5",
 		hpstatusdcicon = "2",
 		deadtagicon = "5",
+		ghosttagicon = "1",
 		dctagicon = "2",
 
 		gamemenu = false,
@@ -1404,7 +1415,10 @@ P.ElvUI_EltreumUI = {
 		taxiscale = 1,
 		bagscale = 1,
 		bankscale = 1,
+		lootscale = 1,
 		colorbg = false,
 		musicshuffle = false,
+		datatextteleport = "Hearthstone",
+		datatextteleporttype = "ITEM",
 	},
 }

@@ -3,11 +3,11 @@
 ## Notes: Fixes invalid TSM import itemID group strings
 ## Notes-ruRU: Исправляет неправильный импорт строк групп ID предметов 
 ## Notes-frFR: Corrige les chaînes de caractères incorrectes IDobjet pour importation dans TSM
-## Version: 2.1.13
+## Version: 2.1.14
 ## Author: Myrroddin/Sygon
-## X-Revision: 48
+## X-Revision: 49
 ## X-Copyright: Copyright (c) 2023 Paul Vandersypen. All Rights Reserved
-## X-Date: 2023-04-05T04:34:16Z
+## X-Date: 2023-05-06T21:57:04Z
 ## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3
 ## X-Category: Auction & Economy
 

@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local _G = _G
 local S = E:GetModule('Skins')
 local CreateFrame = _G.CreateFrame
@@ -88,6 +88,11 @@ function ElvUI_EltreumUI:ExpandedStable()
 		_G["PetStableModel"]:SetPoint(p, r, rp, x, y - 32)
 		_G["PetStableStabledPet1"]:ClearAllPoints()
 		_G["PetStableStabledPet1"]:SetPoint("TOPLEFT", EltruismExpandedStableFrame, 8, -36)
+
+		--nineslice
+		if EltruismExpandedStableFrame.NineSlice then
+			EltruismExpandedStableFrame.NineSlice:Hide()
+		end
 
 		--fix diet icon
 		local texture = _G.PetStableDiet:GetRegions()

@@ -27,10 +27,11 @@ CONST.PRICE_SOURCE = {
     ["Custom"] = "Custom Price Source",                  -- TSM price sources
     ["DBHistorical"] = "TSM: Historical Price",
     ["DBMarket"] = "TSM: Market Value",
+    ["DBRecent"] = "TSM: Recent Value",
     ["DBMinBuyout"] = "TSM: Min Buyout",
     ["DBRegionHistorical"] = "TSM: Region Historical Price",
     ["DBRegionMarketAvg"] = "TSM: Region Market Value Avg",
-    ["DBRegionMinBuyoutAvg"] = "TSM: Region Min Buyout Avg",
+    ["DBRegionSaleAvg"] = "TSM: Region Sale Avg",
     ["DBRegionSaleAvg"] = "TSM: Region Global Sale Average",
     ["VendorSell"] = "TSM: VendorSell",
     ["region"] = "OE: Median All Realms in Region",     --OEMarketInfo (OE) (add:  ["market"] = "OE: Median AH 4-Day")

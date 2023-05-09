@@ -1,2 +1,2 @@
-### 1.0.13
-- fix incompatibilty with other addons
+### 1.0.14
+- version update

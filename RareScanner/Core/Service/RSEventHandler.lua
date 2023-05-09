@@ -14,6 +14,7 @@ local RSNpcDB = private.ImportLib("RareScannerNpcDB")
 local RSDragonGlyphDB = private.ImportLib("RareScannerDragonGlyphDB")
 local RSContainerDB = private.ImportLib("RareScannerContainerDB")
 local RSCollectionsDB = private.ImportLib("RareScannerCollectionsDB")
+local RSAchievementDB = private.ImportLib("RareScannerAchievementDB")
 
 -- RareScanner services
 local RSMinimap = private.ImportLib("RareScannerMinimap")
@@ -40,7 +41,7 @@ local function HandleEntityWithoutVignette(rareScannerButton, unitID)
 	end
 	
 	local unitType, _, _, _, _, entityID = strsplit("-", unitGuid)
-	if (unitType == "Creature") then
+	if (unitType == "Creature" or unitType == "Vehicle") then
 		local npcID = entityID and tonumber(entityID) or nil
 	
 		-- If player in a zone with vignettes ignore it
@@ -509,6 +510,7 @@ end
 
 local function OnCriteriaEarned(parentAchievementID, description)
 	if (parentAchievementID) then
+		-- Update drakewatcher progress
 		RSLogger:PrintDebugMessage(string.format("Criteria del logro [%s][%s]. Completado.", parentAchievementID, description))
 		local achievementID = RSDragonGlyphDB.GetChildDragonGlyphID(parentAchievementID, description)
 		if (achievementID) then
@@ -516,6 +518,9 @@ local function OnCriteriaEarned(parentAchievementID, description)
 			RSDragonGlyphDB.SetDragonGlyphCollected(achievementID)
 			RSMinimap.HideIcon(achievementID)
 		end
+		
+		-- Update achievements cache
+		RSAchievementDB.RefreshAchievementCache(parentAchievementID)
 	end
 end
 

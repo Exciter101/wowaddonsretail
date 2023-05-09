@@ -1,10 +1,9 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local _G = _G
 local string = _G.string
 local OKAY = _G.OKAY
 local IsAddOnLoaded = _G.IsAddOnLoaded
 local fixingold = false
-local pairs = _G.pairs
 local GetAddOnMetadata = _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata or _G.GetAddOnMetadata
 local tonumber = _G.tonumber
 local select = _G.select
@@ -57,10 +56,10 @@ function ElvUI_EltreumUI:ElvUIVersionCheck()
 	}
 
 	--elvui check
-	if E.version < 13.29 then
+	if E.version < tonumber(GetAddOnMetadata("ElvUI_EltreumUI", 'X-ElvUI')) then
 		E:StaticPopup_Show('ELVUIVERSIONCHECK')
 		ElvUI_EltreumUI:Print(L["Your ElvUI version is out of date, please update to avoid issues!"])
-	elseif E.version > 13.35 then
+	elseif E.version > (tonumber(GetAddOnMetadata("ElvUI_EltreumUI", 'X-ElvUI')) + 0.02) then
 		E:StaticPopup_Show('ELVUIVERSIONCHECK2')
 		ElvUI_EltreumUI:Print(L["Your ElvUI version is higher than expected for Eltruism, please update Eltruism or you might run into issues.\n|cffFF0000(You are likely having errors right now!)|r"])
 	end

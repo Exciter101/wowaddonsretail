@@ -43,29 +43,6 @@ G.nameplates.filters = {
 	}
 }
 
-if E.Retail then
-	G.nameplates.filters.ElvUI_Explosives = {
-		triggers = {
-			priority = 2,
-			nameplateType = {
-				enable = true,
-				enemyNPC = true
-			},
-			names = {
-				['120651'] = true
-			}
-		},
-		actions = {
-			usePortrait = true,
-			scale = 1.15,
-			color = {
-				health = true,
-				healthColor = {r = 0, g = 255, b = 255}
-			}
-		}
-	}
-end
-
 E.StyleFilterDefaults = {
 	triggers = {
 		priority = 1,
@@ -248,6 +225,8 @@ E.StyleFilterDefaults = {
 			maxTimeLeft = 0,
 			hasStealable = false,
 			hasNoStealable = false,
+			onMe = false,
+			onPet = false,
 			fromMe = false,
 			fromPet = false,
 			names = {}
@@ -259,6 +238,8 @@ E.StyleFilterDefaults = {
 			maxTimeLeft = 0,
 			hasDispellable = false,
 			hasNoDispellable = false,
+			onMe = false,
+			onPet = false,
 			fromMe = false,
 			fromPet = false,
 			names = {}
@@ -329,11 +310,11 @@ E.StyleFilterDefaults = {
 			power = false,
 			border = false,
 			healthClass = false,
-			healthColor = {r = 1, g = 1, b = 1, a = 1},
+			healthColor = { r = 1, g = 1, b = 1, a = 1 },
 			powerClass = false,
-			powerColor = {r = 1, g = 1, b = 1, a = 1},
+			powerColor = { r = 1, g = 1, b = 1, a = 1 },
 			borderClass = false,
-			borderColor = {r = 1, g = 1, b = 1, a = 1}
+			borderColor = { r = 1, g = 1, b = 1, a = 1 }
 		},
 		texture = {
 			enable = false,
@@ -351,6 +332,16 @@ E.StyleFilterDefaults = {
 			title = '',
 			health = '',
 			power = ''
+		},
+		glow = {
+			enable = false,
+			useColor = true, -- not a real option
+			frameLevel = 5, -- not a real option
+			color = { 0.09, 0.52, 0.82, 0.9 }, -- lib uses old index table
+			style = 'Pixel Glow',
+			speed = 0.3,
+			lines = 8,
+			size = 1
 		},
 		hide = false,
 		usePortrait = false,

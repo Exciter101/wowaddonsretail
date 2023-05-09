@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local utf8sub = string.utf8sub
 local _G = _G
 local UnitName = _G.UnitName
@@ -34,29 +34,10 @@ local DoEmote = _G.DoEmote
 local UnitIsUnit = _G.UnitIsUnit
 local UnitPowerMax = _G.UnitPowerMax
 local UnitPower = _G.UnitPower
-local IsPlayerSpell = _G.IsPlayerSpell
 local GetSpecialization = _G.GetSpecialization
 local GetShapeshiftFormInfo = _G.GetShapeshiftFormInfo
 local select = _G.select
-
---level difference table based on blizzard's
-local eltruismdif = {
-	["-9"] = "|cFF808080",
-	["-8"] = "|cFF008000",
-	["-7"] = "|cFF008000",
-	["-6"] = "|cFF008000",
-	["-5"] = "|cFF008000",
-	["-4"] = "|cFF008000",
-	["-3"] = "|cFF008000",
-	["-2"] = "|cFFFFFF00",
-	["-1"] = "|cFFFFFF00",
-	["0"] = "|cFFFFFF00",
-	["1"] = "|cFFFFFF00",
-	["2"] = "|cFFFFFF00",
-	["3"] = "|cFFFFA500",
-	["4"] = "|cFFA50000",
-	["5"] = "|cFFFF0000",
-}
+local ElvUI_EltreumUI  = _G.ElvUI_EltreumUI
 
 --level difference table based on blizzard's
 local eltruismdif = {
@@ -245,7 +226,7 @@ E:AddTagInfo("name:eltruism:abbreviateshort", ElvUI_EltreumUI.Name.." "..L["Name
 E:AddTag("name:eltruism:gradient", "UNIT_NAME_UPDATE", function(unit)
 	local name = UnitName(unit)
 	local _, unitClass = UnitClass(unit)
-	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate")
+	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate") and not unit:match("party")
 
 	if UnitIsPlayer(unit) then
 		return ElvUI_EltreumUI:GradientName(name, unitClass,isTarget)
@@ -267,13 +248,18 @@ end)
 E:AddTagInfo("name:eltruism:gradient", ElvUI_EltreumUI.Name.." "..L["Names"], L["Displays unit name in gradient class color or reaction color"])
 
 --gradient name abbreviate
-E:AddTag("name:eltruism:gradientshort", "UNIT_NAME_UPDATE", function(unit)
+E:AddTag("name:eltruism:gradientshort", "UNIT_NAME_UPDATE", function(unit,_,args)
 	local name = UnitName(unit)
+	if not name then return end
+	if not args then args = 16 end
 	local _, unitClass = UnitClass(unit)
-	if name and string.len(name) > 16 then
+	if string.len(name) > tonumber(args) then --first for npcs with multiple names/titles
 		name = name:gsub('(%S+) ', function(t) return t:utf8sub(1,1)..'. ' end)
 	end
-	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate")
+	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate") and not unit:match("party")
+	if string.len(name) > tonumber(args) then --second for players
+		name = E:ShortenString(name, tonumber(args))
+	end
 
 	if UnitIsPlayer(unit) then
 		return ElvUI_EltreumUI:GradientName(name, unitClass, isTarget)
@@ -295,11 +281,20 @@ end)
 E:AddTagInfo("name:eltruism:gradientshort", ElvUI_EltreumUI.Name.." "..L["Names"], L["Displays unit name in gradient class color or reaction color, shortens over 16 characters"])
 
 --gradient name translit
-E:AddTag("name:eltruism:gradienttranslit", "UNIT_NAME_UPDATE", function(unit)
+E:AddTag("name:eltruism:gradienttranslit", "UNIT_NAME_UPDATE", function(unit,_,args)
 	local targetName = UnitName(unit)
 	local name = Translit:Transliterate(targetName)
+	if not name then return end
 	local _, unitClass = UnitClass(unit)
-	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate")
+	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate") and not unit:match("party")
+	if args then
+		if string.len(name) > tonumber(args) then --first for npcs with multiple names/titles
+			name = name:gsub('(%S+) ', function(t) return t:utf8sub(1,1)..'. ' end)
+		end
+		if string.len(name) > tonumber(args) then --second for players
+			name = E:ShortenString(name, tonumber(args))
+		end
+	end
 
 	if UnitIsPlayer(unit) then
 		return ElvUI_EltreumUI:GradientName(name, unitClass, isTarget)
@@ -328,7 +323,7 @@ E:AddTag("name:eltruism:gradientshorttranslit", "UNIT_NAME_UPDATE", function(uni
 	if name and string.len(name) > 16 then
 		name = name:gsub('(%S+) ', function(t) return t:utf8sub(1,1)..'. ' end)
 	end
-	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate")
+	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate") and not unit:match("party")
 
 	if UnitIsPlayer(unit) then
 		return ElvUI_EltreumUI:GradientName(name, unitClass, isTarget)
@@ -395,6 +390,60 @@ E:AddTag('eltruismrealm:dash', 'UNIT_NAME_UPDATE', function(unit)
 	end
 end)
 E:AddTagInfo("eltruismrealm:dash", ElvUI_EltreumUI.Name.." "..L["Names"], L["Displays the server name with a dash in gradient"])
+
+
+--gradient name default colors
+E:AddTag("name:eltruism:gradientdefaultcolors", "UNIT_NAME_UPDATE", function(unit)
+	local name = UnitName(unit)
+	local _, unitClass = UnitClass(unit)
+	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate") and not unit:match("party")
+
+	if UnitIsPlayer(unit) then
+		return ElvUI_EltreumUI:GradientNameDefaultColors(name, unitClass,isTarget)
+	elseif not UnitIsPlayer(unit) then
+		local reaction = UnitReaction(unit, "player")
+		if reaction then
+			if reaction >= 5 then
+				return ElvUI_EltreumUI:GradientNameDefaultColors(name, "NPCFRIENDLY", isTarget)
+			elseif reaction == 4 then
+				return ElvUI_EltreumUI:GradientNameDefaultColors(name, "NPCNEUTRAL", isTarget)
+			elseif reaction == 3 then
+				return ElvUI_EltreumUI:GradientNameDefaultColors(name, "NPCUNFRIENDLY", isTarget)
+			elseif reaction == 2 or reaction == 1 then
+				return ElvUI_EltreumUI:GradientNameDefaultColors(name, "NPCHOSTILE", isTarget)
+			end
+		end
+	end
+end)
+E:AddTagInfo("name:eltruism:gradientdefaultcolors", ElvUI_EltreumUI.Name.." "..L["Names"], L["Displays unit name in gradient class color or reaction color"])
+
+--gradient name abbreviate default colors
+E:AddTag("name:eltruism:gradientdefaultcolorsshort", "UNIT_NAME_UPDATE", function(unit)
+	local name = UnitName(unit)
+	local _, unitClass = UnitClass(unit)
+	if name and string.len(name) > 16 then
+		name = name:gsub('(%S+) ', function(t) return t:utf8sub(1,1)..'. ' end)
+	end
+	local isTarget = UnitIsUnit(unit,"target") and not unit:match("nameplate") and not unit:match("party")
+
+	if UnitIsPlayer(unit) then
+		return ElvUI_EltreumUI:GradientNameDefaultColors(name, unitClass, isTarget)
+	elseif not UnitIsPlayer(unit) then
+		local reaction = UnitReaction(unit, "player")
+		if reaction then
+			if reaction >= 5 then
+				return ElvUI_EltreumUI:GradientNameDefaultColors(name, "NPCFRIENDLY", isTarget)
+			elseif reaction == 4 then
+				return ElvUI_EltreumUI:GradientNameDefaultColors(name, "NPCNEUTRAL", isTarget)
+			elseif reaction == 3 then
+				return ElvUI_EltreumUI:GradientNameDefaultColors(name, "NPCUNFRIENDLY", isTarget)
+			elseif reaction == 2 or reaction == 1 then
+				return ElvUI_EltreumUI:GradientNameDefaultColors(name, "NPCHOSTILE", isTarget)
+			end
+		end
+	end
+end)
+E:AddTagInfo("name:eltruism:gradientdefaultcolorsshort", ElvUI_EltreumUI.Name.." "..L["Names"], L["Displays unit name in gradient class color or reaction color, shortens over 16 characters"])
 
 -------------------------------------------------------------------------- ICONS -------------------------------------------------------------------------
 
@@ -475,10 +524,8 @@ E:AddTagInfo("eltruism:ReleafIconOutline:player", ElvUI_EltreumUI.Name.." "..L["
 
 --show class icons on all targets
 E:AddTag("eltruism:reverseclass:all", "UNIT_NAME_UPDATE", function(unit)
-	local icon
 	local _ , classes = UnitClass(unit)
-	icon = reverseclassIcons[classes]
-	return icon
+	return ElvUI_EltreumUI:GetClassIcons("RELEAF",classes,true)
 end)
 E:AddTagInfo('eltruism:reverseclass:all', ElvUI_EltreumUI.Name.." "..L["Icons"], L["Shows Flipped Class Icons recolored by Releaf on all targets"])
 
@@ -542,13 +589,43 @@ E:AddTag("eltruism:reverseReleafIconOutline:all", "UNIT_NAME_UPDATE", function(u
 end)
 E:AddTagInfo("eltruism:reverseReleafIconOutline:all", ElvUI_EltreumUI.Name.." "..L["Icons"], "Shows Flipped Class Icons with Outlines by Releaf all targets")
 
---class icons with otlines on players
+--class icons with outlines on players
 E:AddTag("eltruism:reverseReleafIconOutline:player", "UNIT_NAME_UPDATE", function(unit)
 	if not UnitIsPlayer(unit) then return end
 	local _ , classes = UnitClass(unit)
 	return ElvUI_EltreumUI:GetClassIcons("OUTLINE",classes,true)
 end)
 E:AddTagInfo("eltruism:reverseReleafIconOutline:player", ElvUI_EltreumUI.Name.." "..L["Icons"], "Shows Flipped Class Icons with Outlines by Releaf on Player targets")
+
+--gradient releaf icons
+E:AddTag("eltruism:Releafgradient:player", "UNIT_NAME_UPDATE", function(unit)
+	if not UnitIsPlayer(unit) then return end
+	local _,englishClass = UnitClass(unit)
+	return ElvUI_EltreumUI:GetClassIcons("GRADIENT",englishClass)
+end)
+E:AddTagInfo("eltruism:Releafgradient:player", ElvUI_EltreumUI.Name.." "..L["Icons"], "Shows Releaf Icons with Gradient Colors")
+
+--gradient releaf icons reversed
+E:AddTag("eltruism:reverseReleafgradient:player", "UNIT_NAME_UPDATE", function(unit)
+	if not UnitIsPlayer(unit) then return end
+	local _,englishClass = UnitClass(unit)
+	return ElvUI_EltreumUI:GetClassIcons("GRADIENT",englishClass,true)
+end)
+E:AddTagInfo("eltruism:reverseReleafgradient:player", ElvUI_EltreumUI.Name.." "..L["Icons"], "Shows Reversed Releaf Icons with Gradient Colors")
+
+--gradient releaf icons for all
+E:AddTag("eltruism:Releafgradient:all", "UNIT_NAME_UPDATE", function(unit)
+	local _,englishClass = UnitClass(unit)
+	return ElvUI_EltreumUI:GetClassIcons("GRADIENT",englishClass)
+end)
+E:AddTagInfo("eltruism:Releafgradient:all", ElvUI_EltreumUI.Name.." "..L["Icons"], "Shows Releaf Icons with Gradient Colors for All")
+
+--gradient releaf icons reversed for all
+E:AddTag("eltruism:reverseReleafgradient:all", "UNIT_NAME_UPDATE", function(unit)
+	local _,englishClass = UnitClass(unit)
+	return ElvUI_EltreumUI:GetClassIcons("GRADIENT",englishClass,true)
+end)
+E:AddTagInfo("eltruism:reverseReleafgradient:all", ElvUI_EltreumUI.Name.." "..L["Icons"], "Shows Reversed Releaf Icons with Gradient Colors for All")
 
 -- Releaf Logo
 E:AddTag("releaf", "UNIT_NAME_UPDATE", function()
@@ -590,6 +667,23 @@ E:AddTag("eltruism:levelskull", "UNIT_TARGET UNIT_NAME_UPDATE", function(unit)
 end)
 E:AddTagInfo("eltruism:levelskull", ElvUI_EltreumUI.Name.." "..L["Icons"], L["Shows the Unit Level, or a skull if the level is too high"])
 
+E:AddTag("eltruism:levelskull2", "UNIT_TARGET UNIT_NAME_UPDATE", function(unit)
+	local level
+	if E.Retail then
+		level = UnitEffectiveLevel(unit)
+	else
+		level = UnitLevel(unit)
+	end
+	local diff = level - UnitLevel("player")
+	local classification = UnitClassification(unit)
+	if diff > 8 or classification == "worldboss" then
+		return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Nameplates\\skull10.tga:0:0:0:0|t"
+	else
+		return level
+	end
+end)
+E:AddTagInfo("eltruism:levelskull2", ElvUI_EltreumUI.Name.." "..L["Icons"], L["Shows the Unit Level, or a skull if the level is too high"])
+
 --Short classification, but with a skull for boss instead of B for Nekator
 E:AddTag("eltruism:shortclassification", "UNIT_NAME_UPDATE", function(unit)
 	local c = UnitClassification(unit)
@@ -616,7 +710,11 @@ E:AddTag("eltruism:dead", "UNIT_HEALTH", function(unit)
 			return L["Dead"]
 		end
 	elseif UnitIsGhost(unit) then
-		return GetSpellInfo(8326)
+		if E.db.ElvUI_EltreumUI.otherstuff.ghosttagicon ~= "NONE" then
+			return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Ghost\\ghost"..tostring(E.db.ElvUI_EltreumUI.otherstuff.ghosttagicon)..".tga:0:0:0:0|t"
+		else
+			return GetSpellInfo(8326)
+		end
 	end
 end)
 E:AddTagInfo("eltruism:dead", ElvUI_EltreumUI.Name.." "..L["Icons"], L["Displays a dead symbol when unit is dead. Can be customized in Eltruism > Media"])
@@ -692,21 +790,22 @@ end)
 E:AddTagInfo("eltruism:combatindicator", ElvUI_EltreumUI.Name.." "..L["Icons"], L["Displays an icon when the unit is in combat, uses player icon"])
 
 ------------------------------------------------------------------------- HEALTH ------------------------------------------------------------------------
-
-E:AddTag("eltruism:effectivehp", "UNIT_HEALTH UNIT_TARGET", function()
-	local dr
-	if UnitExists("target") then
-		dr = (UnitArmor("player")/((UnitLevel("target")*467.5)+UnitArmor("player")-22167.5))
-		--dr = (UnitArmor("player")/((UnitLevel('target')*467.5)+UnitHealthMax("player")-22167.5))
-	else
-		dr = (UnitArmor("player")/((UnitLevel("player")*467.5)+UnitArmor("player")-22167.5))
-		--dr = (UnitArmor("player")/((UnitLevel('player')*467.5)+UnitHealthMax("player")-22167.5))
-	end
-	local ehp = UnitHealthMax("player")/(1-dr)
-	local effective = math.floor((ehp*100)/100)
-	return effective
-end)
-E:AddTagInfo("eltruism:effectivehp", ElvUI_EltreumUI.Name.." "..L["Health"], L["Shows Effective Health"])
+if not E.Retail then
+	E:AddTag("eltruism:effectivehp", "UNIT_HEALTH UNIT_TARGET", function()
+		local dr
+		if UnitExists("target") then
+			dr = (UnitArmor("player")/((UnitLevel("target")*467.5)+UnitArmor("player")-22167.5))
+			--dr = (UnitArmor("player")/((UnitLevel('target')*467.5)+UnitHealthMax("player")-22167.5))
+		else
+			dr = (UnitArmor("player")/((UnitLevel("player")*467.5)+UnitArmor("player")-22167.5))
+			--dr = (UnitArmor("player")/((UnitLevel('player')*467.5)+UnitHealthMax("player")-22167.5))
+		end
+		local ehp = UnitHealthMax("player")/(1-dr)
+		local effective = math.floor((ehp*100)/100)
+		return effective
+	end)
+	E:AddTagInfo("eltruism:effectivehp", ElvUI_EltreumUI.Name.." "..L["Health"], L["Shows Effective Health"])
+end
 
 --HP tag that switches to a dead symbol or dc symbol depending on the unit status, based on elvui
 E:AddTag("eltruism:hpstatus", "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED", function(unit)
@@ -746,7 +845,11 @@ E:AddTag("eltruism:hpstatus", "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER
 				return L["Offline"]
 			end
 		elseif UnitIsGhost(unit) then
-			return GetSpellInfo(8326)
+			if E.db.ElvUI_EltreumUI.otherstuff.ghosttagicon ~= "NONE" then
+				return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Ghost\\ghost"..tostring(E.db.ElvUI_EltreumUI.otherstuff.ghosttagicon)..".tga:0:0:0:0|t"
+			else
+				return GetSpellInfo(8326)
+			end
 		end
 	end
 end)
@@ -788,7 +891,11 @@ E:AddTag("eltruism:hpstatusnopc", "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PL
 				return L["Offline"]
 			end
 		elseif UnitIsGhost(unit) then
-			return GetSpellInfo(8326)
+			if E.db.ElvUI_EltreumUI.otherstuff.ghosttagicon ~= "NONE" then
+				return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Ghost\\ghost"..tostring(E.db.ElvUI_EltreumUI.otherstuff.ghosttagicon)..".tga:0:0:0:0|t"
+			else
+				return GetSpellInfo(8326)
+			end
 		end
 	end
 end)
@@ -816,6 +923,44 @@ E:AddTag("eltruism:pchpdeficit", "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE", 
 end)
 E:AddTagInfo("eltruism:pchpdeficit", ElvUI_EltreumUI.Name.." "..L["Health"], L["Displays current health percentage and health lost in shortvalue"])
 
+--perhp with status icons
+E:AddTag("eltruism:perhpstatus", "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED", function(unit)
+	local deadtexture = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Dead\\dead"..tostring(E.db.ElvUI_EltreumUI.otherstuff.hpstatusdeadicon)..".tga:0:0:0:0|t"
+	local dctexture = "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Disconnect\\dc"..tostring(E.db.ElvUI_EltreumUI.otherstuff.hpstatusdcicon)..".tga:0:0:0:0|t"
+	local cur, maxhp = UnitHealth(unit), UnitHealthMax(unit)
+	if (maxhp == 0) then
+		return 0
+	else
+		if not UnitIsDead(unit) and not UnitIsGhost(unit) then
+			return math.floor(((cur / maxhp) * 100) + 0.5)
+		elseif UnitIsConnected(unit) and not UnitIsGhost(unit) then
+			if E.db.ElvUI_EltreumUI.otherstuff.hpstatusdeadicon ~= "NONE" then
+				return deadtexture
+			else
+				return L["Dead"]
+			end
+		elseif not UnitIsDead(unit) and not UnitIsConnected(unit) then
+			if E.db.ElvUI_EltreumUI.otherstuff.hpstatusdcicon ~= "NONE" then
+				return dctexture
+			else
+				return L["Offline"]
+			end
+		elseif UnitIsDead(unit) and not UnitIsConnected(unit) and not UnitIsGhost(unit) then
+			if E.db.ElvUI_EltreumUI.otherstuff.hpstatusdcicon ~= "NONE" then
+				return dctexture
+			else
+				return L["Offline"]
+			end
+		elseif UnitIsGhost(unit) then
+			if E.db.ElvUI_EltreumUI.otherstuff.ghosttagicon ~= "NONE" then
+				return "|TInterface\\Addons\\ElvUI_EltreumUI\\Media\\Textures\\Ghost\\ghost"..tostring(E.db.ElvUI_EltreumUI.otherstuff.ghosttagicon)..".tga:0:0:0:0|t"
+			else
+				return GetSpellInfo(8326)
+			end
+		end
+	end
+end)
+E:AddTagInfo("eltruism:perhpstatus", ElvUI_EltreumUI.Name.." "..L["Health"], L["Displays percentage health with status icons"])
 -------------------------------------------------------------------------- OTHER -------------------------------------------------------------------------
 
 --Difficulty color for npcs in classic/tbc
@@ -1001,7 +1146,7 @@ E:AddTag("eltruism:smartlevel", 'UNIT_LEVEL PLAYER_LEVEL_UP', function(unit)
 end)
 E:AddTagInfo("eltruism:smartlevel", ElvUI_EltreumUI.Name.." "..L["Miscellaneous"], L["Shows level difference when it exists for NPCs and players, hides for players if same level"])
 
-E:AddTag("eltruism:stance", 'UNIT_AURA', function(unit)
+E:AddTag("eltruism:stance", 1, function()
 	local stance = GetShapeshiftForm()
 	local stanceInfo = stanceID[E.myclass] and stanceID[E.myclass][stance]
 	if stanceBackup ~= stance then
@@ -1015,7 +1160,6 @@ E:AddTagInfo("eltruism:stance", ElvUI_EltreumUI.Name.." "..L["Miscellaneous"], L
 
 --group number only for first member of group (can break if players get moved tho)
 E:AddTag("eltruism:groupnumber", "GROUP_ROSTER_UPDATE UNIT_NAME_UPDATE", function(unit)
-	local c = UnitClassification(unit)
 	if IsInRaid() == true then
 		if unit == "raid1" then
 			return GROUP.." 1"
@@ -1045,7 +1189,7 @@ E:AddTag("eltruism:classcolor", 'UNIT_NAME_UPDATE', function(unit)
 	if UnitIsPlayer(unit) then
 		local _, unitClass = UnitClass(unit)
 		local cs = ElvUF.colors.class[unitClass]
-		return (cs and Hex(cs[1], cs[2], cs[3])) or '|cFFcccccc'
+		return (cs and E:RGBToHex(cs[1], cs[2], cs[3])) or '|cFFcccccc'
 	end
 end)
 E:AddTagInfo("eltruism:classcolor", ElvUI_EltreumUI.Name.." "..L["Miscellaneous"], L["Returns class color only for players"])

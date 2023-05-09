@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local _G = _G
 local IsInInstance = _G.IsInInstance
 local IsAddOnLoaded = _G.IsAddOnLoaded
@@ -372,9 +372,13 @@ local mailsoundframe = CreateFrame("FRAME")
 mailsoundframe:RegisterEvent("UPDATE_PENDING_MAIL")
 local mailthrottle = 0
 mailsoundframe:SetScript("OnEvent", function()
+	if not IsAddOnLoaded("ElvUI_EltreumUI") then return end
 	if not E.private.ElvUI_EltreumUI then return end
 	if not E.private.ElvUI_EltreumUI.install_version then return end
 	if not E.db.ElvUI_EltreumUI.otherstuff then return end
+	if not E.db.ElvUI_EltreumUI.otherstuff.mailsoundttsvoice then return end
+	if not E.db.ElvUI_EltreumUI.otherstuff.mailsoundttstext then return end
+	if not E.db.ElvUI_EltreumUI.otherstuff.mailsoundttsvoicevolume then return end
 	if HasNewMail() == true and E.db.ElvUI_EltreumUI.otherstuff.mailsoundenable and not InCombatLockdown() and mailthrottle == 0 then
 
 		if E.db.ElvUI_EltreumUI.otherstuff.mailsoundtype == "tts" and E.db.ElvUI_EltreumUI.otherstuff.mailsoundttsvoice then

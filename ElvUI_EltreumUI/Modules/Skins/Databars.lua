@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local DB = E:GetModule('DataBars')
 local S = E:GetModule('Skins')
 local _G = _G
@@ -32,9 +32,6 @@ function ElvUI_EltreumUI:GradientDatabarRep()
 				if info and info.friendshipFactionID then
 					local isMajorFaction = factionID and C_Reputation.IsMajorFaction(factionID)
 					if isMajorFaction then
-						local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
-						local renownColor = DB.db.colors.factionColors[10]
-						local renownHex = E:RGBToHex(renownColor.r, renownColor.g, renownColor.b)
 						reaction = 10
 					end
 				end
@@ -111,7 +108,7 @@ S:AddCallbackForAddon('Blizzard_ArchaeologyUI', "GradientArcheology", ElvUI_Eltr
 --gradient Blizzard Alt Power
 local B = E:GetModule('Blizzard')
 function ElvUI_EltreumUI:BlizzardAltPower()
-	if B.AltPowerBar then
+	if B.AltPowerBar and B.AltPowerBar:IsShown() then
 		B.AltPowerBar:SetStatusBarTexture(E.LSM:Fetch("statusbar", E.db.unitframe.statusbar))
 		if E.db.ElvUI_EltreumUI.unitframes.gradientmode.gradientAltPower then
 			if E.db.general.altPowerBar.statusBarColorGradient then

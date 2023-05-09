@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local _G = _G
 local C_CVar = _G.C_CVar
 local IsInInstance = _G.IsInInstance
@@ -80,8 +80,8 @@ function ElvUI_EltreumUI:StopBossMusic(event)
 	end
 end
 
-local BuffsMover = E.db["movers"]["BuffsMover"]
-local DebuffsMover = E.db["movers"]["DebuffsMover"]
+local BuffsMover
+local DebuffsMover
 
 function ElvUI_EltreumUI:MinimapHide(event)
 	if E.db.ElvUI_EltreumUI.otherstuff.mapcombathide then
@@ -90,6 +90,12 @@ function ElvUI_EltreumUI:MinimapHide(event)
 				Minimap:Hide()
 			else
 				_G.MinimapCluster:Hide()
+				if _G.AddonCompartmentFrame then
+					_G.AddonCompartmentFrame:Hide()
+				end
+				if _G.QueueStatusButton then
+					_G.QueueStatusButton:Hide()
+				end
 			end
 			if E.db.ElvUI_EltreumUI.otherstuff.mapcombathideadjustaura then
 				BuffsMover = E.db["movers"]["BuffsMover"]
@@ -104,10 +110,16 @@ function ElvUI_EltreumUI:MinimapHide(event)
 				Minimap:Show()
 			else
 				_G.MinimapCluster:Show()
+				if _G.AddonCompartmentFrame then
+					_G.AddonCompartmentFrame:Show()
+				end
+				if _G.QueueStatusButton then
+					_G.QueueStatusButton:Show()
+				end
 			end
 			if E.db.ElvUI_EltreumUI.otherstuff.mapcombathideadjustaura then
-				E.db["movers"]["BuffsMover"] = BuffsMover
-				E.db["movers"]["DebuffsMover"] = DebuffsMover
+				E.db["movers"]["BuffsMover"] = BuffsMover or E.db["movers"]["BuffsMover"]
+				E.db["movers"]["DebuffsMover"] = DebuffsMover or E.db["movers"]["DebuffsMover"]
 				E:SetMoverPoints("BuffsMover")
 				E:SetMoverPoints("DebuffsMover")
 			end

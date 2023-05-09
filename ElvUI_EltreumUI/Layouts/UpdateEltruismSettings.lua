@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
+local E, L = unpack(ElvUI)
 local _G = _G
 local IsAddOnLoaded = _G.IsAddOnLoaded
 
@@ -54,7 +54,7 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.nameplates.auras.enable = true
 
 	-- Unitframes
-	E.db.ElvUI_EltreumUI.unitframes.gradientmode.texture = "Asphyxia-Norm"
+	E.db.ElvUI_EltreumUI.unitframes.gradientmode.texture = "ElvUI Norm1"
 	E.db.ElvUI_EltreumUI.unitframes.gradientmode.enableplayercastbar = true
 	E.db.ElvUI_EltreumUI.unitframes.gradientmode.enableplayercastbarinterrupted = true
 	E.db.ElvUI_EltreumUI.unitframes.gradientmode.enableplayercastbarnoninterruptible = true
@@ -71,7 +71,7 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.unitframes.gradientmode.gradientHonor = true
 	E.db.ElvUI_EltreumUI.unitframes.gradientmode.gradientAltPower = true
 	E.db.ElvUI_EltreumUI.unitframes.models.powerbar = true
-	E.db.ElvUI_EltreumUI.unitframes.ufcustomtexture.backdroptexture = "Asphyxia-Norm"
+	E.db.ElvUI_EltreumUI.unitframes.ufcustomtexture.backdroptexture = "ElvUI Norm1"
 	E.db.ElvUI_EltreumUI.unitframes.ufcustomtexture.backdropalpha = 0.7
 	E.db.ElvUI_EltreumUI.unitframes.sparkcustomcolor.enable = true
 	E.db.ElvUI_EltreumUI.unitframes.sparkcustomcolor.enableaurabars = true
@@ -142,6 +142,7 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.db.ElvUI_EltreumUI.skins.bagsync = true
 	E.db.ElvUI_EltreumUI.skins.hekili = true
 	E.db.ElvUI_EltreumUI.skins.omnicd = true
+	E.db.ElvUI_EltreumUI.skins.cell = true
 	E.db.ElvUI_EltreumUI.skins.elvui.SetTemplate = true --elvui skin
 
 	-- Borders
@@ -235,14 +236,14 @@ function ElvUI_EltreumUI:UpdateEltruismSettings()
 	E.private.ElvUI_EltreumUI.nameplatepower.adjust = true
 
 	-- General Media (primary and secondary media texture for elvui)
-	E.private.general.glossTex = "Asphyxia-Norm"
-	E.private.general.normTex = "Asphyxia-Norm"
+	E.private.general.glossTex = "ElvUI Norm1"
+	E.private.general.normTex = "ElvUI Norm1"
 
 	-- Unitframes Media
 	E.db.unitframe.statusbar = "ElvUI Norm1"
 
 	-- Databar Media
-	E.db.databars.statusbar = "Asphyxia-Norm"
+	E.db.databars.statusbar = "ElvUI Norm1"
 
 	--CVars
 	if E.Retail then

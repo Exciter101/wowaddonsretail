@@ -1,11 +1,10 @@
 -- This whole plugin started based in LuckyoneUI, which was the simplest to understand. Full thanks to him for making it and allowing its use!
 -- It wouldn't be possible without the ElvUI community after all
-local E, _, V, P, G = unpack(ElvUI)
+local E = unpack(ElvUI)
 local EP = LibStub('LibElvUIPlugin-1.0')
-local addon, Engine = ...
+local addon = ...
 local _G = _G
 ElvUI_EltreumUI = E:NewModule(addon, 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0', 'AceConsole-3.0')
-local L = E.Libs.ACL:GetLocale("ElvUI", E.global.general.locale)
 local GetAddOnMetadata = _G.C_AddOns and _G.C_AddOns.GetAddOnMetadata or _G.GetAddOnMetadata
 
 --Binding
@@ -122,6 +121,9 @@ function ElvUI_EltreumUI:PLAYER_ENTERING_WORLD(_, initLogin)
 	if not E.private.unitframe.disabledBlizzardFrames.raid then -- blizzard raid textures/gradient
 		ElvUI_EltreumUI:BlizzardTexturesGradient()
 	end
+	if E.db.ElvUI_EltreumUI.skins.cell then --Cell gradient/custom textures/shadows
+		ElvUI_EltreumUI:EltruismCell()
+	end
 end
 
 function ElvUI_EltreumUI:Initialize()
@@ -151,12 +153,6 @@ function ElvUI_EltreumUI:Initialize()
 	ElvUI_EltreumUI:RegisterEvent('ZONE_CHANGED') --for hiding healthbar in friendly np
 	ElvUI_EltreumUI:RegisterEvent('ZONE_CHANGED_NEW_AREA') --for hiding healthbar in friendly np
 	ElvUI_EltreumUI:RegisterEvent('PLAYER_TARGET_CHANGED') --for power bar and light mode texture
-	ElvUI_EltreumUI:RegisterEvent("CHAT_MSG_LOOT") --LootText things
-	ElvUI_EltreumUI:RegisterEvent("CHAT_MSG_MONEY") --LootText things
-	ElvUI_EltreumUI:RegisterEvent("CHAT_MSG_CURRENCY") --LootText things
-	ElvUI_EltreumUI:RegisterEvent("CHAT_MSG_COMBAT_HONOR_GAIN") --LootText things
-	ElvUI_EltreumUI:RegisterEvent("LOOT_OPENED") --LootText things
-	ElvUI_EltreumUI:RegisterEvent('UI_ERROR_MESSAGE') --LootText things
 	ElvUI_EltreumUI:RegisterEvent('INSPECT_READY')
 	if E.Retail then
 		ElvUI_EltreumUI:RegisterEvent('GOSSIP_SHOW') --for rogue order hall
@@ -203,7 +199,9 @@ end
 function ElvUI_EltreumUI:GROUP_ROSTER_UPDATE()
 	ElvUI_EltreumUI:RaidDeathGroupCheck()
 	--ElvUI_EltreumUI:Shadows()
-	ElvUI_EltreumUI:RaidShadows()
+	if IsInRaid() == true then
+		ElvUI_EltreumUI:RaidShadows()
+	end
 	if E.db.ElvUI_EltreumUI.unitframes.UFmodifications then
 		ElvUI_EltreumUI:GradientUF()
 		ElvUI_EltreumUI:CustomTexture()
@@ -213,6 +211,9 @@ function ElvUI_EltreumUI:GROUP_ROSTER_UPDATE()
 	end
 	if not E.private.unitframe.disabledBlizzardFrames.raid then -- blizzard raid textures/gradient
 		ElvUI_EltreumUI:BlizzardTexturesGradient()
+	end
+	if E.db.ElvUI_EltreumUI.skins.cell then --Cell gradient/custom textures/shadows
+		ElvUI_EltreumUI:EltruismCell()
 	end
 end
 
@@ -280,30 +281,6 @@ function ElvUI_EltreumUI:PLAYER_TARGET_CHANGED()
 	if E.db.ElvUI_EltreumUI.borders.borders and E.db.ElvUI_EltreumUI.borders.classcolor then
 		ElvUI_EltreumUI:BordersTargetChanged()
 	end
-end
-
-function ElvUI_EltreumUI:CHAT_MSG_LOOT()
-	ElvUI_EltreumUI:LootText()
-end
-
-function ElvUI_EltreumUI:CHAT_MSG_MONEY()
-	ElvUI_EltreumUI:LootText()
-end
-
-function ElvUI_EltreumUI:CHAT_MSG_CURRENCY()
-	ElvUI_EltreumUI:LootText()
-end
-
-function ElvUI_EltreumUI:CHAT_MSG_COMBAT_HONOR_GAIN()
-	ElvUI_EltreumUI:LootText()
-end
-
-function ElvUI_EltreumUI:LOOT_OPENED()
-	ElvUI_EltreumUI:LootText()
-end
-
-function ElvUI_EltreumUI:UI_ERROR_MESSAGE()
-	ElvUI_EltreumUI:LootText()
 end
 
 local currenttalentretail = E.Retail and GetSpecialization()

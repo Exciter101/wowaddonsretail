@@ -18,6 +18,14 @@
 					</Anchors>
 				</Texture>
 			</Layer>
+			<Layer level="OVERLAY">
+		    	<Texture parentKey="IconTexture" useAtlasSize="true">
+		        	<Anchors>
+            			<Anchor point="TOPLEFT" relativeKey="$parent.Texture" relativePoint="CENTER" x="-2" y="-2"/>
+            			<Anchor point="BOTTOMRIGHT" relativeKey="$parent.Texture" relativePoint="BOTTOMRIGHT" x="0" y="-2"/>
+					</Anchors>
+		        </Texture>
+			</Layer>
 		</Layers>
 		<Animations>
 	        <AnimationGroup parentKey="ShowPingAnim" setToFinalAlpha="false" looping="BOUNCE">

@@ -39,6 +39,7 @@ function RSEntityPinMixin:OnAcquired(POI, dataProvider)
 	self.dataProvider = dataProvider
 	self.Texture:SetTexture(POI.Texture)
 	self.Texture:SetScale(RSConfigDB.GetIconsWorldMapScale())
+	self.IconTexture:SetAtlas(POI.iconAtlas)
 	self:SetPosition(RSUtils.FixCoord(POI.x), RSUtils.FixCoord(POI.y));
 	self:SetPassThroughButtons("MiddleButton");
 	MapPinHighlight_CheckHighlightPin(self:GetHighlightType(), self, self.Texture, AREAPOI_HIGHLIGHT_PARAMS);

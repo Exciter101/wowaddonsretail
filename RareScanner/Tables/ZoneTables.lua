@@ -17,7 +17,7 @@ private.CONTINENT_ZONE_IDS = {
 	[875] = { zonefilter = true, npcfilter = true, id = 11, zones = {862,863,864,1165} }; --Zandalar
 	[1355] = { zonefilter = true, npcfilter = true, id = 12, zones = {1355} }; --Nazjatar
 	[1550] = { zonefilter = true, npcfilter = true, id = 13, zones = {1409,1525,1533,1536,1543,1565,1618,1961,1970,2030} }; --Shadowlands
-	[1978] = { zonefilter = true, npcfilter = true, id = 14, zones = {2112,2118,2022,2023,2024,2025,2085,2107,2151}, current = { "all" } }; --Dragon Isles
+	[1978] = { zonefilter = true, npcfilter = true, id = 14, zones = {2112,2118,2022,2023,2024,2025,2085,2107,2133,2151}, current = { "all" } }; --Dragon Isles
 	[9999] = { zonefilter = true, npcfilter = true, zones = {276,378,628,629,672,734,702,695,747,739} }; --Class Halls
 	[9998] = { zonefilter = true, npcfilter = true, zones = {407}, current = { "all" } }; --Darkmoon Island
 	[9997] = { zonefilter = true, npcfilter = true, zones = {35,219,229,237,243,251,274,279,280,301,306,316,317,318,616,677,703,706,713,731,733,749,845,897,903,974,1004,1015,1041,1663,1666,1675,1669,1674,1677,1683,1692,2093} }; --Dungeons or scenarios
@@ -79,6 +79,7 @@ private.SUBZONES_IDS = {
 	[2047] = {2048,2049,2050,2051,2052,2055,2061}; --Sepulcher of the First Ones
 	[2024] = {2132}; -- The Azure Span minimaps
 	[2151] = {2100,2101,2102,2154}; --The Forbidden Reach (10.0.7) (Dragonflight)
+	[2133] = {2184}; --Zaralek Cavern (10.1.0) (Dragonflight)
 }
 
 private.ZONES_WITHOUT_VIGNETTE = {
@@ -108,12 +109,12 @@ private.ZONES_WITHOUT_VIGNETTE = {
 	[14] = { 15 }; --Arathi highlands
 	[26] = { 27 }; --The hinterlands
 	[37] = { 41 }; --Elwynn forest
-	[81] = { 86 }; --Silithus
+	[81] = { 962,86 }; --Silithus
 	[48] = { 53 }; --Loch modan
 	[23] = { 24 }; --Eastern plaguelands
 	[63] = { 68 }; --Ashenvale
 	[65] = { 70 }; --Stonetalon mountains
-	[70] = { 75, 498 }; --Dustwallow marsh
+	[70] = { 498,75 }; --Dustwallow marsh
 	[21] = { 22 }; --Silverpine forest
 	[64] = { 69 }; --Thousand needles
 	[36] = { 37 }; --Burning steppes
@@ -147,12 +148,12 @@ private.ZONES_WITHOUT_VIGNETTE = {
 	--[118] = { 123 }; --Icecrown (uncomment once Shadowlands pre-patch is over)
 	[126] = { 131 }; --Dalaran
 	[207] = { 212 }; --Deepholm
-	[198] = { 203 }; --Mount hyjal
-	[241] = { 252 }; --Twilight highlands
+	[198] = { 203,227 }; --Mount hyjal
+	[241] = { 338,252 }; --Twilight highlands
 	[205] = { 210 }; --Shimmering expanse
 	[204] = { 209 }; --Abyssal depths
 	[338] = { 350 }; --Molten front
-	[249] = { 289 }; --Uldum
+	[249] = { 260,289 }; --Uldum
 	[201] = { 206 }; --Kelp thar forest
 	[203] = { 208 }; --Vashj ir
 	[73] = { 77 }; --The gaping chasm
@@ -193,6 +194,7 @@ private.ZONES_WITHOUT_VIGNETTE = {
 	[2024] = { 1707 }; --The Azure Span
 	[2025] = { 1708 }; --Thaldraszus
 	[2151] = { 1781 }; --The Forbidden Reach (10.0.7) (Dragonflight)
+	[2133] = { 1775 }; --The Forbidden Reach (10.0.7) (Dragonflight)
 }
 
 private.RESETABLE_KILLS_ZONE_IDS = {
@@ -229,6 +231,7 @@ private.RESETABLE_KILLS_ZONE_IDS = {
 	[2118] = { "all" }; --The Forbidden Reach (evoker zone) (Dragonflight)
 	[2026] = { "all" }; --The Forbidden Reach (Dragonflight)
 	[2151] = { "all" }; --The Forbidden Reach (10.0.7) (Dragonflight)
+	[2133] = { "all" }; --Zaralek Cavern (10.1.0) (Dragonflight)
 }
 
 private.RESETABLE_WARFRONT_KILLS_ZONE_IDS = {

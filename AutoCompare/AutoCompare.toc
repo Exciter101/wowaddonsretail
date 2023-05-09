@@ -1,6 +1,6 @@
-## Last updated 2023-03-21T14:09:06Z
-## Interface: 100007
-## Version: 2.0
+## Last updated 2023-05-02T14:25:23Z
+## Interface: 100100
+## Version: 2.1
 ## Title: Auto Equipment Compare
 ## Notes: Shows compare on hover, super minimal addon.
 ## Author: Tsaavik (Gnoballs @Greymane)

@@ -32,6 +32,14 @@
 					</Anchors>
 				</Texture>
 			</Layer>
+			<Layer level="OVERLAY">
+		    	<Texture parentKey="IconTexture" useAtlasSize="true">
+		        	<Anchors>
+            			<Anchor point="TOPLEFT" relativePoint="BOTTOMRIGHT" x="-3" y="3"/>
+            			<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="5" y="-5"/>
+					</Anchors>
+		        </Texture>
+			</Layer>
 		</Layers>
 		<Animations>
 	        <AnimationGroup parentKey="ShowPingAnim" setToFinalAlpha="false">
