@@ -40,7 +40,7 @@ do
 						local thisLine = lineContainer[whichRowLine]
 						if not thisLine then return end
 						if thisLine.lineText1 then
-							thisLine.lineText1:SetText(ElvUI_EltreumUI:GradientName(thisLine.colocacao .. ". " .. thisLine.minha_tabela:GetDisplayName(), thisLine.minha_tabela:class()))
+							thisLine.lineText1:SetText(ElvUI_EltreumUI:GradientName(thisLine.colocacao .. ". " .. ElvUI_EltreumUI:ShortenString(thisLine.minha_tabela:GetDisplayName(), 10, true), thisLine.minha_tabela:class()))
 						end
 					end)
 					--gradient name (heal)
@@ -48,7 +48,7 @@ do
 						local thisLine = instancia.barras[whichRowLine]
 						if not thisLine then return end
 						if thisLine.lineText1 then
-							thisLine.lineText1:SetText(ElvUI_EltreumUI:GradientName(thisLine.colocacao .. ". " .. thisLine.minha_tabela:GetDisplayName(), thisLine.minha_tabela:class()))
+							thisLine.lineText1:SetText(ElvUI_EltreumUI:GradientName(thisLine.colocacao .. ". " .. ElvUI_EltreumUI:ShortenString(thisLine.minha_tabela:GetDisplayName(), 10, true), thisLine.minha_tabela:class()))
 						end
 					end)
 				end
@@ -101,32 +101,24 @@ do
 			end
 		end
 
-		--add a basic embed if addonskins is not loaded`
+		--add a basic embed if addonskins is not loaded
 		if E.db.ElvUI_EltreumUI.skins.detailsembed then
-			local checkembed
+			local checkembed = true
 			if IsAddOnLoaded("AddOnSkins") or IsAddOnLoaded("ElvUI_MerathilisUI") then
 				if IsAddOnLoaded("AddOnSkins") then
 					local AS = unpack(AddOnSkins)
-					if not (AS.db["EmbedSystemDual"] or AS.db["EmbedSystem"]) then
-						checkembed = true
-					else
+					if (AS.db["EmbedSystemDual"] or AS.db["EmbedSystem"]) then
 						checkembed = false
 					end
-				else
-					checkembed = true
 				end
 				if IsAddOnLoaded("ElvUI_MerathilisUI") then
 					if E.private.mui.skins.embed.enable then
 						checkembed = false
-					else
-						checkembed = true
 					end
 				end
-			else
-				checkembed = true
 			end
 
-			if checkembed == true then
+			if checkembed then
 				if not _G["EltruismDetailsEmbedPanel"] then
 					embedpanel = CreateFrame("FRAME","EltruismDetailsEmbedPanel")
 				else
