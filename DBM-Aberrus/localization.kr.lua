@@ -62,6 +62,11 @@ L:SetOptionLocalization({
 	DoubleSoak			= "연계 공격이 끝난 후 또는 다른 탱커가 위험한 공격을 받을 때 도발 경고 보기"--Default
 })
 
+L:SetMiscLocalization({
+	pool		= "{rt%d}바닥 %d",--<icon> Pool 1,2,3
+	soakpool	= "바닥 밟기"
+})
+
 ---------------------------
 --  The Vigilant Steward, Zskarn --
 ---------------------------
@@ -88,10 +93,10 @@ L:SetMiscLocalization({
 L= DBM:GetModLocalization(2520)
 
 L:SetOptionLocalization({
-	InfoFrameBehavior	= "디버프 중첩 정보 창 작동 방식 설정",
-	OblivionOnly		= "망각 중첩만 표시 (1 2 3페이즈)",
-	HowlOnly			= "억압의 포효 중첩만 표시 (1페이즈, 이후엔 닫힘)",
-	Hybrid				= "1페이즈에 억압의 포효 중첩, 2페이즈 3페이즈엔 망각 중첩 표시"--Default
+	InfoFrameBehaviorTwo	= "디버프 중첩 정보 창 작동 방식 설정",
+	OblivionOnly			= "망각 중첩만 표시 (1 2 3페이즈)",--Default
+	HowlOnly				= "억압의 포효 중첩만 표시 (1페이즈, 이후엔 닫힘)",
+	Hybrid					= "1페이즈에 억압의 포효 중첩, 2페이즈 3페이즈엔 망각 중첩 표시"
 })
 
 -------------

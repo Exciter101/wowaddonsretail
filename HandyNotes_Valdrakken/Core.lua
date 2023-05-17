@@ -80,6 +80,8 @@ local notes = {
 	["69"] = "Serene Dreams Spa Cliffside\nHas NPCs\nLower surrounding area has hostiles", --nice
 	["70"] = "Serene Dreams Spa Floating Island\nRequires flight\nHas NPCs\nLower surrounding area has hostiles",
 	["71"] = "The Roasted Ram\nHas some NPCs\nHas a few beds & seats and a second floor\nA secret area can be accessed by performing '/bow' at the Odd Statue",
+	["72"] = "The Badlands (Uldaman)",
+	["73"] = "Uldum / Nazmir / Tiragarde Sound",
 
 }
 
@@ -152,7 +154,7 @@ function Valdrakken:OnEnter(mapFile, coord)
 		elseif mode == "inn" then
 			text = "Innkeeper"
 		elseif mode == "portal" then
-			text = "Portal Room"
+			text = "Portal"
 		elseif mode == "stables" then
 			text = "Stable Master"
 		elseif mode == "transmog" then

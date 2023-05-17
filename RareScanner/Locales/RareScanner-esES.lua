@@ -1228,6 +1228,7 @@ AL["NOTE_EARTH_STORM_EVENTS"] = "Solo aparece mientras hay activa una tormenta d
 AL["NOTE_FIRE_STORM_EVENTS"] = "Solo aparece mientras hay activa una tormenta de fuego primalista."
 AL["NOTE_FIRIM_EXILE"] = "Firim en el exilio"
 AL["NOTE_FOUR_PEOPLE_NPCS"] = "Requiere de cuatro personas para invocarlo."
+AL["NOTE_FYRAKK_ASSAULTS_NPCS"] = "Solo aparece mientras hay activo un asalto de Fyrakk."
 AL["NOTE_GLYPH_15985"] = "En el aire, encima de la torre."
 AL["NOTE_GLYPH_15986"] = "Encima de la torre baja en ruinas."
 AL["NOTE_GLYPH_15987"] = "Encima de la columna natural de piedra."

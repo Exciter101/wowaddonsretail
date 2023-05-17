@@ -502,6 +502,11 @@ spec:RegisterAuras( {
         duration = 120,
         max_stack = 25
     },
+    insidious_ire = {
+        id = 373213,
+        duration = 12,
+        max_stack = 1
+    },
     -- Talent: Reduces physical damage taken by $s1%.
     -- https://wowhead.com/beta/spell=390677
     inspiration = {
@@ -558,8 +563,8 @@ spec:RegisterAuras( {
     -- https://wowhead.com/beta/spell=391403
     mind_flay_insanity = {
         id = 391401,
-        duration = 10,
-        max_stack = 1
+        duration = 15,
+        max_stack = 2
     },
     mind_flay_insanity_dot = {
         id = 391403,
@@ -582,6 +587,11 @@ spec:RegisterAuras( {
         duration = 20,
         type = "Magic",
         max_stack = 1
+    },
+    mind_spike_insanity = {
+        id = 407468,
+        duration = 15,
+        max_stack = 2
     },
     -- Sight granted through target's eyes.
     -- https://wowhead.com/beta/spell=2096
@@ -743,11 +753,6 @@ spec:RegisterAuras( {
         mechanic = "silence",
         type = "Magic",
         max_stack = 1
-    },
-    surge_of_insanity = {
-        id = 391401,
-        duration = 15,
-        max_stack = 2
     },
     -- Taking Shadow damage every $t1 sec.
     -- https://wowhead.com/beta/spell=363656
@@ -1025,7 +1030,9 @@ spec:RegisterAbilities( {
             removeBuff( "mind_devourer" )
             removeBuff( "gathering_shadows" )
 
-            if talent.surge_of_insanity.enabled then addStack( "surge_of_insanity" ) end
+            if talent.surge_of_insanity.enabled then
+                addStack( talent.mind_spike.enabled and "mind_spike_insanity" or "mind_flay_insanity" )
+            end
 
             if set_bonus.tier29_4pc > 0 then applyBuff( "dark_reveries" ) end
 
@@ -1180,6 +1187,7 @@ spec:RegisterAbilities( {
         cooldown = 0,
         gcd = "spell",
         school = "holy",
+        damage = 1,
 
         spend = 0.016,
         spendType = "mana",
@@ -1353,9 +1361,9 @@ spec:RegisterAbilities( {
 
     -- Assaults the target's mind with Shadow energy, causing $o1 Shadow damage over $d and slowing their movement speed by $s2%.    |cFFFFFFFFGenerates ${$s4*$s3/100} Insanity over the duration.|r
     mind_flay = {
-        id = function() return buff.surge_of_insanity.up and 391403 or 15407 end,
+        id = function() return buff.mind_flay_insanity.up and 391403 or 15407 end,
         known = 15407,
-        cast = function() return ( buff.surge_of_insanity.up and 3 or 4.5 ) * haste end,
+        cast = function() return ( buff.mind_flay_insanity.up and 3 or 4.5 ) * haste end,
         channeled = true,
         breakable = true,
         cooldown = 0,
@@ -1368,19 +1376,19 @@ spec:RegisterAbilities( {
 
         startsCombat = true,
         texture = function()
-            if buff.surge_of_insanity.up then return 425954 end
+            if buff.mind_flay_insanity.up then return 425954 end
             return 136208
         end,
         notalent = "mind_spike",
         nobuff = "boon_of_the_ascended",
         bind = "ascended_blast",
 
-        aura = function() return buff.surge_of_insanity.up and "mind_flay_insanity" or "mind_flay" end,
+        aura = function() return buff.mind_flay_insanity.up and "mind_flay_insanity" or "mind_flay" end,
         tick_time = function () return class.auras.mind_flay.tick_time end,
 
         start = function ()
-            if buff.surge_of_insanity.up then
-                removeStack( "surge_of_insanity" )
+            if buff.mind_flay_insanity.up then
+                removeStack( "mind_flay_insanity" )
                 applyDebuff( "target", "mind_flay_insanity_dot" )
             else
                 applyDebuff( "target", "mind_flay" )
@@ -1440,7 +1448,7 @@ spec:RegisterAbilities( {
 
         talent = "mind_spike",
         startsCombat = true,
-        nobuff = "surge_of_insanity",
+        nobuff = "mind_flay_insanity",
 
         handler = function ()
             if talent.manipulation.enabled then
@@ -1463,6 +1471,7 @@ spec:RegisterAbilities( {
     -- Implemented separately, unlike mind_flay_insanity, based on how it is used in the SimC APL.
     mind_spike_insanity = {
         id = 407466,
+        known = 73510,
         cast = 1.5,
         cooldown = 0,
         gcd = "spell",
@@ -1473,10 +1482,10 @@ spec:RegisterAbilities( {
 
         talent = "mind_spike",
         startsCombat = true,
-        buff = "surge_of_insanity",
+        buff = "mind_spike_insanity",
 
         handler = function ()
-            removeStack( "surge_of_insanity" )
+            removeStack( "mind_spike_insanity" )
 
             if talent.manipulation.enabled then
                 reduceCooldown( "mindgames", 0.5 * talent.manipulation.rank )
@@ -1527,12 +1536,16 @@ spec:RegisterAbilities( {
         gcd = "spell",
         school = "shadow",
 
+        toggle = function()
+            if not talent.mindbender.enabled then return "cooldowns" end
+        end,
         startsCombat = true,
         texture = function() return talent.mindbender.enabled and 136214 or 136199 end,
 
         handler = function ()
-            summonPet( talent.mindbender.enabled and "mindbender" or "shadowfiend", 15 )
-            applyBuff( talent.mindbender.enabled and "mindbender" or "shadowfiend" )
+            local fiend = talent.mindbender.enabled and "mindbender" or "shadowfiend"
+            summonPet( fiend, 15 )
+            applyBuff( fiend )
         end,
 
         copy = { "shadowfiend", 34433, 123040, 200174 }
@@ -1629,13 +1642,28 @@ spec:RegisterAbilities( {
         spendType = "mana",
 
         startsCombat = false,
-        nodebuff = "weakened_soul",
 
         handler = function ()
             applyBuff( "power_word_shield" )
-            applyDebuff( "player", "weakened_soul" )
-            if talent.body_and_soul.enabled then applyBuff( "body_and_soul" ) end
-            -- if time > 0 then gain( 6, "insanity" ) end
+
+            if talent.body_and_soul.enabled then
+                applyBuff( "body_and_soul" )
+            end
+
+            if state.spec.discipline then
+                applyBuff( "atonement" )
+                removeBuff( "shield_of_absolution" )
+                removeBuff( "weal_and_woe" )
+
+                if set_bonus.tier29_2pc > 0 then
+                    applyBuff( "light_weaving" )
+                end
+                if talent.borrowed_time.enabled then
+                    applyBuff( "borrowed_time" )
+                end
+            else
+                applyDebuff( "player", "weakened_soul" )
+            end
         end,
     },
 
@@ -1791,6 +1819,7 @@ spec:RegisterAbilities( {
         end,
         gcd = "spell",
         school = "shadow",
+        damage = 1,
 
         spend = 0.005,
         spendType = "mana",
@@ -1813,7 +1842,19 @@ spec:RegisterAbilities( {
                 applyDebuff( "target", "death_and_madness_debuff" )
             end
 
-            if talent.inescapable_torment.enabled and buff.mindbender.up then buff.mindbender.expires = buff.mindbender.expires + 1 end
+            if talent.inescapable_torment.enabled then
+                local fiend = talent.mindbender.enabled and "mindbender" or "shadowfiend"
+                if buff[ fiend ].up then buff[ fiend ].expires = buff[ fiend ].expires + ( talent.inescapable_torment.rank * 0.5 ) end
+                if pet[ fiend ].up then pet[ fiend ].expires = pet[ fiend ].expires + ( talent.inescapable_torment.rank * 0.5 ) end
+            end
+
+            if talent.expiation.enabled then
+                local swp = talent.purge_the_wicked.enabled and "purge_the_wicked" or "shadow_word_pain"
+                if debuff[ swp ].up then
+                    if debuff[ swp ].remains <= 6 then removeDebuff( "target", swp )
+                    else debuff[ swp ].expires = debuff[ swp ].expires - 6 end
+                end
+            end
 
             if legendary.painbreaker_psalm.enabled then
                 local power = 0
@@ -1904,8 +1945,9 @@ spec:RegisterAbilities( {
 
         talent = "vampiric_embrace",
         startsCombat = false,
+        texture = 136230,
 
-        toggle = "cooldowns",
+        toggle = "defensives",
 
         handler = function ()
             applyBuff( "vampiric_embrace" )

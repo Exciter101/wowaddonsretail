@@ -1,4 +1,4 @@
-## Changed in v47
+## Changed in v48
 
-* More Zaralek Cavern data
+* Even more Zaralek Cavern data
 

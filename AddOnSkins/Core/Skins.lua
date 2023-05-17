@@ -1319,7 +1319,6 @@ end
 
 function S:HandleStatusBar(statusBar, color, template)
 	statusBar:SetFrameLevel(statusBar:GetFrameLevel() + 1)
-	S:StripTextures(statusBar)
 	S:CreateBackdrop(statusBar, template or 'Transparent')
 	statusBar:SetStatusBarTexture(Media.barTexture)
 	statusBar:SetStatusBarColor(unpack(color or AS:CheckOption('StatusBarColor')))
@@ -1610,7 +1609,7 @@ function S:HandleSliderFrame(frame, template, frameLevel)
 		for _, region in next, { frame:GetRegions() } do
 			if region:IsObjectType('FontString') then
 				local point, anchor, anchorPoint, x, y = region:GetPoint()
-				if strfind(anchorPoint, 'BOTTOM') then
+				if anchorPoint and strfind(anchorPoint, 'BOTTOM') then
 					S:Point(region, point, anchor, anchorPoint, x, y - 4)
 				end
 			end

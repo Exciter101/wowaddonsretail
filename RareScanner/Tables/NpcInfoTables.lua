@@ -59,32 +59,21 @@ private.NPC_INFO = {
 	[199163] = { zoneID = 0, displayID = 55139 }; --Vinyeti <Rare Elite Placeholder>
 	[199210] = { zoneID = 0, displayID = 98731 }; --Rarebear <Solo Rare Placeholder>
 	[200980] = { zoneID = 0, displayID = 55139 }; --PH Vrykul
-	[201054] = { zoneID = 0, displayID = 107377 }; --Crimson Oldblood <Crucible Guardian>
 	[202270] = { zoneID = 0, displayID = 112211 }; --Animated Contaminant
 	[202309] = { zoneID = 0, displayID = 112214 }; --Cavern Flayer Matriarch
-	[202318] = { zoneID = 0, displayID = 112212 }; --Response Team Watcher
 	[202874] = { zoneID = 0, displayID = 112686 }; --Monstrous Magmaclaw Snapper
 	[202932] = { zoneID = 0, displayID = 55139, questID = { 75022 } }; --Vinyeti <Unique Elite Placeholder>
 	[203326] = { zoneID = 0, displayID = 101002 }; --Escaped Elderwing
-	[203355] = { zoneID = 0, displayID = 111912 }; --Captain Reykal
 	[203611] = { zoneID = 0, displayID = 111995 }; --Hadexia <Ember of Twilight>
 	[203630] = { zoneID = 0, displayID = 112007, questID = { 75338 } }; --Lavermix
 	[203642] = { zoneID = 0, displayID = 112010, questID = { 75342 } }; --Kronkapace
 	[203674] = { zoneID = 0, displayID = 111229 }; --Duzalgor <Guardian of the Noxious Brood>
-	[203698] = { zoneID = 0, displayID = 110779 }; --Rampant Shadowflame <Crucible Guardian>
-	[203699] = { zoneID = 0, displayID = 102517 }; --Half-bound Rageflame <Crucible Guardian>
-	[203700] = { zoneID = 0, displayID = 112026 }; --Flamebringer Shaman <Crucible Guardian>
-	[203703] = { zoneID = 0, displayID = 112029 }; --Flamebringer Rageblood <Crucible Guardian>
-	[203705] = { zoneID = 0, displayID = 112026 }; --Flamebringer Elementalist <Crucible Guardian>
-	[203707] = { zoneID = 0, displayID = 112030 }; --Flamebringer Cauterizer <Crucible Guardian>
-	[203834] = { zoneID = 0, displayID = 110556 }; --Contaminated Titan Watcher
 	[203846] = { zoneID = 0, displayID = 112210 }; --Elder Magma Serpent
 	[203868] = { zoneID = 0, displayID = 23915 }; --Dreadswoop
 	[203869] = { zoneID = 0, displayID = 26054 }; --Banechitter
 	[203870] = { zoneID = 0, displayID = 26054 }; --Banechitter <NO TRANSFORM>
 	[203871] = { zoneID = 0, displayID = 108679 }; --Happy Child <STUFFED ANIMAL>
 	[204096] = { zoneID = 0, displayID = 112110 }; --Shadowforge Mole Machine
-	[204831] = { zoneID = 2133, artID = { 1775 }, x = 4392, y = 4816, overlay = { "4392-4816" }, displayID = 109364 }; --Elusive Magma Cobra
 	[205490] = { zoneID = 0, displayID = 61712 }; --Treasure Goblin
 	[205630] = { zoneID = 0, displayID = 103584 }; --Lost Lunker
 	[205791] = { zoneID = 0 }; --Rupturing Earth
@@ -2969,13 +2958,13 @@ private.NPC_INFO = {
 				[2023] = { x = 3560, y = 4160, artID = { 1705 }, overlay = { "3440-4120","3480-3940","3560-4160","3600-4020" } };
 				[2024] = { x = 4895, y = 2543, artID = { 1707 }, overlay = { "4840-2540","1400-3080","5860-6900","5960-6800" } };
 				[2025] = { x = 5900, y = 6120, artID = { 1708 }, overlay = { "5900-6120" } };
-			  }, displayID = 108255, questID = { 74009 }, worldmap = true }; --Fieraan <Second Iceblade>
+			  }, displayID = 108255, questID = { 74009 }, worldmap = true }; --null
 	[193679] = { zoneID = {
 				[2022] = { x = 2740, y = 7360, artID = { 1706 }, overlay = { "2740-7360","2760-7240","3220-5540","3220-5660","6400-2620","6420-2760" } };
 				[2023] = { x = 3600, y = 4020, artID = { 1705 }, overlay = { "3440-4080","3480-3940","3540-4160","3600-4020" } };
 				[2024] = { x = 4897, y = 2543, artID = { 1707 }, overlay = { "4840-2540","1400-3080","5840-6900","5960-6800" } };
 				[2025] = { x = 5840, y = 6040, artID = { 1708 }, overlay = { "5820-5900","5840-6040","5940-6160" } };
-			  }, displayID = 108256, questID = { 74009 }, worldmap = true }; --Leerain <Third Iceblade>
+			  }, displayID = 108256, questID = { 74009 }, worldmap = true }; --null
 	[193680] = { zoneID = {
 				[2022] = { x = 3119, y = 5614, artID = { 1706 }, overlay = { "3175-5169","3120-5600","2440-7540","2440-7660","6740-2640" } };
 				[2023] = { x = 3271, y = 3313, artID = { 1705 }, overlay = { "3260-3320" } };
@@ -3112,12 +3101,20 @@ private.NPC_INFO = {
 	[196334] = { zoneID = 2023, artID = { 1705 }, x = 6680, y = 4960, overlay = { "5920-4920","6640-4960","6060-4980" }, displayID = 103920 }; --The Great Enla <Scourge of the Plains>
 	[196350] = { zoneID = 2023, artID = { 1705 }, x = 6000, y = 4960, overlay = { "5940-4940","6540-5020","6680-4960" }, displayID = 104078 }; --Old Stormhide
 	[197009] = { zoneID = 2023, artID = { 1705 }, x = 8723, y = 6163, overlay = { "8740-6140" }, displayID = 104005, questID = { 73882 }, factionID = { 2503 } }; --Liskheszaera
+	[201054] = { zoneID = 2023, artID = { 1705 }, x = 7364, y = 7178, overlay = { "7364-7178" }, displayID = 107377, reset = true }; --Crimson Oldblood <Crucible Guardian>
 	[201535] = { zoneID = 2023, artID = { 1705 }, x = 3704, y = 3815, overlay = { "3704-3815","3620-3960","3680-3660" }, displayID = 107239, questID = { 74552 }, factionID = { 2503 } }; --Bloodbeak the Ravenous
 	[201537] = { zoneID = 2023, artID = { 1705 }, x = 3544, y = 4088, overlay = { "3544-4088","3520-3900" }, displayID = 101614, questID = { 74549 }, factionID = { 2503 } }; --Groffnar
 	[201538] = { zoneID = 2023, artID = { 1705 }, x = 3384, y = 3870, overlay = { "3384-3870" }, displayID = 105345, questID = { 74548 }, factionID = { 2503 } }; --Huntmaster Yrgena
 	[201539] = { zoneID = 2023, artID = { 1705 }, x = 3263, y = 4183, overlay = { "3338-4161","3320-4040","3460-4140" }, displayID = 109790, questID = { 74547 }, factionID = { 2503 } }; --Stormcaller Narkena
 	[201540] = { zoneID = 2023, artID = { 1705 }, x = 3598, y = 3480, overlay = { "3547-3474","3260-3360","3420-3440","3520-3620","3680-3640","3880-3600","3480-3880","3500-3260" }, displayID = 100207, questID = { 74546 }, factionID = { 2503 } }; --Lurgan <The Trampler>
 	[201563] = { zoneID = 2023, artID = { 1705 }, x = 3404, y = 3853, overlay = { "3380-3840" }, displayID = 100536, questID = { 74548 } }; --Rugren
+	[201673] = { zoneID = 2023, artID = { 1705 }, x = 7591, y = 6980, overlay = { "7591-6980" }, displayID = 112768 }; --Kretchenwrath <Disciple of Fyrakk>
+	[203698] = { zoneID = 2023, artID = { 1705 }, x = 7386, y = 7174, overlay = { "7386-7174" }, displayID = 110779, reset = true }; --Rampant Shadowflame <Crucible Guardian>
+	[203699] = { zoneID = 2023, artID = { 1705 }, x = 7371, y = 7145, overlay = { "7371-7145" }, displayID = 102517, reset = true }; --Half-bound Rageflame <Crucible Guardian>
+	[203700] = { zoneID = 2023, artID = { 1705 }, x = 7375, y = 7136, overlay = { "7375-7136" }, displayID = 112026, reset = true }; --Flamebringer Shaman <Crucible Guardian>
+	[203703] = { zoneID = 2023, artID = { 1705 }, x = 7389, y = 7175, overlay = { "7389-7175" }, displayID = 112029, reset = true }; --Flamebringer Rageblood <Crucible Guardian>
+	[203705] = { zoneID = 2023, artID = { 1705 }, x = 7350, y = 7192, overlay = { "7350-7192" }, displayID = 112026, reset = true }; --Flamebringer Elementalist <Crucible Guardian>
+	[203707] = { zoneID = 2023, artID = { 1705 }, x = 7350, y = 7192, overlay = { "7350-7192" }, displayID = 112030, reset = true }; --Flamebringer Cauterizer <Crucible Guardian>
 	[186962] = { zoneID = 2024, artID = { 1707 }, x = 2356, y = 3291, overlay = { "2351-3282" }, displayID = 106017, questID = { 72836 }, factionID = { 2510 } }; --Cascade
 	[190244] = { zoneID = 2024, artID = { 1707 }, x = 3731, y = 3648, overlay = { "3579-3724","3651-3508","3700-3680","3960-3840","3700-3280","3820-3340","3840-3480" }, displayID = 104875, questID = { 73883 }, factionID = { 2503 } }; --Mahg the Trampler
 	[191356] = { zoneID = 2024, artID = { 1707 }, x = 5833, y = 4381, overlay = { "5820-4380" }, displayID = 103182, questID = { 73877 }, factionID = { 2511 } }; --Frostpaw
@@ -3256,32 +3253,36 @@ private.NPC_INFO = {
 				[2102] = { x = 6692, y = 5647, artID = { 1771 }, overlay = { "6739-5574" } };
 				[2151] = { x = 5174, y = 7276, artID = { 1781 }, overlay = { "5174-7276" } };
 			  }, displayID = 111367, resetTimer = 600 }; --null
-	[200111] = { zoneID = 2133, artID = { 1775 }, x = 4140, y = 3868, overlay = { "4074-3817" }, displayID = 112009, questID = { 75340 } }; --Magtembo
+	[200111] = { zoneID = 2133, artID = { 1775 }, x = 4074, y = 3817, overlay = { "4074-3817" }, displayID = 112009, questID = { 75340 } }; --Magtembo
 	[201029] = { zoneID = 2133, artID = { 1775 }, x = 3939, y = 7061, overlay = { "3886-7150" }, displayID = 112016, questID = { 75366 } }; --Viridian King
 	[201747] = { zoneID = 2133, artID = { 1775 }, x = 5420, y = 5180, overlay = { "5420-5180" }, displayID = 90991 }; --Bogg <Eternal Stench>
+	[202318] = { zoneID = 2133, artID = { 1775 }, x = 4888, y = 6418, overlay = { "4756-6394","4888-6418" }, displayID = 112212, questID = { 75945 } }; --Response Team Watcher
 	[202454] = { zoneID = 2133, artID = { 1775 }, x = 4067, y = 3539, overlay = { "4067-3539" }, displayID = 111332 }; --Zaqali Doomsayer <Prophet of War>
-	[203462] = { zoneID = 2133, artID = { 1775 }, x = 6531, y = 5574, overlay = { "6543-5586" }, displayID = 111967, questID = { 75267 } }; --Kob'rok
-	[203466] = { zoneID = 2133, artID = { 1775 }, x = 5938, y = 4002, overlay = { "5992-3987","5940-4100","6000-3840","6136-3983","5820-4060","6060-4120" }, displayID = 112123, questID = { 75269 } }; --Kapraku
-	[203468] = { zoneID = 2133, artID = { 1775 }, x = 4837, y = 7501, overlay = { "4836-7509" }, displayID = 111970, questID = { 75271 } }; --Aquifon
-	[203477] = { zoneID = 2133, artID = { 1775 }, x = 6842, y = 4627, overlay = { "6854-4600" }, displayID = 112134, questID = { 75273 } }; --Goopal
-	[203480] = { zoneID = 2133, artID = { 1775 }, x = 5314, y = 6404, overlay = { "5309-6421","5520-6560","5340-6560" }, displayID = 111973, questID = { 75276 } }; --Spinmarrow
-	[203515] = { zoneID = 2133, artID = { 1775 }, x = 5648, y = 7347, overlay = { "5613-7391" }, displayID = 111976, questID = { 75285 } }; --Alcanon
-	[203521] = { zoneID = 2133, artID = { 1775 }, x = 5570, y = 1875, overlay = { "5583-1898","5380-1880" }, displayID = 111977, questID = { 75292 } }; --Professor Gastrinax <Ex-Emeritus of Algeth'ar Academy>
+	[203355] = { zoneID = 2133, artID = { 1775 }, x = 4939, y = 5768, overlay = { "4916-5774" }, displayID = 111912, questID = { 75943 } }; --Captain Reykal
+	[203462] = { zoneID = 2133, artID = { 1775 }, x = 6543, y = 5586, overlay = { "6543-5586" }, displayID = 111967, questID = { 75267 } }; --Kob'rok
+	[203466] = { zoneID = 2133, artID = { 1775 }, x = 6029, y = 3933, overlay = { "5992-3987","5940-4100","6000-3840","6136-3983","5820-4060","6060-4120" }, displayID = 112123, questID = { 75269 } }; --Kapraku
+	[203468] = { zoneID = 2133, artID = { 1775 }, x = 4836, y = 7509, overlay = { "4836-7509" }, displayID = 111970, questID = { 75271 } }; --Aquifon
+	[203477] = { zoneID = 2133, artID = { 1775 }, x = 6872, y = 4592, overlay = { "6854-4600" }, displayID = 112134, questID = { 75273 } }; --Goopal
+	[203480] = { zoneID = 2133, artID = { 1775 }, x = 5335, y = 6525, overlay = { "5309-6421","5520-6560","5340-6560" }, displayID = 111973, questID = { 75276 } }; --Spinmarrow
+	[203515] = { zoneID = 2133, artID = { 1775 }, x = 5635, y = 7364, overlay = { "5613-7391" }, displayID = 111976, questID = { 75285 } }; --Alcanon
+	[203521] = { zoneID = 2133, artID = { 1775 }, x = 5490, y = 1882, overlay = { "5583-1898","5380-1880" }, displayID = 111977, questID = { 75292 } }; --Professor Gastrinax <Ex-Emeritus of Algeth'ar Academy>
 	[203592] = { zoneID = 2133, artID = { 1775 }, x = 4213, y = 1866, overlay = { "4213-1866" }, displayID = 111979, questID = { 75296 } }; --General Zskorro
-	[203593] = { zoneID = 2133, artID = { 1775 }, x = 5778, y = 6911, overlay = { "5778-6911" }, displayID = 111980, questID = { 75298 } }; --Underlight Queen
+	[203593] = { zoneID = 2133, artID = { 1775 }, x = 5842, y = 6960, overlay = { "5778-6911" }, displayID = 111980, questID = { 75298 } }; --Underlight Queen
 	[203606] = { zoneID = 2133, artID = { 1775 }, x = 5800, y = 5600, overlay = { "5800-5600" }, displayID = 112717 }; --Calibrating Scent Matrix
-	[203618] = { zoneID = 2133, artID = { 1775 }, x = 5368, y = 4111, overlay = { "5406-4162","5360-4040" }, displayID = 111997, questID = { 75322 } }; --Klakatak
+	[203618] = { zoneID = 2133, artID = { 1775 }, x = 5372, y = 4113, overlay = { "5406-4162","5360-4040" }, displayID = 111997, questID = { 75322 } }; --Klakatak
 	[203621] = { zoneID = 2133, artID = { 1775 }, x = 4151, y = 8612, overlay = { "4151-8612","4340-8520" }, displayID = 111999, questID = { 75326 } }; --Brullo the Strong
-	[203625] = { zoneID = 2133, artID = { 1775 }, x = 4230, y = 6534, overlay = { "4222-6523","4407-6667","4286-6409" }, displayID = 112001, questID = { 75334 } }; --Karokta
-	[203627] = { zoneID = 2133, artID = { 1775 }, x = 4565, y = 3351, overlay = { "4566-3326" }, displayID = 112002, questID = { 75336 } }; --Invoq <Wielder of the Flame>
-	[203643] = { zoneID = 2133, artID = { 1775 }, x = 3641, y = 5310, overlay = { "3640-5273" }, displayID = 89024, questID = { 75349 } }; --Skornak
-	[203646] = { zoneID = 2133, artID = { 1775 }, x = 2855, y = 5122, overlay = { "2851-5115" }, displayID = 112011, questID = { 75353 } }; --Dinn <War Drummer>
-	[203660] = { zoneID = 2133, artID = { 1775 }, x = 3604, y = 4439, overlay = { "3617-4459" }, displayID = 112012, questID = { 75357 } }; --Flowfy
-	[203662] = { zoneID = 2133, artID = { 1775 }, x = 3820, y = 4669, overlay = { "3842-4650" }, displayID = 112013, questID = { 75360 } }; --Subterrax <Emissary of Earth>
-	[203664] = { zoneID = 2133, artID = { 1775 }, x = 3221, y = 5209, overlay = { "3180-5060","3225-5191" }, displayID = 112014, questID = { 75361 } }; --Emberdusk
-	[204093] = { zoneID = 2133, artID = { 1775 }, x = 4828, y = 2366, overlay = { "4837-2383" }, displayID = 112106, questID = { 75476 } }; --Colossian <The Demolisher>
+	[203625] = { zoneID = 2133, artID = { 1775 }, x = 4217, y = 6583, overlay = { "4222-6523","4407-6667","4286-6409" }, displayID = 112001, questID = { 75334 } }; --Karokta
+	[203627] = { zoneID = 2133, artID = { 1775 }, x = 4566, y = 3326, overlay = { "4566-3326" }, displayID = 112002, questID = { 75336 } }; --Invoq <Wielder of the Flame>
+	[203643] = { zoneID = 2133, artID = { 1775 }, x = 3641, y = 5329, overlay = { "3640-5273" }, displayID = 89024, questID = { 75349 } }; --Skornak
+	[203646] = { zoneID = 2133, artID = { 1775 }, x = 2887, y = 5085, overlay = { "2851-5115" }, displayID = 112011, questID = { 75353 } }; --Dinn <War Drummer>
+	[203660] = { zoneID = 2133, artID = { 1775 }, x = 3614, y = 4423, overlay = { "3617-4459" }, displayID = 112012, questID = { 75357 } }; --Flowfy
+	[203662] = { zoneID = 2133, artID = { 1775 }, x = 3794, y = 4641, overlay = { "3842-4650" }, displayID = 112013, questID = { 75360 } }; --Subterrax <Emissary of Earth>
+	[203664] = { zoneID = 2133, artID = { 1775 }, x = 3244, y = 5126, overlay = { "3180-5060","3225-5191" }, displayID = 112014, questID = { 75361 } }; --Emberdusk
+	[203834] = { zoneID = 2133, artID = { 1775 }, x = 4509, y = 6212, overlay = { "4482-6165" }, displayID = 110556, questID = { 75944 } }; --Contaminated Titan Watcher
+	[204093] = { zoneID = 2133, artID = { 1775 }, x = 4781, y = 2342, overlay = { "4837-2383" }, displayID = 112106, questID = { 75476 } }; --Colossian <The Demolisher>
 	[204426] = { zoneID = 2133, artID = { 1775 }, x = 5820, y = 5580, overlay = { "5820-5580" }, displayID = 112231 }; --Jalgon Stoutburn
 	[204821] = { zoneID = 2133, artID = { 1775 }, x = 6000, y = 3800, overlay = { "6000-3800" }, displayID = 110437 }; --Elusive Crystalscale Stonecleaver
+	[204831] = { zoneID = 2133, artID = { 1775 }, x = 4392, y = 4816, overlay = { "4392-4816" }, displayID = 109364 }; --Elusive Magma Cobra
 	[205540] = { zoneID = 2133, artID = { 1775 }, x = 6000, y = 5600, overlay = { "6000-5600" }, displayID = 37168 }; --Pahi'rys
 	[200537] = { zoneID = 2151, artID = { 1781 }, x = 2829, y = 3793, overlay = { "2829-3793" }, displayID = 103886, resetTimer = 600 }; --Gahz'raxes <Spawn of Gahz'ragon>
 	[200579] = { zoneID = 2151, artID = { 1781 }, x = 4101, y = 1435, overlay = { "4101-1435" }, displayID = 111219, resetTimer = 600 }; --Ishyra <Maiden of Discernment>

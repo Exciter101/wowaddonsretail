@@ -103,6 +103,9 @@ function RSNotes.GetNote(entityID, mapID)
 	-- Omnious conchs
 	elseif (RSUtils.Contains(RSConstants.OMINOUS_CONCHS_NPCS, entityID)) then
 		return AL["NOTE_OMINOUS_CONCHS_NPCS"]
+	-- Fyrakk assaults
+	elseif (RSUtils.Contains(RSConstants.FYRAKK_ASSAULTS_NPCS, entityID)) then
+		return AL["NOTE_FYRAKK_ASSAULTS_NPCS"]
 	end
 	
 	-- Rune of constructs Containers

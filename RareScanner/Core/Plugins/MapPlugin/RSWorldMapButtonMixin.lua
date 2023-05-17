@@ -207,10 +207,10 @@ local function WorldMapButtonDropDownMenu_Initialize(dropDown)
 			end
 			RSMinimap.RefreshAllData(true)
 		elseif (value == SHOW_NOT_DISCOVERED_EVENT_ICONS) then
-			if (RSConfigDB.IsShowingCompletedEvents()) then
-				RSConfigDB.SetShowingCompletedEvents(false)
+			if (RSConfigDB.IsShowingNotDiscoveredEvents()) then
+				RSConfigDB.SetShowingNotDiscoveredEvents(false)
 			else
-				RSConfigDB.SetShowingCompletedEvents(true)
+				RSConfigDB.SetShowingNotDiscoveredEvents(true)
 			end
 			RSMinimap.RefreshAllData(true)
 		

@@ -289,9 +289,22 @@ spec:RegisterAuras( {
         copy = { 279526, "berserk_cat" },
         multiplier = 1.5,
     },
-    berserk_overflow = {
+    overflowing_power = {
+        id = 405189,
         duration = function () return talent.incarnation.enabled and 30 or 20 end,
         max_stack = 3,
+        copy = "berserk_overflow",
+        meta = {
+            stack = function( t )
+                if buff.bs_inc.down then return 0 end
+                local deficit = combo_points.deficit
+                if deficit > 0 then return t.count end
+                return min( 3, t.count + max( 0, floor( ( query_time - t.applied ) / 1.5 ) ) )
+            end,
+            stacks = function( t )
+                return t.stack
+            end
+        }
     },
 
     -- Alias for Berserk vs. Incarnation
@@ -621,7 +634,7 @@ spec:RegisterAuras( {
     -- https://wowhead.com/beta/spell=1079
     rip = {
         id = 1079,
-        duration = function () return mod_circle_dot( ( talent.veinripper.enabled and 1.25 or 1 ) * ( 4 + ( combo_points.current * 4 ) ) ) * haste end,
+        duration = function () return mod_circle_dot( ( talent.veinripper.enabled and 1.25 or 1 ) * ( 4 + ( combo_points.current * 4 ) ) ) end,
         tick_time = function() return mod_circle_dot( 2 ) * haste end,
         mechanic = "bleed",
         meta = {
@@ -998,7 +1011,7 @@ spec:RegisterStateFunction( "shift", function( form )
     removeBuff( "stag_form" )
     applyBuff( form )
 
-    if affinities[ form ] and legendary.oath_of_the_elder_druid.enabled and debuff.oath_of_the_elder_druid_icd.down and talent[ affinities[ form ] ].enabled then
+    if affinities[ form ] and legendary.oath_of_the_elder_druid.enabled and debuff.oath_of_the_elder_druid_icd.down then
         applyBuff( "heart_of_the_wild" )
         applyDebuff( "player", "oath_of_the_elder_druid_icd" )
     end
@@ -1151,6 +1164,10 @@ spec:RegisterHook( "reset_precast", function ()
 end )
 
 spec:RegisterHook( "gain", function( amt, resource )
+    if amt > 0 and resource == "combo_points" and buff.bs_inc.up and buff.overflowing_power.applied == 0 and combo_points.deficit - amt <= 0 then
+        local partial = max( 0, ( query_time - buff.bs_inc.applied ) % 1.5 )
+        applyBuff( "overflowing_power", buff.bs_inc.remains + partial, 0, nil, nil, nil, query_time - partial )
+    end
     if azerite.untamed_ferocity.enabled and amt > 0 and resource == "combo_points" then
         if talent.incarnation.enabled then gainChargeTime( "incarnation", 0.2 )
         else gainChargeTime( "berserk", 0.3 ) end
@@ -1164,9 +1181,9 @@ local function comboSpender( a, r )
             gain( a * 3, "energy" )
         end
 
-        if buff.bs_inc.up and buff.berserk_overflow.up then
-            gain( buff.berserk_overflow.stack, "combo_points" )
-            removeBuff( "berserk_overflow" )
+        if buff.overflowing_power.up then
+            gain( buff.overflowing_power.stack, "combo_points" )
+            removeBuff( "overflowing_power" )
         end
 
         if legendary.frenzyband.enabled then
@@ -1417,6 +1434,7 @@ spec:RegisterAbilities( {
         handler = function ()
             if buff.cat_form.down then shift( "cat_form" ) end
             applyBuff( "berserk" )
+            applyBuff( "overflowing_power", nil, 0 )
         end,
 
         copy = { "berserk_cat", "bs_inc" }
@@ -1753,6 +1771,7 @@ spec:RegisterAbilities( {
             if buff.cat_form.down then shift( "cat_form" ) end
             applyBuff( "incarnation" )
             applyBuff( "jungle_stalker" )
+            applyBuff( "overflowing_power", nil, 0 )
             energy.max = energy.max + 50
         end,
 
@@ -1886,6 +1905,8 @@ spec:RegisterAbilities( {
             if buff.bs_inc.up and talent.berserk_frenzy.enabled then applyDebuff( "target", "frenzied_assault" ) end
         end,
 
+        bind = "moonfire",
+
         copy = { 155625, "moonfire_cat" }
     },
 
@@ -1908,6 +1929,8 @@ spec:RegisterAbilities( {
             if not buff.moonkin_form.up then unshift() end
             applyDebuff( "target", "moonfire" )
         end,
+
+        bind = { "lunar_inspiration", "moonfire_cat" }
     },
 
     -- Talent: Shapeshift into $?s114301[Astral Form][Moonkin Form], increasing your armor by $m3%, and granting protection from Polymorph effects.    The act of shapeshifting frees you from movement impairing effects.
@@ -1965,7 +1988,7 @@ spec:RegisterAbilities( {
             if talent.tear_open_wounds.enabled and debuff.rip.up then
                 debuff.rip.expires = debuff.rip.expires - 4
             end
-            applyDebuff( "target", "rip", mod_circle_dot( 2 + 2 * combo_points.current ) * haste )
+            applyDebuff( "target", "rip" )
             active_dot.rip = active_enemies
 
             spend( combo_points.current, "combo_points" )
@@ -2196,10 +2219,9 @@ spec:RegisterAbilities( {
         end,
 
         handler = function ()
-            spend( combo_points.current, "combo_points" )
-
-            applyDebuff( "target", "rip", mod_circle_dot( min( 1.3 * class.auras.rip.duration, debuff.rip.remains + class.auras.rip.duration ) ) * haste )
+            applyDebuff( "target", "rip" )
             debuff.rip.pmultiplier = persistent_multiplier
+            spend( combo_points.current, "combo_points" )
 
             removeStack( "bloodtalons" )
 
@@ -2611,4 +2633,4 @@ spec:RegisterSetting( "vigil_damage", 50, {
 } )
 
 
-spec:RegisterPack( "Feral", 20230506.1, [[Hekili:D3ZAVnoYr(BXi44iTJhn6HLZm5Seq2n4WTd2lyr0EiFtu0KTKzmfjp(WE8ab9B)QQFq2DZUjPKLNSjal2XMSz9URxDr61tw)BRxf4vqw)xNoE6SXZhF7OPtVzYnFE9QIxsjRxL65)O3o4hI92d)))lsMxeE1xIs8cWNopPmZhUZ6v3xggv8ZXRV3aiNE7ntxVYRS4HKS1RwfU)NwV6HWGacB5KC)1RWL)HXZ)W4B)th3CCZ)tyCs2XnLPiWYhD8lh)s1kMrxXFJKxKKroUzFyEEy8UJB8siUizeqGN0ZVimj(4MOW8ctp()lfYW625fclBBwY(JBqstAXZ(W0)iDX)gGRkIXYINkw8Fo4FuIlFBzCmjIszfjWtNdy7x)7h3eUfUWdeK09O0FzuryAe8tLXF4VfMMscGf4LTJuKRc)5vedJFf444MKug3oipLedp(p9RW1GFh0yj(HjLar)JHi7ggNxq8GvKauXVMfU3dE6)EMxXdmcdW)XnpNe)oKb8IqqVD7qvYyIeBI06psYYjzpcY6KDH(mUnnJ8ejgbsgH8nGC)ijlljtLHMWyiGmsYclEbqCiIrQKAByCyoiLak3daZnVhyQK93dG(xtcJlGl)8deGd)fGVFh8BRkYiX7OSrok(IaStcU(4g)K4CWgGsmphIlic1Ifufyj8Zaa(PmVT1k4rRxHwn5ObUKnf8R)v6wgsS39rKG1)iCBQvgy9NvcO0npYl)H1R8FXpI4YvH4drTXZctzl27PKqqS57LMs1J3JmP)d4YZbc2dvGOnjyKCCdxmIQlVGa8(Gcb3(v9im2cFGmIxoIaavfKSqp4NssIcsEoEKmboABzuKBgH98UfH7b8ChiJpU5WbHP3i8YUfjUbHS7oFDbSPwJ)RXugb005pG354ghWse4RYTBhbscVmFpQj7iGa9lyybUpyRc0HWsV4HmG2C9rT9YJBMmUFRBofBxju5JcskbsW1pY7zsGBM3JKrC694MH0)tz5mOb0g9jYLwBTYTgJOiyMvraB9JO4e40Gxe4IkiYlrhEUE7VVeubLPcPuqsH4rKKGiRxDNuUlIq0XgOkMm6gjoHc90SKNJeqvCrVuYxDHDIGvnS1Z1pZ7juluMwZBa(a7J9KOaK3U5sYBTt(xwAxDdgSBih98htWnje)hZL86IouIX967Y8cimPnsMi)p3Y2B697ABDCsb1NCkjBlbnZZtIkXBDnYsWVhwutorjpt9bfGp0wmuxkSVNSp0)JOd6i0pvESxA(d0feMLxiRoSl1bSZD35kl2xAwFGm9TVgMM5SARgdHIFWbo5AvMM6qlJShI4sD8bRnN7VJJaQaCFY9mFAjOuZG4yavuht8j55EzHrGX4ueimAy4BHGITJuAlkk5(J9XBOn)iFIgEXy8JAqcR7Z9bjuos1pz(ZHPeMBsQ37kCfvg7L5cjcKgM5XUudLmG3jJLjWkOPrDt0Ji2HmOVixpqt9EEWLqNwLOb5ZGq5bVNi84RuRmWU5bwixsrbQuXuvWGtxZnsf(jqf1Xn)L)cUsp0SKIxWYd3PIlz1FMzLxMo0GBs6Qhf4ThsEMAsXVETfq1nBXlkvqmtwlizbPOgGFvKVKPSuQPpvtKuA(FUpZs)diZP1Os(ENwK)oWXel4WODG9GT6y1uwllxaudOPbvE(iW4WnOuy0v5Klm1mMPHc379vxsmjB3luBmJeIieEykGC)hPMxTKgLr6renFqTXW95WUeFQZkEAq6xwjpgOqSi3KTUGlwxiCc4gunTNAoEROKa37bwWuuV3gEZa53jT3cvJHdLsTSDZEDJLoZ)ZMtB77cS68v1KV2pARw3Qqto6G((uLihc7wnVLAUkAPEgTaNntEhGzrwOFbD)q1MOsWRf9NDXcNyLp5Y6zGIsQvj4PvRIDjW)2MGUPKCdZPLQZZ5eREmNLZvsmMwKsMxmZPQQG5jSPMp2iSNbyhfW62zXhd3d0(tK2RpOHSzqBs1tn3lhfTasV50vFRINnBzXRi2YiPqeDk7Y6bdkffPs(cwEnwLWZHypi2NKedPEtenMiXhmKZbW4fHc37jSKhibv9vPL9es7B6XUSw2bPNV(LjJRELl7RW5PrK(6ZbUv3UIGvuIfuHbmGtmqPk(L1s91StuwtVA3jQp2Xk3uEdRwi6wHiMQSP8NO35jOCgeoJ(gaBAOUNj0CyBl9E1imArknk3BZjSofB0JVpSdWQl)Qurn4mwnnDeh(LzzG(b3qb1(X6gl62H1ev)K4IWsGBW7xK9IO7Ij(W(VcwFY8siTrzg34PYN3j0mDiJLyY7JsscatRK4829mAoOZo)GA1piMh)DmuuDifjqxVREl2LFxa(XF7L6KirKufHwzjYwXZ0XvpIWrJmQzzSdJ7eJQ6QY)XFbbjRBn1Td4dFacwH0dnMfqqIo)q7dm8qKOW9HXSM9dwlKGDm)24sIFkj6jAWaeW3tO)OMpDq4wYdf(q4Uhq5ku4ss7zo)V4PA03WmVnX6VYMKWqWE7XTWv(eX9(cxWbWUD0Jsa2PnvQAKcxEL6GrDdh(QUQalh8uMIQYJcsv4LKsHFQApsSJLaT0ssttYkkJPhTb4ypNKxf078PyLSJvjC9mHTh2SxyIf9MIJ(f4xnewmHeayWwPuSGSDzG1wEmT3(jZLtuDMjQbnvZ9qrZhWommidyijS0J6NwdTZUpsiPS0U9EYlmIzSs7Q79mEDA3jua7zXy9wQLT6zlPzKIHIIHqtayU5hGyjmqeq26b7KQE(Qh6rSiQ7BMxLkzLGP(QTc7ftjxpVSjIIliDV8TgPu8WGbc2hG9kpV4IMC7MaRlNizPjSbXFkQe(hUDRuqBfBwgViDZ8cpSzG3rl1gGgpOVWK2G7XUPbR5wSGAkwJfVOWDXUZGGwLfmxg6o56gzBHivfUYHMR2paPu9uYJeA7wWntqwy1XWFpngolA0GQ97GLJ3EVysU7UYWaVyFII4tdz3rF0EJVBhlozoESKR((G3jtRq8qzXp4dOG)SMCxFoYEGSMnMIuzcKV5PAHFeJMFR0XuQOd4fC4(aunyHODzrysgDks(8PIBt6Ixb(N8jgbyf7w0cyrqvXXQVLATrmnceVWSorXBwlXCQzut2nYSOutAlcXqNUBlZEPQtTS(fpc8fh6hYQC425QNNC9t1rmStIIQc8kzaxPhnFth7SYWwjz7fqsZh9hoR0(g0i)vK4nvYIEEGMpdjLJobkaOemsCFkCxyKUzH9ysdesxKQ9c8sP5nL)Sx2Ex2r4O2zC7ltEpXuPD42FI6GqZya3mzaBiJeRL11JQYb4vHy6bcJD3gHBwBFTCsPFRwEzmAW4PYql2g5hEwOWoM9H8CYMkxaqhYBhXMnMmAEhyKb3bnZqLEl7zelzSPsqwm7SnebT2ZeHRrkeSx6vJ2wmvuzU21NjLxJ4mxQjf563TWf2RRQ9YjfM1TMTtL5m3bN8bbQ2YHQkM9G4pfygQcVtxa1zFAv2e7LRPlDp1(KjAHi(i2lvtv1IhPjB6z6OvvNkXi30UP2dtAGAEL4YwLonHqnvyuLFLXZySzJ(ARnEtpZd4J76XQX8jFSzYZDisx61H1hPKLEC2qoPkqQqAbw0gbbIxHPss12iWIAR2qI9EqMA8ufX(VxvZPeye18aIvOOA30YV9nyt49jFvYTRHBkQnvSgL0sP4sngVY5IYB5OYcMlVGQQn1Rsx2EPJw)FkNMz7tEPKV8tQ)p2nM5HV)DDtPfmmfcw7WGYf7rtoR6dX)cCmXMLaD0fE0C6MtvQ03XaDGYmWXyVZnJ)HM5X(KAV9(UFUeZ5sj2tvRzhMRXIPHIUTq6luNHeA)dn0wilTO3XElDpBQryGDrpj4wLJNGFV(pYKcGloP)Ajtp1fM7kDVATDRkMlOOTL(lyXg9u08DCS6ct1w6yqfrG4PMi6h8vo2EBjj1NrGGoRFQxD1mtK5jyQiERjAP)cnzEBmNDFEgPStJ7BVQtEaXtBQwTyBzlmQUnZzvvQ6gjJBrytoOOABdPWDM5Jktkj55uETzZqNnxUZQvLXO2XFSg1lxIYMkBshFoT3C47Koua9gn(n6B(fVu9ZRfK9RJ9y(sZQBvSE()ab7LfZTVBM5VTSzmZo19)UfD50zYl0auCArMi1fcP2a06K4EbKFJTHy779BZmTQ9SgAXeh48zwRR9TQd7CBBGM2hvJvlzN3aXyAIiUFljXyNwR9iyASWKQ9tVd9InTM7i4GE0nKfIorp02UBL9W236RJj1dpWG80uwAm)B79Id9D3Lfs2cvR4B8TPSwUA4WwUzCnMBaSQKZeROmN4caBFEZk95N3fVHiDuUVXrwWEzdNzBMSKBq7LY25CECczw390LdsUNWAVGfu9kGVE1ZGVz8ndy9QFdNe5W94KXWhrI3XL0VdRT8)RmK(I2KNGTgXRSizVhDyS8FWlEh9nb)xOt31n)j8fcogWf92VZWWR9o2qBz6wImjHLmyYxhwb1pBgQA5GRbylzOxd7JFXaxZhwJtJR)Kk9LaL5sd5LZMeY3P4Ez5GzJF)al(c)pMm62HdDgmOVhVRJcSVBWN7c2dpCyWvNl0N8PXV3c0bilua9ND)4Bi7(X3C21MnKuxIpn7OPVr25)mL8qqozI63Gbe3uVB(Ol4z0gXTnS2Bj(MIXB287x8r9ghFD42fs9hJwnXxm9Gc)5xJrtwyiFyZpwJUhBEzuSB(wIogJsb(9HRwp5vkxLoPvYxHc4kMuAQQCUsTTGspJaJ4JXwL0GtD8l)H)a4HNW)YmqF7httEgB1vy82YCQEXpihZ6a)(cWgzwm2nytGFjgGOqxJgsSxKs6hQcXlnzcoRSSXEmNehqplwk44gWmCxtOHSW)KVcpDm4cgPvM(HsrUveKeZjs0GTo(X8CnDaBwuyDyUCyIp9b56UP2bTAoTCmyji8Ij2HJu2sCGO6CQpzx((z1oOSp6t6(o6fKVDSIdQlm0Nmfa)W2foy2IgLm)BBuk7Yd1jy66K0f05xs(bKY2NUbVOZrbYzWvgQt4Wb1CKxE78HTGNEHgtLiaIrtx2XenPkAWSKVwjj5ftqszYOB(bJTXFPPw47mqXr5HdSUmjFQskyvzEGKVH6mEyIWgm4QoNoLdh6CsGUBkyy3X0)C3SdhmHS6z(z5KHoxXO(2NZhBRsFcFSSU6fm0P55uUC(Hd8An4tZZYPoDlLCy2M3nBUry6C1a9t63PzfnlMounSO6jIZ2XvhBQELYfeysplxS8DtpCq53N5Ov0RkGLMRetGM(SwpxoNbwdabMdTmMbWDzM9YtlZWlOyK7H8A20miXlgLdMHHy6puaISSD5IBCSiawoHLCX)n5XWOqij2FJ(wWgKqyVhS7zVAqK4CY)j7d1a9D0G9DG4gE)pWmHq8Cn99InwTRilMlEBpjyWk6RneMe84r6P18SxyX15e)fQpUo3amd3Zetr7IFzSavya7O2C0CpFZ4lJeSBOiLMe(8nmrUsvX6Oy(pxXdU6GSWtSQU2ef60QM1Pfd7EWnCuPVVDUoFGjOJ6X32pcx1fjijhaIxUHkM950VXg5UBoCOPltj1IgERpbeelsDRIh3S5zadb0T9H3A5KXTDxqKZvL2)yCbj1DL5YkhAJfQJLJSapiv9qAW1Z6NReleR(GzWcpRNdXDqkhd1Q4I)R2N3r0y6S(GtDH5tBm05WpV1FkRSX62sf0mh3)Kdz74)D4NQQV3cIdhKhaHt1xrFCQzBnIdNMcwdCMSljlHiS7DRUn5VEStTv(U(bKYUJa4rmrTCFcYNh)s(1ACw8wCx0TUxQrwIcJ7vQTQzd5ODOwl)KtvIgQvb3wkFnPJZmXii7oQ69I9HhO)0MC6w2ipiBL2s8fOYF))EXBsIu1EZMrZKM50fJVWXWvQ(3PQnpY19Hv11Y4uUC2WUdy2KFpZq4NjB2)q7nPuAGgvhGqQDV2WmSs)15KHS9ExM3KEZID0HjxIRxDlVEDLbsYamusqVlq14Ktnbr1WPTcpPHxYw6XonE3hmGsLWDgcV9AFN27JGR13)EZo1zXiBg3P6m4BjZiJPPy45R8O2ATOTcIlSjIc11qcuh1O3Y4(xTyVOsfk43fEYfuD1KAF(ocvyU)j52Uj70AmP7U5MZLbTT5zGcHFAnEFyt6)ur)PHW(JVQ4bnD9ZasZUEyl)RftSHej37DuwJjV8NmzylUqJoL1HRJtENFlXuQ4mLjq(7TO8mfmTzK0TwW04PBftYHEQWw1GF7CgGS16ABmr7lMjJ5EPSKR5(K4MZIITrDh)Y7HSw(zLIY)XSvNwr58kW51JlxIE7fLBYC51wuUbBTUQt36wfjHM8BrICse19vYuN6LD)08KDA6CYeGp)mtyhRsErskEUmjS)GPi6)IpTZPyjPqj6YucVob5JKrIAq4a4H9xNgKCUQzWClrTF91(ibxwnK4emCLvzzv7J)(9PC1Kc8Fs5(0)ezu7n6LVKvdQnQY5T9dg731nPD571CnuM6lChHN7FO4o6HSHw82ADByzo9jiQApwL9vkljB4N9S4rni2pgX6JR7O1(xk8LtTtdn4AU7633JjOKA0LKNRnmuZMJtsLL3vKHNpQSarhBJ11DZ0NqjSpZhoCstTuFM6T7MmtEiVKzmPxgjJ3xmgfyPxnPvCK0miGNoBOo5IR2XiJzMUKX7RGVh3k0rhuyixlko(Kz1CGrKbf7DQPo1gXIHh2GL3uZcmlgioxEo3WZyzxcUjr)ir4THrDg5q7B1XpAGQOqzEmwmfNsslM4M2nOcllMXQ7p1FzAmfeW(WSycU5YUGeNDdQ9LMaKM(4KVRSpoBa4KoSrfGpXiWbvxxWSzV2wUW8FCmusGvMduYGDBsMBm5R8i(IKzLnyyFNkmrUANyx9Fst4T(rynwn4IgAuOrAFOyGtL2DQBJkcsA)pXhYME2P6xjHQrvDsuY2L1FxwXaNSp)QxZ)6RUO(JV66)))]] )
+spec:RegisterPack( "Feral", 20230515, [[Hekili:L31EZnUns(plQsfosz8OrpDCYz7QYJ6QlPYT7uRYv5)efnjKm3HIKlFypEkv6Z(1nEqcacqsjBpzZDvsLylb0O7gn6(x3Oj96PR)91Rc8kiR)BZMmB(KLtxoEYvtwmD66vfpLswVk1Z)JE7GFi2Bp8F)pjzEr4N(uuIxao78KYmF4BwV6UYWOIFjE9DMj56vELf3NKTE1QW9)06v3hgeqyJMK7VEfo63nz57MU87pU54MFkz)Djh38HKW4I8JB89IpUjm2pJ4LtoUj5bs2XnfH7HFoOmlmE3Xn)ijlNK9XXh)1J)AfXwqj2)T3hHb(Fr8YkG5UfM59WV)hHrbh34fhN80XniLIi55QtFkB6HXjWYvMIYfWmfaJTnmom)EKl8IbQ4NKefK8iWKL5G(sHktUIsLFb5(9K4cVijATnlz)XnOkrDoxAyLvhXC6i(hK8IKmG53hMNt1dEjexCViGYC(fHjaxffMxyA6)pukdJBNxySfUz(7M9T0b)7WA1fRptm4Fi4FwIdFBzCmjIYzOERe3((WFaBMSTbK19O8FzuryAe8tLXV7FeMMsa1AHx2osrUk9xwXmm5vSgWwBktAhMNsWDLF6dWNb)oy2M4hMucm9pgIIByCEbXlGzm8HSW94EYFK5vCpJXG1)4MhtIFdkaEriP3UDKkBmvsmrELB)b66KDH(mPnnJ8aSJJ6kc5Za7(EswwsMQaXT4b2ijlSaSfFmexrQMsyMbCUhqMfVTXjJhVNas4VbY9BGFBvrgjEhvmqdvViy1jbxGgOX5GnaLzEmehqeUlwq3alHFgiWpL5TTEdE86vOvtoEkxYMc(1)g1Vbj27UisW6Fe(AQvg4ciRews38iV87xVY)j)iIlFleN0kFq(izHEWpXpVmwEkJ3wgf5Mr8VhNJl7491GuFCZHdcJHX4h7wK4geY(2LmpizHPmMW7HKq8ePxAk1(4ou5Xiz(f8JROTo1haF7bnd8ccWVh2OrFBvtHPUWjG(EGfOa8SPj)1Yvgb2PZVh)MJBCalry9l3UDmOj8Y89OMSJbc5xWKj47bBvqQfw6f3NbAcxFC3(2JBMoPFJBjD1gi2YhhKucSGRFK3JKa3mW)3yo)ECZi6)QmCg1aEJoJCPXwV5wVIOkyUvvaB8JPRjiPbpjwlQIiVeD776T)UsydVmvOLcsketrsdIIE13KYDreIo2Gn(PJxijjuQNML8yKGQIp0lL8jx4Kiyvdh9C9Z8Ea3fktRLny9aRX9KOau2wyX8wAuQMCG9ro6JnMGMne)pMl5Fdp6IXfs3L5fqyYfkpptDw7QLZxNaY)slYpNRB5yTD2nf8HX8)4kZV3Awq00VXjfu)8ar2sWJo5jrL4xDbkoWVhwuR4JsEK6xlaN0wm8zkCMNSp0)9Ot)i03xESxA(90beMLtnOV8pDHMzUlz)R7yJ65ARMeIwEqucYfQAbQ3naVbewN6fegBo35hxkOA09j3XCWLGQrd6NHuDFmXhWg5LfgbwMZqIW4HrOM7B7J3qB(rUIgEXy8JAscJ77SS9evg7L5cXZtdZ8yFKDVXQUqZFmmLW8GYcJ0ytgw3PtKzWQPOXDtTfrSVSNLfxpqtTNi4OB7wLCxk0rooWBpGkLA5X)86DHQVSfpoAwIOr4JWmU37bcpal1YcSvUNfZLuuqrONGbIZlUGBykClIR9Xn)8pJJ0dnfPSjyTHhxXHS6hyw2LPutSPZL3fKSGu2gGFvGxYekLADZWQqoPuSFUpIq)gRBUuhF0pmd10jBDJc3sCbH1fCLdtroOQiyLgnXJG5utSlf4yyXCbebUjaqv3htkJdYvOvdJvzIYqgqheNwklPqKR0xYFRj4lvU6ctpjZtDmavRhaUdGXjsnSMIdQn)c3b(gD3wM9KuaV2cnHOfH93Km3yYNk4CGTi1Bfa(DVdw7E4(ULfvGqrC24UC48Sp1fphzM(hRy6aAHi0WbCi7cCp40ufj26v79(KljMKT7jUuzl(BdPs2G2at0poafIUWjzy3hoSjdQT9dC2pzzb5PTWf2rEB13oEwXKh8wbXQsn54sucoZsmlHjPMFAnNuTKjLMzzZ0gaAwKf6tpauFWTe8vt)zxmLnwIBUSs2OSj1Qg80YjZUg4)pLAGftCzhdViidDuud8qk3sdPmsdRAloqEEOrSHqwoC8Z6iVPf9B7j(WR65rznhdkrKFeowYioXGJifphFxpoLZQhKPt5D7q3hlYJBkVgp3isWNAdeMQycCf9BEaaNJ0F8NH1KsUhju0zTb7L5A0KAx3lHc8p4OKpyCxWGQn59tXmh8eO7w((lXYnrlsftaQfyFpGru8u1PipO(Kew13TqIhOPtkK)r2y(YE9nc8qiTFG4ExHl4LC3oAHZGVCwn8I7IsscGn8K4CTPpsXVzfssdE0ubdtRpDzwgycHPhbzvXkMkc(Lvdu)K4IWsyFg)(ISNefhSsngtlBBB6jjV(900wrAKK62WnrDsQjF7sqgez4Q0dXFbvMSczuNU47EhKlkEfb0cEg)5NeffjKx1Csu4(WywfNbzMeG5D4tlPFy8djrpqZEaj8De6pIbUibsfSnOKWi19H7OLFha3MOHXScnubRYxCFU2Tngjc1yoa1o)G6tCWmM8fmSvD4hbPRctt10UmfTsEglw0VGCOjVHOfVe6Y)6hPxpA3lHwzOs5DEDGjmWMACKrOc6fVrlMMQNo4ilEhti1yoDG86FkPu4MR2Hg7sjWJ4jPPjzfLX0l2aIrLtY1re2H)6cxEnmWeaBnsFViMc4wwsL2aYQxZPtCL2NKeVnmJOTknbHvvMPZFTyyQQZxTt0wQGgIjKaxCJZIrkNwk6U6CiTLSwJQIzbSz7AgBvRqfmOIHAa7M7q8c(EWjjTRaIwY4psiPSsM69GxyetwPLl(UIUZkQ6YHOrABuHkZicb3siOmlzlxn3sQvdg(ogcNdKzX3arGyKiGS1doVxn)Qj9rmnT7AIlEMYOsskUNOnc7PRjxsbzllfVS6GhAnjjXKbdeSue7vMV4dnftkbgxoPOEWctx8NIkH)NWevcENSPUvSF0K5bQXbkXpjykcq38Gv8y3qXJvVkErH7IDNdyHkli5M8d39ITfaabHFKYeOYufWB(qYhj0k(GhMaiQ1aeE7XnZfh0hwD0gSC827ftYD3vgg4f7tuuFAl210P2717YjIBDKhXBWxM1D6SQfEKS6hocxWNRPikNJUhyR5tOlQmdYp8unW3JawUu6kyv2d4zm6Ep2OkIk2fH4O6uL8DN6ABAV4zS(tVIXawxDl7cy2QvHAR)k1Kyz7iq8cZ7jkEZAjqQu58ny3ilIsv7vUq1Is(Ykw7yWxCOFilBRlxQghSEwDei8K4OQ41sgWv7JM)sh7IYOwzzRxsG2vxtbG)nNfu1HnaSxvlAT0EgzUkfQbDH8klbJe3hc3fgPBwylJxVaVuk(Q8h9GqpnUKioCA1H5YUYmqJ6)rAAQIuumpm5ZkY5cyFg1bNMZiUz2aoOgjglRAwvzcXtaZ0ecJD3gHhIBFSCwPFJwEymEWu36WAufuE4GAHts7d5WOMjN(sh6BhXHqMoAzhROJOmsgb82swBwm7SvF1MLTrUq8CxJukyRwQY50BV4ym7iup24ZNlH2rCzqwKcBP(zVQKDvobMzDROGQmNB5MlRgdZvGhexQarUk8A9sVDApJsD9OH7EP19CrnGXPONnzoXxDFTYYDV3NQP)JEHTxM0f174IDfxSTdb9BGOvZCmg0AbRqwTJAfZHqpMAZ6F657tslWbOxBtEPaGFAHFAoRwNQfrGN2Lh857P9AjR8PdNmE67MmE2xlAyXceG1I0rTP7TPNUTsrnGJsYUw0EfIB16Qln5XwkW8m7aemAJpq)io9tB4myzFntvRo8SZ8ww5EHBPJeoX7UuUTtr(YEQQnfDZ6P(QqQw0cmVwcsEVctzTR5RGbLrTGp79aWSC004vmvLwUezePfcQ17buWPLF(ZGFQ7sKCey6l7o9DV4NezAxBHxL(TkJQG7xWPk3Nn)(buGwTuEav5WRx7drUfCnBEBvarhIzN3m5zAVwVI9SRaA9W)zuGXE0RavOgArFz0SrYoijp3sMBZxkNgyLRg1YtqDCz3a1G(VNmM11ZP9mzVwQcg6zf9zAl4ZXpCE5l1VYlG39WCP8ABvb1YHu6MdYsnRPWmj)3GcWllUQQO2lXwtYm9kEIvc7GwvBnnsMXZbXWeC6qn)cOJNOKLQeGQwV2kRMwvzyAiKaN48gLX(faPh6vr5A4q2S6B6X(OSAT78kOgttegs2BE32tGt2yQPWSu6w70AxHL1ol1liHJbOz1P60jGhTBARvdt72)6lJAvsmONxBOcImNb79Id9D3Lfs2cGY9n(iXudsOXyR2jmcDFDHwxOuMtCHzSpVzSxj4DD1xSNwtGjUDOMwkmJGQndRbhvhG6zQMqFv3m0dNAhgaBg)7996luruky96wu(WECP2vxkZFb6kpZAGxU(DqgRvFEEF0XHo0WnJAxhDQfeDKzDGzeVD8i6OgQ6fH96pV1vGt5l0VMUMEc5C6Q4eAGNneptmG(1KIcgu)60pBouyyEoT(yxLL6Ks1WEVmythO0(cDlP1lD)AWHxMnMZu12YfYyXg9u2L7OpsfMQnUIfdmbUo1mr)OVCUStT9mAyQvGBaobFYeu)0vZnXMNGPcTQufgUqM2eEBc3z1NZgzAlMj2kt)R1ZFLfJpBXI1Qe7VO8yz9JzRoThll(ZGf)jYs(H0Y6JLL9ShmCG14zE2)S6bmAe8vIxAelWcFNHp6IGn3VJplJH7XgjJxR43Wtv7nye5)vziLXZtqyPELfj79OnnkaxnEh91MWVr7c1Pt(E8XNpgwm63)gZUoEdtbz5Bfh4GrnC6NyVtamWG8g150yWRu5Veign18nNv283OKO1TdNp5TdTK24xpD8LJg5mCyFVAFhfAF9WVRlAp6WHHdoxQp9QjV1c1bkl2a6V4((xrX99V6IRnBiPYFFA2rZELSZ)fk7HKC60JkVBrW1MMSX2W6o6dFQf5Lo)T38E9YGFr42BKYbG6S7xnnrrITxGzvFJHkSzEAnQMD1ckvtChgYo56HBMAuM08xjMnQH4Fp8P1DKNYNs7ap5pHs4kwtQB7CgOMHK0CeRioTbQsaoWV6RqV483gj0ia0Nwc0jY2YC6EMFqoc0hF3xW6qFmRaWEbF7JarUVanYybtOVCwebosWwZN1SV5K4aAqfk5eV(BORDnJgYQwc5tWSJb4OiVY2gPCKBfdjjCIS(zJJN6)f0gV6McRn5hBJSXv3D9m7KwT0G8vWcWLBMANosfxItevhx9PiDVDETZl7TeNUFLEr5lNO486fM6tNbKFu7khS4Ag1m)F2iy21hQD22fjP3q7Rn5jivwu6b8UBrmNHmVaQfu9Wb1chE7Llh1Y60RLXufvb1OPp2XepPQAWcjCHci6BMISY0Xl(gJ1N4wt1MWzOIJYdhyyLLlWMYQQ0NyYFHAthzIXgoCqNDN0HdD2jyxpdmS7O7VUE(HdMwS6E(62PJCgWtNO1(8Y2O07WllJREaJCAwQ3BxE4aoT6U562zoDRLCy2MxpFPrA6myOE1FD4RI0TVEZSrQHfvVsF2jU6yt1JuUuIM2NLVyHRND4GYVp3rouTAKz1ENYePziqSvIsNHwdabMdT0BfW3Ym7L7wQrVGQrUhYlyTWHKSyupGDT0f5e)BS1Gt6A5Bw4WpfBSfMC0CLTyItlrQ)k8b7i)lBxj1Tgu0Wp6I(TGSpyOjLrt4m3m14(NDLrp4lPvbzTggmdu3MDuomSuXFUAV8WHzvNfJIXJfw(2PoTyM3dPHVu6NIxQlhiCDeS6R7RlU6ugK0daZlxFwZEG639WD9IdhA6avABrBDRl9cUksLzLhfTzrUHW72E1ZD70jT9TGkNVvA)1rhaXBG5eqhzteQJSJIapKv9TxX3N1RvglGR(nwXcwRJO4AaaYiT8V4)Q9UFfnMoRxeCVWYPnb6CKNx7x8A2eDBadnlX9hQi7e))g(Eu7lTI4Wb5By5u9v0hNA2gJOS7uYAqYKDjzjeHDVB1x0WZF1zWi(s(MoZUJaykM4wUpb57y4w(N14(fS4UO79EPYAjstUxaDva0S0rRxGU9kNkGgQ5eBBx)wgWUt9LpIjM)0WNDdMncv5z5fqIvuzwbXnQgJ6lYBoK(lKYG96fAmkN(xG3biMubv1wLV)Dx1RRbZzb5mSzuwPMe6MjVWyluQrHtRn6Y1lw0ve7rMubQGi6REO3GnotbV)GqAkr0qINGSmuHZg(CJCYQTHUipIFI(L5nKH5nsmia3PVfpnkxCSbAOK0rxKQzR6zGIkXt7IIQTjGbQPc4OvAjDVY2sGWPrMSQMcIs)A4LAHXJs6YQowHN7BDI(SJ16BJIBNA1WXqq8QhfJwGzAeZNH5xfVOJqjTqIxyBtfURHgOoiOHvE4Zn37rodTYOIVsufIdh0TshnYgJwfo7pZOukoDnCpLNGlDfH7mZ29mLPkUTP48CddBtaTDgt1P0Zn80OMs0PYqpxwO)CqvmTMHV4xmFJQr1wzFnVisbv6iDttXwoz2Ww0OgvWSdVq9XvNcbAj8K5iWFPvLNPIPnJKU3fm1RKwxj5OyvRwvxi6CgKS16n0O9kVzU8k3Rnl5AHCssZzXX24ok(NVOTFy7wlp3ALyWuRRYNy9KIKotU7LLHJuxUptxGIS3NMx)MHUs3aH7hostqCyT0ZV)3)5)(3JjRJqxzv5U6VMt4D9vLD()bwIGKuS6ljS)QpjkHg9pHx0j4b)IexZtlsU1HK4CLxM808(AInWciGNFUEs0Lv1kSLugCc69)Kq10FikQvAw1l(RKgKTtNrsHt60TF2FfWqBkr9XFcVzn8stEmenye(Ae)PXkXhu8yFJ5fH1f7osZIezXA6v7awxUnnNjLPsT3rK1(hfTJYYBOQ5TM9wvcZDe)tTS1Y(5K1Kn8rEwYOgf7NGyD66ojvPG83E7m78qdPM7Q9T9OtwPgDj55ADB28LyRQz5zAE05VuwOOJT(M7656Tagw6(dhoP2cRpTv41tNl3fDYcM0dcVqBD4GABfoBPXzk6GfywQJF6vqExOw3OWPUvmBUug7Ib5yrb8mK)jML(6hrDAOqlBG80iB2zoYKI9mGxdpPUIeMSaNHbdA(5wmuCE5LCdZb59M1FbBin2UPkRUKh)u6oOwYa6P2IIod17(lv9Js)VqlWSLDFtgtQKYIjU6zx9NmCtbiA0DuTs3Cz3tIB9cTiKA4gKQdPWqS9NiPkV0D9hhPrmfVP)SiD9LvrvS9NdPrAz(itME2RqYYiS937WZYQgfuOI)keXMRaqAJ)Mg50gkm1CWKwkTBwT(VoqWQDI9tinXLHd0pFRvcYQns7)Hcs2q1oRAQ4wAlv3Re)mslyxRzL6xOYyGx27n5l4V2KVH9wtgFda5Jp(PZPpOzR)F)d]] )

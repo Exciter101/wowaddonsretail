@@ -14,7 +14,7 @@ points[2112] = { --Valdrakken Defaults
 	[57912411] = "30:renown",
 	[74506321] = "31:renown",
 	[58173528] = "32:renown",
-	[26024007] = "34:renown",
+	[26223957] = "34:renown",
 	[41014431] = "35:pvp",
 	--profession
 	[31036135] = "1:enchanting",
@@ -38,6 +38,8 @@ points[2112] = { --Valdrakken Defaults
 	[30335402] = "19:barber",
 	[47464626] = "21:inn",
 	[58843877] = "22:portal",
+	[25894093] = "72:portal",
+	[53855510] = "73:portal",
 	[46767885] = "25:stables",
 	[74265645] = "26:transmog",
 	[76565092] = "27:inn",
@@ -62,7 +64,7 @@ Valdrakken.vendors = {
 	[57912411] = "30:renown",
 	[74506321] = "31:renown",
 	[58173528] = "32:renown",
-	[26024007] = "34:renown",
+	[26223957] = "34:renown",
 	[41014431] = "35:pvp",
 	
 }
@@ -98,6 +100,8 @@ Valdrakken.amenities = {
 	[30335402] = "19:barber",
 	[47464626] = "21:inn",
 	[58843877] = "22:portal",
+	[25894093] = "72:portal",
+	[53855510] = "73:portal",
 	[46767885] = "25:stables",
 	[74265645] = "26:transmog",
 	[76565092] = "27:inn",

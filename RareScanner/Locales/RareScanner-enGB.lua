@@ -1229,6 +1229,7 @@ AL["NOTE_EARTH_STORM_EVENTS"] = "It only spawns while a earth primal storm is up
 AL["NOTE_FIRE_STORM_EVENTS"] = "It only spawns while a fire primal storm is up."
 AL["NOTE_FIRIM_EXILE"] = "Firim in Exile"
 AL["NOTE_FOUR_PEOPLE_NPCS"] = "It requires 4 people to summon him."
+AL["NOTE_FYRAKK_ASSAULTS_NPCS"] = "It only spawns while a Fyrakk assault is up."
 AL["NOTE_GLYPH_15985"] = "In the air on top of the tower."
 AL["NOTE_GLYPH_15986"] = "On top of a short broken tower."
 AL["NOTE_GLYPH_15987"] = "On top of a natural stone column."

@@ -2,7 +2,7 @@
 -- AddOn namespace.
 -----------------------------------------------------------------------
 local LibStub = _G.LibStub
-local RareScanner = LibStub("AceAddon-3.0"):NewAddon("RareScanner")
+local RareScanner = LibStub("AceAddon-3.0"):NewAddon("RareScanner", "AceConsole-3.0")
 
 local ADDON_NAME, private = ...
 
@@ -41,6 +41,7 @@ local RSLoot = private.ImportLib("RareScannerLoot")
 local RSAudioAlerts = private.ImportLib("RareScannerAudioAlerts")
 local RSEventHandler = private.ImportLib("RareScannerEventHandler")
 local RSEntityStateHandler = private.ImportLib("RareScannerEntityStateHandler")
+local RSCommandLine = private.ImportLib("RareScannerCommandLine")
 
 -- RareScanner other addons integration services
 local RSTomtom = private.ImportLib("RareScannerTomtom")
@@ -1019,6 +1020,9 @@ function RareScanner:OnInitialize()
 	C_Timer.NewTicker(2, function()
 		RSMinimap.RefreshAllData()
 	end)
+	
+	-- Initialize command line
+	RSCommandLine.Initialize(self)
 
 	RSLogger:PrintDebugMessage("Cargado")
 end

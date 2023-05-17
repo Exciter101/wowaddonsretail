@@ -10,6 +10,7 @@ local pairs, ipairs, type, pcall = pairs, ipairs, type, pcall
 local floor, print, format, strlower, strmatch, strlen = floor, print, format, strlower, strmatch, strlen
 local sort, tinsert = sort, tinsert
 
+local geterrorhandler = geterrorhandler
 local IsAddOnLoaded, C_Timer = IsAddOnLoaded, C_Timer
 
 AS.SkinErrors = {}
@@ -130,7 +131,9 @@ local alwaysValid = { PLAYER_ENTERING_WORLD = true, ADDON_LOADED = true }
 
 function AS:RegisterSkin(addonName, skinFunc, ...)
 	local priority = 1
-	for _, event in next, {... or 'PLAYER_ENTERING_WORLD'} do
+	local events = ... and { ... } or { 'PLAYER_ENTERING_WORLD' }
+
+	for _, event in next, events do
 		if not event then break end
 		local conflict = strmatch(event, '%[([!%w_]+)%]')
 		if conflict and AS:CheckAddOn(conflict) then
@@ -158,7 +161,7 @@ function AS:UnregisterSkin(addonName)
 end
 
 function AS:RegisterSkinForPreload(addonName, skinFunc, addon)
-	AS.preload[addonName] = { func = skinFunc, addon = addon }
+	AS.preload[addonName] = { func = skinFunc or R[addonName], addon = addon }
 end
 
 function AS:RunPreload(addonName)
@@ -168,10 +171,15 @@ function AS:RunPreload(addonName)
 	end
 end
 
+
+local function errorhandler(err)
+	return geterrorhandler()(err)
+end
+
 function AS:CallSkin(addonName, func, event, ...)
 	if (AS:CheckOption('SkinDebug')) then
 		local args = {...}
-		securecallfunction(function() func(self, event, unpack(args)) end)
+		xpcall(function() func(self, event, unpack(args)) end, errorhandler)
 	else
 		local pass = pcall(func, self, event, ...)
 		if not pass then
@@ -184,7 +192,7 @@ function AS:CallSkin(addonName, func, event, ...)
 			tinsert(AS.SkinErrors, Name)
 
 			if AS.RunOnce then
-				AS:Print(format('%s: There was an error in the following skin: %s', AS.Version, Name))
+				AS:Print(format(L["%s: There was an error in the following skin: %s"], AS.Version, Name))
 			end
 		end
 	end
@@ -259,8 +267,8 @@ function AS:StartUp(event, ...)
 	end
 
 	if not AS:CheckOption('SkinDebug') and AS.FoundError then
-		AS:Print(format('%s: There was an error in the following skin(s): %s', AS.Version, table.concat(AS.SkinErrors, ", ")))
-		AS:Print(format('Please report this to Azilroka immediately @ %s', AS:PrintURL(AS.TicketTracker)))
+		AS:Print(format(L["%s: There was an error in the following skin(s): %s"], AS.Version, table.concat(AS.SkinErrors, ", ")))
+		AS:Print(format(L["Please report this to Azilroka immediately @ %s"], AS:PrintURL(AS.TicketTracker)))
 	end
 
 	ES:Initialize()
