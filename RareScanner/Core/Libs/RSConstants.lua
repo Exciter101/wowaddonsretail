@@ -24,8 +24,8 @@ RSConstants.LOOT_ITEM_ID = nil
 -- Current versions
 ---============================================================================
 
-RSConstants.CURRENT_DB_VERSION = 103
-RSConstants.CURRENT_LOOT_DB_VERSION = 112
+RSConstants.CURRENT_DB_VERSION = 104
+RSConstants.CURRENT_LOOT_DB_VERSION = 113
 
 ---============================================================================
 -- Current maps (newer)
@@ -65,6 +65,7 @@ RSConstants.FIND_HIDDEN_QUESTS_TIMER = 5 --5 seconds after killing a NPC or open
 RSConstants.CHECK_RESPAWN_THRESHOLD = 150 --2.5 minutes
 RSConstants.CHECK_RESPAWN_TIMER = 60 --1 minute
 RSConstants.CHECK_RESET_NOTIFICATIONS_TIMER = 10 --10 seconds
+RSConstants.BUTTON_TIMER = 1 --1 seconds
 
 ---============================================================================
 -- Collections enumerators
@@ -187,6 +188,7 @@ RSConstants.PROFILE_DEFAULTS = {
 			displayNotDiscoveredNpcIcons = true,
 			displayAlreadyKilledNpcIcons = false,
 			displayAlreadyKilledNpcIconsReseteable = false,
+			displayProfessionRaresNpcIcons = true,
 			displayAchievementRaresNpcIcons = true,
 			displayHuntingPartyRaresNpcIcons = false,
 			displayPrimalStormRaresNpcIcons = true,
@@ -411,6 +413,7 @@ RSConstants.CONTAINER_WITH_NPC_VIGNETTE = { 192243 }
 RSConstants.CONTAINERS_FORBIDDEN_REACH = { 386214, 386165, 386166, 386167, 386168, 386172, 386174, 386179, 386208, 386212, 386213 }
 RSConstants.FORBIDDEN_REACH_ANCESTRAL_SPIRIT = 203388
 RSConstants.ZARALEK_CAVERN_LOAM_SCOUT = 204657
+RSConstants.ELUSIVE_NPCS = { 204821, 204831, 202436, 202441, 194489, 194491, 195465, 195472, 195492, 195509, 195518, 195541 }
 
 -- NPCs that spawn after completing an event
 RSConstants.NPCS_WITH_PRE_EVENT = {

@@ -106,6 +106,9 @@ function RSNotes.GetNote(entityID, mapID)
 	-- Fyrakk assaults
 	elseif (RSUtils.Contains(RSConstants.FYRAKK_ASSAULTS_NPCS, entityID)) then
 		return AL["NOTE_FYRAKK_ASSAULTS_NPCS"]
+	-- Elusive NPCs in Dragon Isles
+	elseif (RSUtils.Contains(RSConstants.ELUSIVE_NPCS, entityID)) then
+		return AL["NOTE_ELUSIVE_NPCS"]
 	end
 	
 	-- Rune of constructs Containers
