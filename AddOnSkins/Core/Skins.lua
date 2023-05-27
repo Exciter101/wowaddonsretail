@@ -554,7 +554,7 @@ do
 			for _, which in pairs(gradients) do
 				local grad = frame:CreateTexture(nil, layer or 'HIGHLIGHT')
 				S:Height(grad, frame:GetHeight() * 0.95)
-				grad:SetTexture(Media.barTexture)
+				grad:SetTexture(Media.StatusBar)
 				frame[which] = grad
 			end
 		end
@@ -1317,19 +1317,23 @@ function S:HandleDropDownBox(dropDown, width, pos, template)
 	end
 end
 
-function S:HandleStatusBar(statusBar, color, template)
+function S:HandleStatusBar(statusBar, color, template, ignoreColor)
 	statusBar:SetFrameLevel(statusBar:GetFrameLevel() + 1)
+	S:StripTextures(statusBar)
 	S:CreateBackdrop(statusBar, template or 'Transparent')
-	statusBar:SetStatusBarTexture(Media.barTexture)
-	statusBar:SetStatusBarColor(unpack(color or AS:CheckOption('StatusBarColor')))
+	statusBar:SetStatusBarTexture(Media.StatusBar)
+
+	if not ignoreColor then
+		statusBar:SetStatusBarColor(unpack(color or AS:CheckOption('StatusBarColor')))
+	end
 
 	S.StatusBars[statusBar] = true
 end
 
 do
-	local function checkNormalTexture(checkBox, texture) if texture ~= S.Media.ClearTexture then checkBox:SetNormalTexture(S.Media.ClearTexture) end end
-	local function checkPushedTexture(checkBox, texture) if texture ~= S.Media.ClearTexture then checkBox:SetPushedTexture(S.Media.ClearTexture) end end
-	local function checkHighlightTexture(checkBox, texture) if texture ~= S.Media.ClearTexture then checkBox:SetHighlightTexture(S.Media.ClearTexture) end end
+	local function checkNormalTexture(checkBox, texture) if texture ~= Media.ClearTexture then checkBox:SetNormalTexture(Media.ClearTexture) end end
+	local function checkPushedTexture(checkBox, texture) if texture ~= Media.ClearTexture then checkBox:SetPushedTexture(Media.ClearTexture) end end
+	local function checkHighlightTexture(checkBox, texture) if texture ~= Media.ClearTexture then checkBox:SetHighlightTexture(Media.ClearTexture) end end
 	local function checkCheckedTexture(checkBox, texture)
 		if texture == Media.StatusBar then return end
 		checkBox:SetCheckedTexture(Media.StatusBar)

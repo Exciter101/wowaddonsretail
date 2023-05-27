@@ -168,7 +168,13 @@ spec:RegisterAuras( {
     danse_macabre = {
         id = 393969,
         duration = function () return talent.subterfuge.enabled and 9 or 8 end,
-        max_stack = 1
+        max_stack = 10
+    },
+    deeper_daggers = {
+        id = 383405,
+        duration = 8,
+        max_stack = 1,
+        copy = 341550 -- Conduit version.
     },
     finality_black_powder = {
         id = 385948,
@@ -186,16 +192,20 @@ spec:RegisterAuras( {
         max_stack = 1,
     },
     flagellation = {
+        id = 323654,
+        duration = 12,
+        max_stack = 30
+    },
+    flagellation_buff = {
         id = 384631,
         duration = 12,
-        max_stack = 30,
-        copy = 323654
+        max_stack = 30
     },
     flagellation_persist = {
         id = 394758,
         duration = 12,
         max_stack = 30,
-        copy = { "flagellation_buff", 345569 }
+        copy = 345569,
     },
     -- Talent: $?s200758[Gloomblade][Backstab] deals an additional $s1% damage as Shadow.
     -- https://wowhead.com/beta/spell=385960
@@ -312,11 +322,6 @@ spec:RegisterAuras( {
     },
 
     -- Conduit
-    deeper_daggers = {
-        id = 341550,
-        duration = 5,
-        max_stack = 1
-    },
     perforated_veins = {
         id = 341572,
         duration = 12,
@@ -542,25 +547,33 @@ spec:RegisterHook( "runHandler", function( ability )
     local a = class.abilities[ ability ]
 
     if stealthed.mantle and ( not a or a.startsCombat ) then
-        if talent.subterfuge.enabled and stealthed.mantle then
+        if talent.subterfuge.enabled then
             applyBuff( "subterfuge" )
         end
 
-        if legendary.mark_of_the_master_assassin.enabled and stealthed.mantle then
-            applyBuff( "master_assassins_mark", 4 )
+        if legendary.mark_of_the_master_assassin.enabled then
+            applyBuff( "master_assassins_mark" )
         end
 
         if buff.stealth.up then
             setCooldown( "stealth", 2 )
         end
+
         removeBuff( "stealth" )
         removeBuff( "vanish" )
         removeBuff( "shadowmeld" )
     end
 
-    if buff.shadow_dance.up and talent.danse_macabre.enabled then
+    if buff.shadow_dance.up and talent.danse_macabre.enabled and not danse_macabre_tracker[ a.key ] then
         danse_macabre_tracker[ a.key ] = true
+        addStack( "danse_macabre" )
     end
+
+    if buff.cold_blood.up and ( not a or a.startsCombat ) then
+        removeBuff( "cold_blood" )
+    end
+
+    class.abilities.apply_poison = class.abilities[ action.apply_poison_actual.next_poison ]
 end )
 
 
@@ -611,30 +624,6 @@ spec:RegisterHook( "reset_precast", function( amt, resource )
     class.abilities.apply_poison = class.abilities[ action.apply_poison_actual.next_poison ]
 
     if buff.cold_blood.up then setCooldown( "cold_blood", action.cold_blood.cooldown ) end
-end )
-
-spec:RegisterHook( "runHandler", function( ability )
-    local a = class.abilities[ ability ]
-
-    if stealthed.all and ( not a or a.startsCombat ) then
-        if buff.stealth.up then
-            setCooldown( "stealth", 2 )
-        end
-
-        if legendary.mark_of_the_master_assassin.enabled and stealthed.mantle then
-            applyBuff( "master_assassins_mark" )
-        end
-
-        removeBuff( "stealth" )
-        removeBuff( "shadowmeld" )
-        removeBuff( "vanish" )
-    end
-
-    if buff.cold_blood.up and ( not a or a.startsCombat ) then
-        removeBuff( "cold_blood" )
-    end
-
-    class.abilities.apply_poison = class.abilities[ action.apply_poison_actual.next_poison ]
 end )
 
 spec:RegisterUnitEvent( "UNIT_POWER_FREQUENT", "player", nil, function( event, unit, powerType )
@@ -777,7 +766,7 @@ spec:RegisterAbilities( {
             if set_bonus.tier29_2pc > 0 then applyBuff( "honed_blades", nil, effective_combo_points ) end
 
             spend( combo_points.current, "combo_points" )
-            if conduit.deeper_daggers.enabled then applyBuff( "deeper_daggers" ) end
+            if talent.deeper_daggers.enabled or conduit.deeper_daggers.enabled then applyBuff( "deeper_daggers" ) end
         end,
     },
 
@@ -858,7 +847,7 @@ spec:RegisterAbilities( {
             removeBuff( "echoing_reprimand_" .. combo_points.current )
             spend( combo_points.current, "combo_points" )
 
-            if conduit.deeper_daggers.enabled then applyBuff( "deeper_daggers" ) end
+            if talent.deeper_daggers.enabled or conduit.deeper_daggers.enabled then applyBuff( "deeper_daggers" ) end
         end,
     },
 
@@ -883,7 +872,7 @@ spec:RegisterAbilities( {
         end,
 
         handler = function ()
-            applyBuff( "flagellation" )
+            applyBuff( talent.flagellation.enabled and "flagellation_buff" or "flagellation" )
             applyDebuff( "target", "flagellation" )
         end,
 

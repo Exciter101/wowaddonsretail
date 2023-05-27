@@ -24,8 +24,8 @@ RSConstants.LOOT_ITEM_ID = nil
 -- Current versions
 ---============================================================================
 
-RSConstants.CURRENT_DB_VERSION = 104
-RSConstants.CURRENT_LOOT_DB_VERSION = 113
+RSConstants.CURRENT_DB_VERSION = 105
+RSConstants.CURRENT_LOOT_DB_VERSION = 114
 
 ---============================================================================
 -- Current maps (newer)
@@ -48,9 +48,11 @@ RSConstants.DEFAULT_FILTERED_ENTITIES = {
 ---============================================================================
 
 RSConstants.SHADOWLANDS_PRE_PATCH_EVENT = 1
+RSConstants.DIABLO_4_GOBLIN_EVENT = 2
 
 RSConstants.EVENTS = {
-	[RSConstants.SHADOWLANDS_PRE_PATCH_EVENT] = false
+	[RSConstants.SHADOWLANDS_PRE_PATCH_EVENT] = false;
+	[RSConstants.DIABLO_4_GOBLIN_EVENT] = true;
 }
 
 ---============================================================================
@@ -321,6 +323,8 @@ RSConstants.NPC_LEGION_VIGNETTE = "DemonInvasion5"
 RSConstants.NPC_NAZJATAR_VIGNETTE = "nazjatar-nagaevent"
 RSConstants.NPC_WARFRONT_NEUTRAL_HERO_VIGNETTE = "Warfront-NeutralHero"
 RSConstants.NPC_TORMENTORS_VIGNETTE = "Tormentors-Boss"
+RSConstants.NPC_DIABLO_GOBLIN = "BuildanAbomination-32x32"
+RSConstants.NPC_WARLOCK_PORTAL_GOBLIN = "WarlockPortal-Yellow-32x32"
 
 RSConstants.CONTAINER_VIGNETTE = "VignetteLoot"
 RSConstants.CONTAINER_ELITE_VIGNETTE = "VignetteLootElite"
@@ -412,6 +416,7 @@ RSConstants.MAGIC_BOUND_CHEST = { 376426, 385075, 385074 }
 RSConstants.CONTAINER_WITH_NPC_VIGNETTE = { 192243 }
 RSConstants.CONTAINERS_FORBIDDEN_REACH = { 386214, 386165, 386166, 386167, 386168, 386172, 386174, 386179, 386208, 386212, 386213 }
 RSConstants.FORBIDDEN_REACH_ANCESTRAL_SPIRIT = 203388
+RSConstants.GOBLIN_PORTAL = 205722
 RSConstants.ZARALEK_CAVERN_LOAM_SCOUT = 204657
 RSConstants.ELUSIVE_NPCS = { 204821, 204831, 202436, 202441, 194489, 194491, 195465, 195472, 195492, 195509, 195518, 195541 }
 
@@ -498,6 +503,7 @@ RSConstants.NPCS_WITH_PRE_EVENT = {
 	[386346] = 200740;
 	[386340] = 200742;
 	[386338] = 200743;
+	[205722] = 205490;
 }
 
 -- Contains that spawn after completing an event
@@ -538,7 +544,7 @@ RSConstants.NPCS_WITH_CONTAINER_VIGNETTE = { 179883 }
 RSConstants.CONTAINERS_WITH_NPC_VIGNETTE = { 369435, 398828 }
 RSConstants.EVENTS_WITH_NPC_VIGNETTE = { 204131, 204211, 204747, 204768, 203278, 203950, 204101, 203065, 203702, 203889, 205006, 204710, 204967, 204732, 204389, 204423, 204460, 204763 }
 RSConstants.NPCS_WITH_MULTIPLE_SPAWNS = { 69768, 69769, 69841, 69842, 70323 }
-RSConstants.CONTAINERS_WITH_MULTIPLE_SPAWNS = { 375366, 375530, 375362, 375363, 375373, 375290, 376587, 382029, 376386, 383733, 383734, 383735, 383732, 386214, 386165, 386166, 386167, 386168, 386172, 386174, 386179, 386208, 386212, 386213, 401844 }
+RSConstants.CONTAINERS_WITH_MULTIPLE_SPAWNS = { 375366, 375530, 375362, 375363, 375373, 375290, 376587, 382029, 376386, 383733, 383734, 383735, 383732, 386214, 386165, 386166, 386167, 386168, 386172, 386174, 386179, 386208, 386212, 386213, 401844, 401845 }
 RSConstants.FIRIM_EXILE_OBJECTS = { 375973, 375982, 375983, 375984, 375985, 375986, 375987 }
 
 ---============================================================================
@@ -745,7 +751,7 @@ function RSConstants.IsEventAtlas(atlasName)
 end
 
 function RSConstants.IsNpcAtlas(atlasName)
-	return atlasName == RSConstants.NPC_VIGNETTE or atlasName == RSConstants.NPC_LEGION_VIGNETTE or atlasName == RSConstants.NPC_VIGNETTE_ELITE or atlasName == RSConstants.NPC_NAZJATAR_VIGNETTE or atlasName == RSConstants.NPC_WARFRONT_NEUTRAL_HERO_VIGNETTE or atlasName == RSConstants.NPC_TORMENTORS_VIGNETTE
+	return atlasName == RSConstants.NPC_VIGNETTE or atlasName == RSConstants.NPC_LEGION_VIGNETTE or atlasName == RSConstants.NPC_VIGNETTE_ELITE or atlasName == RSConstants.NPC_NAZJATAR_VIGNETTE or atlasName == RSConstants.NPC_WARFRONT_NEUTRAL_HERO_VIGNETTE or atlasName == RSConstants.NPC_TORMENTORS_VIGNETTE or atlasName == RSConstants.NPC_DIABLO_GOBLIN or atlasName == RSConstants.NPC_WARLOCK_PORTAL_GOBLIN
 end
 
 function RSConstants.IsContainerAtlas(atlasName)

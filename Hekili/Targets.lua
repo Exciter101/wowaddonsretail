@@ -202,6 +202,7 @@ local enemyExclusions = {
     [168113] = 329606,    -- Grashaal (when shielded)
     [168112] = 329636,    -- Kaal (when shielded)
     [193760] = true,      -- Surging Ruiner (Raszageth) -- gives bad range information.
+    [204560] = true       -- Incorporeal Being
 }
 
 local FindExclusionAuraByID
@@ -1423,9 +1424,7 @@ do
     local trackedUnits = { "target", "boss1", "boss2", "boss3", "boss4", "boss5", "focus", "arena1", "arena2", "arena3", "arena4", "arena5" }
     local seen = {}
 
-    local UpdateTTDs
-
-    UpdateTTDs = function()
+    local UpdateTTDs = function()
         if not InCombatLockdown() then return end
 
         wipe(seen)

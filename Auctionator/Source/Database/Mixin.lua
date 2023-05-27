@@ -179,3 +179,21 @@ function Auctionator.DatabaseMixin:GetPriceHistory(dbKey)
 
  return results
 end
+
+function Auctionator.DatabaseMixin:GetPriceAge(dbKey)
+  local itemData = self.db[dbKey]
+
+  if itemData == nil then
+    return
+  end
+
+  local days = Auctionator.Utilities.TableKeys(itemData.h)
+
+  if #days == 0 then
+    return nil
+  end
+
+  table.sort(days)
+
+  return GetScanDay()-days[#days]
+end

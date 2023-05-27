@@ -1,9 +1,14 @@
 # Hekili
 
-## [v10.1.0-1.0.1e](https://github.com/Hekili/hekili/tree/v10.1.0-1.0.1e) (2023-05-18)
-[Full Changelog](https://github.com/Hekili/hekili/compare/v10.1.0-1.0.1d...v10.1.0-1.0.1e) [Previous Releases](https://github.com/Hekili/hekili/releases)
+## [v10.1.0-1.0.1l](https://github.com/Hekili/hekili/tree/v10.1.0-1.0.1l) (2023-05-26)
+[Full Changelog](https://github.com/Hekili/hekili/compare/v10.1.0-1.0.1k...v10.1.0-1.0.1l) [Previous Releases](https://github.com/Hekili/hekili/releases)
 
-- Iterate on Retribution priority again.  
-- Fix Pocket-Darkened Elemental Core ID (fix conflict with Draconic Cauterizing Magma).  
-- Correct loaded\_die\_critical\_strike ID.  
-- Revise Ambush stealth requirements.  
+- MM:  Reset steady\_focus\_count to zero if the last GCD ability used is not Steady Shot.  
+- Demo can use Vilefiend more often.  
+- Don't sync interrupts/defensives to the GCD.  
+- Assassin and Outlaw updates/adjustments.  
+- Arcane priority update.  
+- Fix Deepflayer Scute item ID.  
+- Subtlety:  Implement talent version of Deeper Daggers.  
+- Fix dot/buff/debuff 'refreshable' when aura is not applied.  
+- Modify Feral priority to use Rip and Funneling settings.  
