@@ -69,7 +69,7 @@ private.ACHIEVEMENT_ZONE_IDS = {
 	[2025] = { 16461, 16301, 16679, 18258 }; --Thaldraszus (Dragonflight)
 	[2132] = { 16678, 18258 }; --The Azure Span minimap (Dragonflight)
 	[2151] = { 17524, 17525, 17526 }; --The Forbidden Reach (10.0.7) (Dragonflight)
-	[2133] = { 17786, 17783, 18100 }; --Zaralek Cavern (10.1.0) (Dragonflight)
+	[2133] = { 17786, 17783, 18100, 18199 }; --Zaralek Cavern (10.1.0) (Dragonflight)
 }
 
 private.ACHIEVEMENT_TARGET_IDS = {
@@ -140,4 +140,5 @@ private.ACHIEVEMENT_TARGET_IDS = {
 	[17783] = { 203515, 203621, 203664, 203592, 203611, 203646, 203466, 203462, 203630, 203521, 203643, 203662, 201029, 203468, 204093, 203660, 203477, 203627, 203625, 203618, 203642, 200111, 204096, 203480, 203593 }; --Adventurer of Zaralek Cavern (10.1.0)
 	[18100] = { 203515, 203621, 203664, 203592, 203627, 203625, 203618, 200111, 203643, 203662, 201029, 203468, 204093, 203660, 203477, 203646, 203466, 203462, 203521, 203480, 203593 }; --Cavern Clawbbering
 	[18258] = { 205490 }; --Little Lord of Lies (10.1.0)
+	[18199] = { 203846, 202274 }; --Zaqali Ritual Buster (10.1.0)
 }

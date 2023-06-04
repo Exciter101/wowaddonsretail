@@ -164,7 +164,7 @@ local function UpdateRareFound(entityID, vignetteInfo, coordinates)
 		else
 			mapID = C_Map.GetBestMapForUnit("player")
 		end
-		-- If its a container
+	-- If its a container
 	elseif (RSConstants.IsContainerAtlas(vignetteInfo.atlasName)) then
 		atlasName = RSConstants.CONTAINER_VIGNETTE
 
@@ -176,7 +176,7 @@ local function UpdateRareFound(entityID, vignetteInfo, coordinates)
 		else
 			mapID = C_Map.GetBestMapForUnit("player")
 		end
-		-- If its an event
+	-- If its an event
 	elseif (RSConstants.IsEventAtlas(vignetteInfo.atlasName)) then
 		atlasName = RSConstants.EVENT_VIGNETTE
 
@@ -310,8 +310,8 @@ local function ShowAlert(button, vignetteInfo, isNavigating)
 		RSRecentlySeenTracker.AddRecentlySeen(entityID, vignetteInfo.atlasName, false)
 		return true
 	-- disable alerts for filtered zones
-	elseif (not RSConfigDB.IsZoneFilteredOnlyOnWorldMap() and (RSConfigDB.IsZoneFiltered(mapID) or RSConfigDB.IsEntityZoneFiltered(entityID, vignetteInfo.atlasName))) then
-		RSLogger:PrintDebugMessage(string.format("La entidad [%s] se ignora por pertenecer a una zona filtrada", entityID))
+	elseif (RSConfigDB.IsZoneFiltered(mapID) or RSConfigDB.IsZoneFilteredOnlyAlerts(mapID) or RSConfigDB.IsEntityZoneFilteredOnlyAlerts(entityID, vignetteInfo.atlasName)) then
+		RSLogger:PrintDebugMessage(string.format("La entidad [%s] se ignora por pertenecer a una zona [%s] filtrada", entityID, mapID))
 		return
 	-- extra checkings for containers
 	elseif (RSConstants.IsContainerAtlas(vignetteInfo.atlasName)) then		
@@ -489,7 +489,7 @@ function RSButtonHandler.AddAlert(button, vignetteInfo, isNavigating)
 		return
 	end
 	
-	RSLogger:PrintDebugMessage(string.format("Vignette ATLAS [%s]", vignetteInfo.atlasName))
+	--RSLogger:PrintDebugMessage(string.format("Vignette ATLAS [%s]", vignetteInfo.atlasName))
 	
 	local entityID, vignetteInfo = FixVignetteInfo(vignetteInfo)
 	if (not entityID or not vignetteInfo) then

@@ -5,8 +5,5 @@
 ## Interface: 100100
 ## X-oUF: ElvUF
 ## IconTexture: Interface\AddOns\ElvUI\Core\Media\Textures\LogoAddon
-## X-Tukui-ProjectID: -2
-## X-Tukui-ProjectFolders: ElvUI, ElvUI_Libraries, ElvUI_Options
 
 Mainline\Libs.xml
-

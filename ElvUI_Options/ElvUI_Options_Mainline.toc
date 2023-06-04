@@ -6,8 +6,5 @@
 ## RequiredDeps: ElvUI
 ## LoadOnDemand: 1
 ## IconTexture: Interface\AddOns\ElvUI\Core\Media\Textures\LogoAddon
-## X-Tukui-ProjectID: -2
-## X-Tukui-ProjectFolders: ElvUI, ElvUI_Libraries, ElvUI_Options
 
 Core\Load.xml
-

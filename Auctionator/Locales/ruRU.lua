@@ -4,8 +4,7 @@ AUCTIONATOR_LOCALES.ruRU = function()
   L["ADD_FAVOURITE"] = "Добавить в избранное"
 L["ADD_ITEM"] = "Добавить предмет"
 L["ADD_TERM_TO_LIST_DIALOG"] = "Введите поисковый запрос, чтобы добавить:"
---[[Translation missing --]]
-L["ADD_TO_LIST"] = "Add To List"
+L["ADD_TO_LIST"] = "Добавить в список"
 L["ALREADY_PURCHASED_X"] = "Уже купил %s"
 L["ALT_LEFT_CLICK"] = "Alt ЛКМ"
 L["ALT_RIGHT_CLICK"] = "Alt ПКМ"

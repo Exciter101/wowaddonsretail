@@ -195,7 +195,7 @@ private.ZONES_WITHOUT_VIGNETTE = {
 	[2024] = { 1707 }; --The Azure Span
 	[2025] = { 1708 }; --Thaldraszus
 	[2151] = { 1781 }; --The Forbidden Reach (10.0.7) (Dragonflight)
-	[2133] = { 1775 }; --The Forbidden Reach (10.0.7) (Dragonflight)
+	[2133] = { 1775 }; --Zaralek Cavern (10.1.0) (Dragonflight)
 }
 
 private.RESETABLE_KILLS_ZONE_IDS = {

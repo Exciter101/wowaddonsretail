@@ -87,6 +87,13 @@ function AuctionatorShoppingTabFrameMixin:OnLoad()
   end)
 
   self.ContainerTabs:SetView(Auctionator.Config.Get(Auctionator.Config.Options.SHOPPING_LAST_CONTAINER_VIEW))
+
+  self.shouldDefaultOpenOnShow = true
+  if Auctionator.Constants.IsVanilla then
+    self:RegisterEvent("AUCTION_HOUSE_CLOSED")
+  else
+    self:RegisterEvent("PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
+  end
 end
 
 function AuctionatorShoppingTabFrameMixin:SetupSearchProvider()
@@ -121,6 +128,7 @@ function AuctionatorShoppingTabFrameMixin:SetupListsContainer()
     self.singleSearch = true
     self:DoSearch({searchTerm})
     self.SearchOptions:SetSearchTerm(searchTerm)
+    self.ListsContainer:TemporarilySelectSearchTerm(index)
   end)
   self.ListsContainer:SetOnSearchTermDelete(function(list, searchTerm, index)
     list:DeleteItem(index)
@@ -151,6 +159,12 @@ function AuctionatorShoppingTabFrameMixin:SetupListsContainer()
     StaticPopupDialogs[Auctionator.Constants.DialogNames.DeleteShoppingList].text = AUCTIONATOR_L_DELETE_LIST_CONFIRM:format(list:GetName()):gsub("%%", "%%%%")
     StaticPopup_Show(Auctionator.Constants.DialogNames.DeleteShoppingList, nil, nil, {list = list, view = self})
   end)
+
+  self.ListsContainer:SetOnListItemDrag(function(list, oldIndex, newIndex)
+    local old = list:GetItemByIndex(oldIndex)
+    list:DeleteItem(oldIndex)
+    list:InsertItem(old, newIndex)
+  end)
 end
 
 function AuctionatorShoppingTabFrameMixin:SetupRecentsContainer()
@@ -158,6 +172,7 @@ function AuctionatorShoppingTabFrameMixin:SetupRecentsContainer()
     self.singleSearch = true
     self:DoSearch({searchTerm})
     self.SearchOptions:SetSearchTerm(searchTerm)
+    self.RecentsContainer:TemporarilySelectSearchTerm(searchTerm)
   end)
   self.RecentsContainer:SetOnDeleteRecent(function(searchTerm)
     Auctionator.Shopping.Recents.DeleteEntry(searchTerm)
@@ -235,11 +250,25 @@ function AuctionatorShoppingTabFrameMixin:ReceiveEvent(eventName, eventData)
   end
 end
 
+function AuctionatorShoppingTabFrameMixin:OnEvent(eventName, ...)
+  if eventName == "PLAYER_INTERACTION_MANAGER_FRAME_HIDE" then
+    local showType = ...
+    if showType == Enum.PlayerInteractionType.Auctioneer then
+      self.shouldDefaultOpenOnShow = true
+    end
+  elseif eventName == "AUCTION_HOUSE_CLOSED" then
+    self.shouldDefaultOpenOnShow = true
+  end
+end
+
 function AuctionatorShoppingTabFrameMixin:OnShow()
   self.SearchOptions:FocusSearchBox()
   Auctionator.EventBus:Register(self, EVENTBUS_EVENTS)
 
-  self:OpenDefaultList()
+  if self.shouldDefaultOpenOnShow then
+    self:OpenDefaultList()
+    self.shouldDefaultOpenOnShow = false
+  end
 end
 
 function AuctionatorShoppingTabFrameMixin:OnHide()
@@ -267,6 +296,8 @@ function AuctionatorShoppingTabFrameMixin:OpenDefaultList()
   local listIndex = Auctionator.Shopping.ListManager:GetIndexForName(listName)
 
   if listIndex ~= nil then
+    self.ListsContainer:CollapseList()
+    self.ContainerTabs:SetView(Auctionator.Constants.ShoppingListViews.Lists)
     self.ListsContainer:ExpandList(Auctionator.Shopping.ListManager:GetByIndex(listIndex))
   end
 end

@@ -679,7 +679,7 @@ local function RefreshDatabaseData(previousDbVersion)
 			if (npcInfo.questID) then
 				for _, questID in ipairs(npcInfo.questID) do
 					if (C_QuestLog.IsQuestFlaggedCompleted(questID) and not RSNpcDB.IsNpcKilled(npcID)) then
-						RSLogger:PrintDebugMessage(string.format("RefreshDatabaseData. El NPC[%s] no esta marcado como muerto, pero su mision (BD capturada) esta completada", npcID))
+						RSLogger:PrintDebugMessage(string.format("RefreshDatabaseData. El NPC[%s] no esta marcado como muerto, pero su mision esta completada", npcID))
 						-- The NPC will be tagged as dead as usual, it won't be until the next world quest reset
 						-- when the RespawnTracker will decide if this NPC died forever
 						RSEntityStateHandler.SetDeadNpc(npcID, true)
@@ -701,7 +701,7 @@ local function RefreshDatabaseData(previousDbVersion)
 			if (eventInfo.questID) then
 				for _, questID in ipairs(eventInfo.questID) do
 					if (C_QuestLog.IsQuestFlaggedCompleted(questID) and not RSEventDB.IsEventCompleted(eventID)) then
-						RSLogger:PrintDebugMessage(string.format("RefreshDatabaseData. El Evento[%s] no esta marcado como completado, pero su mision (BD capturada) esta completada", eventID))
+						RSLogger:PrintDebugMessage(string.format("RefreshDatabaseData. El Evento[%s] no esta marcado como completado, pero su mision esta completada", eventID))
 						-- The Event will be tagged as completed as usual, it won't be until the next world quest reset
 						-- when the RespawnTracker will decide if this event is completed forever
 						RSEntityStateHandler.SetEventCompleted(eventID, true)
@@ -723,7 +723,7 @@ local function RefreshDatabaseData(previousDbVersion)
 			if (containerInfo.questID) then
 				for _, questID in ipairs(containerInfo.questID) do
 					if (C_QuestLog.IsQuestFlaggedCompleted(questID) and not RSContainerDB.IsContainerOpened(containerID)) then
-						RSLogger:PrintDebugMessage(string.format("RefreshDatabaseData. El Contenedor[%s] no esta marcado como cerrado, pero su mision (BD capturada) esta completada", containerID))
+						RSLogger:PrintDebugMessage(string.format("RefreshDatabaseData. El Contenedor[%s] no esta marcado como cerrado, pero su mision esta completada", containerID))
 						-- The Container will be tagged as opened as usual, it won't be until the next world quest reset
 						-- when the RespawnTracker will decide if this container is opened forever
 						RSEntityStateHandler.SetContainerOpen(containerID, true)
@@ -737,7 +737,6 @@ local function RefreshDatabaseData(previousDbVersion)
 		end
 	)
 	table.insert(routines, setContainersOpenedByQuestIdRoutine)
-	
 	
 	-- Clean already killed/collected/completed entities that arent in the database
 	if (not RSGeneralDB.GetLastCleanDb()) then
@@ -883,6 +882,33 @@ local function RefreshDatabaseData(previousDbVersion)
 		)
 		table.insert(routines, fixEventFilters)
 	end
+
+	-- Update older zone filters system to newer (10.1.0)
+	if (RSUtils.GetTableLength(private.db.general.filteredZones) > 0) then
+		-- Set default behaviour
+		if (private.db.zoneFilters.filterOnlyMap) then
+			RSConfigDB.SetDefaultZoneFilter(RSConstants.ENTITY_FILTER_WORLDMAP)
+		else
+			RSConfigDB.SetDefaultZoneFilter(RSConstants.ENTITY_FILTER_ALL)
+		end
+		
+		local fixZoneFilters = RSRoutines.LoopRoutineNew()
+		fixZoneFilters:Init(function() return private.db.general.filteredZones end, 100,
+			function(context, zoneID, value)
+				if (private.db.general.filtersFixed and value == true) then
+					RSConfigDB.SetZoneFiltered(zoneID)
+				elseif (not private.db.general.filtersFixed and value == false) then
+					RSConfigDB.SetZoneFiltered(zoneID)
+				end
+			end, 
+			function(context)			
+				private.db.zoneFilters.filterOnlyMap = nil
+				private.db.general.filteredZones = nil
+				RSLogger:PrintDebugMessage("Migrados filtros de Zonas")
+			end
+		)
+		table.insert(routines, fixZoneFilters)
+	end
 	
 	-- Launches a forced vignette scan
 	local firstScanRoutine = RSRoutines.LoopRoutineNew()
@@ -992,13 +1018,6 @@ function RareScanner:InitializeDataBase()
 	--============================================
 	-- Initialize default profiles
 	--============================================
-
-	-- Initialize zone filter list
-	for k, v in pairs(RSMapDB.GetContinents()) do
-		table.foreach(v.zones, function(index, zoneID)
-			RSConstants.PROFILE_DEFAULTS.profile.general.filteredZones[zoneID] = true
-		end)
-	end
 
 	-- Initialize loot filter list
 	for categoryID, subcategories in pairs(private.ITEM_CLASSES) do

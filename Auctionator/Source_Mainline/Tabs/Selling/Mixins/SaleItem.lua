@@ -181,13 +181,18 @@ function AuctionatorSaleItemMixin:ReceiveEvent(event, ...)
 
   elseif event == Auctionator.Selling.Events.PriceSelected and
          self.itemInfo ~= nil then
-    local buyoutAmount, shouldUndercut = ...
+    local selectedPrices, shouldUndercut = ...
+    local buyoutAmount = selectedPrices.buyout or selectedPrices.bid
 
     if shouldUndercut then
       buyoutAmount = Auctionator.Selling.CalculateItemPriceFromPrice(buyoutAmount)
     end
 
-    self:UpdateSalesPrice(buyoutAmount)
+    if Auctionator.Config.Get(Auctionator.Config.Options.SHOW_SELLING_BID_PRICE) then
+      self:UpdateSalesPrice(buyoutAmount, selectedPrices.bid, true)
+    else
+      self:UpdateSalesPrice(buyoutAmount)
+    end
 
   elseif event == Auctionator.Selling.Events.RefreshSearch then
     self:RefreshButtonClicked()
@@ -344,13 +349,21 @@ function AuctionatorSaleItemMixin:Reset()
   self:Update()
 end
 
-function AuctionatorSaleItemMixin:UpdateSalesPrice(salesPrice)
+function AuctionatorSaleItemMixin:UpdateSalesPrice(salesPrice, bidPrice, preserveBidPrice)
   if salesPrice == 0 then
     self.Price:SetAmount(0)
   else
     self.Price:SetAmount(NormalizePrice(salesPrice))
   end
-  self.BidPrice:Clear()
+  if bidPrice == nil then
+    -- Carry over the bid price from a previously selected row unless its higher
+    -- than the unit price chosen
+    if not preserveBidPrice or self.BidPrice:GetAmount() > self.Price:GetAmount() then
+      self.BidPrice:Clear()
+    end
+  else
+    self.BidPrice:SetAmount(bidPrice)
+  end
 end
 
 function AuctionatorSaleItemMixin:SetEquipmentMultiplier(itemLink)
