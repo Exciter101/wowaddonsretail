@@ -1,7 +1,8 @@
 # TL;DR Missions
 
-##  (2023-06-13)
+##  (2023-06-17)
  
 
 - Update TLDRMissions.toc  
-- Fix binding label  
+- Fix bug stopping TFF from picking the correct torghast layer  
+    Closes https://github.com/TLDRMissions/TLDRMissions/issues/609  

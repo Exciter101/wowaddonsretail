@@ -40,6 +40,7 @@ local RSAudioAlerts = private.ImportLib("RareScannerAudioAlerts")
 local RSEventHandler = private.ImportLib("RareScannerEventHandler")
 local RSEntityStateHandler = private.ImportLib("RareScannerEntityStateHandler")
 local RSCommandLine = private.ImportLib("RareScannerCommandLine")
+local RSTargetUnitTracker = private.ImportLib("RareScannerTargetUnitTracker")
 
 -- RareScanner other addons integration services
 local RSTomtom = private.ImportLib("RareScannerTomtom")
@@ -510,6 +511,7 @@ function scanner_button:ShowButton()
 	self:StartHideTimer()
 end
 
+local AUTOHIDING_TIMER
 function scanner_button:StartHideTimer()
 	if (RSConfigDB.GetAutoHideButtonTime() > 0) then
 		if (AUTOHIDING_TIMER) then
@@ -937,6 +939,9 @@ local function RefreshDatabaseData(previousDbVersion)
 	chainRoutines:Run(function(context)
 		-- Initialize respawning tracker and scan the first time
 		RSRespawnTracker.Init()
+		
+		-- Initialize unit target tracker
+		RSTargetUnitTracker.Init(scanner_button)
 		
 		-- Set default filters
 		if (not previousDbVersion or previousDbVersion < RSConstants.DEFAULT_FILTERED_ENTITIES.version) then

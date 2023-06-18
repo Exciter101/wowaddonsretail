@@ -174,7 +174,7 @@ function subBindings:set(id, bind)
 	end
 	t[id] = bind
 	for j=#t,1,-1 do if t[j] == "false" then t[j] = nil else break end end
-	self.count = #t+2
+	self.count = #t + firstListSize + 1
 	local _, _, _, global, default = PC:GetOption("SliceBindingString", self.scope)
 	local v = table.concat(t, " ")
 	if self.scope == nil and v == default then v = nil

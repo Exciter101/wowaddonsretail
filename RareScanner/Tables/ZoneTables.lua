@@ -188,14 +188,6 @@ private.ZONES_WITHOUT_VIGNETTE = {
 	[274] = { 285 }; --Old hillsbrad foothills
 	[462] = { 474 }; --Camp Narache
 	[425] = { 437 }; --Northshire
-	
-	-- Remove if in retail all the vignettes work
-	[2022] = { 1706 }; --The Walking Shores
-	[2023] = { 1705 }; --Ohn'ahran Plains
-	[2024] = { 1707 }; --The Azure Span
-	[2025] = { 1708 }; --Thaldraszus
-	[2151] = { 1781 }; --The Forbidden Reach (10.0.7) (Dragonflight)
-	[2133] = { 1775 }; --Zaralek Cavern (10.1.0) (Dragonflight)
 }
 
 private.RESETABLE_KILLS_ZONE_IDS = {

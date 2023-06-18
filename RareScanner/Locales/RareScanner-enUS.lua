@@ -233,6 +233,8 @@ AL["ENABLE_SCAN_ON_TAXI"] = "Toggle scanning while using a transportation"
 AL["ENABLE_SCAN_ON_TAXI_DESC"] = "When this is activated the addon will work as usual while you are using a transportation (flight, boat, etc.)"
 AL["ENABLE_SCAN_RARES"] = "Toggle searching rare NPCs"
 AL["ENABLE_SCAN_RARES_DESC"] = "When this is activated you will be warned visually and with a sound everytime a rare NPC shows up in your minimap"
+AL["ENABLE_SCAN_TARGET_UNIT"] = "Toggle searching for npcs in target range ('/target NPC')"
+AL["ENABLE_SCAN_TARGET_UNIT_DESC"] = "When this is activated you will be warned whenever you are in the range of an NPC to target it. This tracker works as if you were spaming the macro '/target NPC'."
 AL["ENABLE_SCAN_WORLDMAP_VIGNETTES"] = "Toggle searching for entities through world map vignettes"
 AL["ENABLE_SCAN_WORLDMAP_VIGNETTES_DESC"] = "When this is activated you will be warned whenever an icon of a rare NPC, treasure or event appears on the world map. Be aware that this filter can be pretty annoying in places where the icons remain for a long time, so use it with caution."
 AL["ENABLE_SEARCHING_CONTAINER_TOOLTIP"] = "Enable alerts for this container"
@@ -300,12 +302,7 @@ AL["FILTER_CONTINENT"] = "Continent/Category"
 AL["FILTER_CONTINENT_DESC"] = "Continent or category name"
 AL["FILTER_DEFAULT"] = "Default filter behaviour"
 AL["FILTER_DEFAULT_DESC"] = "This is the default behaviour that will be applied when filtering using any of the options available in the addon (worldmap commands, visual alerts, RareScanner's explorer, etc.)."
-AL["FILTER_DESC"] = [=[Uncheck to filter it. Once it is filtered the behaviour selected will apply: 
-- %s: It won't show up in the map and you won't get alerts either.
-- %s: It won't show up in the map but you will still get alerts.
-- %s: It will show up in the map but you won't get alerts.
-Check to unfilter it:
-- It will appear in your map and you will get the alerts.]=]
+AL["FILTER_DESC"] = "Uncheck to filter it. Once it is filtered the behaviour selected will apply: \n- %s: It won't show up in the map and you won't get alerts either.\n- %s: It won't show up in the map but you will still get alerts.\n- %s: It will show up in the map but you won't get alerts.\nCheck to unfilter it:\n- It will appear in your map and you will get the alerts."
 AL["FILTER_EVENT_LIST"] = "Filter searching for events"
 AL["FILTER_TYPE_ALERTS"] = "Filter only audio/visual alerts"
 AL["FILTER_TYPE_ALL"] = "Filter completely"
@@ -1338,6 +1335,7 @@ AL["SOUND_RELOAD_DESC"] = "Reloads the interface. Use this button if you copied 
 AL["SOUND_VOLUME"] = "Volume"
 AL["SOUND_VOLUME_DESC"] = "Sets the sound volume level. This doesn't apply to custom sounds."
 AL["STOLEN_ANIMA_VESSEL"] = "Stolen Anima Vessel"
+AL["TARGET_UNIT_WARNING"] = "WARNING!! Read carefully.\n\nThis tracker uses a protected function that addons aren't allowed to use, so every single time that the addon detects a NPC using this system the game will show a pop up indicanting that RareScanner produced an error. \n\n|cffFF00001. It isn't possible to hide or avoid this error, so use this tracker ONLY when you are intensively looking for an specific rare NPC.|r\n2. The spot shown in the world map with the pink skull for rare NPCs detected with this system won't be accurate in most cases. The addon cannot know where the NPC is, so the position shown is one of the possible spots where it might be.\n3. In order to avoid constant errors, if you enable this tracker, |cffFFBF00it will only work in expansions before Pandaria or to detect custom NPCs|r.\n\nAre you sure you want to enable it?"
 AL["TEST"] = "Launch Test"
 AL["TEST_DESC"] = "Press the button to show an alert example. You can drag and drop the panel to another position where it will be shown from now on."
 AL["TOC_NOTES"] = "Minimap scanner. Warns you visually with a button and a miniature and plays a sound everytime a rare NPC, treasure/chest or event shows up in your minimap"

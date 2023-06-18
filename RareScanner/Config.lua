@@ -26,6 +26,7 @@ local RSConstants = private.ImportLib("RareScannerConstants")
 -- RareScanner service libraries
 local RSMinimap = private.ImportLib("RareScannerMinimap")
 local RSMap = private.ImportLib("RareScannerMap")
+local RSTargetUnitTracker = private.ImportLib("RareScannerTargetUnitTracker")
 
 -----------------------------------------------------------------------
 -- Config option functions.
@@ -290,8 +291,23 @@ local function GetGeneralOptions()
 					end,
 					width = "full",
 				},
-				ignoreCompletedEntities = {
+				scanTargetUnit = {
 					order = 11,
+					name = AL["ENABLE_SCAN_TARGET_UNIT"],
+					desc = AL["ENABLE_SCAN_TARGET_UNIT_DESC"],
+					type = "toggle",
+					get = function() return RSConfigDB.IsScanningTargetUnit() end,
+					set = function(_, value)
+						if (value) then
+							LibDialog:Spawn(RSConstants.TARGET_UNIT_WARNING)
+						else
+							RSConfigDB.SetScanningTargetUnit(value)
+						end
+					end,
+					width = "full",
+				},
+				ignoreCompletedEntities = {
+					order = 12,
 					name = AL["IGNORE_SCAN_COMPLETED_ENTITIES"],
 					desc = AL["IGNORE_SCAN_COMPLETED_ENTITIES_DESC"],
 					type = "toggle",
@@ -302,7 +318,7 @@ local function GetGeneralOptions()
 					width = "full",
 				},
 				showMaker = {
-					order = 12,
+					order = 13,
 					name = AL["ENABLE_MARKER"],
 					desc = AL["ENABLE_MARKER_DESC"],
 					type = "toggle",
@@ -313,7 +329,7 @@ local function GetGeneralOptions()
 					width = "full",
 				},
 				marker = {
-					order = 13,
+					order = 14,
 					type = "select",
 					dialogControl = 'RS_Markers',
 					name = AL["MARKER"],
@@ -327,12 +343,12 @@ local function GetGeneralOptions()
 					disabled = function() return not RSConfigDB.IsDisplayingMarkerOnTarget() end,
 				},
 				separatorIngameWaypoints = {
-					order = 14,
+					order = 15,
 					type = "header",
 					name = AL["INGAME_WAYPOINTS"],
 				},
 				enableIngameWaypoints = {
-					order = 15,
+					order = 16,
 					name = AL["ENABLE_WAYPOINTS_SUPPORT"],
 					desc = AL["ENABLE_WAYPOINTS_SUPPORT_DESC"],
 					type = "toggle",
@@ -346,7 +362,7 @@ local function GetGeneralOptions()
 					width = "full",
 				},
 				autoIngameWaypoints = {
-					order = 16,
+					order = 17,
 					name = AL["ENABLE_AUTO_WAYPOINTS"],
 					desc = AL["ENABLE_AUTO_WAYPOINTS_DESC"],
 					type = "toggle",
@@ -358,12 +374,12 @@ local function GetGeneralOptions()
 					disabled = function() return not RSConfigDB.IsWaypointsSupportEnabled() end,
 				},
 				separatorTomtomWaypoints = {
-					order = 17,
+					order = 18,
 					type = "header",
 					name = AL["TOMTOM_WAYPOINTS"],
 				},
 				enableTomtomSupport = {
-					order = 18,
+					order = 19,
 					name = AL["ENABLE_TOMTOM_SUPPORT"],
 					desc = AL["ENABLE_TOMTOM_SUPPORT_DESC"],
 					type = "toggle",
@@ -378,7 +394,7 @@ local function GetGeneralOptions()
 					disabled = function() return not TomTom end,
 				},
 				autoTomtomWaypoints = {
-					order = 19,
+					order = 20,
 					name = AL["ENABLE_AUTO_TOMTOM_WAYPOINTS"],
 					desc = AL["ENABLE_AUTO_TOMTOM_WAYPOINTS_DESC"],
 					type = "toggle",
@@ -1310,6 +1326,7 @@ local function GetCustomNpcOptions()
 								
 								private.custom_npcs_options[npcID].zone = private.custom_npcs_options[npcID].subzone
 								RSNpcDB.SetCustomNpcInfo(npcID, private.custom_npcs_options[npcID])
+								RSTargetUnitTracker.Refresh()
 							end
 						end,
 						width = "normal",
@@ -2432,7 +2449,7 @@ local function GetLootFilterOptions()
 		if (loot_filter_options) then
 			loot_filter_options.args.filters.args.category_filters.args.lootFilters.values = {}
 			for i, subcategoryID in ipairs(private.ITEM_CLASSES[mainClassID]) do
-				loot_filter_options.args.filters.args.category_filters.args.lootFilters.values[GetItemSubClassInfo(mainClassID, subcategoryID)] = subcategoryID
+				loot_filter_options.args.filters.args.category_filters.args.lootFilters.values[subcategoryID] = GetItemSubClassInfo(mainClassID, subcategoryID)
 			end
 		end
 	end

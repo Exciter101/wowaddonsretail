@@ -233,6 +233,8 @@ AL["ENABLE_SCAN_ON_TAXI"] = "Activa el escáner mientras estás usando un transp
 AL["ENABLE_SCAN_ON_TAXI_DESC"] = "Cuando este activo el addon funcionara con normalidad mientras estás usando un transporte (vuelo, barco, etc.)"
 AL["ENABLE_SCAN_RARES"] = "Activa la búsqueda de NPCs raros"
 AL["ENABLE_SCAN_RARES_DESC"] = "Cuando este activo se avisará por pantalla y con un sonido cada vez que un NPC raro aparezca en el minimapa."
+AL["ENABLE_SCAN_TARGET_UNIT"] = "Activa la búsqueda de NPCs raros en rango de objetivo ('/target NPC')"
+AL["ENABLE_SCAN_TARGET_UNIT_DESC"] = "Cuando este activo recibirás alertas de NPCs que estén a rango de poder seleccionarlos. Este rastreador funciona como si estuvieras ejecutando constantemente la macro '/target NPC'."
 AL["ENABLE_SCAN_WORLDMAP_VIGNETTES"] = "Activa la búsqueda de entidades por medio de iconos del mapa del mundo"
 AL["ENABLE_SCAN_WORLDMAP_VIGNETTES_DESC"] = "Cuando se activa recibirás alertas cuando se detecten iconos de NPCs, tesoros o eventos en el mapa del mundo. Ten en cuenta que este filtro puede ser realmente molesto en zonas donde los iconos permanecen en el mapa durante mucho tiempo, así que usalo con cuidado."
 AL["ENABLE_SEARCHING_CONTAINER_TOOLTIP"] = "Habilita la búsqueda de este contenedor"
@@ -300,12 +302,7 @@ AL["FILTER_CONTINENT"] = "Continente/Categoría"
 AL["FILTER_CONTINENT_DESC"] = "Nombre del continente o categoría."
 AL["FILTER_DEFAULT"] = "Comportamiento predeterminado del filtro"
 AL["FILTER_DEFAULT_DESC"] = "Este es el comportamiento predeterminado que se aplicará al filtrar haciendo uso de cualquier opción disponible en el addon (comandos del mapa del mundo, alertas visuales, el explorador de Rarescanner, etc.)"
-AL["FILTER_DESC"] = [=[Desmarca para filtrarlo. Una vez filtrado se aplicará el comportamiento seleccionado: 
-- %s: No aparecerá en el mapa y tampoco recibirás alertas.
-- %s: No aparecerá en el mapa pero si recibirás alertas.
-- %s: Aparecerá en el mapa pero no recibirás alertas.
-Marca para quitar el filtro:
-- Aparecerá en tu mapa y recibirás alertas.]=]
+AL["FILTER_DESC"] = "Desmarca para filtrarlo. Una vez filtrado se aplicará el comportamiento seleccionado: \n- %s: No aparecerá en el mapa y tampoco recibirás alertas.\n- %s: No aparecerá en el mapa pero si recibirás alertas.\n- %s: Aparecerá en el mapa pero no recibirás alertas.\nMarca para quitar el filtro:\n- Aparecerá en tu mapa y recibirás alertas."
 AL["FILTER_EVENT_LIST"] = "Filtro de avisos para eventos"
 AL["FILTER_TYPE_ALERTS"] = "Filtrar solo alertas de audio/visuales"
 AL["FILTER_TYPE_ALL"] = "Filtrar completamente"
@@ -1338,6 +1335,7 @@ AL["SOUND_RELOAD_DESC"] = "Recarga el interfaz. Utiliza este botón si has copia
 AL["SOUND_VOLUME"] = "Volumen"
 AL["SOUND_VOLUME_DESC"] = "Establece el volumen de los sonidos. No aplica a los sonidos personalizados."
 AL["STOLEN_ANIMA_VESSEL"] = "Receptáculo de ánima robado"
+AL["TARGET_UNIT_WARNING"] = "¡¡ATENCIÓN!! Leer detenidamente.\n\nEste rastreador hace uso de una función protegida que los addons no pueden utilizar, de modo que cada vez que el addon detecte un NPC por medio de este sistema, el juego mostrará un mensaje indicando que RareScanner ha producido un error. \n\n|cffFF00001. No es posible esconder o evitar este error, con lo que debes utilizar este rastreador ÚNICAMENTE cuando estés buscando un NPC de modo intensivo.|r\n2. El punto donde se muestre la calavera rosa en el mapa del mundo para los NPCs encontrados con este sistema no será preciso en la mayoría de los casos. No hay modo de saber donde se encuentra el NPC exactamente, con lo que se mostrará la calavera en uno de los puntos donde puede estar.\n3. Para evitar constantes errores, si activas este rastreador, |cffFFBF00sólamente se utilizará para detectar NPCs en expansiones anteriores a Pandaria y para detectar NPCs personalizados|r.\n\n¿Estás seguro de querer activarlo?"
 AL["TEST"] = "Lanzar Test"
 AL["TEST_DESC"] = "Pulsa el botón para mostrar un ejemplo de alerta. Puedes arrastrar el panel a otra posición donde se mostrarán las futuras alertas."
 AL["TOC_NOTES"] = "Escaner del minimapa. Avisa con un mensaje, una miniatura y reproduce un sonido cada vez que un NPC raro, tesoro o evento aparece en tu minimapa."

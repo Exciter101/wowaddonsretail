@@ -461,20 +461,20 @@ local function ShowAlerts(button)
 	for k, vignetteInfo in pairs (foundAlerts) do
 		refreshMinimap = ShowAlert(button, vignetteInfo, false)
 	    foundAlerts[k] = nil
-		RSLogger:PrintDebugMessage(string.format("Eliminado %s", k))
+		--RSLogger:PrintDebugMessage(string.format("Eliminado %s", k))
 	end
 	
 	if (refreshMinimap) then
-		RSLogger:PrintDebugMessage(string.format("Refrescado minimapa tras mostrar todas las alertas"))
+		--RSLogger:PrintDebugMessage(string.format("Refrescado minimapa tras mostrar todas las alertas"))
 		RSMinimap.RefreshAllData(true)
 	end
 	
 	if (RSUtils.GetTableLength(foundAlerts) > 0) then
-		RSLogger:PrintDebugMessage(string.format("Quedan alertas que mostrar"))
+		--RSLogger:PrintDebugMessage(string.format("Quedan alertas que mostrar"))
 		ShowAlerts(button)
 	else
 		-- Cancel
-		RSLogger:PrintDebugMessage(string.format("BUTTON_TIMER:Cancel"))
+		--RSLogger:PrintDebugMessage(string.format("BUTTON_TIMER:Cancel"))
 		BUTTON_TIMER:Cancel()
 	end
 end
@@ -514,7 +514,7 @@ function RSButtonHandler.AddAlert(button, vignetteInfo, isNavigating)
 	elseif (RSEventHandler.IsCinematicPlaying()) then
 		return
 	-- disable ALL alerts in instances
-	elseif (isInstance == true and not RSConfigDB.IsScanningInInstances()) then
+	elseif (isInstance == true and not isNavigating and not RSConfigDB.IsScanningInInstances()) then
 		RSLogger:PrintDebugMessage(string.format("La entidad [%s] se ignora por estar en una instancia", entityID))
 		return
 	-- disable alerts while flying

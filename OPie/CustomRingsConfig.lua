@@ -1738,7 +1738,7 @@ function api.addSlice(pos, ...)
 		wasRepick = true
 	else
 		pos = math.max(1, math.min(#currentRing+1, pos and (pos + sliceBaseIndex) or (#currentRing+1)))
-		table.insert(currentRing, pos, {...})
+		table.insert(currentRing, pos, {sliceToken=AB:CreateToken(), ...})
 		if pos < sliceBaseIndex then sliceBaseIndex = pos end
 	end
 	api.saveRing(currentRingName, currentRing)

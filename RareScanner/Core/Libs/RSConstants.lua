@@ -25,7 +25,7 @@ RSConstants.LOOT_ITEM_ID = nil
 ---============================================================================
 
 RSConstants.CURRENT_DB_VERSION = 106
-RSConstants.CURRENT_LOOT_DB_VERSION = 115
+RSConstants.CURRENT_LOOT_DB_VERSION = 116
 
 ---============================================================================
 -- Current maps (newer)
@@ -52,7 +52,7 @@ RSConstants.DIABLO_4_GOBLIN_EVENT = 2
 
 RSConstants.EVENTS = {
 	[RSConstants.SHADOWLANDS_PRE_PATCH_EVENT] = false;
-	[RSConstants.DIABLO_4_GOBLIN_EVENT] = true;
+	[RSConstants.DIABLO_4_GOBLIN_EVENT] = false;
 }
 
 ---============================================================================
@@ -67,6 +67,7 @@ RSConstants.FIND_HIDDEN_QUESTS_TIMER = 5 --5 seconds after killing a NPC or open
 RSConstants.CHECK_RESPAWN_THRESHOLD = 150 --2.5 minutes
 RSConstants.CHECK_RESPAWN_TIMER = 60 --1 minute
 RSConstants.CHECK_RESET_NOTIFICATIONS_TIMER = 10 --10 seconds
+RSConstants.CHECK_TARGETS_TIMER = 2 --2 seconds
 RSConstants.BUTTON_TIMER = 1 --1 seconds
 
 ---============================================================================
@@ -119,6 +120,7 @@ RSConstants.PROFILE_DEFAULTS = {
 			scanOnPetBattle = true,
 			scanOnRacingQuest = true,
 			scanWorldmapVignette = true,
+			scanTargetUnit = false,
 			ignoreCompletedEntities = true,
 			filteredRares = {},
 			filteredContainers = {},
@@ -715,6 +717,7 @@ RSConstants.STEP7 = "7"
 RSConstants.APPLY_COLLECTIONS_LOOT_FILTERS = "RARESCANNER_APPLY_COLLECTIONS_LOOT_FILTERS"
 RSConstants.EXPLORER_FILTERING_DIALOG = "RARESCANNER_EXPLORER_FILTERING_DIALOG"
 RSConstants.EXPLORER_SCAN_NOT_DONE = "RARESCANNER_EXPLORER_SCAN_NOT_DONE"
+RSConstants.TARGET_UNIT_WARNING = "RARESCANNER_TARGET_UNIT_WARNING"
 
 ---============================================================================
 -- Explorer filters
